@@ -1,0 +1,458 @@
+{
+  "total_matches": 964,
+  "total_goals": 2720,
+  "avg_goals_all": 2.822,
+  "n_editions": 22,
+  "highest_scoring_match": {
+    "home_team": "Switzerland",
+    "away_team": "Austria",
+    "home_score": 5,
+    "away_score": 7,
+    "total": 12,
+    "year": 1954,
+    "flag_home": "🇨🇭",
+    "flag_away": "🇦🇹"
+  },
+  "biggest_victory": {
+    "home_team": "Hungary",
+    "away_team": "South Korea",
+    "home_score": 9,
+    "away_score": 0,
+    "margin": 9,
+    "year": 1954,
+    "flag_home": "🏳️",
+    "flag_away": "🇰🇷"
+  },
+  "goals_by_year": [
+    {
+      "year": 1930,
+      "total": 70,
+      "matches": 18,
+      "avg": 3.889
+    },
+    {
+      "year": 1934,
+      "total": 70,
+      "matches": 17,
+      "avg": 4.118
+    },
+    {
+      "year": 1938,
+      "total": 84,
+      "matches": 18,
+      "avg": 4.667
+    },
+    {
+      "year": 1950,
+      "total": 88,
+      "matches": 22,
+      "avg": 4.0
+    },
+    {
+      "year": 1954,
+      "total": 140,
+      "matches": 26,
+      "avg": 5.385
+    },
+    {
+      "year": 1958,
+      "total": 126,
+      "matches": 35,
+      "avg": 3.6
+    },
+    {
+      "year": 1962,
+      "total": 89,
+      "matches": 32,
+      "avg": 2.781
+    },
+    {
+      "year": 1966,
+      "total": 89,
+      "matches": 32,
+      "avg": 2.781
+    },
+    {
+      "year": 1970,
+      "total": 95,
+      "matches": 32,
+      "avg": 2.969
+    },
+    {
+      "year": 1974,
+      "total": 97,
+      "matches": 38,
+      "avg": 2.553
+    },
+    {
+      "year": 1978,
+      "total": 102,
+      "matches": 38,
+      "avg": 2.684
+    },
+    {
+      "year": 1982,
+      "total": 146,
+      "matches": 52,
+      "avg": 2.808
+    },
+    {
+      "year": 1986,
+      "total": 132,
+      "matches": 52,
+      "avg": 2.538
+    },
+    {
+      "year": 1990,
+      "total": 115,
+      "matches": 52,
+      "avg": 2.212
+    },
+    {
+      "year": 1994,
+      "total": 141,
+      "matches": 52,
+      "avg": 2.712
+    },
+    {
+      "year": 1998,
+      "total": 171,
+      "matches": 64,
+      "avg": 2.672
+    },
+    {
+      "year": 2002,
+      "total": 161,
+      "matches": 64,
+      "avg": 2.516
+    },
+    {
+      "year": 2006,
+      "total": 147,
+      "matches": 64,
+      "avg": 2.297
+    },
+    {
+      "year": 2010,
+      "total": 145,
+      "matches": 64,
+      "avg": 2.266
+    },
+    {
+      "year": 2014,
+      "total": 171,
+      "matches": 64,
+      "avg": 2.672
+    },
+    {
+      "year": 2018,
+      "total": 169,
+      "matches": 64,
+      "avg": 2.641
+    },
+    {
+      "year": 2022,
+      "total": 172,
+      "matches": 64,
+      "avg": 2.688
+    }
+  ],
+  "best_avg_edition": {
+    "year": 1954,
+    "avg": 5.385
+  },
+  "worst_avg_edition": {
+    "year": 1990,
+    "avg": 2.212
+  },
+  "top_scoring_teams": [
+    {
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "matches": 114,
+      "goals_for": 237,
+      "goals_against": 108,
+      "goal_diff": 129,
+      "avg": 2.08
+    },
+    {
+      "team": "Germany",
+      "flag": "🇩🇪",
+      "matches": 112,
+      "goals_for": 232,
+      "goals_against": 130,
+      "goal_diff": 102,
+      "avg": 2.07
+    },
+    {
+      "team": "Argentina",
+      "flag": "🇦🇷",
+      "matches": 88,
+      "goals_for": 152,
+      "goals_against": 101,
+      "goal_diff": 51,
+      "avg": 1.73
+    },
+    {
+      "team": "France",
+      "flag": "🇫🇷",
+      "matches": 73,
+      "goals_for": 136,
+      "goals_against": 85,
+      "goal_diff": 51,
+      "avg": 1.86
+    },
+    {
+      "team": "Italy",
+      "flag": "🇮🇹",
+      "matches": 83,
+      "goals_for": 128,
+      "goals_against": 77,
+      "goal_diff": 51,
+      "avg": 1.54
+    },
+    {
+      "team": "Spain",
+      "flag": "🇪🇸",
+      "matches": 67,
+      "goals_for": 108,
+      "goals_against": 75,
+      "goal_diff": 33,
+      "avg": 1.61
+    },
+    {
+      "team": "England",
+      "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "matches": 74,
+      "goals_for": 104,
+      "goals_against": 68,
+      "goal_diff": 36,
+      "avg": 1.41
+    },
+    {
+      "team": "Netherlands",
+      "flag": "🇳🇱",
+      "matches": 55,
+      "goals_for": 96,
+      "goals_against": 52,
+      "goal_diff": 44,
+      "avg": 1.75
+    },
+    {
+      "team": "Uruguay",
+      "flag": "🇺🇾",
+      "matches": 59,
+      "goals_for": 89,
+      "goals_against": 76,
+      "goal_diff": 13,
+      "avg": 1.51
+    },
+    {
+      "team": "Hungary",
+      "flag": "🏳️",
+      "matches": 32,
+      "goals_for": 87,
+      "goals_against": 57,
+      "goal_diff": 30,
+      "avg": 2.72
+    },
+    {
+      "team": "Sweden",
+      "flag": "🇸🇪",
+      "matches": 51,
+      "goals_for": 80,
+      "goals_against": 73,
+      "goal_diff": 7,
+      "avg": 1.57
+    },
+    {
+      "team": "Russia",
+      "flag": "🏳️",
+      "matches": 45,
+      "goals_for": 77,
+      "goals_against": 54,
+      "goal_diff": 23,
+      "avg": 1.71
+    },
+    {
+      "team": "Serbia",
+      "flag": "🇷🇸",
+      "matches": 49,
+      "goals_for": 71,
+      "goals_against": 71,
+      "goal_diff": 0,
+      "avg": 1.45
+    },
+    {
+      "team": "Belgium",
+      "flag": "🇧🇪",
+      "matches": 51,
+      "goals_for": 69,
+      "goals_against": 74,
+      "goal_diff": -5,
+      "avg": 1.35
+    },
+    {
+      "team": "Mexico",
+      "flag": "🇲🇽",
+      "matches": 60,
+      "goals_for": 62,
+      "goals_against": 101,
+      "goal_diff": -39,
+      "avg": 1.03
+    }
+  ],
+  "top_upsets": [
+    {
+      "year": 2022,
+      "home_team": "Cameroon",
+      "away_team": "Brazil",
+      "home_score": 1,
+      "away_score": 0,
+      "favored": "Brazil",
+      "winner": "Cameroon",
+      "elo_favored": 2098.0,
+      "elo_winner": 1680.0,
+      "elo_advantage": 418.0,
+      "flag_favored": "🇧🇷",
+      "flag_winner": "🇨🇲"
+    },
+    {
+      "year": 2010,
+      "home_team": "Spain",
+      "away_team": "Switzerland",
+      "home_score": 0,
+      "away_score": 1,
+      "favored": "Spain",
+      "winner": "Switzerland",
+      "elo_favored": 2066.0,
+      "elo_winner": 1720.0,
+      "elo_advantage": 346.0,
+      "flag_favored": "🇪🇸",
+      "flag_winner": "🇨🇭"
+    },
+    {
+      "year": 2022,
+      "home_team": "Argentina",
+      "away_team": "Saudi Arabia",
+      "home_score": 1,
+      "away_score": 2,
+      "favored": "Argentina",
+      "winner": "Saudi Arabia",
+      "elo_favored": 2044.0,
+      "elo_winner": 1701.0,
+      "elo_advantage": 343.0,
+      "flag_favored": "🇦🇷",
+      "flag_winner": "🇸🇦"
+    },
+    {
+      "year": 1950,
+      "home_team": "England",
+      "away_team": "United States",
+      "home_score": 0,
+      "away_score": 1,
+      "favored": "England",
+      "winner": "United States",
+      "elo_favored": 1751.0,
+      "elo_winner": 1427.0,
+      "elo_advantage": 324.0,
+      "flag_favored": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+      "flag_winner": "🇺🇸"
+    },
+    {
+      "year": 2006,
+      "home_team": "Czech Republic",
+      "away_team": "Ghana",
+      "home_score": 0,
+      "away_score": 2,
+      "favored": "Czech Republic",
+      "winner": "Ghana",
+      "elo_favored": 1898.0,
+      "elo_winner": 1616.0,
+      "elo_advantage": 281.0,
+      "flag_favored": "🇨🇿",
+      "flag_winner": "🇬🇭"
+    },
+    {
+      "year": 2018,
+      "home_team": "South Korea",
+      "away_team": "Germany",
+      "home_score": 2,
+      "away_score": 0,
+      "favored": "Germany",
+      "winner": "South Korea",
+      "elo_favored": 1942.0,
+      "elo_winner": 1693.0,
+      "elo_advantage": 249.0,
+      "flag_favored": "🇩🇪",
+      "flag_winner": "🇰🇷"
+    },
+    {
+      "year": 2022,
+      "home_team": "Tunisia",
+      "away_team": "France",
+      "home_score": 1,
+      "away_score": 0,
+      "favored": "France",
+      "winner": "Tunisia",
+      "elo_favored": 1986.0,
+      "elo_winner": 1737.0,
+      "elo_advantage": 248.0,
+      "flag_favored": "🇫🇷",
+      "flag_winner": "🇹🇳"
+    },
+    {
+      "year": 1982,
+      "home_team": "Germany",
+      "away_team": "Algeria",
+      "home_score": 1,
+      "away_score": 2,
+      "favored": "Germany",
+      "winner": "Algeria",
+      "elo_favored": 1901.0,
+      "elo_winner": 1658.0,
+      "elo_advantage": 243.0,
+      "flag_favored": "🇩🇪",
+      "flag_winner": "🇩🇿"
+    },
+    {
+      "year": 1998,
+      "home_team": "Spain",
+      "away_team": "Nigeria",
+      "home_score": 2,
+      "away_score": 3,
+      "favored": "Spain",
+      "winner": "Nigeria",
+      "elo_favored": 1882.0,
+      "elo_winner": 1639.0,
+      "elo_advantage": 242.0,
+      "flag_favored": "🇪🇸",
+      "flag_winner": "🇳🇬"
+    },
+    {
+      "year": 2002,
+      "home_team": "France",
+      "away_team": "Senegal",
+      "home_score": 0,
+      "away_score": 1,
+      "favored": "France",
+      "winner": "Senegal",
+      "elo_favored": 1936.0,
+      "elo_winner": 1706.0,
+      "elo_advantage": 230.0,
+      "flag_favored": "🇫🇷",
+      "flag_winner": "🇸🇳"
+    }
+  ],
+  "colombia": {
+    "total_matches": 22,
+    "wins": 9,
+    "draws": 3,
+    "losses": 10,
+    "goals_for": 32,
+    "goals_against": 30,
+    "win_pct": 40.9,
+    "elo_current": 1933.2,
+    "elo_rank": 8
+  }
+}
