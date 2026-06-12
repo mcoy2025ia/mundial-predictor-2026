@@ -53,6 +53,66 @@ ROUND_ORDER = [
     "Campeón",
 ]
 
+# ─── Bracket oficial 2026 (partidos 73–88 del fixture) ────────────────────────
+# "1A"/"2A" = primero/segundo del grupo A; "3:ABCDF" = mejor tercero de A/B/C/D/F.
+R32_SLOTS = [
+    ("2A", "2B"), ("1E", "3:ABCDF"), ("1F", "2C"), ("1C", "2F"),
+    ("1I", "3:CDFGH"), ("2E", "2I"), ("1A", "3:CEFHI"), ("1L", "3:EHIJK"),
+    ("1D", "3:BEFIJ"), ("1G", "3:AEHIJ"), ("2K", "2L"), ("1H", "2J"),
+    ("1B", "3:EFGIJ"), ("1J", "2H"), ("1K", "3:DEIJL"), ("2D", "2G"),
+]
+# Rondas siguientes: pares de índices sobre los ganadores de la ronda anterior.
+R16_PAIRS = [(1, 4), (0, 2), (3, 5), (6, 7), (10, 11), (8, 9), (13, 15), (12, 14)]
+QF_PAIRS = [(0, 1), (4, 5), (2, 3), (6, 7)]
+SF_PAIRS = [(0, 1), (2, 3)]
+
+THIRD_SLOTS = [
+    {"r32_index": i, "allowed": list(away[2:])}
+    for i, (_, away) in enumerate(R32_SLOTS)
+    if away.startswith("3:")
+]
+
+
+def assign_thirds(qualified: Dict[str, str]) -> Dict[int, str]:
+    """Asigna los 8 mejores terceros (grupo→equipo) a sus slots del bracket.
+
+    Backtracking respetando las restricciones del fixture (slots más
+    restringidos primero); fallback greedy si la combinación no casa.
+    """
+    order = sorted(
+        THIRD_SLOTS,
+        key=lambda s: sum(1 for g in s["allowed"] if g in qualified),
+    )
+    used: set = set()
+    result: Dict[int, str] = {}
+
+    def bt(k: int) -> bool:
+        if k == len(order):
+            return True
+        slot = order[k]
+        for g in slot["allowed"]:
+            if g in qualified and g not in used:
+                used.add(g)
+                result[slot["r32_index"]] = qualified[g]
+                if bt(k + 1):
+                    return True
+                used.discard(g)
+                del result[slot["r32_index"]]
+        return False
+
+    if not bt(0):
+        used.clear()
+        result.clear()
+        avail = list(qualified.keys())
+        for slot in order:
+            g = next(
+                (x for x in slot["allowed"] if x in qualified and x not in used),
+                None,
+            ) or next(x for x in avail if x not in used)
+            used.add(g)
+            result[slot["r32_index"]] = qualified[g]
+    return result
+
 # ─── Tipo alias ───────────────────────────────────────────────────────────────
 
 ProbsDict = Dict[str, float]   # {"team1_win": p, "draw": p, "team2_win": p}
@@ -413,29 +473,80 @@ def simulate_tournament(
         group_points[gname] = pts
 
     # ── Clasificados: top 2 (24) + 8 mejores terceros = 32 ──────────────────
-    top2: List[str] = []
-    third_candidates: List[Tuple[str, int]] = []
-
+    third_candidates: List[Tuple[str, str, int]] = []  # (grupo, equipo, pts)
     for gname, standing in group_standings.items():
-        top2.extend(standing[:2])
         third = standing[2]
-        third_candidates.append((third, group_points[gname].get(third, 0)))
+        third_candidates.append((gname, third, group_points[gname].get(third, 0)))
+    third_candidates.sort(key=lambda x: x[2], reverse=True)
 
-    third_candidates.sort(key=lambda x: x[1], reverse=True)
-    best_thirds = [t for t, _ in third_candidates[:8]]
+    official_bracket = set(groups.keys()) == set("ABCDEFGHIJKL")
+
+    if official_bracket:
+        # ── Ronda de 32 según el bracket oficial del fixture ────────────────
+        qualified_thirds = {g: t for g, t, _ in third_candidates[:8]}
+        third_by_r32 = assign_thirds(qualified_thirds)
+
+        def _resolve(slot: str, r32_index: int) -> str:
+            if slot.startswith("3:"):
+                return third_by_r32[r32_index]
+            gname = slot[1]
+            return group_standings[gname][0 if slot[0] == "1" else 1]
+
+        r32_matches = [
+            (_resolve(home, i), _resolve(away, i))
+            for i, (home, away) in enumerate(R32_SLOTS)
+        ]
+        for t1, t2 in r32_matches:
+            results[t1] = ROUND_ORDER[1]
+            results[t2] = ROUND_ORDER[1]
+
+        winners = [
+            _sample_knockout(
+                predict_match(model, t1, t2, elo_ratings, df_features, probs_cache),
+                t1, t2, shootout_stats,
+            )
+            for t1, t2 in r32_matches
+        ]
+        for t in winners:
+            results[t] = ROUND_ORDER[2]  # "Octavos de final"
+
+        # R16 → QF → SF → Final con los emparejamientos del fixture
+        for pairs, round_name in [
+            (R16_PAIRS, ROUND_ORDER[3]),
+            (QF_PAIRS, ROUND_ORDER[4]),
+            (SF_PAIRS, ROUND_ORDER[5]),
+            ([(0, 1)], ROUND_ORDER[6]),
+        ]:
+            winners = [
+                _sample_knockout(
+                    predict_match(
+                        model, winners[i], winners[j], elo_ratings, df_features, probs_cache
+                    ),
+                    winners[i], winners[j], shootout_stats,
+                )
+                for i, j in pairs
+            ]
+            for t in winners:
+                results[t] = round_name
+        return results
+
+    # ── Fallback (grupos no oficiales, p.ej. tests): bracket aleatorio ──────
+    top2: List[str] = []
+    for standing in group_standings.values():
+        top2.extend(standing[:2])
+    best_thirds = [t for _, t, _ in third_candidates[:8]]
 
     round_of_32 = top2 + best_thirds
     for t in round_of_32:
         results[t] = ROUND_ORDER[1]  # "Ronda de 32"
 
-    # ── Knockout — los ganadores ascienden; los perdedores quedan en su ronda ─
     current = round_of_32.copy()
     random.shuffle(current)
     round_idx = 2  # ganadores de R32 → ROUND_ORDER[2] = "Octavos de final"
 
     while len(current) > 1:
         next_round_name = ROUND_ORDER[round_idx] if round_idx < len(ROUND_ORDER) else ROUND_ORDER[-1]
-        winners: List[str] = []
+        winners = []
 
         for i in range(0, len(current), 2):
             t1, t2 = current[i], current[i + 1]

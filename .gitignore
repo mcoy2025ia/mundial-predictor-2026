@@ -61,3 +61,6 @@ htmlcov/
 
 # Claude Code (config local por usuario)
 .claude/settings.local.json
+
+# Build artifacts frontend
+frontend/tsconfig.tsbuildinfo

@@ -80,6 +80,80 @@ function simulateGroup(
   return { standings, points: pts };
 }
 
+// ── Bracket oficial 2026 ──────────────────────────────────────────────────────
+// Cruces reales de la Ronda de 32 según el fixture oficial (partidos 73–88).
+// "1A"/"2A" = primero/segundo del grupo A; "3:ABCDF" = mejor tercero de A/B/C/D/F.
+const R32_SLOTS = [
+  ["2A", "2B"],      // 73
+  ["1E", "3:ABCDF"], // 74
+  ["1F", "2C"],      // 75
+  ["1C", "2F"],      // 76
+  ["1I", "3:CDFGH"], // 77
+  ["2E", "2I"],      // 78
+  ["1A", "3:CEFHI"], // 79
+  ["1L", "3:EHIJK"], // 80
+  ["1D", "3:BEFIJ"], // 81
+  ["1G", "3:AEHIJ"], // 82
+  ["2K", "2L"],      // 83
+  ["1H", "2J"],      // 84
+  ["1B", "3:EFGIJ"], // 85
+  ["1J", "2H"],      // 86
+  ["1K", "3:DEIJL"], // 87
+  ["2D", "2G"],      // 88
+] as const;
+
+// Rondas siguientes: pares de índices sobre los ganadores de la ronda anterior.
+const R16_PAIRS = [[1, 4], [0, 2], [3, 5], [6, 7], [10, 11], [8, 9], [13, 15], [12, 14]] as const; // 89–96
+const QF_PAIRS = [[0, 1], [4, 5], [2, 3], [6, 7]] as const; // 97–100
+const SF_PAIRS = [[0, 1], [2, 3]] as const; // 101–102
+
+const THIRD_SLOTS: Array<{ r32Index: number; allowed: string[] }> = R32_SLOTS.flatMap(
+  ([, away], i) => (away.startsWith("3:") ? [{ r32Index: i, allowed: away.slice(2).split("") }] : [])
+);
+
+/**
+ * Asigna los 8 mejores terceros a sus slots del bracket respetando las
+ * restricciones de grupo del fixture (backtracking; los slots más restringidos
+ * primero). Si la combinación no admite asignación perfecta, cae a greedy.
+ */
+function assignThirds(qualified: Map<string, string>): Record<number, string> {
+  const order = [...THIRD_SLOTS].sort(
+    (a, b) =>
+      a.allowed.filter((g) => qualified.has(g)).length -
+      b.allowed.filter((g) => qualified.has(g)).length
+  );
+  const used = new Set<string>();
+  const result: Record<number, string> = {};
+
+  function bt(k: number): boolean {
+    if (k === order.length) return true;
+    const slot = order[k];
+    for (const g of slot.allowed) {
+      if (qualified.has(g) && !used.has(g)) {
+        used.add(g);
+        result[slot.r32Index] = qualified.get(g)!;
+        if (bt(k + 1)) return true;
+        used.delete(g);
+        delete result[slot.r32Index];
+      }
+    }
+    return false;
+  }
+
+  if (!bt(0)) {
+    used.clear();
+    const avail = [...qualified.keys()];
+    for (const slot of order) {
+      const g =
+        slot.allowed.find((x) => qualified.has(x) && !used.has(x)) ??
+        avail.find((x) => !used.has(x))!;
+      used.add(g);
+      result[slot.r32Index] = qualified.get(g)!;
+    }
+  }
+  return result;
+}
+
 export function runMonteCarlo(
   predictions: PredictionsMap,
   groups: Groups,
@@ -99,38 +173,53 @@ export function runMonteCarlo(
   const penRates = buildPenRates(teams);
 
   for (let sim = 0; sim < n; sim++) {
-    const thirds: Array<{ team: string; pts: number; elo: number }> = [];
-    const r32: string[] = [];
+    const firsts: Record<string, string> = {};
+    const seconds: Record<string, string> = {};
+    const thirds: Array<{ group: string; team: string; pts: number; elo: number }> = [];
 
-    for (const gteams of Object.values(groups)) {
+    for (const [gname, gteams] of Object.entries(groups)) {
       const { standings, points } = simulateGroup(gteams, predictions, elos, fixedResults);
       // track group finish positions (0=1st, 1=2nd, 2=3rd, 3=4th)
       standings.forEach((t, i) => { counts[t][positions[Math.min(i, 3)]]++; });
-      r32.push(standings[0], standings[1]);
-      thirds.push({ team: standings[2], pts: points[standings[2]] ?? 0, elo: elos[standings[2]] ?? 1500 });
+      firsts[gname] = standings[0];
+      seconds[gname] = standings[1];
+      thirds.push({
+        group: gname,
+        team: standings[2],
+        pts: points[standings[2]] ?? 0,
+        elo: elos[standings[2]] ?? 1500,
+      });
     }
 
     thirds.sort((a, b) => b.pts - a.pts || b.elo - a.elo);
-    const bracket = [...r32, ...thirds.slice(0, 8).map((x) => x.team)];
-    for (const t of bracket) counts[t].r32++;
+    const qualifiedThirds = new Map(thirds.slice(0, 8).map((x) => [x.group, x.team]));
+    const thirdByR32 = assignThirds(qualifiedThirds);
 
-    // shuffle bracket for knockout draw
-    for (let i = bracket.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [bracket[i], bracket[j]] = [bracket[j], bracket[i]];
-    }
+    // ── Ronda de 32 según el bracket oficial ──
+    const r32Matches: Array<[string, string]> = R32_SLOTS.map(([home, away], i) => {
+      const resolve = (slot: string): string =>
+        slot.startsWith("3:") ? thirdByR32[i] : slot[0] === "1" ? firsts[slot[1]] : seconds[slot[1]];
+      return [resolve(home), resolve(away)];
+    });
+    for (const [t1, t2] of r32Matches) { counts[t1].r32++; counts[t2].r32++; }
 
-    const roundKeys: (typeof stages[number])[] = ["r16", "qf", "sf", "final", "champion"];
-    let current = bracket;
-    for (const stage of roundKeys) {
-      const next: string[] = [];
-      for (let i = 0; i < current.length; i += 2) {
-        const p = getProbs(predictions, current[i], current[i + 1]);
-        next.push(sampleKnockout(p, current[i], current[i + 1], penRates));
-      }
-      for (const t of next) counts[t][stage]++;
-      current = next;
-      if (stage === "champion") break;
+    let winners = r32Matches.map(([t1, t2]) =>
+      sampleKnockout(getProbs(predictions, t1, t2), t1, t2, penRates)
+    );
+    for (const t of winners) counts[t].r16++;
+
+    // ── R16 → QF → SF → Final, con los emparejamientos del fixture ──
+    const rounds: Array<{ pairs: ReadonlyArray<readonly [number, number]>; stage: typeof stages[number] }> = [
+      { pairs: R16_PAIRS, stage: "qf" },
+      { pairs: QF_PAIRS, stage: "sf" },
+      { pairs: SF_PAIRS, stage: "final" },
+      { pairs: [[0, 1]], stage: "champion" },
+    ];
+    for (const { pairs, stage } of rounds) {
+      winners = pairs.map(([i, j]) =>
+        sampleKnockout(getProbs(predictions, winners[i], winners[j]), winners[i], winners[j], penRates)
+      );
+      for (const t of winners) counts[t][stage]++;
     }
   }
 
