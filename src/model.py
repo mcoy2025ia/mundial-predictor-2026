@@ -2,7 +2,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Tuple, Union
+from typing import Optional, Tuple, Union
 
 import joblib
 import numpy as np
@@ -10,6 +10,7 @@ import pandas as pd
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss
+from sklearn.model_selection import TimeSeriesSplit
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier
@@ -31,11 +32,25 @@ FEATURE_COLS = [
 ]
 
 
-def temporal_split(df: pd.DataFrame, test_year: int = 2022) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    train = df[df["year"] < test_year].copy()
+def temporal_split(
+    df: pd.DataFrame,
+    test_year: int = 2022,
+    calib_year: int = 2018,
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Retorna (train, calib, test) con corte temporal estricto.
+
+    train  < calib_year   → entrena el XGB base
+    calib == calib_year   → calibra las probabilidades (holdout temporal)
+    test  == test_year    → evaluación final, nunca vista
+    """
+    train = df[df["year"] < calib_year].copy()
+    calib = df[df["year"] == calib_year].copy()
     test = df[df["year"] == test_year].copy()
-    logger.info("Train: %d filas | Test (%d): %d filas", len(train), test_year, len(test))
-    return train, test
+    logger.info(
+        "Train: %d filas | Calib (%d): %d filas | Test (%d): %d filas",
+        len(train), calib_year, len(calib), test_year, len(test),
+    )
+    return train, calib, test
 
 
 def build_baseline() -> Pipeline:
@@ -68,19 +83,45 @@ def build_xgb_pipeline() -> Pipeline:
 def train(
     df_train: pd.DataFrame,
     model_type: str = "xgb_calibrated",
+    df_calib: Optional[pd.DataFrame] = None,
 ) -> Union[CalibratedClassifierCV, Pipeline]:
-    """Entrena un modelo. model_type: 'baseline' | 'xgb' | 'xgb_calibrated'."""
+    """Entrena un modelo. model_type: 'baseline' | 'xgb' | 'xgb_calibrated'.
+
+    Para 'xgb_calibrated':
+    - Si df_calib está presente, entrena el XGB en df_train y calibra con
+      holdout temporal (method='sigmoid', sin KFold sobre la serie).
+    - Si df_calib es None, usa prefit=False con cv=5 como fallback.
+    """
     X = df_train[FEATURE_COLS]
     y = df_train["outcome"].map(LABEL_MAP)
 
     if model_type == "baseline":
         model = build_baseline()
+        model.fit(X, y)
     elif model_type == "xgb":
         model = build_xgb_pipeline()
+        model.fit(X, y)
     else:
-        model = CalibratedClassifierCV(build_xgb_pipeline(), cv=5, method="isotonic")
+        if df_calib is not None and len(df_calib) > 0:
+            # Entrenamos con train+calib; TimeSeriesSplit respeta el orden temporal
+            # → últimos folds calibran sobre datos recientes (sin leakage KFold aleatorio)
+            df_full = pd.concat([df_train, df_calib]).sort_values("year").reset_index(drop=True)
+            X_full = df_full[FEATURE_COLS]
+            y_full = df_full["outcome"].map(LABEL_MAP)
+            tss = TimeSeriesSplit(n_splits=3)
+            model = CalibratedClassifierCV(build_xgb_pipeline(), cv=tss, method="sigmoid")
+            model.fit(X_full, y_full)
+            logger.info(
+                "Calibración temporal (TimeSeriesSplit n=3, sigmoid) sobre %d filas "
+                "(train %d + calib %d)",
+                len(df_full), len(df_train), len(df_calib),
+            )
+        else:
+            tss = TimeSeriesSplit(n_splits=5)
+            model = CalibratedClassifierCV(build_xgb_pipeline(), cv=tss, method="sigmoid")
+            model.fit(X, y)
+            logger.info("Calibración con TimeSeriesSplit n=5 (sin df_calib disponible)")
 
-    model.fit(X, y)
     logger.info("Modelo '%s' entrenado sobre %d filas", model_type, len(df_train))
     return model
 

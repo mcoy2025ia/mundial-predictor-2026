@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT))
 import numpy as np
 import pandas as pd
 
-from src.extractor import load_shootouts
+from src.extractor import load_results, load_shootouts
 from src.model import FEATURE_COLS, load_model
 from src.simulator import (
     WC2026_GROUPS,
@@ -138,6 +138,7 @@ def main():
     df_features = pd.read_parquet(DATA_PROCESSED / "features.parquet")
     df_wc = pd.read_csv(DATA_PROCESSED / "wc_clean.csv", parse_dates=["date"])
     df_wc = df_wc[df_wc["home_score"].notna()].copy()
+    df_all = load_results()  # timeline completo para forma reciente real de los 48 equipos
 
     with open(DATA_PROCESSED / "elo_current.json") as f:
         elo_ratings = json.load(f)
@@ -146,7 +147,7 @@ def main():
 
     # ── 1. teams.json ─────────────────────────────────────────────────────
     print("Exportando teams.json...")
-    team_stats = build_team_stats(df_features, elo_ratings, WC2026_TEAMS)
+    team_stats = build_team_stats(df_features, elo_ratings, WC2026_TEAMS, df_all=df_all)
     elo_sorted = list(elo_ratings.keys())
 
     shootout_stats = build_shootout_stats(load_shootouts())

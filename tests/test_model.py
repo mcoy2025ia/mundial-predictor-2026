@@ -35,15 +35,16 @@ def _make_features(n_per_year: int = 20):
 
 def test_temporal_split_no_leakage():
     df = _make_features()
-    train, test = temporal_split(df, test_year=2022)
-    assert train["year"].max() < 2022
+    train, calib, test = temporal_split(df, test_year=2022, calib_year=2018)
+    assert train["year"].max() < 2018
+    assert (calib["year"] == 2018).all()
     assert (test["year"] == 2022).all()
 
 
 def test_temporal_split_sizes():
     df = _make_features()
-    train, test = temporal_split(df, test_year=2022)
-    assert len(train) + len(test) == len(df)
+    train, calib, test = temporal_split(df, test_year=2022, calib_year=2018)
+    assert len(train) + len(calib) + len(test) == len(df)
 
 
 # --- Label map ---
@@ -62,7 +63,7 @@ def test_label_names_is_inverse():
 
 def test_baseline_pipeline_fits_and_predicts():
     df = _make_features()
-    train_df, test_df = temporal_split(df, test_year=2022)
+    train_df, calib_df, test_df = temporal_split(df, test_year=2022, calib_year=2018)
     model = build_baseline()
     model.fit(train_df[FEATURE_COLS], train_df["outcome"].map(LABEL_MAP))
     preds = model.predict(test_df[FEATURE_COLS])
@@ -72,7 +73,7 @@ def test_baseline_pipeline_fits_and_predicts():
 
 def test_xgb_pipeline_predict_proba_sums_to_one():
     df = _make_features()
-    train_df, test_df = temporal_split(df, test_year=2022)
+    train_df, calib_df, test_df = temporal_split(df, test_year=2022, calib_year=2018)
     model = build_xgb_pipeline()
     model.fit(train_df[FEATURE_COLS], train_df["outcome"].map(LABEL_MAP))
     probas = model.predict_proba(test_df[FEATURE_COLS])
@@ -84,7 +85,7 @@ def test_xgb_pipeline_predict_proba_sums_to_one():
 
 def test_evaluate_returns_required_keys():
     df = _make_features()
-    train_df, test_df = temporal_split(df, test_year=2022)
+    train_df, calib_df, test_df = temporal_split(df, test_year=2022, calib_year=2018)
     model = train(train_df, model_type="baseline")
     metrics = evaluate(model, test_df, model_name="test_model")
     assert "test_model" in metrics
@@ -96,7 +97,7 @@ def test_evaluate_returns_required_keys():
 
 def test_evaluate_accuracy_in_range():
     df = _make_features()
-    train_df, test_df = temporal_split(df, test_year=2022)
+    train_df, calib_df, test_df = temporal_split(df, test_year=2022, calib_year=2018)
     model = train(train_df, model_type="baseline")
     metrics = evaluate(model, test_df, model_name="test_model")
     acc = metrics["test_model"]["accuracy"]

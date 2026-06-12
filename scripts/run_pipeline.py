@@ -42,8 +42,9 @@ def main() -> None:
     df_features = build_feature_matrix(df_all, df_wc_played)
     save_features(df_features)
 
-    # 4. Entrenamiento + evaluacion (split temporal, test = Qatar 2022)
-    train_df, test_df = temporal_split(df_features, test_year=2022)
+    # 4. Entrenamiento + evaluacion
+    # Split temporal: train < 2018 | calib = 2018 (holdout para calibración) | test = 2022
+    train_df, calib_df, test_df = temporal_split(df_features, test_year=2022, calib_year=2018)
 
     metrics = {}
     for name, mtype, fname in [
@@ -51,9 +52,12 @@ def main() -> None:
         ("xgb_v1", "xgb", "xgb_v1.pkl"),
         ("xgb_calibrated", "xgb_calibrated", "xgb_calibrated.pkl"),
     ]:
-        model = train(train_df, model_type=mtype)
+        # xgb_calibrated usa holdout temporal para calibración (sin KFold aleatorio)
+        calib_arg = calib_df if mtype == "xgb_calibrated" else None
+        model = train(train_df, model_type=mtype, df_calib=calib_arg)
         m = evaluate(model, test_df, model_name=name)
         m[name]["n_train"] = len(train_df)
+        m[name]["n_calib"] = len(calib_df) if calib_arg is not None else 0
         metrics.update(m)
         if fname:
             save_model(model, MODELS_DIR / fname)

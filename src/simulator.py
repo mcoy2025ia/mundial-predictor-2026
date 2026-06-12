@@ -43,6 +43,9 @@ WC2026_GROUPS: Dict[str, List[str]] = {
 
 WC2026_TEAMS: List[str] = [t for teams in WC2026_GROUPS.values() for t in teams]
 
+# Selecciones que juegan en casa en 2026 (is_neutral=0 cuando son "local" en el fixture)
+WC2026_HOSTS: set = {"Mexico", "United States", "Canada"}
+
 ROUND_ORDER = [
     "Fase de Grupos",
     "Ronda de 32",
@@ -125,36 +128,53 @@ def build_team_stats(
     df_features: pd.DataFrame,
     elo_ratings: Dict[str, float],
     teams: Optional[List[str]] = None,
+    df_all: Optional[pd.DataFrame] = None,
 ) -> Dict[str, dict]:
+    """Pre-computa stats de equipo para lookups O(1).
+
+    df_all: todos los internacionales (no solo WC). Si se provee, la forma
+    reciente se calcula desde el timeline completo — elimina los defaults
+    silenciosos para debutantes y el skew train/serving para el resto.
+    Si df_all es None, cae al comportamiento anterior (solo feature matrix WC).
     """
-    Pre-computa stats de equipo (ELO, goles, experiencia WC) para lookups O(1).
-    Reemplaza los 3 pandas-scans que hacía predict_match por acceso a dict.
-    """
+    from src.features import compute_current_form
+
     if teams is None:
         teams = list(set(df_features["home_team"]) | set(df_features["away_team"]))
 
+    # Forma reciente: desde timeline completo si disponible, sino desde WC
+    if df_all is not None:
+        current_form = compute_current_form(df_all, teams=teams)
+    else:
+        current_form = None
+
     cache: Dict[str, dict] = {}
     for team in teams:
-        mask = (df_features["home_team"] == team) | (df_features["away_team"] == team)
-        rows = df_features[mask].sort_values("date")
-        if rows.empty:
-            cache[team] = {
-                "elo": elo_ratings.get(team, DEFAULT_ELO),
-                "goals_scored": 1.5, "goals_conceded": 1.2, "wc_matches": 0,
-            }
-            continue
-        last = rows.iloc[-1]
-        if last["home_team"] == team:
-            scored = float(last["home_goals_scored_avg5"])
-            conceded = float(last["home_goals_conceded_avg5"])
+        wc_mask = (df_features["home_team"] == team) | (df_features["away_team"] == team)
+        wc_matches = int(wc_mask.sum())
+
+        if current_form is not None:
+            form = current_form.get(team, {"goals_scored": 1.5, "goals_conceded": 1.2})
+            scored = form["goals_scored"]
+            conceded = form["goals_conceded"]
         else:
-            scored = float(last["away_goals_scored_avg5"])
-            conceded = float(last["away_goals_conceded_avg5"])
+            rows = df_features[wc_mask].sort_values("date")
+            if rows.empty:
+                scored, conceded = 1.5, 1.2
+            else:
+                last = rows.iloc[-1]
+                if last["home_team"] == team:
+                    scored = float(last["home_goals_scored_avg5"])
+                    conceded = float(last["home_goals_conceded_avg5"])
+                else:
+                    scored = float(last["away_goals_scored_avg5"])
+                    conceded = float(last["away_goals_conceded_avg5"])
+
         cache[team] = {
             "elo": elo_ratings.get(team, DEFAULT_ELO),
             "goals_scored": scored,
             "goals_conceded": conceded,
-            "wc_matches": len(rows),
+            "wc_matches": wc_matches,
         }
     return cache
 
@@ -201,15 +221,18 @@ def precompute_match_probs(
     team_stats: Dict[str, dict],
     h2h_stats: Dict[tuple, float],
     teams: Optional[List[str]] = None,
+    host_teams: Optional[set] = None,
 ) -> PropsCache:
-    """
-    Pre-computa probabilidades para todos los pares posibles con UN SOLO
-    batch predict_proba (1128 filas para 48 equipos en vez de 1128 llamadas).
+    """Pre-computa probabilidades para todos los pares posibles en un batch.
 
-    Speedup: de ~90 minutos (llamadas individuales) a ~2 segundos.
+    host_teams: selecciones que juegan en casa (is_neutral=0 cuando son "local").
+    Para cada par (t1, t2) se generan dos filas: t1 como local y t2 como local,
+    lo que produce probabilidades asimétricas cuando alguno es anfitrión.
     """
     if teams is None:
         teams = WC2026_TEAMS
+    if host_teams is None:
+        host_teams = WC2026_HOSTS
 
     _def = {"elo": DEFAULT_ELO, "goals_scored": 1.5, "goals_conceded": 1.2, "wc_matches": 0}
 
@@ -223,6 +246,8 @@ def precompute_match_probs(
     for t1, t2 in pairs:
         s1 = team_stats.get(t1, _def)
         s2 = team_stats.get(t2, _def)
+        # is_neutral=0 si t1 es anfitrión y t2 no; neutral en cualquier otro caso
+        is_neutral = 0 if (t1 in host_teams and t2 not in host_teams) else 1
         rows.append({
             "elo_diff": s1["elo"] - s2["elo"],
             "elo_home": s1["elo"],
@@ -232,18 +257,37 @@ def precompute_match_probs(
             "away_goals_scored_avg5": s2["goals_scored"],
             "away_goals_conceded_avg5": s2["goals_conceded"],
             "h2h_home_win_pct": h2h_stats.get((t1, t2), 0.5),
-            "is_neutral": 1,
+            "is_neutral": is_neutral,
             "wc_experience_diff": s1["wc_matches"] - s2["wc_matches"],
         })
 
     df_batch = pd.DataFrame(rows)[FEATURE_COLS]
-    probas = model.predict_proba(df_batch)  # un solo batch call
+    probas = model.predict_proba(df_batch)
 
     cache: PropsCache = {}
     for idx, (t1, t2) in enumerate(pairs):
         p0, p1, p2 = float(probas[idx][0]), float(probas[idx][1]), float(probas[idx][2])
         cache[(t1, t2)] = {"team1_win": p0, "draw": p1, "team2_win": p2}
-        cache[(t2, t1)] = {"team1_win": p2, "draw": p1, "team2_win": p0}
+        # Para (t2, t1): t2 es "local" — is_neutral=0 si t2 es anfitrión
+        s1, s2 = team_stats.get(t2, _def), team_stats.get(t1, _def)
+        is_neutral_rev = 0 if (t2 in host_teams and t1 not in host_teams) else 1
+        if is_neutral_rev != is_neutral:
+            row_rev = pd.DataFrame([{
+                "elo_diff": s1["elo"] - s2["elo"],
+                "elo_home": s1["elo"],
+                "elo_away": s2["elo"],
+                "home_goals_scored_avg5": s1["goals_scored"],
+                "home_goals_conceded_avg5": s1["goals_conceded"],
+                "away_goals_scored_avg5": s2["goals_scored"],
+                "away_goals_conceded_avg5": s2["goals_conceded"],
+                "h2h_home_win_pct": h2h_stats.get((t2, t1), 0.5),
+                "is_neutral": is_neutral_rev,
+                "wc_experience_diff": s1["wc_matches"] - s2["wc_matches"],
+            }])[FEATURE_COLS]
+            pr = model.predict_proba(row_rev)[0]
+            cache[(t2, t1)] = {"team1_win": float(pr[0]), "draw": float(pr[1]), "team2_win": float(pr[2])}
+        else:
+            cache[(t2, t1)] = {"team1_win": p2, "draw": p1, "team2_win": p0}
 
     logger.info("precompute_match_probs: %d pares calculados en batch", len(pairs))
     return cache
@@ -307,7 +351,8 @@ def predict_match(
         "elo_diff": elo1 - elo2, "elo_home": elo1, "elo_away": elo2,
         "home_goals_scored_avg5": gs1, "home_goals_conceded_avg5": gc1,
         "away_goals_scored_avg5": gs2, "away_goals_conceded_avg5": gc2,
-        "h2h_home_win_pct": h2h_pct, "is_neutral": 1,
+        "h2h_home_win_pct": h2h_pct,
+        "is_neutral": 0 if (team1 in WC2026_HOSTS and team2 not in WC2026_HOSTS) else 1,
         "wc_experience_diff": n1 - n2,
     }])[FEATURE_COLS]
 

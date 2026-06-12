@@ -3,7 +3,7 @@ import json
 import logging
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -226,6 +226,51 @@ def build_feature_matrix(df_all: pd.DataFrame, df_wc: pd.DataFrame) -> pd.DataFr
     df_features = wc[[c for c in feature_cols if c in wc.columns]].copy()
     logger.info("Feature matrix lista: %d filas, %d columnas", *df_features.shape)
     return df_features
+
+
+def compute_current_form(
+    df_all: pd.DataFrame,
+    teams: Optional[List[str]] = None,
+    n: int = 5,
+) -> Dict[str, Dict[str, float]]:
+    """Calcula la forma reciente de cada equipo desde el timeline completo de internacionales.
+
+    A diferencia de build_feature_matrix, aquí NO hacemos shift(1): queremos
+    incluir el último partido jugado porque esto es para serving, no entrenamiento.
+    Retorna {team: {goals_scored: x, goals_conceded: y}} con los últimos n partidos.
+    """
+    home = df_all[["date", "home_team", "home_score", "away_score"]].dropna().copy()
+    home.columns = ["date", "team", "scored", "conceded"]
+    away = df_all[["date", "away_team", "away_score", "home_score"]].dropna().copy()
+    away.columns = ["date", "team", "scored", "conceded"]
+
+    timeline = (
+        pd.concat([home, away])
+        .sort_values(["team", "date"])
+        .reset_index(drop=True)
+    )
+
+    global_scored = float(df_all["home_score"].dropna().mean())
+    global_conceded = float(df_all["away_score"].dropna().mean())
+
+    target_teams = set(teams) if teams is not None else set(timeline["team"].unique())
+    result: Dict[str, Dict[str, float]] = {}
+
+    for team, grp in timeline.groupby("team"):
+        if team not in target_teams:
+            continue
+        last_n = grp.tail(n)
+        result[team] = {
+            "goals_scored": float(last_n["scored"].mean()) if len(last_n) > 0 else global_scored,
+            "goals_conceded": float(last_n["conceded"].mean()) if len(last_n) > 0 else global_conceded,
+        }
+
+    # Equipos sin historial → media global
+    for team in target_teams:
+        if team not in result:
+            result[team] = {"goals_scored": global_scored, "goals_conceded": global_conceded}
+
+    return result
 
 
 def save_features(df: pd.DataFrame, path: Path = DATA_PROCESSED / "features.parquet") -> None:
