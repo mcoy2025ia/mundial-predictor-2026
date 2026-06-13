@@ -11,3 +11,4 @@ pyarrow
 kagglehub
 python-dotenv
 requests
+pyyaml>=6.0

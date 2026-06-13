@@ -1,7 +1,7 @@
 {
   "Mexico": {
-    "elo": 1892.8,
-    "rank": 15,
+    "elo": 2062.7,
+    "rank": 17,
     "flag": "🇲🇽",
     "group": "A",
     "confederation": "CONCACAF",
@@ -12,8 +12,8 @@
     "pen_total": 14
   },
   "South Africa": {
-    "elo": 1635.5,
-    "rank": 74,
+    "elo": 1737.3,
+    "rank": 67,
     "flag": "🇿🇦",
     "group": "A",
     "confederation": "CAF",
@@ -24,8 +24,8 @@
     "pen_total": 28
   },
   "South Korea": {
-    "elo": 1842.0,
-    "rank": 23,
+    "elo": 2025.1,
+    "rank": 22,
     "flag": "🇰🇷",
     "group": "A",
     "confederation": "AFC",
@@ -36,8 +36,8 @@
     "pen_total": 25
   },
   "Czech Republic": {
-    "elo": 1765.8,
-    "rank": 36,
+    "elo": 1840.4,
+    "rank": 43,
     "flag": "🇨🇿",
     "group": "A",
     "confederation": "UEFA",
@@ -48,8 +48,8 @@
     "pen_total": 7
   },
   "Canada": {
-    "elo": 1824.3,
-    "rank": 26,
+    "elo": 1997.6,
+    "rank": 25,
     "flag": "🇨🇦",
     "group": "B",
     "confederation": "CONCACAF",
@@ -60,8 +60,8 @@
     "pen_total": 8
   },
   "Qatar": {
-    "elo": 1578.8,
-    "rank": 94,
+    "elo": 1626.9,
+    "rank": 93,
     "flag": "🇶🇦",
     "group": "B",
     "confederation": "AFC",
@@ -72,8 +72,8 @@
     "pen_total": 9
   },
   "Bosnia and Herzegovina": {
-    "elo": 1637.4,
-    "rank": 72,
+    "elo": 1621.3,
+    "rank": 95,
     "flag": "🇧🇦",
     "group": "B",
     "confederation": "UEFA",
@@ -84,8 +84,8 @@
     "pen_total": 4
   },
   "Switzerland": {
-    "elo": 1860.0,
-    "rank": 20,
+    "elo": 2077.3,
+    "rank": 16,
     "flag": "🇨🇭",
     "group": "B",
     "confederation": "UEFA",
@@ -96,8 +96,8 @@
     "pen_total": 8
   },
   "Brazil": {
-    "elo": 1955.6,
-    "rank": 6,
+    "elo": 2230.7,
+    "rank": 5,
     "flag": "🇧🇷",
     "group": "C",
     "confederation": "CONMEBOL",
@@ -108,8 +108,8 @@
     "pen_total": 16
   },
   "Haiti": {
-    "elo": 1604.9,
-    "rank": 88,
+    "elo": 1725.1,
+    "rank": 74,
     "flag": "🇭🇹",
     "group": "C",
     "confederation": "CONCACAF",
@@ -120,8 +120,8 @@
     "pen_total": 2
   },
   "Morocco": {
-    "elo": 1916.9,
-    "rank": 11,
+    "elo": 2110.7,
+    "rank": 10,
     "flag": "🇲🇦",
     "group": "C",
     "confederation": "CAF",
@@ -132,8 +132,8 @@
     "pen_total": 14
   },
   "Scotland": {
-    "elo": 1760.0,
-    "rank": 39,
+    "elo": 1887.0,
+    "rank": 36,
     "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
     "group": "C",
     "confederation": "UEFA",
@@ -144,8 +144,8 @@
     "pen_total": 2
   },
   "United States": {
-    "elo": 1819.7,
-    "rank": 28,
+    "elo": 1916.4,
+    "rank": 33,
     "flag": "🇺🇸",
     "group": "D",
     "confederation": "CONCACAF",
@@ -156,8 +156,8 @@
     "pen_total": 10
   },
   "Paraguay": {
-    "elo": 1803.9,
-    "rank": 30,
+    "elo": 1929.0,
+    "rank": 31,
     "flag": "🇵🇾",
     "group": "D",
     "confederation": "CONMEBOL",
@@ -168,8 +168,8 @@
     "pen_total": 13
   },
   "Turkey": {
-    "elo": 1880.6,
-    "rank": 17,
+    "elo": 2024.9,
+    "rank": 23,
     "flag": "🇹🇷",
     "group": "D",
     "confederation": "UEFA",
@@ -180,8 +180,8 @@
     "pen_total": 1
   },
   "Australia": {
-    "elo": 1804.2,
-    "rank": 29,
+    "elo": 1987.8,
+    "rank": 26,
     "flag": "🇦🇺",
     "group": "D",
     "confederation": "AFC",
@@ -192,8 +192,8 @@
     "pen_total": 8
   },
   "Germany": {
-    "elo": 1956.1,
-    "rank": 5,
+    "elo": 2114.7,
+    "rank": 9,
     "flag": "🇩🇪",
     "group": "E",
     "confederation": "UEFA",
@@ -204,8 +204,8 @@
     "pen_total": 8
   },
   "Ecuador": {
-    "elo": 1903.2,
-    "rank": 12,
+    "elo": 2090.1,
+    "rank": 15,
     "flag": "🇪🇨",
     "group": "E",
     "confederation": "CONMEBOL",
@@ -216,8 +216,8 @@
     "pen_total": 4
   },
   "Ivory Coast": {
-    "elo": 1773.7,
-    "rank": 34,
+    "elo": 1872.9,
+    "rank": 38,
     "flag": "🇨🇮",
     "group": "E",
     "confederation": "CAF",
@@ -228,8 +228,8 @@
     "pen_total": 18
   },
   "Curacao": {
-    "elo": 1521.5,
-    "rank": 130,
+    "elo": 1615.0,
+    "rank": 97,
     "flag": "🇨🇼",
     "group": "E",
     "confederation": "CONCACAF",
@@ -240,8 +240,8 @@
     "pen_total": 2
   },
   "Netherlands": {
-    "elo": 1927.6,
-    "rank": 9,
+    "elo": 2139.2,
+    "rank": 8,
     "flag": "🇳🇱",
     "group": "F",
     "confederation": "UEFA",
@@ -252,8 +252,8 @@
     "pen_total": 10
   },
   "Japan": {
-    "elo": 1922.1,
-    "rank": 10,
+    "elo": 2100.3,
+    "rank": 11,
     "flag": "🇯🇵",
     "group": "F",
     "confederation": "AFC",
@@ -264,8 +264,8 @@
     "pen_total": 12
   },
   "Sweden": {
-    "elo": 1754.6,
-    "rank": 41,
+    "elo": 1812.3,
+    "rank": 51,
     "flag": "🇸🇪",
     "group": "F",
     "confederation": "UEFA",
@@ -276,8 +276,8 @@
     "pen_total": 6
   },
   "Tunisia": {
-    "elo": 1685.5,
-    "rank": 58,
+    "elo": 1826.4,
+    "rank": 47,
     "flag": "🇹🇳",
     "group": "F",
     "confederation": "CAF",
@@ -288,8 +288,8 @@
     "pen_total": 13
   },
   "Belgium": {
-    "elo": 1891.2,
-    "rank": 16,
+    "elo": 2093.8,
+    "rank": 14,
     "flag": "🇧🇪",
     "group": "G",
     "confederation": "UEFA",
@@ -300,8 +300,8 @@
     "pen_total": 2
   },
   "Egypt": {
-    "elo": 1758.3,
-    "rank": 40,
+    "elo": 1893.2,
+    "rank": 34,
     "flag": "🇪🇬",
     "group": "G",
     "confederation": "CAF",
@@ -312,8 +312,8 @@
     "pen_total": 26
   },
   "Iran": {
-    "elo": 1830.1,
-    "rank": 25,
+    "elo": 1999.3,
+    "rank": 24,
     "flag": "🇮🇷",
     "group": "G",
     "confederation": "AFC",
@@ -324,8 +324,8 @@
     "pen_total": 23
   },
   "New Zealand": {
-    "elo": 1628.5,
-    "rank": 78,
+    "elo": 1761.7,
+    "rank": 63,
     "flag": "🇳🇿",
     "group": "G",
     "confederation": "OFC",
@@ -336,7 +336,7 @@
     "pen_total": 4
   },
   "Spain": {
-    "elo": 2058.9,
+    "elo": 2436.3,
     "rank": 1,
     "flag": "🇪🇸",
     "group": "H",
@@ -348,8 +348,8 @@
     "pen_total": 14
   },
   "Uruguay": {
-    "elo": 1860.1,
-    "rank": 19,
+    "elo": 2099.7,
+    "rank": 12,
     "flag": "🇺🇾",
     "group": "H",
     "confederation": "CONMEBOL",
@@ -360,8 +360,8 @@
     "pen_total": 17
   },
   "Saudi Arabia": {
-    "elo": 1666.3,
-    "rank": 63,
+    "elo": 1734.6,
+    "rank": 69,
     "flag": "🇸🇦",
     "group": "H",
     "confederation": "AFC",
@@ -372,8 +372,8 @@
     "pen_total": 9
   },
   "Cape Verde": {
-    "elo": 1619.3,
-    "rank": 84,
+    "elo": 1657.8,
+    "rank": 86,
     "flag": "🇨🇻",
     "group": "H",
     "confederation": "CAF",
@@ -384,7 +384,7 @@
     "pen_total": 5
   },
   "France": {
-    "elo": 1998.6,
+    "elo": 2303.6,
     "rank": 3,
     "flag": "🇫🇷",
     "group": "I",
@@ -396,8 +396,8 @@
     "pen_total": 11
   },
   "Senegal": {
-    "elo": 1821.8,
-    "rank": 27,
+    "elo": 2052.6,
+    "rank": 18,
     "flag": "🇸🇳",
     "group": "I",
     "confederation": "CAF",
@@ -408,8 +408,8 @@
     "pen_total": 21
   },
   "Norway": {
-    "elo": 1854.3,
-    "rank": 21,
+    "elo": 2044.6,
+    "rank": 20,
     "flag": "🇳🇴",
     "group": "I",
     "confederation": "UEFA",
@@ -420,8 +420,8 @@
     "pen_total": 0
   },
   "Iraq": {
-    "elo": 1704.9,
-    "rank": 52,
+    "elo": 1791.8,
+    "rank": 53,
     "flag": "🇮🇶",
     "group": "I",
     "confederation": "AFC",
@@ -432,7 +432,7 @@
     "pen_total": 15
   },
   "Argentina": {
-    "elo": 2058.1,
+    "elo": 2345.7,
     "rank": 2,
     "flag": "🇦🇷",
     "group": "J",
@@ -444,8 +444,8 @@
     "pen_total": 23
   },
   "Algeria": {
-    "elo": 1836.0,
-    "rank": 24,
+    "elo": 1971.2,
+    "rank": 28,
     "flag": "🇩🇿",
     "group": "J",
     "confederation": "CAF",
@@ -456,8 +456,8 @@
     "pen_total": 15
   },
   "Austria": {
-    "elo": 1850.7,
-    "rank": 22,
+    "elo": 1981.3,
+    "rank": 27,
     "flag": "🇦🇹",
     "group": "J",
     "confederation": "UEFA",
@@ -468,8 +468,8 @@
     "pen_total": 2
   },
   "Jordan": {
-    "elo": 1683.4,
-    "rank": 60,
+    "elo": 1836.7,
+    "rank": 45,
     "flag": "🇯🇴",
     "group": "J",
     "confederation": "AFC",
@@ -480,8 +480,8 @@
     "pen_total": 3
   },
   "Colombia": {
-    "elo": 1939.5,
-    "rank": 8,
+    "elo": 2196.5,
+    "rank": 6,
     "flag": "🇨🇴",
     "group": "K",
     "confederation": "CONMEBOL",
@@ -492,8 +492,8 @@
     "pen_total": 12
   },
   "Portugal": {
-    "elo": 1965.8,
-    "rank": 4,
+    "elo": 2144.4,
+    "rank": 7,
     "flag": "🇵🇹",
     "group": "K",
     "confederation": "UEFA",
@@ -504,8 +504,8 @@
     "pen_total": 8
   },
   "DR Congo": {
-    "elo": 1679.3,
-    "rank": 61,
+    "elo": 1753.6,
+    "rank": 65,
     "flag": "🇨🇩",
     "group": "K",
     "confederation": "CAF",
@@ -516,7 +516,7 @@
     "pen_total": 8
   },
   "Uzbekistan": {
-    "elo": 1754.4,
+    "elo": 1851.4,
     "rank": 42,
     "flag": "🇺🇿",
     "group": "K",
@@ -528,8 +528,8 @@
     "pen_total": 5
   },
   "England": {
-    "elo": 1954.1,
-    "rank": 7,
+    "elo": 2234.1,
+    "rank": 4,
     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "group": "L",
     "confederation": "UEFA",
@@ -540,8 +540,8 @@
     "pen_total": 12
   },
   "Croatia": {
-    "elo": 1896.7,
-    "rank": 14,
+    "elo": 2097.2,
+    "rank": 13,
     "flag": "🇭🇷",
     "group": "L",
     "confederation": "UEFA",
@@ -552,8 +552,8 @@
     "pen_total": 11
   },
   "Ghana": {
-    "elo": 1570.2,
-    "rank": 101,
+    "elo": 1699.8,
+    "rank": 80,
     "flag": "🇬🇭",
     "group": "L",
     "confederation": "CAF",
@@ -564,8 +564,8 @@
     "pen_total": 13
   },
   "Panama": {
-    "elo": 1730.6,
-    "rank": 48,
+    "elo": 1957.5,
+    "rank": 30,
     "flag": "🇵🇦",
     "group": "L",
     "confederation": "CONCACAF",

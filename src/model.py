@@ -30,6 +30,7 @@ FEATURE_COLS = [
     "away_goals_scored_avg5", "away_goals_conceded_avg5",
     "h2h_home_win_pct", "is_neutral", "wc_experience_diff",
 ]
+WEIGHT_COL = "tournament_weight"
 
 
 def temporal_split(
@@ -80,6 +81,13 @@ def build_xgb_pipeline() -> Pipeline:
     return Pipeline([("scaler", StandardScaler()), ("xgb", xgb)])
 
 
+def _sample_weights(df: pd.DataFrame) -> Optional[np.ndarray]:
+    """Retorna sample_weight desde tournament_weight si existe, sino None."""
+    if WEIGHT_COL in df.columns:
+        return df[WEIGHT_COL].to_numpy(dtype=float)
+    return None
+
+
 def train(
     df_train: pd.DataFrame,
     model_type: str = "xgb_calibrated",
@@ -94,23 +102,26 @@ def train(
     """
     X = df_train[FEATURE_COLS]
     y = df_train["outcome"].map(LABEL_MAP)
+    sw = _sample_weights(df_train)
 
     if model_type == "baseline":
         model = build_baseline()
-        model.fit(X, y)
+        fit_params = {"lr__sample_weight": sw} if sw is not None else {}
+        model.fit(X, y, **fit_params)
     elif model_type == "xgb":
         model = build_xgb_pipeline()
-        model.fit(X, y)
+        fit_params = {"xgb__sample_weight": sw} if sw is not None else {}
+        model.fit(X, y, **fit_params)
     else:
         if df_calib is not None and len(df_calib) > 0:
-            # Entrenamos con train+calib; TimeSeriesSplit respeta el orden temporal
-            # → últimos folds calibran sobre datos recientes (sin leakage KFold aleatorio)
             df_full = pd.concat([df_train, df_calib]).sort_values("year").reset_index(drop=True)
             X_full = df_full[FEATURE_COLS]
             y_full = df_full["outcome"].map(LABEL_MAP)
+            sw_full = _sample_weights(df_full)
             tss = TimeSeriesSplit(n_splits=3)
             model = CalibratedClassifierCV(build_xgb_pipeline(), cv=tss, method="sigmoid")
-            model.fit(X_full, y_full)
+            fit_params = {"xgb__sample_weight": sw_full} if sw_full is not None else {}
+            model.fit(X_full, y_full, **fit_params)
             logger.info(
                 "Calibración temporal (TimeSeriesSplit n=3, sigmoid) sobre %d filas "
                 "(train %d + calib %d)",
@@ -119,40 +130,61 @@ def train(
         else:
             tss = TimeSeriesSplit(n_splits=5)
             model = CalibratedClassifierCV(build_xgb_pipeline(), cv=tss, method="sigmoid")
-            model.fit(X, y)
+            fit_params = {"xgb__sample_weight": sw} if sw is not None else {}
+            model.fit(X, y, **fit_params)
             logger.info("Calibración con TimeSeriesSplit n=5 (sin df_calib disponible)")
 
     logger.info("Modelo '%s' entrenado sobre %d filas", model_type, len(df_train))
     return model
 
 
+def rps_score(y_true_labels: np.ndarray, y_proba: np.ndarray) -> float:
+    """Ranked Probability Score promedio para predicciones 3-clase.
+
+    Métrica propia para 1X2: respeta el orden de los outcomes (home < draw < away).
+    Menor es mejor; RPS=0 implica predicción perfecta.
+    """
+    n, k = y_proba.shape
+    total = 0.0
+    for i in range(n):
+        obs = np.zeros(k)
+        obs[int(y_true_labels[i])] = 1.0
+        cum_pred = np.cumsum(y_proba[i])
+        cum_obs = np.cumsum(obs)
+        total += np.sum((cum_pred[:-1] - cum_obs[:-1]) ** 2) / (k - 1)
+    return float(total / n)
+
+
 def evaluate(model, df_test: pd.DataFrame, model_name: str = "model") -> dict:
-    """Evalúa el modelo y retorna diccionario de métricas."""
+    """Evalúa el modelo y retorna diccionario de métricas (acc, log_loss, brier, RPS)."""
     X = df_test[FEATURE_COLS]
     y_true = df_test["outcome"].map(LABEL_MAP)
     y_pred = model.predict(X)
     y_proba = model.predict_proba(X)
 
-    # Brier score por clase (media de las tres clases)
     brier_scores = []
-    for i, label in LABEL_NAMES.items():
+    for i in LABEL_NAMES:
         y_bin = (y_true == i).astype(int)
         brier_scores.append(brier_score_loss(y_bin, y_proba[:, i]))
+
+    rps = rps_score(y_true.to_numpy(), y_proba)
 
     metrics = {
         model_name: {
             "accuracy": round(accuracy_score(y_true, y_pred), 4),
             "log_loss": round(log_loss(y_true, y_proba), 4),
             "brier_mean": round(float(np.mean(brier_scores)), 4),
+            "rps": round(rps, 4),
             "n_train": None,
             "n_test": len(df_test),
         }
     }
-    logger.info("%s — acc=%.3f | log_loss=%.3f | brier=%.4f",
+    logger.info("%s — acc=%.3f | log_loss=%.3f | brier=%.4f | rps=%.4f",
                 model_name,
                 metrics[model_name]["accuracy"],
                 metrics[model_name]["log_loss"],
-                metrics[model_name]["brier_mean"])
+                metrics[model_name]["brier_mean"],
+                metrics[model_name]["rps"])
     return metrics
 
 

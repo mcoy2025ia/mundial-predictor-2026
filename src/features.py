@@ -14,7 +14,36 @@ DATA_PROCESSED = ROOT / "data" / "processed"
 logger = logging.getLogger(__name__)
 
 INITIAL_ELO = 1500.0
-K_FACTOR = 32.0
+HOME_ADVANTAGE_ELO = 100.0  # puntos extra al local cuando is_neutral=False
+
+# K-factor por tipo de torneo (mayor importancia → mayor actualización)
+K_BY_TOURNAMENT: Dict[str, float] = {
+    "FIFA World Cup": 60.0,
+    "UEFA Euro": 55.0,
+    "Copa América": 55.0,
+    "African Cup of Nations": 50.0,
+    "AFC Asian Cup": 50.0,
+    "Gold Cup": 45.0,
+    "CONCACAF Nations League": 40.0,
+    "UEFA Nations League": 40.0,
+    "FIFA World Cup qualification": 40.0,
+    "UEFA Euro qualification": 35.0,
+    "African Cup of Nations qualification": 35.0,
+    "Copa América qualification": 35.0,
+    "AFC Asian Cup qualification": 35.0,
+    "CONCACAF Nations League qualification": 30.0,
+    "Friendly": 20.0,
+}
+_DEFAULT_K = 30.0
+
+
+def _k_factor(tournament: str) -> float:
+    return K_BY_TOURNAMENT.get(tournament, _DEFAULT_K)
+
+
+def _goal_margin_multiplier(goal_diff: int) -> float:
+    """Escala el K por margen de victoria: log(1 + |GD|) normalizado a 1.0 para GD=1."""
+    return np.log1p(abs(goal_diff)) / np.log1p(1)
 
 
 # ---------------------------------------------------------------------------
@@ -25,21 +54,27 @@ def expected_score(rating_a: float, rating_b: float) -> float:
     return 1 / (1 + 10 ** ((rating_b - rating_a) / 400))
 
 
-def update_elo(rating: float, expected: float, actual: float, k: float = K_FACTOR) -> float:
+def update_elo(rating: float, expected: float, actual: float, k: float = 32.0) -> float:
+    """Actualiza el ELO de un equipo (API pública para tests y uso externo)."""
     return rating + k * (actual - expected)
 
 
 def compute_elo_ratings(df_all: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, float]]:
-    """Calcula ELO pre-match cronológicamente sobre todos los partidos.
+    """ELO mejorado: K por torneo, multiplicador por margen de goles, home advantage.
 
-    Retorna (df con elo_home/elo_away/elo_diff, dict ratings finales).
-    Partidos sin score (NaN) registran el ELO actual pero no lo actualizan.
+    - K varía por importancia del torneo (60 para WC, 20 para amistosos).
+    - El update se escala por log(1+|GD|) para que las goleadas cuenten más.
+    - Cuando neutral=False, se suma HOME_ADVANTAGE_ELO al expected del local
+      antes de calcular el update (el modelo aprende que local gana más).
     """
     df = df_all.sort_values("date").reset_index(drop=True)
     ratings: Dict[str, float] = {}
 
     elo_home_pre = np.empty(len(df))
     elo_away_pre = np.empty(len(df))
+
+    has_neutral = "neutral" in df.columns
+    has_tournament = "tournament" in df.columns
 
     for i, row in enumerate(df.itertuples(index=False)):
         home, away = row.home_team, row.away_team
@@ -53,7 +88,11 @@ def compute_elo_ratings(df_all: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, f
         if pd.isna(hs) or pd.isna(as_):
             continue
 
-        exp_home = expected_score(r_home, r_away)
+        # Home advantage en el expected score (solo partidos no neutrales)
+        is_neutral = bool(getattr(row, "neutral", True)) if has_neutral else True
+        r_home_adj = r_home + (HOME_ADVANTAGE_ELO if not is_neutral else 0.0)
+        exp_home = expected_score(r_home_adj, r_away)
+
         if hs > as_:
             actual_home, actual_away = 1.0, 0.0
         elif hs == as_:
@@ -61,8 +100,12 @@ def compute_elo_ratings(df_all: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, f
         else:
             actual_home, actual_away = 0.0, 1.0
 
-        ratings[home] = update_elo(r_home, exp_home, actual_home)
-        ratings[away] = update_elo(r_away, 1 - exp_home, actual_away)
+        k = _k_factor(getattr(row, "tournament", "")) if has_tournament else _DEFAULT_K
+        margin_mult = _goal_margin_multiplier(int(hs) - int(as_))
+        k_scaled = k * margin_mult
+
+        ratings[home] = r_home + k_scaled * (actual_home - exp_home)
+        ratings[away] = r_away + k_scaled * (actual_away - (1 - exp_home))
 
     df = df.copy()
     df["elo_home"] = elo_home_pre
@@ -190,41 +233,213 @@ def compute_wc_experience(df_wc: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
+# Pesos por torneo — escala 0.0–1.0 (mayor = partido más informativo)
+# ---------------------------------------------------------------------------
+
+TOURNAMENT_WEIGHTS: Dict[str, float] = {
+    # Máximo peso: fase final de Copa del Mundo y grandes copas continentales
+    "FIFA World Cup": 1.0,
+    "UEFA Euro": 0.90,
+    "Copa América": 0.90,
+    "African Cup of Nations": 0.80,
+    "AFC Asian Cup": 0.80,
+    "Gold Cup": 0.75,
+    "CONCACAF Nations League": 0.65,
+    "UEFA Nations League": 0.65,
+    "OFC Nations Cup": 0.65,
+    # Eliminatorias mundialistas
+    "FIFA World Cup qualification": 0.60,
+    "UEFA Euro qualification": 0.55,
+    "African Cup of Nations qualification": 0.50,
+    "Copa América qualification": 0.50,
+    "AFC Asian Cup qualification": 0.50,
+    "CONCACAF Nations League qualification": 0.45,
+    "Friendly": 0.20,
+}
+_DEFAULT_WEIGHT = 0.35  # torneos regionales menores
+
+
+def get_tournament_weight(tournament: str) -> float:
+    return TOURNAMENT_WEIGHTS.get(tournament, _DEFAULT_WEIGHT)
+
+
+# ---------------------------------------------------------------------------
+# Días de descanso entre partidos
+# ---------------------------------------------------------------------------
+
+def compute_rest_days(
+    df_all: pd.DataFrame,
+    df_target: pd.DataFrame,
+    cap_days: int = 365,
+) -> pd.DataFrame:
+    """Agrega home_days_rest / away_days_rest a df_target.
+
+    Para cada partido, calcula cuántos días lleva cada equipo sin jugar un
+    internacional antes de ese partido. Sin leakage: shift(1) excluye el
+    partido actual del cómputo.
+
+    cap_days=365 aplica a la primera aparición histórica de un equipo.
+    """
+    home = df_all[["date", "home_team"]].rename(columns={"home_team": "team"})
+    away = df_all[["date", "away_team"]].rename(columns={"away_team": "team"})
+    timeline = (
+        pd.concat([home, away])
+        .drop_duplicates(subset=["team", "date"])
+        .sort_values(["team", "date"])
+        .reset_index(drop=True)
+    )
+    timeline["prev_date"] = timeline.groupby("team")["date"].shift(1)
+    timeline["days_since_last"] = (
+        (timeline["date"] - timeline["prev_date"]).dt.days
+        .clip(upper=cap_days)
+        .fillna(float(cap_days))
+    )
+
+    home_rest = timeline[["date", "team", "days_since_last"]].rename(
+        columns={"team": "home_team", "days_since_last": "home_days_rest"}
+    )
+    away_rest = timeline[["date", "team", "days_since_last"]].rename(
+        columns={"team": "away_team", "days_since_last": "away_days_rest"}
+    )
+
+    df_out = df_target.merge(home_rest, on=["date", "home_team"], how="left")
+    df_out = df_out.merge(away_rest, on=["date", "away_team"], how="left")
+    df_out["home_days_rest"] = df_out["home_days_rest"].fillna(float(cap_days))
+    df_out["away_days_rest"] = df_out["away_days_rest"].fillna(float(cap_days))
+    return df_out
+
+
+# ---------------------------------------------------------------------------
+# H2H y experiencia para el set completo de internacionales
+# ---------------------------------------------------------------------------
+
+def compute_h2h_all(df: pd.DataFrame) -> pd.DataFrame:
+    """Versión de compute_h2h que opera sobre cualquier DataFrame con outcome."""
+    df = df.sort_values("date").reset_index(drop=True).copy()
+    pair_total: Dict[frozenset, int] = defaultdict(int)
+    pair_wins: Dict[frozenset, Dict[str, int]] = defaultdict(lambda: defaultdict(int))
+    h2h_values = []
+    for row in df.itertuples(index=False):
+        home, away = row.home_team, row.away_team
+        pair = frozenset([home, away])
+        total = pair_total[pair]
+        h2h_values.append(pair_wins[pair][home] / total if total > 0 else 0.5)
+        pair_total[pair] += 1
+        if row.outcome == "home_win":
+            pair_wins[pair][home] += 1
+        elif row.outcome == "away_win":
+            pair_wins[pair][away] += 1
+    df["h2h_home_win_pct"] = h2h_values
+    return df
+
+
+def compute_wc_experience_all(df_all: pd.DataFrame, df_target: pd.DataFrame) -> pd.DataFrame:
+    """Acumula experiencia mundialista hasta la fecha de cada partido en df_target."""
+    wc_only = df_all[df_all["tournament"] == "FIFA World Cup"].sort_values("date").copy()
+    exp: Dict[str, int] = defaultdict(int)
+    for row in wc_only.itertuples(index=False):
+        exp[row.home_team] += 1
+        exp[row.away_team] += 1
+
+    # Para df_target, calculamos la experiencia acumulada hasta cada fecha
+    df_target = df_target.sort_values("date").reset_index(drop=True).copy()
+    exp_running: Dict[str, int] = defaultdict(int)
+    wc_iter = iter(wc_only.itertuples(index=False))
+    wc_row = next(wc_iter, None)
+    exp_diff = []
+    for trow in df_target.itertuples(index=False):
+        # Avanza el acumulador de WC hasta la fecha del partido actual
+        while wc_row is not None and wc_row.date < trow.date:
+            exp_running[wc_row.home_team] += 1
+            exp_running[wc_row.away_team] += 1
+            wc_row = next(wc_iter, None)
+        exp_diff.append(exp_running[trow.home_team] - exp_running[trow.away_team])
+    df_target["wc_experience_diff"] = exp_diff
+    return df_target
+
+
+# ---------------------------------------------------------------------------
 # Pipeline completo
 # ---------------------------------------------------------------------------
 
-def build_feature_matrix(df_all: pd.DataFrame, df_wc: pd.DataFrame) -> pd.DataFrame:
-    """Ensambla todas las features para los partidos de Mundial."""
+def build_feature_matrix(
+    df_all: pd.DataFrame,
+    df_wc: pd.DataFrame,
+    use_all_matches: bool = True,
+) -> pd.DataFrame:
+    """Ensambla la feature matrix para entrenamiento.
+
+    use_all_matches=True (default): usa todos los ~49k internacionales con score,
+    ponderados por torneo. Esto multiplica el dataset de entrenamiento por ~50x.
+    use_all_matches=False: comportamiento original (solo partidos de WC, ~966 filas).
+    """
     logger.info("ELO sobre %d partidos históricos...", len(df_all))
     df_elo, _ = compute_elo_ratings(df_all)
 
-    wc = df_wc.merge(
-        df_elo[["date", "home_team", "away_team", "elo_home", "elo_away", "elo_diff"]],
-        on=["date", "home_team", "away_team"],
-        how="left",
-    )
+    if use_all_matches:
+        from src.extractor import add_outcome
+        # Todos los partidos con score disponible
+        df_base = df_all[df_all["home_score"].notna()].copy()
+        df_base = add_outcome(df_base)
 
-    logger.info("Goles promedio últimos 5 partidos...")
-    wc = compute_rolling_goals(df_all, wc, n=5)
+        # Merge ELO pre-match
+        base = df_base.merge(
+            df_elo[["date", "home_team", "away_team", "elo_home", "elo_away", "elo_diff"]],
+            on=["date", "home_team", "away_team"],
+            how="left",
+        )
 
-    logger.info("H2H...")
-    wc = compute_h2h(wc)
+        logger.info("Goles promedio últimos 5 partidos (todos los internacionales)...")
+        base = compute_rolling_goals(df_all, base, n=5)
 
-    logger.info("Experiencia en Mundiales...")
-    wc = compute_wc_experience(wc)
+        logger.info("H2H (todos los internacionales)...")
+        base = compute_h2h_all(base)
 
-    wc["is_neutral"] = wc["neutral"].astype(int)
-    wc["year"] = wc["date"].dt.year
+        logger.info("Experiencia en Mundiales (acumulada cronológicamente)...")
+        base = compute_wc_experience_all(df_all, base)
 
-    feature_cols = [
-        "date", "year", "home_team", "away_team", "outcome",
-        "elo_diff", "elo_home", "elo_away",
-        "home_goals_scored_avg5", "home_goals_conceded_avg5",
-        "away_goals_scored_avg5", "away_goals_conceded_avg5",
-        "h2h_home_win_pct", "is_neutral", "wc_experience_diff",
-    ]
-    df_features = wc[[c for c in feature_cols if c in wc.columns]].copy()
-    logger.info("Feature matrix lista: %d filas, %d columnas", *df_features.shape)
+        base["is_neutral"] = base["neutral"].astype(int)
+        base["year"] = base["date"].dt.year
+        base["tournament_weight"] = base["tournament"].map(get_tournament_weight).fillna(_DEFAULT_WEIGHT)
+
+        feature_cols = [
+            "date", "year", "home_team", "away_team", "outcome", "tournament_weight",
+            "elo_diff", "elo_home", "elo_away",
+            "home_goals_scored_avg5", "home_goals_conceded_avg5",
+            "away_goals_scored_avg5", "away_goals_conceded_avg5",
+            "h2h_home_win_pct", "is_neutral", "wc_experience_diff",
+        ]
+        df_features = base[[c for c in feature_cols if c in base.columns]].dropna(
+            subset=["elo_diff", "outcome"]
+        ).copy()
+        logger.info(
+            "Feature matrix completa: %d filas, %d columnas (todos los internacionales)",
+            *df_features.shape,
+        )
+    else:
+        # Modo original: solo WC
+        wc = df_wc.merge(
+            df_elo[["date", "home_team", "away_team", "elo_home", "elo_away", "elo_diff"]],
+            on=["date", "home_team", "away_team"],
+            how="left",
+        )
+        wc = compute_rolling_goals(df_all, wc, n=5)
+        wc = compute_h2h(wc)
+        wc = compute_wc_experience(wc)
+        wc["is_neutral"] = wc["neutral"].astype(int)
+        wc["year"] = wc["date"].dt.year
+        wc["tournament_weight"] = 1.0
+
+        feature_cols = [
+            "date", "year", "home_team", "away_team", "outcome", "tournament_weight",
+            "elo_diff", "elo_home", "elo_away",
+            "home_goals_scored_avg5", "home_goals_conceded_avg5",
+            "away_goals_scored_avg5", "away_goals_conceded_avg5",
+            "h2h_home_win_pct", "is_neutral", "wc_experience_diff",
+        ]
+        df_features = wc[[c for c in feature_cols if c in wc.columns]].copy()
+        logger.info("Feature matrix WC-only: %d filas, %d columnas", *df_features.shape)
+
     return df_features
 
 

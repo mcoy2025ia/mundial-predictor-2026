@@ -148,9 +148,18 @@ def build_team_stats(
     else:
         current_form = None
 
+    # Filtrar solo partidos de Mundial para contar experiencia WC real
+    # (df_features puede contener todos los internacionales cuando use_all_matches=True)
+    if "tournament_weight" in df_features.columns:
+        df_wc_only = df_features[df_features["tournament_weight"] == 1.0]
+    elif "tournament" in df_features.columns:
+        df_wc_only = df_features[df_features["tournament"] == "FIFA World Cup"]
+    else:
+        df_wc_only = df_features
+
     cache: Dict[str, dict] = {}
     for team in teams:
-        wc_mask = (df_features["home_team"] == team) | (df_features["away_team"] == team)
+        wc_mask = (df_wc_only["home_team"] == team) | (df_wc_only["away_team"] == team)
         wc_matches = int(wc_mask.sum())
 
         if current_form is not None:

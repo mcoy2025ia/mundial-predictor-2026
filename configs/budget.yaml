@@ -1,0 +1,18 @@
+# LLM cost guardrails for the multi-agent system.
+# All limits are soft-caps: the pipeline logs a warning and skips LLM agents when
+# exceeded, falling back to the deterministic model (Ensemble without delta_P).
+
+llm:
+  # Daily cap in USD — resets at midnight UTC
+  daily_limit_usd: 2.00
+  # Monthly cap in USD
+  monthly_limit_usd: 50.00
+  # Max LLM agent calls per single pipeline run (predict_live + export)
+  max_calls_per_run: 5
+  # Cost per 1k tokens by model (input/output averaged; update if Anthropic prices change)
+  cost_per_1k_tokens:
+    claude-haiku-4-5-20251001: 0.00025     # $0.25 / MTok
+    claude-sonnet-4-6: 0.003               # $3.00 / MTok
+    claude-fable-5: 0.015                  # $15.00 / MTok (not used in agents)
+  # Path to the spend ledger (JSONL, one entry per call)
+  ledger_path: "logs/llm_costs.jsonl"

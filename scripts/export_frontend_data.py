@@ -14,6 +14,8 @@ import pandas as pd
 
 from src.extractor import load_results, load_shootouts
 from src.model import FEATURE_COLS, load_model
+from src.poisson_model import PoissonModel
+from src.ensemble import EnsembleModel, _elo_proba as elo_proba
 from src.simulator import (
     WC2026_GROUPS,
     WC2026_TEAMS,
@@ -186,14 +188,60 @@ def main():
     h2h_stats = build_h2h_stats(df_features, WC2026_TEAMS)
     probs_cache = precompute_match_probs(model, team_stats, h2h_stats, WC2026_TEAMS)
 
+    # Cargar modelos adicionales para ensemble y Poisson
+    poisson_model = None
+    try:
+        poisson_model = PoissonModel.load()
+    except Exception:
+        pass  # Si no existe, exportar solo probs XGB
+
     predictions_out = {}
     for (t1, t2), p in probs_cache.items():
-        key = f"{t1}|{t2}"
-        predictions_out[key] = {
-            "home_win": round(p["team1_win"], 4),
-            "draw": round(p["draw"], 4),
-            "away_win": round(p["team2_win"], 4),
+        elo_h = team_stats.get(t1, {}).get("elo", 1500.0)
+        elo_a = team_stats.get(t2, {}).get("elo", 1500.0)
+        is_neutral = p.get("is_neutral", True)
+
+        # Probs XGB (base)
+        p_xgb_h = round(p["team1_win"], 4)
+        p_xgb_d = round(p["draw"], 4)
+        p_xgb_a = round(p["team2_win"], 4)
+
+        entry = {
+            "home_win": p_xgb_h,
+            "draw": p_xgb_d,
+            "away_win": p_xgb_a,
         }
+
+        # Ensemble: ELO + Poisson + XGB
+        p_elo = elo_proba(elo_h, elo_a, is_neutral)
+        p_elo_arr = np.array(p_elo)
+        p_xgb_arr = np.array([p_xgb_h, p_xgb_d, p_xgb_a])
+
+        if poisson_model is not None:
+            try:
+                lam_h, lam_a = poisson_model.predict_goals(
+                    t1, t2,
+                    is_neutral=bool(is_neutral),
+                    elo_diff=elo_h - elo_a,
+                )
+                mat = poisson_model.scoreline_matrix(lam_h, lam_a)
+                p_poi = poisson_model.aggregate_1x2(mat)
+                p_poi_arr = np.array(p_poi)
+                top5 = poisson_model.top_scorelines(mat, n=5)
+
+                p_ens = 0.35 * p_elo_arr + 0.35 * p_poi_arr + 0.30 * p_xgb_arr
+                p_ens /= p_ens.sum()
+
+                entry["ensemble_home_win"] = round(float(p_ens[0]), 4)
+                entry["ensemble_draw"] = round(float(p_ens[1]), 4)
+                entry["ensemble_away_win"] = round(float(p_ens[2]), 4)
+                entry["top_scorelines"] = top5
+                entry["lambda_home"] = round(float(lam_h), 3)
+                entry["lambda_away"] = round(float(lam_a), 3)
+            except Exception:
+                pass
+
+        predictions_out[f"{t1}|{t2}"] = entry
 
     (OUT_DIR / "predictions.json").write_text(
         json.dumps(predictions_out, ensure_ascii=False), encoding="utf-8"
@@ -479,7 +527,8 @@ def main():
             "home_team": r["home_team"], "away_team": r["away_team"],
             "home_flag": TEAM_FLAGS.get(r["home_team"], "🏳️"),
             "away_flag": TEAM_FLAGS.get(r["away_team"], "🏳️"),
-            "home_score": int(r["home_score"]), "away_score": int(r["away_score"]),
+            "home_score": int(r["home_score"]) if pd.notna(r["home_score"]) else None,
+            "away_score": int(r["away_score"]) if pd.notna(r["away_score"]) else None,
             "home_win": round(p_home, 4), "draw": round(p_draw, 4), "away_win": round(p_away, 4),
             "predicted": predicted, "actual": r["outcome"], "hit": hit,
         })

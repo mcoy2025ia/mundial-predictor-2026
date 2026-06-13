@@ -18,6 +18,7 @@ import Groups         from "@/components/Groups";
 import Knockout       from "@/components/Knockout";
 import Glossary       from "@/components/Glossary";
 import LiveTournament from "@/components/LiveTournament";
+import ModelTab       from "@/components/ModelTab";
 
 /* ─────────────────────────────────────────────────────────────
    UI DEL SHELL (hero, navbar, tabs, footer)
@@ -34,6 +35,7 @@ const SHELL = {
       { id: "grupos",        label: "Grupos"         },
       { id: "proyecciones",  label: "Proyecciones"   },
       { id: "curiosidades",  label: "Stats"          },
+      { id: "modelo",        label: "Modelo"         },
       { id: "glosario",      label: "Glosario"       },
     ],
     projByRound: "Por ronda",
@@ -62,6 +64,7 @@ const SHELL = {
       { id: "grupos",        label: "Groups"        },
       { id: "proyecciones",  label: "Projections"   },
       { id: "curiosidades",  label: "Stats"         },
+      { id: "modelo",        label: "Model"         },
       { id: "glosario",      label: "Glossary"      },
     ],
     projByRound: "By round",
@@ -90,6 +93,7 @@ const SHELL = {
       { id: "grupos",        label: "Grupos"          },
       { id: "proyecciones",  label: "Projeções"       },
       { id: "curiosidades",  label: "Stats"           },
+      { id: "modelo",        label: "Modelo"          },
       { id: "glosario",      label: "Glossário"       },
     ],
     projByRound: "Por fase",
@@ -109,7 +113,7 @@ const SHELL = {
   },
 } as const;
 
-type TabId = "envivo" | "predictor" | "grupos" | "proyecciones" | "curiosidades" | "glosario";
+type TabId = "envivo" | "predictor" | "grupos" | "proyecciones" | "curiosidades" | "modelo" | "glosario";
 
 /* ─────────────────────────────────────────────────────────────
    PAGE
@@ -327,6 +331,11 @@ export default function Home() {
               {tab === "curiosidades" && stats && (
                 <TabPane key="curiosidades">
                   <FunFacts stats={stats} goalscorers={goalscorers} qatar={qatar} />
+                </TabPane>
+              )}
+              {tab === "modelo" && (
+                <TabPane key="modelo">
+                  <ModelTab />
                 </TabPane>
               )}
               {tab === "glosario" && (

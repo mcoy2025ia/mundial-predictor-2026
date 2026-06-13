@@ -64,3 +64,6 @@ htmlcov/
 
 # Build artifacts frontend
 frontend/tsconfig.tsbuildinfo
+
+# Logs (JSONL observability — regenerable, no va en el repo)
+logs/*.jsonl

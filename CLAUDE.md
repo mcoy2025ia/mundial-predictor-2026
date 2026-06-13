@@ -113,9 +113,10 @@ models/{logistic_regression, xgb_calibrated, xgb}.pkl
 
 **Key files:**
 - `src/extractor.py`: Data loading, World Cup filtering, outcome mapping, team name normalization
-- `src/features.py`: ELO calculation (K=32, pre-match), rolling form (5-game avg), H2H win %, WC experience diff
-- `src/model.py`: XGBoost pipeline with isotonic calibration, temporal split, evaluation metrics
-- `src/simulator.py`: Monte Carlo simulation (backend Python + fixture/ELO lookup)
+- `src/features.py`: ELO (K by tournament + margin multiplier + home advantage), rolling form, H2H, WC experience, tournament_weight
+- `src/model.py`: XGBoost + TimeSeriesSplit calibration, temporal 3-way split (train/calib/test), RPS metric
+- `src/simulator.py`: Monte Carlo simulation (official 2026 bracket, host home advantage)
+- `src/agents/`: Multi-agent system — Orchestrator routes to max 2 specialists, each produces delta_P adjustments
 
 ### Feature Engineering
 
@@ -134,11 +135,12 @@ models/{logistic_regression, xgb_calibrated, xgb}.pkl
 
 ### Model Training
 
-- **Train/test split:** Temporal (all matches before 2022 train, Qatar 2022 test)
-- **Base model:** XGBoost multi-class softmax + CalibratedClassifierCV (isotonic)
-- **Baseline:** Logistic Regression for comparison
-- **Calibration:** Critical for simulator accuracy (probabilities must reflect true win rates)
-- **Hyperparameters:** Strong regularization (small dataset ~900 rows)
+- **Train/test split:** 3-way temporal: train < 2018 | calib = 2018 | test = WC 2022 (64 games)
+- **Training data:** All 49,765 internationals (use_all_matches=True); WC games weighted 1.0, friendlies 0.20
+- **Base model:** XGBoost multi-class softmax + CalibratedClassifierCV (TimeSeriesSplit n=3, sigmoid)
+- **Baseline:** Logistic Regression + ELO-only for comparison
+- **Metrics:** Accuracy, log-loss, Brier score, **RPS** (Ranked Probability Score — primary metric)
+- **Walk-forward validation:** `scripts/walk_forward_validation.py` — folds 2006→2022, XGB vs ELO baseline
 
 ### Simulator (Backend)
 
@@ -175,7 +177,13 @@ models/{logistic_regression, xgb_calibrated, xgb}.pkl
 Time-series data (match history) requires temporal validation to prevent leakage. Test set is always Qatar 2022 (never in training), not random K-folds.
 
 ### Custom ELO vs FIFA Rankings
-ELO is computed only from match results (no confederation bias), making it more reliable for prediction than FIFA rankings. K-factor of 32 is calibrated for international football.
+ELO is computed from all internationals chronologically. K varies by tournament importance (WC=60, friendly=20). A margin-of-victory multiplier `log(1+|GD|)` scales each update. Home advantage adds 100 ELO points to the expected score for non-neutral venues.
+
+### Multi-Agent Architecture (src/agents/)
+The Orchestrator is the single API gateway. It routes each match query to at most 2 sub-agents based on available context (injuries, odds, altitude, etc.). Each agent returns a `delta_P` (adjustment to XGBoost prior). The Orchestrator blends deltas with per-agent weights and confidence, clamped to 12% max total shift, then renormalizes to sum=1.
+- **LLM agents** (Claude API): IntMatch-Analytics-Pro (Haiku), Roster-Data-Scout (Sonnet), Media-Sentiment-Parser (Sonnet), Travel-Logistics-Quant (Haiku)
+- **Deterministic agents** (no LLM): FinOps-Bookmaker-Alpha (odds math), FIFA-Regs-Strategist (altitude/bracket), Travel-Logistics-Quant (haversine fallback)
+- Requires `ANTHROPIC_API_KEY` env var; LLM agents fail gracefully (delta=0) without it.
 
 ### Isotonic Calibration
 Probabilities matter more than accuracy in a tournament simulator. Isotonic calibration ensures the model's predicted probabilities match observed win rates.
@@ -193,12 +201,23 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 ```
 ├── src/
 │   ├── extractor.py        # Data loading + team name normalization
-│   ├── features.py         # ELO, H2H, rolling form, World Cup experience
-│   ├── model.py            # XGBoost + CalibratedClassifierCV, evaluation
-│   ├── simulator.py        # Tournament simulation logic (backend)
-│   └── app.py              # Streamlit demo interface
+│   ├── features.py         # ELO (K by tournament + margin mult + home adv), H2H, form, weights
+│   ├── model.py            # XGBoost + TimeSeriesSplit calibration, RPS metric
+│   ├── simulator.py        # Tournament simulation (official 2026 bracket, host advantage)
+│   ├── app.py              # Streamlit demo interface
+│   └── agents/
+│       ├── base.py         # MatchContext, AgentResult, BaseAgent ABC
+│       ├── orchestrator.py # Routing (max 2 agents), delta blending, OrchestratorOutput
+│       └── specialists/
+│           ├── intmatch.py  # Tactical matchup (Claude Haiku)
+│           ├── roster.py    # Injury/WAR analysis (Claude Sonnet)
+│           ├── media.py     # Sentiment/morale (Claude Sonnet)
+│           ├── travel.py    # Fatigue/altitude (Claude Haiku + deterministic)
+│           ├── finops.py    # Odds implied probs (deterministic)
+│           └── fifa_regs.py # Bracket/altitude math (deterministic)
 ├── scripts/
-│   ├── run_pipeline.py     # Execute full pipeline
+│   ├── run_pipeline.py          # Execute full pipeline
+│   ├── walk_forward_validation.py  # Walk-forward RPS vs ELO baseline
 │   ├── export_frontend_data.py  # Generate JSONs for frontend
 │   └── enrich_goalscorers.py    # Optional: goalscorer enrichment
 ├── frontend/               # Next.js 15 + React 19
