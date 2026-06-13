@@ -478,6 +478,45 @@ export default function Predictor({ teams, predictions, matches, liveMatches }: 
         )}
       </AnimatePresence>
 
+      {/* ── AI Agents Panel ── */}
+      <AnimatePresence>
+        {predicted && (
+          <motion.div
+            variants={fadeUp} initial="hidden" animate="visible" exit="exit"
+            className="rounded-2xl overflow-hidden"
+            style={{ background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.07)" }}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-3">
+                <div style={{ width: 3, height: 18, background: "var(--color-wc-gold)", borderRadius: 2 }} />
+                <span className="text-[11px] uppercase tracking-widest" style={{ fontFamily: "var(--font-mono)", color: "var(--color-ink-secondary)" }}>
+                  {T.agentsTitle}
+                </span>
+              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
+                fontFamily: "var(--font-mono)", background: "rgba(212,168,67,0.10)",
+                color: "var(--color-wc-gold)", border: "1px solid rgba(212,168,67,0.25)",
+              }}>
+                {T.agentsBadge}
+              </span>
+            </div>
+
+            {/* Intro */}
+            <p className="px-5 pt-4 pb-3 text-xs leading-relaxed" style={{ fontFamily: "var(--font-body)", color: "var(--color-ink-secondary)" }}>
+              {T.agentsIntro}
+            </p>
+
+            {/* Agent Cards Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 px-5 pb-5">
+              {AGENTS.map((agent) => (
+                <AgentCard key={agent.id} agent={agent} T={T} />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {predicted && (
         <motion.p
           variants={fadeUp}
@@ -490,6 +529,122 @@ export default function Predictor({ teams, predictions, matches, liveMatches }: 
         </motion.p>
       )}
     </motion.div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════
+   AI AGENTS DATA + CARD
+══════════════════════════════════════════════════════ */
+interface AgentDef {
+  id: string;
+  icon: string;
+  name: string;
+  domain: { es: string; en: string; pt: string };
+  desc:   { es: string; en: string; pt: string };
+  type: "llm" | "det";
+  model: string | null;
+}
+
+const AGENTS: AgentDef[] = [
+  {
+    id: "intmatch",
+    icon: "🎯",
+    name: "IntMatch-Analytics-Pro",
+    domain: { es: "Análisis táctico", en: "Tactical analysis", pt: "Análise tática" },
+    desc:   { es: "Formaciones, pressing, ventajas posicionales", en: "Formations, pressing, positional edge", pt: "Formações, pressing, vantagens posicionais" },
+    type: "llm", model: "Haiku",
+  },
+  {
+    id: "roster",
+    icon: "🩺",
+    name: "Roster-Data-Scout",
+    domain: { es: "Plantel y lesiones", en: "Squad & injuries", pt: "Elenco e lesões" },
+    desc:   { es: "Ausencias, suspensiones, WAR del plantel", en: "Absences, suspensions, squad WAR", pt: "Ausências, suspensões, WAR do elenco" },
+    type: "llm", model: "Sonnet",
+  },
+  {
+    id: "media",
+    icon: "📰",
+    name: "Media-Sentiment-Parser",
+    domain: { es: "Prensa y moral", en: "Press & morale", pt: "Imprensa e moral" },
+    desc:   { es: "Sentimiento mediático, cohesión del equipo", en: "Media sentiment, team cohesion", pt: "Sentimento da mídia, coesão da equipe" },
+    type: "llm", model: "Sonnet",
+  },
+  {
+    id: "travel",
+    icon: "✈️",
+    name: "Travel-Logistics-Quant",
+    domain: { es: "Fatiga y altitud", en: "Fatigue & altitude", pt: "Fadiga e altitude" },
+    desc:   { es: "Distancia de viaje, aclimatación, clima", en: "Travel distance, acclimatization, weather", pt: "Distância de viagem, aclimatação, clima" },
+    type: "llm", model: "Haiku",
+  },
+  {
+    id: "finops",
+    icon: "📊",
+    name: "FinOps-Bookmaker-Alpha",
+    domain: { es: "Cuotas de mercado", en: "Market odds", pt: "Odds de mercado" },
+    desc:   { es: "Probabilidades implícitas en casas de apuesta", en: "Odds-implied probabilities correction", pt: "Probabilidades implícitas em apostas" },
+    type: "det", model: null,
+  },
+  {
+    id: "fifareg",
+    icon: "📐",
+    name: "FIFA-Regs-Strategist",
+    domain: { es: "Reglamento y sede", en: "Regulations & venue", pt: "Regulamento e sede" },
+    desc:   { es: "Altitud del estadio, ventaja local, bracket", en: "Stadium altitude, home advantage, bracket", pt: "Altitude do estádio, vantagem local, chaves" },
+    type: "det", model: null,
+  },
+];
+
+function AgentCard({ agent, T }: { agent: AgentDef; T: ReturnType<typeof import("@/lib/i18n").useLang> }) {
+  const isLlm = agent.type === "llm";
+  const lang  = (typeof window !== "undefined" ? localStorage.getItem("wc-lang") : null) ?? "es";
+  const l     = (lang === "en" || lang === "pt") ? lang : "es";
+
+  return (
+    <div
+      className="rounded-xl p-3 flex flex-col gap-2"
+      style={{
+        background: isLlm ? "rgba(212,168,67,0.05)" : "rgba(74,222,128,0.04)",
+        border: `1px solid ${isLlm ? "rgba(212,168,67,0.18)" : "rgba(74,222,128,0.18)"}`,
+      }}
+    >
+      <div className="flex items-center justify-between gap-1">
+        <span className="text-xl leading-none">{agent.icon}</span>
+        <span
+          className="text-[9px] px-1.5 py-0.5 rounded-full shrink-0"
+          style={{
+            fontFamily: "var(--font-mono)",
+            background: isLlm ? "rgba(212,168,67,0.15)" : "rgba(74,222,128,0.12)",
+            color: isLlm ? "var(--color-wc-gold)" : "#4ADE80",
+            border: `1px solid ${isLlm ? "rgba(212,168,67,0.30)" : "rgba(74,222,128,0.30)"}`,
+          }}
+        >
+          {isLlm ? T.agentLlm : T.agentDet}
+        </span>
+      </div>
+
+      <div>
+        <p className="text-[11px] font-semibold leading-tight" style={{ fontFamily: "var(--font-heading)", color: "var(--color-ink-primary)" }}>
+          {agent.domain[l]}
+        </p>
+        <p className="text-[10px] mt-0.5 leading-snug" style={{ fontFamily: "var(--font-mono)", color: "var(--color-ink-muted)" }}>
+          {agent.desc[l]}
+        </p>
+      </div>
+
+      <div className="mt-auto">
+        {isLlm ? (
+          <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "rgba(212,168,67,0.55)" }}>
+            {agent.model} · {T.agentApiKey}
+          </span>
+        ) : (
+          <span className="text-[9px]" style={{ fontFamily: "var(--font-mono)", color: "rgba(74,222,128,0.65)" }}>
+            ● {T.agentAlwaysOn}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }
 

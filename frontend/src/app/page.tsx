@@ -121,6 +121,7 @@ type TabId = "envivo" | "predictor" | "grupos" | "proyecciones" | "curiosidades"
 export default function Home() {
   const [lang,  setLang]  = useState<Lang>("es");
   const [tab,   setTab]   = useState<TabId>("envivo");
+  const [theme, setTheme] = useState<"dark"|"light">("dark");
 
   const [teams,          setTeams]          = useState<Record<string, TeamInfo> | null>(null);
   const [predictions,    setPredictions]    = useState<Record<string, Prediction> | null>(null);
@@ -159,10 +160,11 @@ export default function Home() {
   useEffect(() => {
     const l = localStorage.getItem("wc-lang") as Lang | null;
     if (l === "es" || l === "en" || l === "pt") setLang(l);
+    const t = localStorage.getItem("wc-theme");
+    if (t === "dark" || t === "light") setTheme(t);
   }, []);
-  useEffect(() => {
-    localStorage.setItem("wc-lang", lang);
-  }, [lang]);
+  useEffect(() => { localStorage.setItem("wc-lang", lang); }, [lang]);
+  useEffect(() => { localStorage.setItem("wc-theme", theme); }, [theme]);
 
   /* Carga de datos */
   useEffect(() => {
@@ -192,7 +194,7 @@ export default function Home() {
   return (
     /* Context provider: toda la app recibe el idioma activo */
     <LangContext.Provider value={lang}>
-      <div style={{ background: mainBg, minHeight: "100dvh", transition: "background 0.25s" }}>
+      <div data-theme={theme} style={{ background: mainBg, minHeight: "100dvh", transition: "background 0.25s" }}>
 
         {/* ══ NAVBAR ══════════════════════════════════════════ */}
         <nav className="navbar-wc">
@@ -234,6 +236,15 @@ export default function Home() {
                   </button>
                 ))}
               </div>
+              {/* Toggle modo claro/oscuro */}
+              <button
+                onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
+                className="theme-toggle"
+                aria-label="Cambiar tema"
+                title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
+              >
+                {theme === "dark" ? "☀" : "☾"}
+              </button>
               {/* WE ARE 26 */}
               <div className="hidden md:flex" style={{ alignItems: "center", gap: "0.4rem" }}>
                 <span style={{ fontSize: "0.85rem" }}>🇨🇦🇲🇽🇺🇸</span>
@@ -365,14 +376,12 @@ export default function Home() {
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.1em", color: "var(--color-ink-muted)", textTransform: "uppercase" }}>
                   {S.footerBy}
                 </span>
-                <a href="https://luismiguelro.com" target="_blank" rel="noopener noreferrer" style={{
+                <span style={{
                   fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.1em",
                   color: "var(--color-wc-gold)", textTransform: "uppercase",
-                  textDecoration: "none", borderBottom: "1px solid rgba(212,168,67,0.35)",
-                  paddingBottom: "1px", transition: "color 0.14s",
                 }}>
-                  luismiguelro.com
-                </a>
+                  Manuel Coy · AI Data Strategist
+                </span>
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.07em", color: "var(--color-ink-muted)", opacity: 0.5 }}>
                   · {S.footerNote}
                 </span>

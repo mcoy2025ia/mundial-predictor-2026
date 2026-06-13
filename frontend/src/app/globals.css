@@ -369,6 +369,67 @@ details > summary::-webkit-details-marker { display: none; }
   button { touch-action: manipulation; }
 }
 
+/* ══════════════════════════════════════════════
+   LIGHT MODE — applied via data-theme="light"
+   Paleta: azul hielo + blanco editorial
+══════════════════════════════════════════════ */
+[data-theme="light"] {
+  --color-arena-void:      #F0F4FC;
+  --color-arena-deep:      #E5EAF7;
+  --color-arena-card:      #FFFFFF;
+  --color-arena-elevated:  #EEF1FA;
+  --color-ink-primary:     #0F172A;
+  --color-ink-secondary:   #3D4E70;
+  --color-ink-muted:       #7A8CB0;
+}
+
+[data-theme="light"] .stat-card {
+  border-color: rgba(15,23,42,0.09);
+  box-shadow: 0 1px 4px rgba(15,23,42,0.06);
+}
+[data-theme="light"] .stat-card:hover {
+  border-color: rgba(207,10,44,0.25);
+}
+[data-theme="light"] .tab-nav-bar {
+  border-bottom-color: rgba(15,23,42,0.08);
+}
+[data-theme="light"] .team-select {
+  background: #FFFFFF;
+  border-color: rgba(15,23,42,0.12);
+  color: #0F172A;
+}
+[data-theme="light"] table thead th {
+  border-bottom-color: rgba(15,23,42,0.08);
+}
+[data-theme="light"] table tbody tr {
+  border-bottom-color: rgba(15,23,42,0.05);
+}
+[data-theme="light"] table tbody tr:hover {
+  background: rgba(15,23,42,0.025);
+}
+
+/* Toggle button — día/noche */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.60);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.14s, color 0.14s, transform 0.18s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  transform: rotate(20deg) scale(1.08);
+}
+
 /* ── Compat aliases ── */
 :root {
   --wc-red:        var(--color-wc-red);

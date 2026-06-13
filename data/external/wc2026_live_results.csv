@@ -1,5 +1,5 @@
 date,home_team,away_team,home_score,away_score,tournament,city,country,neutral
-2026-06-11,Mexico,South Africa,2,0,FIFA World Cup,Mexico City,USA/Mexico/Canada,False
-2026-06-11,South Korea,Czech Republic,1,1,FIFA World Cup,Guadalajara,USA/Mexico/Canada,True
-2026-06-12,Canada,Bosnia and Herzegovina,2,1,FIFA World Cup,Vancouver,USA/Mexico/Canada,False
-2026-06-12,United States,Paraguay,3,1,FIFA World Cup,Dallas,USA/Mexico/Canada,False
+2026-06-11,Mexico,South Africa,2,1,FIFA World Cup,Mexico City,USA/Mexico/Canada,False
+2026-06-11,South Korea,Czech Republic,0,0,FIFA World Cup,Guadalajara,USA/Mexico/Canada,True
+2026-06-12,Canada,Bosnia and Herzegovina,0,2,FIFA World Cup,Vancouver,USA/Mexico/Canada,False
+2026-06-12,United States,Paraguay,2,1,FIFA World Cup,Dallas,USA/Mexico/Canada,False

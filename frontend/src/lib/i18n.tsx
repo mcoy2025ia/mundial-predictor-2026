@@ -174,6 +174,14 @@ export const UI = {
     glossaryDetail:  "Ver detalles",
     glossaryHide:    "Ocultar",
     glossaryFooter:  "Modelo entrenado con 964 partidos de Mundial (1930–2022) · Dataset: Kaggle · ELO calculado sobre 49 000+ partidos internacionales",
+    /* AI Agents panel */
+    agentsTitle:     "Capa de IA: Multi-Agente",
+    agentsBadge:     "Claude API + Determinístico",
+    agentsIntro:     "El modelo XGBoost recibe ajustes opcionales de hasta 6 agentes especializados. Cada agente analiza una dimensión diferente y puede mover las probabilidades ±12% máximo.",
+    agentLlm:        "Claude AI",
+    agentDet:        "Determinístico",
+    agentApiKey:     "Requiere ANTHROPIC_API_KEY",
+    agentAlwaysOn:   "Siempre activo",
   },
 
   en: {
@@ -329,6 +337,14 @@ export const UI = {
     glossaryDetail:  "Show details",
     glossaryHide:    "Hide",
     glossaryFooter:  "Model trained on 964 World Cup matches (1930–2022) · Dataset: Kaggle · ELO computed over 49,000+ international matches",
+    /* AI Agents panel */
+    agentsTitle:     "AI Intelligence Layer",
+    agentsBadge:     "Claude API + Deterministic",
+    agentsIntro:     "The XGBoost model can receive optional adjustments from up to 6 specialized agents. Each agent analyzes a different dimension and can shift probabilities by ±12% max.",
+    agentLlm:        "Claude AI",
+    agentDet:        "Deterministic",
+    agentApiKey:     "Requires ANTHROPIC_API_KEY",
+    agentAlwaysOn:   "Always active",
   },
 
   pt: {
@@ -484,6 +500,14 @@ export const UI = {
     glossaryDetail:  "Ver detalhes",
     glossaryHide:    "Ocultar",
     glossaryFooter:  "Modelo treinado com 964 jogos da Copa (1930–2022) · Dataset: Kaggle · ELO calculado sobre 49.000+ jogos internacionales",
+    /* AI Agents panel */
+    agentsTitle:     "Camada de IA: Multi-Agente",
+    agentsBadge:     "Claude API + Determinístico",
+    agentsIntro:     "O modelo XGBoost recebe ajustes opcionais de até 6 agentes especializados. Cada agente analisa uma dimensão diferente e pode mover as probabilidades ±12% máximo.",
+    agentLlm:        "Claude AI",
+    agentDet:        "Determinístico",
+    agentApiKey:     "Requer ANTHROPIC_API_KEY",
+    agentAlwaysOn:   "Sempre ativo",
   },
 } as const;
 
