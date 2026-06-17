@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { TeamInfo, Prediction, LiveMatch } from "@/types";
 import type { LiveStats, MatchVerdict } from "@/lib/live";
 import { computeGroupStandings } from "@/lib/live";
@@ -17,19 +17,33 @@ interface Props {
   verdicts: MatchVerdict[];
 }
 
-const MVR_PREVIEW = 6; // tarjetas visibles antes de "Ver todos"
+type LiveSection = "resultados" | "posiciones" | "proximos";
+
+const MVR_PREVIEW = 6;
 
 function fmtPct(n: number) { return `${(n * 100).toFixed(0)}%`; }
 
-/* ══════════════════════════════════════════════════════
-   EN VIVO — lo que va del torneo: realidad + modelo
-══════════════════════════════════════════════════════ */
 export default function LiveTournament({
   teams, predictions, groups, liveMatches, stats, verdicts,
 }: Props) {
   const T = useLang();
+  const [section, setSection] = useState<LiveSection>("resultados");
+  const [sectionDir, setSectionDir] = useState(0);
   const [showAll, setShowAll] = useState(false);
   const flag = (name: string) => teams[name]?.flag ?? "";
+
+  const SECTIONS: { id: LiveSection; label: string }[] = [
+    { id: "resultados", label: T.lt_secResults },
+    { id: "posiciones", label: T.lt_secStandings },
+    { id: "proximos",   label: T.lt_secUpcoming },
+  ];
+
+  function switchSection(s: LiveSection) {
+    const currentIdx = SECTIONS.findIndex((x) => x.id === section);
+    const newIdx = SECTIONS.findIndex((x) => x.id === s);
+    setSectionDir(newIdx > currentIdx ? 1 : -1);
+    setSection(s);
+  }
 
   const ROUND_LABEL: Record<string, string> = {
     LAST_32: T.roundOf32, LAST_16: T.roundOf16,
@@ -41,13 +55,11 @@ export default function LiveTournament({
       ? `${T.group} ${m.group.slice(6)}`
       : (m.round ? (ROUND_LABEL[m.round] ?? m.round) : "");
 
-  /* En juego ahora (estado solo disponible vía API) */
   const inPlay = useMemo(
     () => liveMatches.filter((m) => m.status === "IN_PLAY" || m.status === "PAUSED"),
     [liveMatches]
   );
 
-  /* Modelo vs Realidad: más reciente primero */
   const recent = useMemo(
     () => [...verdicts].sort((a, b) => (b.m.date ?? "").localeCompare(a.m.date ?? "")),
     [verdicts]
@@ -56,7 +68,6 @@ export default function LiveTournament({
   const hits = verdicts.filter((v) => v.hit).length;
   const pct = verdicts.length ? Math.round((hits / verdicts.length) * 100) : 0;
 
-  /* Posiciones reales: solo grupos con al menos un partido jugado */
   const standings = useMemo(() => {
     const all = computeGroupStandings(liveMatches, groups);
     return Object.entries(all)
@@ -64,7 +75,6 @@ export default function LiveTournament({
       .sort(([a], [b]) => a.localeCompare(b));
   }, [liveMatches, groups]);
 
-  /* Próximos partidos: las siguientes 2 fechas con partidos pendientes */
   const today = new Date().toLocaleDateString("en-CA");
   const upcoming = useMemo(() => {
     const pending = liveMatches.filter(
@@ -76,7 +86,6 @@ export default function LiveTournament({
     return dates.map((d) => ({ date: d, fixtures: pending.filter((m) => m.date === d) }));
   }, [liveMatches, teams, today]);
 
-  /* Pronóstico del modelo para un partido pendiente */
   function forecast(m: LiveMatch): { label: string; prob: number } | null {
     const direct = predictions[`${m.team1}|${m.team2}`];
     const reverse = predictions[`${m.team2}|${m.team1}`];
@@ -98,9 +107,9 @@ export default function LiveTournament({
     utc ? new Date(utc).toLocaleTimeString(T.locale, { hour: "2-digit", minute: "2-digit" }) : "";
 
   return (
-    <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-7">
+    <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-5">
 
-      {/* ── KPIs del torneo ── */}
+      {/* ── KPIs siempre visibles ── */}
       <motion.div variants={fadeUp} className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
         <Kpi label={T.lt_played}   value={String(stats.played)} />
         <Kpi label={T.lt_goals}    value={String(stats.goals)} />
@@ -113,7 +122,7 @@ export default function LiveTournament({
         />
       </motion.div>
 
-      {/* ── En juego ahora ── */}
+      {/* ── En juego ahora (siempre visible si hay partidos) ── */}
       {inPlay.length > 0 && (
         <motion.section variants={fadeUp} className="space-y-3">
           <SectionTitle dot title={T.lt_inPlay} />
@@ -148,191 +157,245 @@ export default function LiveTournament({
         </motion.section>
       )}
 
-      {/* ── Modelo vs Realidad ── */}
-      <motion.section variants={fadeUp} className="space-y-3">
-        <SectionTitle title={T.lt_mvrTitle} note={T.lt_mvrNote} />
+      {/* ── Sub-navegación ── */}
+      <motion.div variants={fadeUp}>
+        <div style={{
+          display: "flex", gap: 4,
+          background: "var(--surface-2)",
+          borderRadius: 12, padding: 4,
+          width: "fit-content",
+        }}>
+          {SECTIONS.map(({ id, label }) => (
+            <button
+              key={id}
+              onClick={() => switchSection(id)}
+              style={{
+                padding: "0.45rem 1.1rem", borderRadius: 9, cursor: "pointer",
+                fontFamily: "var(--font-mono)", fontSize: "0.6rem",
+                letterSpacing: "0.1em", textTransform: "uppercase",
+                fontWeight: 700, transition: "all 0.18s",
+                background: section === id ? "var(--wc-red)" : "transparent",
+                color: section === id ? "#fff" : "var(--text-muted)",
+                border: "none",
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </motion.div>
 
-        {recent.length === 0 ? (
-          <div className="stat-card !p-5 flex items-center gap-3">
-            <span className="live-dot shrink-0" />
-            <p className="text-sm" style={{ color: "var(--text-muted)" }}>{T.lt_empty}</p>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-              {visible.map((v) => {
-                const { m } = v;
-                const pickLabel =
-                  v.predicted === "t1" ? m.team1 : v.predicted === "t2" ? m.team2 : T.draw;
-                return (
-                  <div key={`${m.team1}|${m.team2}|${m.date}`} className="stat-card !p-4 text-left">
-                    {/* fecha + fase + veredicto */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span
-                        className="text-[10px] uppercase tracking-wider truncate"
-                        style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
-                      >
-                        {m.date ? fmtDate(m.date) : ""} · {stageLabel(m)}
-                      </span>
-                      <span className={`verdict-badge ${v.hit ? "verdict-hit" : "verdict-miss"}`}>
-                        {v.hit ? `✓ ${T.verdictHit}` : `✗ ${T.verdictMiss}`}
-                      </span>
-                    </div>
+      {/* ── Contenido de la sección activa con transición ── */}
+      <AnimatePresence mode="wait" custom={sectionDir}>
+        <motion.div
+          key={section}
+          custom={sectionDir}
+          initial={{ opacity: 0, x: sectionDir * 32 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -sectionDir * 32 }}
+          transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* RESULTADOS: Modelo vs Realidad */}
+          {section === "resultados" && (
+            <div className="space-y-3">
+              <SectionTitle title={T.lt_mvrTitle} note={T.lt_mvrNote} />
 
-                    {/* equipos + marcador oficial */}
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="flex-1 min-w-0 text-right text-sm font-bold truncate">
-                        {flag(m.team1)} {m.team1}
-                      </span>
-                      <span className="score-final shrink-0 px-1">{m.score1}–{m.score2}</span>
-                      <span className="flex-1 min-w-0 text-sm font-bold truncate">
-                        {m.team2} {flag(m.team2)}
-                      </span>
-                    </div>
-
-                    {/* lo que dijo el modelo */}
-                    <div className="flex h-2 rounded-full overflow-hidden mb-1.5">
-                      <div style={{ width: `${v.probs.t1 * 100}%`, background: "#c8102e" }} />
-                      <div style={{ width: `${v.probs.draw * 100}%`, background: "rgba(255,255,255,0.15)" }} />
-                      <div style={{ width: `${v.probs.t2 * 100}%`, background: "#003087" }} />
-                    </div>
-                    <p className="text-xs tabular-nums" style={{ color: "var(--text-muted)" }}>
-                      {T.lt_forecast}: <span className="font-bold" style={{ color: "var(--text)" }}>{pickLabel}</span> · {fmtPct(v.prob)}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {recent.length > MVR_PREVIEW && (
-              <div className="text-center">
-                <button
-                  onClick={() => setShowAll(!showAll)}
-                  className="text-xs px-4 py-2 rounded-lg font-semibold transition-all bg-[var(--surface-2)] text-[var(--text-muted)] hover:text-[var(--text)]"
-                >
-                  {showAll ? T.backtestLess : `${T.backtestMore} (${recent.length})`}
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </motion.section>
-
-      {/* ── Posiciones oficiales ── */}
-      {standings.length > 0 && (
-        <motion.section variants={fadeUp} className="space-y-3">
-          <SectionTitle title={T.lt_standings} note={T.lt_standingsNote} />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {standings.map(([g, rows]) => (
-              <div key={g} className="stat-card !p-4 text-left">
-                {/* encabezado alineado con las columnas numéricas */}
-                <div className="grid grid-cols-[1fr_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-baseline mb-2 pb-2 border-b border-[var(--border-subtle)]">
-                  <span className="text-xs font-black" style={{ color: "var(--wc-red)" }}>
-                    {T.group} {g}
-                  </span>
-                  {[T.lt_playedHead, T.lt_gdHead, T.lt_ptsHead].map((h) => (
-                    <span
-                      key={h}
-                      className="text-[9px] uppercase tracking-wider text-right"
-                      style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
-                    >
-                      {h}
-                    </span>
-                  ))}
+              {recent.length === 0 ? (
+                <div className="stat-card !p-5 flex items-center gap-3">
+                  <span className="live-dot shrink-0" />
+                  <p className="text-sm" style={{ color: "var(--text-muted)" }}>{T.lt_empty}</p>
                 </div>
-                <div className="space-y-1.5">
-                  {rows.map((r, i) => (
-                    <div
-                      key={r.team}
-                      className="grid grid-cols-[1fr_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-center text-xs"
-                    >
-                      <span className="flex items-center gap-1.5 min-w-0">
-                        <span
-                          className="w-2 h-2 rounded-full shrink-0"
-                          style={{
-                            background:
-                              i < 2 ? "#22c55e" : i === 2 ? "#f59e0b88" : "rgba(255,255,255,0.10)",
-                          }}
-                        />
-                        <span className="truncate">{flag(r.team)} {r.team}</span>
-                      </span>
-                      <span className="tabular-nums text-right" style={{ color: "var(--text-muted)" }}>
-                        {r.played}
-                      </span>
-                      <span className="tabular-nums text-right" style={{ color: "var(--text-muted)" }}>
-                        {r.gd > 0 ? `+${r.gd}` : r.gd}
-                      </span>
-                      <span className="tabular-nums font-bold text-right" style={{ color: "var(--wc-gold)" }}>
-                        {r.points}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.section>
-      )}
-
-      {/* ── Próximos partidos ── */}
-      {upcoming.length > 0 && (
-        <motion.section variants={fadeUp} className="space-y-3">
-          <SectionTitle title={T.lt_upcoming} />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
-            {upcoming.map(({ date, fixtures }) => (
-              <div key={date} className="stat-card !p-4 text-left">
-                <p
-                  className="text-[10px] uppercase tracking-[0.18em] mb-1"
-                  style={{ fontFamily: "var(--font-mono)", color: "var(--wc-gold)" }}
-                >
-                  {fmtDate(date)}
-                </p>
-                <div className="divide-y divide-[var(--border-subtle)]">
-                  {fixtures.map((m) => {
-                    const f = forecast(m);
-                    return (
-                      <div key={`${m.team1}|${m.team2}`} className="py-2.5">
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="text-[10px] tabular-nums w-11 shrink-0"
-                            style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
-                          >
-                            {fmtTime(m.utc)}
-                          </span>
-                          <span className="flex-1 min-w-0 text-right text-sm truncate">
-                            {flag(m.team1)} {m.team1}
-                          </span>
-                          <span className="text-[10px] shrink-0 px-0.5" style={{ color: "var(--text-muted)" }}>
-                            vs
-                          </span>
-                          <span className="flex-1 min-w-0 text-sm truncate">
-                            {m.team2} {flag(m.team2)}
-                          </span>
-                        </div>
-                        {f && (
-                          <div className="flex justify-end mt-1.5 pl-11">
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                    {visible.map((v) => {
+                      const { m } = v;
+                      const pickLabel =
+                        v.predicted === "t1" ? m.team1 : v.predicted === "t2" ? m.team2 : T.draw;
+                      return (
+                        <div key={`${m.team1}|${m.team2}|${m.date}`} className="stat-card !p-4 text-left">
+                          <div className="flex items-center justify-between gap-2 mb-3">
                             <span
-                              className="text-[10px] px-2 py-0.5 rounded-full tabular-nums"
-                              style={{
-                                fontFamily: "var(--font-mono)",
-                                background: "rgba(212,168,67,0.10)",
-                                border: "1px solid rgba(212,168,67,0.30)",
-                                color: "var(--wc-gold)",
-                              }}
+                              className="text-[10px] uppercase tracking-wider truncate"
+                              style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
                             >
-                              {T.lt_forecast}: {f.label} {fmtPct(f.prob)}
+                              {m.date ? fmtDate(m.date) : ""} · {stageLabel(m)}
+                            </span>
+                            <span className={`verdict-badge ${v.hit ? "verdict-hit" : "verdict-miss"}`}>
+                              {v.hit ? `✓ ${T.verdictHit}` : `✗ ${T.verdictMiss}`}
                             </span>
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
+
+                          <div className="flex items-center gap-2 mb-3">
+                            <span className="flex-1 min-w-0 text-right text-sm font-bold truncate">
+                              {flag(m.team1)} {m.team1}
+                            </span>
+                            <span className="score-final shrink-0 px-1">{m.score1}–{m.score2}</span>
+                            <span className="flex-1 min-w-0 text-sm font-bold truncate">
+                              {m.team2} {flag(m.team2)}
+                            </span>
+                          </div>
+
+                          <div className="flex h-2 rounded-full overflow-hidden mb-1.5">
+                            <div style={{ width: `${v.probs.t1 * 100}%`, background: "#c8102e" }} />
+                            <div style={{ width: `${v.probs.draw * 100}%`, background: "rgba(255,255,255,0.15)" }} />
+                            <div style={{ width: `${v.probs.t2 * 100}%`, background: "#003087" }} />
+                          </div>
+                          <p className="text-xs tabular-nums" style={{ color: "var(--text-muted)" }}>
+                            {T.lt_forecast}: <span className="font-bold" style={{ color: "var(--text)" }}>{pickLabel}</span> · {fmtPct(v.prob)}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {recent.length > MVR_PREVIEW && (
+                    <div className="text-center">
+                      <button
+                        onClick={() => setShowAll(!showAll)}
+                        className="text-xs px-4 py-2 rounded-lg font-semibold transition-all bg-[var(--surface-2)] text-[var(--text-muted)] hover:text-[var(--text)]"
+                      >
+                        {showAll ? T.backtestLess : `${T.backtestMore} (${recent.length})`}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {/* POSICIONES: Grupos oficiales */}
+          {section === "posiciones" && (
+            <div className="space-y-3">
+              <SectionTitle title={T.lt_standings} note={T.lt_standingsNote} />
+
+              {standings.length === 0 ? (
+                <div className="stat-card !p-5 flex items-center gap-3">
+                  <span className="live-dot shrink-0" />
+                  <p className="text-sm" style={{ color: "var(--text-muted)" }}>{T.lt_empty}</p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </motion.section>
-      )}
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {standings.map(([g, rows]) => (
+                    <div key={g} className="stat-card !p-4 text-left">
+                      <div className="grid grid-cols-[1fr_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-baseline mb-2 pb-2 border-b border-[var(--border-subtle)]">
+                        <span className="text-xs font-black" style={{ color: "var(--wc-red)" }}>
+                          {T.group} {g}
+                        </span>
+                        {[T.lt_playedHead, T.lt_gdHead, T.lt_ptsHead].map((h) => (
+                          <span
+                            key={h}
+                            className="text-[9px] uppercase tracking-wider text-right"
+                            style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
+                          >
+                            {h}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="space-y-1.5">
+                        {rows.map((r, i) => (
+                          <div
+                            key={r.team}
+                            className="grid grid-cols-[1fr_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-center text-xs"
+                          >
+                            <span className="flex items-center gap-1.5 min-w-0">
+                              <span
+                                className="w-2 h-2 rounded-full shrink-0"
+                                style={{
+                                  background:
+                                    i < 2 ? "#22c55e" : i === 2 ? "#f59e0b88" : "rgba(255,255,255,0.10)",
+                                }}
+                              />
+                              <span className="truncate">{flag(r.team)} {r.team}</span>
+                            </span>
+                            <span className="tabular-nums text-right" style={{ color: "var(--text-muted)" }}>
+                              {r.played}
+                            </span>
+                            <span className="tabular-nums text-right" style={{ color: "var(--text-muted)" }}>
+                              {r.gd > 0 ? `+${r.gd}` : r.gd}
+                            </span>
+                            <span className="tabular-nums font-bold text-right" style={{ color: "var(--wc-gold)" }}>
+                              {r.points}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* PRÓXIMOS: Siguientes partidos */}
+          {section === "proximos" && (
+            <div className="space-y-3">
+              <SectionTitle title={T.lt_upcoming} />
+
+              {upcoming.length === 0 ? (
+                <div className="stat-card !p-5 flex items-center gap-3">
+                  <span className="live-dot shrink-0" />
+                  <p className="text-sm" style={{ color: "var(--text-muted)" }}>{T.lt_empty}</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
+                  {upcoming.map(({ date, fixtures }) => (
+                    <div key={date} className="stat-card !p-4 text-left">
+                      <p
+                        className="text-[10px] uppercase tracking-[0.18em] mb-1"
+                        style={{ fontFamily: "var(--font-mono)", color: "var(--wc-gold)" }}
+                      >
+                        {fmtDate(date)}
+                      </p>
+                      <div className="divide-y divide-[var(--border-subtle)]">
+                        {fixtures.map((m) => {
+                          const f = forecast(m);
+                          return (
+                            <div key={`${m.team1}|${m.team2}`} className="py-2.5">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="text-[10px] tabular-nums w-11 shrink-0"
+                                  style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
+                                >
+                                  {fmtTime(m.utc)}
+                                </span>
+                                <span className="flex-1 min-w-0 text-right text-sm truncate">
+                                  {flag(m.team1)} {m.team1}
+                                </span>
+                                <span className="text-[10px] shrink-0 px-0.5" style={{ color: "var(--text-muted)" }}>
+                                  vs
+                                </span>
+                                <span className="flex-1 min-w-0 text-sm truncate">
+                                  {m.team2} {flag(m.team2)}
+                                </span>
+                              </div>
+                              {f && (
+                                <div className="flex justify-end mt-1.5 pl-11">
+                                  <span
+                                    className="text-[10px] px-2 py-0.5 rounded-full tabular-nums"
+                                    style={{
+                                      fontFamily: "var(--font-mono)",
+                                      background: "rgba(212,168,67,0.10)",
+                                      border: "1px solid rgba(212,168,67,0.30)",
+                                      color: "var(--wc-gold)",
+                                    }}
+                                  >
+                                    {T.lt_forecast}: {f.label} {fmtPct(f.prob)}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
       <motion.p
         variants={fadeUp}
@@ -379,7 +442,6 @@ function Kpi({ label, value, sub, gold }: {
   );
 }
 
-/** Encabezado editorial: guion rojo + título mono uppercase + nota */
 function SectionTitle({ title, note, dot }: { title: string; note?: string; dot?: boolean }) {
   return (
     <div className="flex items-center gap-2.5 flex-wrap">

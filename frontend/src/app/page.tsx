@@ -6,120 +6,98 @@ import type {
   TeamInfo, Prediction, HistoricalMatch, SiteStats, FixedResults,
   Goalscorer, GroupMatch, GroupStandingEntry, LiveMatch, QatarBacktest,
 } from "@/types";
-import { LangContext, type Lang } from "@/lib/i18n";
+import { LangContext, UI, type Lang } from "@/lib/i18n";
 import {
   buildFixedResults, buildLiveStats, buildScoreMap, buildVerdicts,
   fetchLiveMatches, type LiveStats,
 } from "@/lib/live";
 import Predictor      from "@/components/Predictor";
 import SimulatorTab   from "@/components/Simulator";
-import FunFacts       from "@/components/FunFacts";
 import Groups         from "@/components/Groups";
 import Knockout       from "@/components/Knockout";
-import Glossary       from "@/components/Glossary";
 import LiveTournament from "@/components/LiveTournament";
 import ModelTab       from "@/components/ModelTab";
+import ChatTab        from "@/components/ChatTab";
+import StatsTab       from "@/components/StatsTab";
 
 /* ─────────────────────────────────────────────────────────────
    UI DEL SHELL (hero, navbar, tabs, footer)
 ───────────────────────────────────────────────────────────── */
-const SHELL = {
-  es: {
-    navLabel:   "Predictor ML",
-    weAre26:    "WE ARE 26",
-    eyebrow:    "Análisis con Machine Learning",
-    subtitle:   "Probabilidades para las 48 selecciones del Mundial 2026, calculadas con un modelo XGBoost calibrado sobre 964 partidos mundialistas, ratings ELO históricos y simulación Monte Carlo.",
-    tabs:       [
-      { id: "envivo",        label: "En Vivo"        },
-      { id: "predictor",     label: "Predictor"      },
-      { id: "grupos",        label: "Grupos"         },
-      { id: "proyecciones",  label: "Proyecciones"   },
-      { id: "curiosidades",  label: "Stats"          },
-      { id: "modelo",        label: "Modelo"         },
-      { id: "glosario",      label: "Glosario"       },
-    ],
-    projByRound: "Por ronda",
-    projSim:     "Simulador",
-    loading:    "Cargando datos del modelo…",
-    footerBy:   "por",
-    footerNote: "Modelo entrenado hasta Qatar 2022 · No afiliado a FIFA",
-    kickoffIn:  "El torneo arranca en",
-    liveNow:    "Torneo en vivo",
-    played:     "partidos",
-    goalsLabel: "goles",
-    perMatch:   "/partido",
-    modelTag:   "Modelo",
-    hitsLabel:  "aciertos",
-    lastLabel:  "Último",
-    daysSuffix: "d",
-  },
-  en: {
-    navLabel:   "ML Predictor",
-    weAre26:    "WE ARE 26",
-    eyebrow:    "Machine Learning Analysis",
-    subtitle:   "Probabilities for all 48 teams at the 2026 World Cup, computed with a calibrated XGBoost model trained on 964 World Cup matches, historical ELO ratings and Monte Carlo simulation.",
-    tabs:       [
-      { id: "envivo",        label: "Live"          },
-      { id: "predictor",     label: "Predictor"     },
-      { id: "grupos",        label: "Groups"        },
-      { id: "proyecciones",  label: "Projections"   },
-      { id: "curiosidades",  label: "Stats"         },
-      { id: "modelo",        label: "Model"         },
-      { id: "glosario",      label: "Glossary"      },
-    ],
-    projByRound: "By round",
-    projSim:     "Simulator",
-    loading:    "Loading model data…",
-    footerBy:   "by",
-    footerNote: "Model trained up to Qatar 2022 · Not affiliated with FIFA",
-    kickoffIn:  "Tournament kicks off in",
-    liveNow:    "Tournament live",
-    played:     "matches",
-    goalsLabel: "goals",
-    perMatch:   "/match",
-    modelTag:   "Model",
-    hitsLabel:  "correct",
-    lastLabel:  "Latest",
-    daysSuffix: "d",
-  },
-  pt: {
-    navLabel:   "Preditor ML",
-    weAre26:    "WE ARE 26",
-    eyebrow:    "Análise com Machine Learning",
-    subtitle:   "Probabilidades para as 48 seleções da Copa 2026, calculadas com um modelo XGBoost calibrado sobre 964 jogos de Copa, ratings ELO históricos e simulação Monte Carlo.",
-    tabs:       [
-      { id: "envivo",        label: "Ao Vivo"         },
-      { id: "predictor",     label: "Preditor"        },
-      { id: "grupos",        label: "Grupos"          },
-      { id: "proyecciones",  label: "Projeções"       },
-      { id: "curiosidades",  label: "Stats"           },
-      { id: "modelo",        label: "Modelo"          },
-      { id: "glosario",      label: "Glossário"       },
-    ],
-    projByRound: "Por fase",
-    projSim:     "Simulador",
-    loading:    "Carregando dados do modelo…",
-    footerBy:   "por",
-    footerNote: "Modelo treinado até o Qatar 2022 · Não afiliado à FIFA",
-    kickoffIn:  "O torneio começa em",
-    liveNow:    "Torneio ao vivo",
-    played:     "jogos",
-    goalsLabel: "gols",
-    perMatch:   "/jogo",
-    modelTag:   "Modelo",
-    hitsLabel:  "acertos",
-    lastLabel:  "Último",
-    daysSuffix: "d",
-  },
+const _shellEs = {
+  navLabel:    "Predictor ML",
+  weAre26:     "WE ARE 26",
+  eyebrow:     "Análisis con Machine Learning",
+  subtitle:    "Sigue el Mundial 2026 en tiempo real: resultados, probabilidades por partido y quién tiene más opciones de llegar a la final.",
+  tabs: [
+    { id: "envivo",       label: "En Vivo"      },
+    { id: "predictor",    label: "Predictor"    },
+    { id: "grupos",       label: "Grupos"       },
+    { id: "proyecciones", label: "Proyecciones" },
+    { id: "curiosidades", label: "Stats"        },
+    { id: "modelo",       label: "Modelo"       },
+    { id: "chat",         label: "Chat IA"      },
+  ],
+  projByRound: "Por ronda",
+  projSim:     "Simulador",
+  loading:     "Cargando datos del modelo…",
+  footerBy:    "por",
+  footerNote:  "Modelo entrenado hasta Qatar 2022 · No afiliado a FIFA",
+  kickoffIn:   "El torneo arranca en",
+  liveNow:     "Torneo en vivo",
+  played:      "partidos",
+  goalsLabel:  "goles",
+  perMatch:    "/partido",
+  modelTag:    "Modelo",
+  hitsLabel:   "aciertos",
+  lastLabel:   "Último",
+  daysSuffix:  "d",
 } as const;
 
-type TabId = "envivo" | "predictor" | "grupos" | "proyecciones" | "curiosidades" | "modelo" | "glosario";
+const _shellEn = {
+  navLabel:    "ML Predictor",
+  weAre26:     "WE ARE 26",
+  eyebrow:     "Machine Learning Analysis",
+  subtitle:    "Follow the 2026 World Cup live: scores, match probabilities and who has the best shot at lifting the trophy.",
+  tabs: [
+    { id: "envivo",       label: "Live"        },
+    { id: "predictor",    label: "Predictor"   },
+    { id: "grupos",       label: "Groups"      },
+    { id: "proyecciones", label: "Projections" },
+    { id: "curiosidades", label: "Stats"       },
+    { id: "modelo",       label: "Model"       },
+    { id: "chat",         label: "AI Chat"     },
+  ],
+  projByRound: "By round",
+  projSim:     "Simulator",
+  loading:     "Loading model data…",
+  footerBy:    "by",
+  footerNote:  "Model trained up to Qatar 2022 · Not affiliated with FIFA",
+  kickoffIn:   "Tournament kicks off in",
+  liveNow:     "Tournament live",
+  played:      "matches",
+  goalsLabel:  "goals",
+  perMatch:    "/match",
+  modelTag:    "Model",
+  hitsLabel:   "correct",
+  lastLabel:   "Latest",
+  daysSuffix:  "d",
+} as const;
+
+const SHELL = {
+  bogotano: _shellEs,
+  paisa:    _shellEs,
+  boyaco:   _shellEs,
+  costeño:  _shellEs,
+  en:       _shellEn,
+} as const;
+
+type TabId = "envivo" | "predictor" | "grupos" | "proyecciones" | "curiosidades" | "modelo" | "chat";
 
 /* ─────────────────────────────────────────────────────────────
    PAGE
 ───────────────────────────────────────────────────────────── */
 export default function Home() {
-  const [lang,  setLang]  = useState<Lang>("es");
+  const [lang,  setLang]  = useState<Lang>("bogotano");
   const [tab,   setTab]   = useState<TabId>("envivo");
   const [theme, setTheme] = useState<"dark"|"light">("dark");
 
@@ -133,6 +111,7 @@ export default function Home() {
   const [groupStandings, setGroupStandings] = useState<Record<string, GroupStandingEntry[]> | null>(null);
   const [liveMatches,    setLiveMatches]    = useState<LiveMatch[]>([]);
   const [qatar,          setQatar]          = useState<QatarBacktest | null>(null);
+  const [narrations,     setNarrations]     = useState<Record<string, string>>({});
   const [loading,        setLoading]        = useState(true);
 
   /* Resultados reales del torneo (openfootball) — no bloquea la carga inicial.
@@ -159,7 +138,7 @@ export default function Home() {
   /* Persistencia */
   useEffect(() => {
     const l = localStorage.getItem("wc-lang") as Lang | null;
-    if (l === "es" || l === "en" || l === "pt") setLang(l);
+    if (l === "bogotano" || l === "paisa" || l === "boyaco" || l === "costeño" || l === "en") setLang(l);
     const t = localStorage.getItem("wc-theme");
     if (t === "dark" || t === "light") setTheme(t);
   }, []);
@@ -178,17 +157,37 @@ export default function Home() {
       fetch("/data/group_matches.json").then((r) => r.json()),
       fetch("/data/group_standings.json").then((r) => r.json()),
       fetch("/data/qatar2022.json").then((r) => r.json()).catch(() => null),
-    ]).then(([t, p, g, m, s, gs, gm, gst, q]) => {
+      fetch("/data/live_predictions.json").then((r) => r.json()).catch(() => null),
+      fetch("/data/narrations.json").then((r) => r.json()).catch(() => ({})),
+    ]).then(([t, p, g, m, s, gs, gm, gst, q, lp, nar]) => {
+      // Merge live_predictions (agent-adjusted) on top of base predictions
+      if (lp && Array.isArray(lp)) {
+        for (const entry of lp) {
+          const key = `${entry.home_team}|${entry.away_team}`;
+          p[key] = { home_win: entry.p_home, draw: entry.p_draw, away_win: entry.p_away };
+        }
+      }
       setTeams(t); setPredictions(p); setGroups(g); setMatches(m);
       setStats(s); setGoalscorers(gs); setGroupMatches(gm); setGroupStandings(gst);
       setQatar(q);
+      if (nar && typeof nar === "object") setNarrations(nar);
       setLoading(false);
     });
   }, []);
 
   const S = SHELL[lang];
-  const tabNavBg = "rgba(16,22,36,0.96)";
   const mainBg   = "var(--color-arena-void)";
+
+  const LANGS: Array<{ key: Lang; label: string }> = [
+    { key: "bogotano", label: "Bog." },
+    { key: "paisa",    label: "Pai." },
+    { key: "boyaco",   label: "Boy." },
+    { key: "costeño",  label: "Cos." },
+    { key: "en",       label: "EN"   },
+  ];
+  const langIdx  = LANGS.findIndex(l => l.key === lang);
+  const cycleLang = (dir: 1 | -1) =>
+    setLang(LANGS[(langIdx + dir + LANGS.length) % LANGS.length].key);
   const footerBg = "var(--color-arena-deep)";
 
   return (
@@ -198,104 +197,201 @@ export default function Home() {
 
         {/* ══ NAVBAR ══════════════════════════════════════════ */}
         <nav className="navbar-wc">
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            width: "100%", maxWidth: "80rem", margin: "0 auto",
-          }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "80rem", margin: "0 auto" }}>
             {/* Logo */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "0.3rem" }}>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(0.78rem, 2.5vw, 1rem)", letterSpacing: "0.1em", color: "#fff", whiteSpace: "nowrap" }}>
-                  FIFA WC
-                </span>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(0.78rem, 2.5vw, 1rem)", letterSpacing: "0.1em", color: "var(--color-wc-red)" }}>
-                  2026
-                </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+              {/* WC Trophy SVG icon */}
+              <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M7 2h8l-1 11a5 5 0 01-6 0L7 2z" fill="url(#trophy-grad)"/>
+                <path d="M3 4c-2 3-1 6 2 7" stroke="#C9981F" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+                <path d="M19 4c2 3 1 6-2 7" stroke="#C9981F" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
+                <rect x="9" y="17" width="4" height="4" rx="0.5" fill="#C9981F" opacity="0.85"/>
+                <rect x="5.5" y="21" width="11" height="2.2" rx="1" fill="url(#trophy-base)"/>
+                <rect x="3.5" y="23" width="15" height="2" rx="1" fill="#C9981F" opacity="0.6"/>
+                <defs>
+                  <linearGradient id="trophy-grad" x1="7" y1="2" x2="15" y2="15" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#F5CC6A"/>
+                    <stop offset="1" stopColor="#C9981F"/>
+                  </linearGradient>
+                  <linearGradient id="trophy-base" x1="5.5" y1="21" x2="16.5" y2="23" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#C9981F"/>
+                    <stop offset="1" stopColor="#7A5C0F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div style={{ display: "flex", alignItems: "baseline", gap: "0.28rem" }}>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(0.95rem, 2.5vw, 1.15rem)", letterSpacing: "0.08em", color: "var(--color-ink-primary)" }}>FIFA</span>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(0.95rem, 2.5vw, 1.15rem)", letterSpacing: "0.08em", color: "var(--color-wc-red)" }}>WC 2026</span>
               </div>
-              <div className="hidden sm:block" style={{ width: 1, height: 16, background: "rgba(255,255,255,0.14)" }} />
-              <span className="hidden sm:block" style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.15em", color: "var(--color-wc-gold)", textTransform: "uppercase" }}>
-                {S.navLabel}
-              </span>
             </div>
 
-            {/* Controles derechos */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              {/* Idioma */}
-              <div style={{ display: "flex", gap: "2px" }}>
-                {(["es", "en", "pt"] as Lang[]).map((l) => (
-                  <button key={l} onClick={() => setLang(l)} style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.08em",
-                    textTransform: "uppercase", padding: "0.28rem 0.5rem",
-                    border: "none", borderRadius: "3px", cursor: "pointer",
-                    minHeight: "32px",
-                    background: lang === l ? "var(--color-wc-red)" : "transparent",
-                    color: lang === l ? "#fff" : "rgba(255,255,255,0.4)",
-                    transition: "background 0.14s, color 0.14s",
-                  }}>
-                    {l.toUpperCase()}
-                  </button>
+            {/* Controls */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+              {/* Lang — desktop: 5 botones · móvil: ‹ activo › */}
+              <div className="hidden sm:flex" style={{ gap: "1px", background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "2px" }}>
+                {LANGS.map(({ key, label }) => (
+                  <button key={key} onClick={() => setLang(key)} style={{
+                    fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.06em",
+                    padding: "0.25rem 0.55rem",
+                    border: "none", borderRadius: 4, cursor: "pointer", minHeight: 28,
+                    background: lang === key ? "var(--color-wc-red)" : "transparent",
+                    color: lang === key ? "#fff" : "var(--color-ink-muted)",
+                    transition: "background 0.15s, color 0.15s",
+                  }}>{label}</button>
                 ))}
               </div>
-              {/* Toggle modo claro/oscuro */}
-              <button
-                onClick={() => setTheme(t => t === "dark" ? "light" : "dark")}
-                className="theme-toggle"
-                aria-label="Cambiar tema"
-                title={theme === "dark" ? "Modo claro" : "Modo oscuro"}
-              >
+              <div className="flex sm:hidden" style={{ alignItems: "center", background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "2px", gap: 0 }}>
+                <button onClick={() => cycleLang(-1)} aria-label="Dialecto anterior" style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.9rem", lineHeight: 1,
+                  padding: "0.2rem 0.45rem", border: "none", borderRadius: 4,
+                  background: "transparent", color: "var(--color-ink-muted)", cursor: "pointer", minHeight: 28,
+                }}>‹</button>
+                <span style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.06em",
+                  padding: "0 0.3rem", color: "#fff", minWidth: 32, textAlign: "center",
+                }}>{LANGS[langIdx].label}</span>
+                <button onClick={() => cycleLang(1)} aria-label="Dialecto siguiente" style={{
+                  fontFamily: "var(--font-mono)", fontSize: "0.9rem", lineHeight: 1,
+                  padding: "0.2rem 0.45rem", border: "none", borderRadius: 4,
+                  background: "transparent", color: "var(--color-ink-muted)", cursor: "pointer", minHeight: 28,
+                }}>›</button>
+              </div>
+              {/* Theme toggle */}
+              <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} className="theme-toggle" aria-label="Toggle theme">
                 {theme === "dark" ? "☀" : "☾"}
               </button>
-              {/* WE ARE 26 */}
-              <div className="hidden md:flex" style={{ alignItems: "center", gap: "0.4rem" }}>
-                <span style={{ fontSize: "0.85rem" }}>🇨🇦🇲🇽🇺🇸</span>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.75rem", letterSpacing: "0.18em", color: "rgba(255,255,255,0.45)" }}>
-                  {S.weAre26}
-                </span>
-              </div>
             </div>
           </div>
         </nav>
 
-        {/* ══ HERO — editorial compacto ════════════════════════ */}
+        {/* ══ HERO ══════════════════════════════════════════════ */}
         <header className="hero-brand">
+          {/* Aurora background */}
+          <div className="hero-aurora" aria-hidden />
+
           <div style={{
+            position: "relative", zIndex: 1,
             maxWidth: "80rem", margin: "0 auto",
-            padding: "clamp(1.75rem, 4vw, 2.75rem) 1.5rem clamp(1.5rem, 3vw, 2.25rem)",
+            padding: "clamp(2.25rem, 5vw, 3.5rem) clamp(1rem, 4vw, 1.5rem) 0",
+            display: "flex",
+            alignItems: "flex-end",
+            gap: "clamp(0.5rem, 2vw, 2rem)",
           }}>
-            {/* Eyebrow + estado del torneo */}
-            <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-              style={{ display: "flex", alignItems: "center", gap: "0.55rem", marginBottom: "0.9rem", flexWrap: "wrap" }}>
-              <div style={{ width: 22, height: 3, background: "var(--color-wc-red)", flexShrink: 0 }} />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.2em", color: "var(--color-ink-secondary)", textTransform: "uppercase" }}>
-                {S.eyebrow}
-              </span>
-              <TournamentStatus S={S} stats={liveStats} record={record} teams={teams} />
-            </motion.div>
+            {/* Columna texto — ocupa todo el espacio disponible */}
+            <div style={{ flex: 1, minWidth: 0, paddingBottom: "clamp(1.75rem, 3vw, 2.5rem)" }}>
 
-            {/* H1 */}
-            <motion.h1 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              style={{ margin: 0, lineHeight: 0.95, letterSpacing: "0.01em" }}>
-              <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 7vw, 4.25rem)", color: "var(--color-ink-primary)" }}>MUNDIAL 2026</span>
-              <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 7vw, 4.25rem)", color: "var(--color-wc-red)" }}> · PREDICTOR</span>
-            </motion.h1>
+              {/* WC Logo + eyebrow row */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem", flexWrap: "wrap" }}
+              >
+                {/* Trophy icon — animated glow */}
+                <motion.div
+                  animate={{ boxShadow: ["0 0 12px rgba(201,152,31,0.2)", "0 0 32px rgba(201,152,31,0.55)", "0 0 12px rgba(201,152,31,0.2)"] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  style={{
+                    width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                    background: "linear-gradient(135deg, rgba(229,0,45,0.18) 0%, rgba(201,152,31,0.14) 50%, rgba(0,50,200,0.12) 100%)",
+                    border: "1px solid rgba(201,152,31,0.35)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
+                >
+                  <svg width="26" height="30" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 2h10l-1.5 13a6 6 0 01-7 0L8 2z" fill="url(#hero-trophy)"/>
+                    <path d="M3.5 4.5C1 8 2 12 5.5 13.5" stroke="#F5CC6A" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+                    <path d="M22.5 4.5C25 8 24 12 20.5 13.5" stroke="#F5CC6A" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
+                    <rect x="11" y="19" width="4" height="4.5" rx="0.8" fill="#C9981F"/>
+                    <rect x="6.5" y="23.5" width="13" height="2.5" rx="1.2" fill="url(#hero-base)"/>
+                    <rect x="4" y="26" width="18" height="2.5" rx="1.2" fill="#7A5C0F" opacity="0.7"/>
+                    <ellipse cx="11" cy="8" rx="2" ry="1.2" fill="white" opacity="0.18"/>
+                    <defs>
+                      <linearGradient id="hero-trophy" x1="8" y1="2" x2="18" y2="17" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#FDEAAC"/>
+                        <stop offset="0.5" stopColor="#F5CC6A"/>
+                        <stop offset="1" stopColor="#C9981F"/>
+                      </linearGradient>
+                      <linearGradient id="hero-base" x1="6.5" y1="23.5" x2="19.5" y2="26" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#D4A843"/>
+                        <stop offset="1" stopColor="#7A5C0F"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </motion.div>
 
-            {/* Subtítulo legible */}
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.15 }}
-              style={{ fontFamily: "var(--font-body)", fontSize: "clamp(0.9rem, 1.6vw, 1.02rem)", lineHeight: 1.55, color: "var(--color-ink-secondary)", margin: "0.85rem 0 0", maxWidth: "46rem" }}>
-              {S.subtitle}
-            </motion.p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span style={{
+                      fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.2em",
+                      color: "var(--color-wc-gold-bright)", textTransform: "uppercase",
+                    }}>FIFA WORLD CUP</span>
+                    <span style={{ width: 1, height: 8, background: "rgba(255,255,255,0.12)" }} />
+                    <span style={{
+                      fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.16em",
+                      color: "var(--color-ink-muted)", textTransform: "uppercase",
+                    }}>{S.eyebrow}</span>
+                  </div>
+                </div>
+
+                <div style={{ marginLeft: "auto", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+                  <TournamentStatus S={S} stats={liveStats} record={record} teams={teams} />
+                </div>
+              </motion.div>
+
+              {/* H1 */}
+              <motion.h1
+                initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.07, ease: [0.16, 1, 0.3, 1] }}
+                style={{ margin: 0, lineHeight: 0.9, letterSpacing: "-0.01em" }}
+              >
+                <span style={{ display: "block", fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 7.5vw, 5.5rem)", color: "var(--color-ink-primary)" }}>
+                  MUNDIAL
+                </span>
+                <span style={{ display: "block", fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 7.5vw, 5.5rem)" }}>
+                  <span style={{ color: "var(--color-wc-red)" }}>2026</span>
+                  <span style={{ color: "rgba(255,255,255,0.18)", margin: "0 0.2em" }}>·</span>
+                  <span style={{ color: "var(--color-ink-primary)" }}>PREDICTOR</span>
+                </span>
+              </motion.h1>
+
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.2 }}
+                style={{
+                  fontFamily: "var(--font-body)", fontSize: "clamp(0.85rem, 1.4vw, 0.95rem)",
+                  lineHeight: 1.65, color: "var(--color-ink-secondary)",
+                  margin: "1rem 0 0", maxWidth: "42rem", fontWeight: 400,
+                }}
+              >{S.subtitle}</motion.p>
+
+            </div>
+
+            {/* Columna mascota — solo md+ */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/mascotas.webp"
+              alt=""
+              aria-hidden
+              className="hidden md:block"
+              style={{
+                flexShrink: 0,
+                alignSelf: "flex-end",
+                height: "clamp(160px, 24vw, 300px)",
+                width: "auto",
+                objectFit: "contain",
+                objectPosition: "bottom",
+                pointerEvents: "none",
+                userSelect: "none",
+              }}
+            />
           </div>
 
           <div className="accent-bar" />
         </header>
 
         {/* ══ TABS ════════════════════════════════════════════ */}
-        <div className="tab-nav-bar" style={{
-          position: "sticky", top: 56, zIndex: 40,
-          background: tabNavBg, backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)", transition: "background 0.25s",
-        }}>
+        <div className="tab-nav-bar" style={{ position: "sticky", top: 52, zIndex: 40 }}>
           <div style={{ maxWidth: "80rem", margin: "0 auto", padding: "0 1.5rem", display: "flex", overflowX: "auto" }} className="scrollbar-hide">
             {S.tabs.map((t) => (
               <button key={t.id} onClick={() => setTab(t.id as TabId)}
@@ -322,7 +418,7 @@ export default function Home() {
               )}
               {tab === "predictor" && teams && predictions && (
                 <TabPane key="predictor">
-                  <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} />
+                  <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} narrations={narrations} />
                 </TabPane>
               )}
               {tab === "grupos" && groupMatches && groupStandings && (
@@ -339,19 +435,24 @@ export default function Home() {
                   />
                 </TabPane>
               )}
-              {tab === "curiosidades" && stats && (
+              {tab === "curiosidades" && (
                 <TabPane key="curiosidades">
-                  <FunFacts stats={stats} goalscorers={goalscorers} qatar={qatar} />
+                  <StatsTab
+                    liveMatches={liveMatches}
+                    groupMatches={groupMatches ?? {}}
+                    liveScores={liveScores}
+                    teams={teams ?? {}}
+                  />
                 </TabPane>
               )}
               {tab === "modelo" && (
                 <TabPane key="modelo">
-                  <ModelTab />
+                  <ModelTab groupMatches={groupMatches ?? {}} liveScores={liveScores} teams={teams ?? {}} />
                 </TabPane>
               )}
-              {tab === "glosario" && (
-                <TabPane key="glosario">
-                  <Glossary />
+              {tab === "chat" && (
+                <TabPane key="chat">
+                  <ChatTab />
                 </TabPane>
               )}
             </AnimatePresence>
@@ -361,28 +462,19 @@ export default function Home() {
         {/* ══ FOOTER ══════════════════════════════════════════ */}
         <footer>
           <div className="accent-bar" />
-          <div style={{ background: footerBg, padding: "1.5rem", transition: "background 0.25s" }}>
-            <div style={{
-              maxWidth: "80rem", margin: "0 auto",
-              display: "flex", alignItems: "center",
-              justifyContent: "space-between", flexWrap: "wrap", gap: "0.75rem",
-            }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "0.4rem" }}>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.85rem", letterSpacing: "0.12em", color: "var(--color-ink-muted)" }}>FIFA WORLD CUP</span>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.85rem", letterSpacing: "0.12em", color: "var(--color-wc-red)" }}>2026</span>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.85rem", letterSpacing: "0.12em", color: "var(--color-ink-muted)", opacity: 0.5 }}>PREDICTOR</span>
+          <div style={{ background: footerBg, padding: "1.25rem clamp(1rem, 4vw, 1.5rem)", transition: "background 0.3s" }}>
+            <div style={{ maxWidth: "80rem", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.6rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.8rem", letterSpacing: "0.1em", color: "var(--color-ink-muted)" }}>FIFA WC</span>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.8rem", letterSpacing: "0.1em", color: "var(--color-wc-red)" }}>2026</span>
+                <span style={{ width: 1, height: 10, background: "rgba(255,255,255,0.08)" }} />
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", color: "var(--color-ink-muted)", textTransform: "uppercase", opacity: 0.6 }}>Predictor</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.1em", color: "var(--color-ink-muted)", textTransform: "uppercase" }}>
-                  {S.footerBy}
-                </span>
-                <span style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.1em",
-                  color: "var(--color-wc-gold)", textTransform: "uppercase",
-                }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.08em", color: "var(--color-wc-gold)", textTransform: "uppercase" }}>
                   Manuel Coy · AI Data Strategist
                 </span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.55rem", letterSpacing: "0.07em", color: "var(--color-ink-muted)", opacity: 0.5 }}>
+                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "var(--color-ink-muted)", opacity: 0.45 }}>
                   · {S.footerNote}
                 </span>
               </div>
@@ -397,7 +489,7 @@ export default function Home() {
 /* ── Estado del torneo: countdown antes del kickoff, stats en vivo después ── */
 const KICKOFF_UTC = Date.parse("2026-06-11T19:00:00Z"); // México vs Sudáfrica · Estadio Azteca · 13:00 CDMX
 
-type ShellStrings = (typeof SHELL)[Lang];
+type ShellStrings = typeof _shellEs | typeof _shellEn;
 
 function TournamentStatus({ S, stats, record, teams }: {
   S: ShellStrings;

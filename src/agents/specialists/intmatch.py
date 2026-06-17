@@ -13,8 +13,18 @@ Analyze the match context JSON and return ONLY a JSON object with these keys:
 - notes: string — max 2 bullet points, tactical rationale
 
 Constraints: delta_home + delta_draw + delta_away must equal 0.
-Focus on: tactical style matchup, home crowd effect for host nations (USA/MEX/CAN),
-card accumulation suspensions, and heat/humidity drain for high-tempo teams."""
+
+Key factors to weigh (in priority order):
+1. GROUP QUALIFICATION PRESSURE: A team with 0-1 pts needing to win attacks desperately,
+   increasing their win probability but also conceding more. A team already through (6 pts)
+   rotates heavily — reduce their win probability by 3-5%.
+2. MATCHDAY CONTEXT: MD3 simultaneous matches change team behavior completely.
+   A team that only needs a draw will play conservatively → increase P(draw).
+3. HOST NATION ADVANTAGE: USA/Mexico/Canada get real crowd boost — especially Mexico
+   in Mexico City/Guadalajara/Monterrey venues.
+4. TACTICAL STYLE CLASH: counter-attack teams benefit when facing possession-heavy
+   opponents who must win. High press teams suffer in heat/altitude.
+5. CARD ACCUMULATIONS: a team with 2 yellows each plays more cautiously."""
 
 
 class IntMatchAgent(BaseAgent):
@@ -31,6 +41,15 @@ class IntMatchAgent(BaseAgent):
             "venue_city": ctx.venue_city,
             "round": ctx.round_label,
             "injuries": ctx.injuries,
+            "group_context": {
+                "group": ctx.group_name,
+                "matchday": ctx.matchday,
+                "home_pts": ctx.group_points_home,
+                "away_pts": ctx.group_points_away,
+                "home_games_played": ctx.games_played_home,
+                "away_games_played": ctx.games_played_away,
+                "standings": ctx.group_standings,
+            } if ctx.group_points_home is not None else None,
         }
         raw = call_claude(_SYSTEM, payload, model=self.model, max_tokens=400)
         data = parse_delta_json(raw)

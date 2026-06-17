@@ -1,272 +1,360 @@
 "use client";
 
-import { useContext } from "react";
-import { LangContext } from "@/lib/i18n";
+import { useMemo } from "react";
+import type { GroupMatch, TeamInfo } from "@/types";
+import type { ScoreMap } from "@/lib/live";
+import { orientScore, modelVerdict } from "@/lib/live";
 
-// Walk-forward results — updated after each full pipeline run
-const WF_ROWS = [
-  { year: 2006, elo: 0.1609, poisson: 0.1787, xgb: 0.1614, ensemble: 0.1626, best: "elo" },
-  { year: 2010, elo: 0.2022, poisson: 0.2072, xgb: 0.2052, ensemble: 0.1995, best: "ensemble" },
-  { year: 2014, elo: 0.1925, poisson: 0.2185, xgb: 0.1973, ensemble: 0.1984, best: "elo" },
-  { year: 2018, elo: 0.2050, poisson: 0.2099, xgb: 0.2141, ensemble: 0.2043, best: "ensemble" },
-  { year: 2022, elo: 0.2222, poisson: 0.2181, xgb: 0.2152, ensemble: 0.2142, best: "ensemble" },
-];
-const WF_OVERALL = { elo: 0.1966, poisson: 0.2065, xgb: 0.1986, ensemble: 0.1958 };
+interface Props {
+  groupMatches: Record<string, GroupMatch[]>;
+  liveScores: ScoreMap;
+  teams: Record<string, TeamInfo>;
+}
 
-const FEATURES = [
-  { key: "elo_diff",                  es: "Diferencia ELO (local − visitante)",      en: "ELO difference (home − away)",         pt: "Diferença ELO (casa − visitante)" },
-  { key: "elo_home / elo_away",       es: "ELO absoluto de cada equipo",             en: "Absolute ELO of each team",             pt: "ELO absoluto de cada equipe" },
-  { key: "home_goals_scored_avg5",    es: "Goles marcados (promedio últimos 5)",     en: "Goals scored (rolling avg 5 matches)",  pt: "Gols marcados (média últimos 5)" },
-  { key: "home_goals_conceded_avg5",  es: "Goles recibidos (promedio últimos 5)",    en: "Goals conceded (rolling avg 5 matches)", pt: "Gols sofridos (média últimos 5)" },
-  { key: "h2h_home_win_pct",          es: "% victorias del local en enfrentamientos", en: "Head-to-head home win rate",           pt: "% vitórias em confrontos diretos" },
-  { key: "is_neutral",                es: "Sede neutral / ventaja de anfitrión",     en: "Neutral venue / host advantage",        pt: "Sede neutra / vantagem do anfitrião" },
-  { key: "wc_experience_diff",        es: "Diferencia de apariciones en Mundiales", en: "Difference in WC appearances",          pt: "Diferença de participações em Copas" },
-];
+interface MatchResult {
+  group: string;
+  groupMd: number;   // 1, 2 or 3 (internal group matchday)
+  team1: string;
+  team2: string;
+  t1_flag: string;
+  t2_flag: string;
+  score1: number;
+  score2: number;
+  predicted: "t1" | "draw" | "t2";
+  actual: "t1" | "draw" | "t2";
+  prob: number;
+  hit: boolean;
+}
 
-const LIMITATIONS = {
-  es: [
-    "El modelo refleja patrones históricos. Equipos debutantes o con pocos datos tienen priors menos informados.",
-    "No incorpora datos de lesiones en tiempo real. Los agentes LLM son opcionales y requieren contexto manual.",
-    "La calibración se entrenó en WC 2018. Deriva posible ante cambios estructurales del fútbol moderno.",
-    "Los empates son el outcome más difícil: ningún modelo reduce sustancialmente su error en esta clase.",
-    "No es una herramienta de apuestas. Las probabilidades están calibradas para forecasting, no para valor esperado vs. casas.",
-  ],
-  en: [
-    "The model reflects historical patterns. Debutant teams or those with few records have less informative priors.",
-    "No real-time injury data. LLM agents are optional and require manual context injection.",
-    "Calibration was fitted on WC 2018. Drift is possible as modern football evolves structurally.",
-    "Draws are the hardest outcome: no model tested significantly reduces draw prediction error.",
-    "Not a betting tool. Probabilities are calibrated for forecasting, not for expected value against bookmakers.",
-  ],
-  pt: [
-    "O modelo reflete padrões históricos. Equipes estreantes ou com poucos dados têm priors menos informativos.",
-    "Sem dados de lesões em tempo real. Agentes LLM são opcionais e requerem contexto manual.",
-    "A calibração foi treinada no WC 2018. Deriva possível com mudanças estruturais no futebol moderno.",
-    "Empates são o resultado mais difícil: nenhum modelo reduz significativamente o erro nessa classe.",
-    "Não é uma ferramenta de apostas. Probabilidades calibradas para previsão, não para valor esperado.",
-  ],
-};
+function computeResults(
+  groupMatches: Record<string, GroupMatch[]>,
+  liveScores: ScoreMap,
+  teams: Record<string, TeamInfo>
+): MatchResult[] {
+  const out: MatchResult[] = [];
+  for (const [group, matches] of Object.entries(groupMatches)) {
+    // Determine internal matchday by unique dates sorted
+    const uniqueDates = [...new Set(matches.map((m) => m.date))].sort();
+    const dateToMd = new Map(uniqueDates.map((d, i) => [d, i + 1]));
 
-const T = {
-  es: {
-    title:       "Metodología del Modelo",
-    subtitle:    "Walk-forward validation en 5 Mundiales · 320 partidos sin leakage",
-    wfTitle:     "Validación Walk-Forward (RPS — menor es mejor)",
-    wfNote:      "Cada fold entrena con datos anteriores al torneo de prueba. El Ensemble (ELO 35% + Poisson 35% + XGB 30%) gana en 3 de 5 torneos y tiene el mejor RPS global.",
-    wfYear:      "Mundial",
-    wfBest:      "Mejor",
-    ensTitle:    "Arquitectura del Ensemble",
-    ensNote:     "Tres señales independientes calibradas y promediadas. Pesos optimizados por grid search en walk-forward.",
-    eloDesc:     "ELO mejorado: K por torneo, multiplicador por margen, home advantage +100",
-    poissonDesc: "Dixon-Robinson: ataque/defensa por iteración, matrices de scoreline 8×8",
-    xgbDesc:     "XGBoost softmax + CalibratedClassifierCV (TimeSeriesSplit n=3, sigmoid)",
-    featTitle:   "Features del Modelo (10)",
-    featNote:    "Todas las features se computan estrictamente antes del partido (sin leakage). El rolling usa shift(1) sobre el timeline completo de internacionales.",
-    limTitle:    "Limitaciones",
-    limNote:     "El modelo es honesto sobre sus límites. Lea esto antes de interpretar las probabilidades.",
-    testTitle:   "Qatar 2022 — Test Set",
-    testNote:    "64 partidos nunca vistos durante el entrenamiento.",
-  },
-  en: {
-    title:       "Model Methodology",
-    subtitle:    "Walk-forward validation on 5 World Cups · 320 matches, no leakage",
-    wfTitle:     "Walk-Forward Validation (RPS — lower is better)",
-    wfNote:      "Each fold trains on data before the test tournament. The Ensemble (ELO 35% + Poisson 35% + XGB 30%) wins in 3 of 5 tournaments and achieves the best overall RPS.",
-    wfYear:      "World Cup",
-    wfBest:      "Best",
-    ensTitle:    "Ensemble Architecture",
-    ensNote:     "Three independent signals blended and calibrated. Weights optimised by grid search on walk-forward data.",
-    eloDesc:     "Improved ELO: K by tournament, goal-margin multiplier, +100 home advantage",
-    poissonDesc: "Dixon-Robinson: attack/defense via iteration, 8×8 scoreline matrices",
-    xgbDesc:     "XGBoost softmax + CalibratedClassifierCV (TimeSeriesSplit n=3, sigmoid)",
-    featTitle:   "Model Features (10)",
-    featNote:    "All features are computed strictly before the match (no leakage). Rolling stats use shift(1) over the full international timeline.",
-    limTitle:    "Limitations",
-    limNote:     "The model is honest about its limits. Read this before interpreting probabilities.",
-    testTitle:   "Qatar 2022 — Test Set",
-    testNote:    "64 matches never seen during training.",
-  },
-  pt: {
-    title:       "Metodologia do Modelo",
-    subtitle:    "Validação walk-forward em 5 Copas · 320 jogos sem vazamento de dados",
-    wfTitle:     "Validação Walk-Forward (RPS — menor é melhor)",
-    wfNote:      "Cada fold treina com dados anteriores ao torneio de teste. O Ensemble (ELO 35% + Poisson 35% + XGB 30%) vence em 3 de 5 torneios e tem o melhor RPS global.",
-    wfYear:      "Copa",
-    wfBest:      "Melhor",
-    ensTitle:    "Arquitetura do Ensemble",
-    ensNote:     "Três sinais independentes calibrados e ponderados. Pesos otimizados por grid search no walk-forward.",
-    eloDesc:     "ELO aprimorado: K por torneio, multiplicador de margem, vantagem em casa +100",
-    poissonDesc: "Dixon-Robinson: ataque/defesa por iteração, matrizes de scoreline 8×8",
-    xgbDesc:     "XGBoost softmax + CalibratedClassifierCV (TimeSeriesSplit n=3, sigmoid)",
-    featTitle:   "Features do Modelo (10)",
-    featNote:    "Todas as features são calculadas estritamente antes do jogo (sem leakage). Rolling usa shift(1) sobre o histórico completo.",
-    limTitle:    "Limitações",
-    limNote:     "O modelo é honesto sobre seus limites. Leia isso antes de interpretar as probabilidades.",
-    testTitle:   "Qatar 2022 — Conjunto de Teste",
-    testNote:    "64 jogos nunca vistos durante o treinamento.",
-  },
-};
+    for (const m of matches) {
+      const score = orientScore(m, liveScores);
+      if (!score) continue;
+      const v = modelVerdict(m, score);
+      const actual: "t1" | "draw" | "t2" =
+        score.s1 > score.s2 ? "t1" : score.s1 < score.s2 ? "t2" : "draw";
+      out.push({
+        group,
+        groupMd: dateToMd.get(m.date) ?? 1,
+        team1: m.team1,
+        team2: m.team2,
+        t1_flag: m.team1_flag,
+        t2_flag: m.team2_flag,
+        score1: score.s1,
+        score2: score.s2,
+        predicted: v.predicted,
+        actual,
+        prob: v.prob,
+        hit: v.hit,
+      });
+    }
+  }
+  return out;
+}
 
-function RpsCell({ value, isBest }: { value: number; isBest: boolean }) {
+const cardBg = { background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.06)" };
+
+function Pill({ value, label, color }: { value: string; label: string; color: string }) {
   return (
-    <td className={`py-2 px-3 text-right font-mono text-xs tabular-nums ${
-      isBest
-        ? "text-[var(--color-wc-gold)] font-bold"
-        : "text-[var(--color-ink-muted)]"
-    }`}>
-      {value.toFixed(4)}
-      {isBest && <span className="ml-1 text-[0.6rem]">▲</span>}
-    </td>
+    <div className="rounded-xl p-4 text-center" style={cardBg}>
+      <div className="font-mono text-base font-black leading-tight" style={{ color }}>{value}</div>
+      <div className="text-[0.6rem] mt-1 leading-snug" style={{ color: "var(--color-ink-muted)" }}>{label}</div>
+    </div>
   );
 }
 
-export default function ModelTab() {
-  const lang = useContext(LangContext);
-  const S = T[lang] ?? T.es;
-  const lims = LIMITATIONS[lang] ?? LIMITATIONS.es;
+function pct(hits: number, played: number) {
+  if (played === 0) return "—";
+  return `${Math.round((hits / played) * 100)}%`;
+}
 
-  const card = "rounded-xl p-5 space-y-3" as const;
-  const cardBg = { background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.06)" };
+function Arrow({ delta }: { delta: number | null }) {
+  if (delta === null) return <span style={{ color: "var(--color-ink-muted)", fontSize: "0.7rem" }}>—</span>;
+  if (delta > 0)  return <span style={{ color: "#34d399", fontSize: "0.7rem" }}>▲ +{delta}pp</span>;
+  if (delta < 0)  return <span style={{ color: "var(--color-wc-red)", fontSize: "0.7rem" }}>▼ {delta}pp</span>;
+  return <span style={{ color: "var(--color-ink-muted)", fontSize: "0.7rem" }}>= 0pp</span>;
+}
+
+export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
+  const results = useMemo(
+    () => computeResults(groupMatches, liveScores, teams),
+    [groupMatches, liveScores, teams]
+  );
+
+  // ── Global KPIs ────────────────────────────────────────────────────────────
+  const played = results.length;
+  const hits   = results.filter((r) => r.hit).length;
+  const pctGlobal = played > 0 ? Math.round((hits / played) * 100) : null;
+
+  // ── Per internal matchday ──────────────────────────────────────────────────
+  const byMd = useMemo(() => {
+    const map: Record<number, { hits: number; played: number }> = {};
+    for (const r of results) {
+      if (!map[r.groupMd]) map[r.groupMd] = { hits: 0, played: 0 };
+      map[r.groupMd].played++;
+      if (r.hit) map[r.groupMd].hits++;
+    }
+    return map;
+  }, [results]);
+
+  // ── Per group ──────────────────────────────────────────────────────────────
+  const byGroup = useMemo(() => {
+    const map: Record<string, Record<number, { hits: number; played: number }>> = {};
+    for (const r of results) {
+      if (!map[r.group]) map[r.group] = {};
+      if (!map[r.group][r.groupMd]) map[r.group][r.groupMd] = { hits: 0, played: 0 };
+      map[r.group][r.groupMd].played++;
+      if (r.hit) map[r.group][r.groupMd].hits++;
+    }
+    return map;
+  }, [results]);
+
+  // ── Surprises (model was most wrong — lowest prob for actual outcome) ───────
+  const surprises = useMemo(() => {
+    // Sort by how wrong the model was: lowest prob on actual outcome
+    return [...results]
+      .filter((r) => !r.hit)
+      .sort((a, b) => a.prob - b.prob)   // lowest predicted prob = biggest surprise
+      .slice(0, 5);
+  }, [results]);
+
+  const groups = Object.keys(groupMatches).sort();
+
+  if (played === 0) {
+    return (
+      <div className="max-w-3xl mx-auto text-center py-16">
+        <p style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono)", fontSize: "0.8rem" }}>
+          Aún no hay partidos jugados con resultados disponibles.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto">
+    <div className="space-y-5 max-w-3xl mx-auto">
 
       {/* Header */}
       <div>
-        <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.1rem, 3vw, 1.5rem)", letterSpacing: "0.08em", color: "var(--color-ink)" }}>
-          {S.title}
+        <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1rem, 3vw, 1.4rem)", letterSpacing: "0.06em", color: "var(--color-ink)" }}>
+          Rendimiento del modelo
         </h2>
-        <p className="text-xs mt-1" style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono)", letterSpacing: "0.05em" }}>
-          {S.subtitle}
+        <p className="text-xs mt-1" style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>
+          {played} partidos jugados · actualizado en tiempo real
         </p>
       </div>
 
-      {/* Walk-forward table */}
-      <div className={card} style={cardBg}>
-        <h3 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--color-wc-red)" }}>
-          {S.wfTitle}
-        </h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b" style={{ borderColor: "rgba(255,255,255,0.08)" }}>
-                <th className="py-2 px-3 text-left font-mono text-[var(--color-ink-muted)]">{S.wfYear}</th>
-                <th className="py-2 px-3 text-right font-mono text-[var(--color-ink-muted)]">ELO</th>
-                <th className="py-2 px-3 text-right font-mono text-[var(--color-ink-muted)]">Poisson</th>
-                <th className="py-2 px-3 text-right font-mono text-[var(--color-ink-muted)]">XGB</th>
-                <th className="py-2 px-3 text-right font-mono" style={{ color: "var(--color-wc-gold)" }}>Ensemble</th>
-              </tr>
-            </thead>
-            <tbody>
-              {WF_ROWS.map((r) => (
-                <tr key={r.year} className="border-b" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
-                  <td className="py-2 px-3 font-mono text-xs" style={{ color: "var(--color-ink)" }}>{r.year}</td>
-                  <RpsCell value={r.elo} isBest={r.best === "elo"} />
-                  <RpsCell value={r.poisson} isBest={r.best === "poisson"} />
-                  <RpsCell value={r.xgb} isBest={r.best === "xgb"} />
-                  <RpsCell value={r.ensemble} isBest={r.best === "ensemble"} />
-                </tr>
-              ))}
-              {/* Overall row */}
-              <tr style={{ background: "rgba(212,168,67,0.06)" }}>
-                <td className="py-2 px-3 font-mono text-xs font-bold" style={{ color: "var(--color-ink)" }}>
-                  {S.wfBest}
-                </td>
-                <RpsCell value={WF_OVERALL.elo} isBest={false} />
-                <RpsCell value={WF_OVERALL.poisson} isBest={false} />
-                <RpsCell value={WF_OVERALL.xgb} isBest={false} />
-                <RpsCell value={WF_OVERALL.ensemble} isBest={true} />
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p className="text-[0.65rem] leading-relaxed" style={{ color: "var(--color-ink-muted)" }}>
-          {S.wfNote}
-        </p>
+      {/* KPIs globales */}
+      <div className="grid grid-cols-3 gap-3">
+        <Pill
+          value={pctGlobal !== null ? `${pctGlobal}%` : "—"}
+          label={`${hits}/${played} aciertos WC 2026`}
+          color="var(--color-wc-gold)"
+        />
+        <Pill
+          value="48%"
+          label="Qatar 2022 · 64 partidos"
+          color="var(--color-ink-muted)"
+        />
+        <Pill
+          value="33%"
+          label="azar sin modelo"
+          color="rgba(255,255,255,0.25)"
+        />
       </div>
 
-      {/* Ensemble architecture */}
-      <div className={card} style={cardBg}>
-        <h3 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--color-wc-red)" }}>
-          {S.ensTitle}
+      {/* Progresión por jornada interna */}
+      <div className="rounded-xl p-5 space-y-3" style={cardBg}>
+        <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+          📈 Precisión por jornada
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {[
-            { label: "ELO", weight: "35%", color: "var(--color-wc-gold)", desc: S.eloDesc },
-            { label: "Poisson", weight: "35%", color: "#60a5fa", desc: S.poissonDesc },
-            { label: "XGBoost", weight: "30%", color: "#34d399", desc: S.xgbDesc },
-          ].map(({ label, weight, color, desc }) => (
-            <div key={label} className="rounded-lg p-3 space-y-1"
-              style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${color}33` }}>
-              <div className="flex items-baseline gap-2">
-                <span className="font-mono text-sm font-bold" style={{ color }}>{label}</span>
-                <span className="font-mono text-xs" style={{ color: "var(--color-ink-muted)" }}>{weight}</span>
+        <div className="space-y-2">
+          {[1, 2, 3].map((md) => {
+            const data = byMd[md];
+            if (!data) return null;
+            const p = Math.round((data.hits / data.played) * 100);
+            const prev = byMd[md - 1];
+            const delta = prev ? p - Math.round((prev.hits / prev.played) * 100) : null;
+            return (
+              <div key={md} className="flex items-center gap-3">
+                <span className="shrink-0 font-mono text-[0.65rem]" style={{ color: "var(--color-ink-muted)", width: 40 }}>
+                  JOR {md}
+                </span>
+                <div className="flex-1 rounded-full overflow-hidden" style={{ height: 6, background: "rgba(255,255,255,0.06)" }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ width: `${p}%`, background: p >= 50 ? "var(--color-wc-gold)" : "var(--color-wc-red)" }}
+                  />
+                </div>
+                <span className="shrink-0 font-mono font-bold text-xs" style={{ color: "var(--color-ink)", width: 34, textAlign: "right" }}>
+                  {p}%
+                </span>
+                <span className="shrink-0 text-[0.6rem]" style={{ color: "var(--color-ink-muted)", width: 52 }}>
+                  {data.hits}/{data.played}
+                </span>
+                <div className="shrink-0 w-16 text-right">
+                  <Arrow delta={delta} />
+                </div>
               </div>
-              <p className="text-[0.62rem] leading-snug" style={{ color: "var(--color-ink-muted)" }}>{desc}</p>
-            </div>
-          ))}
-        </div>
-        <p className="text-[0.65rem]" style={{ color: "var(--color-ink-muted)" }}>{S.ensNote}</p>
-      </div>
-
-      {/* Qatar 2022 test set */}
-      <div className={card} style={cardBg}>
-        <h3 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--color-wc-red)" }}>
-          {S.testTitle}
-        </h3>
-        <p className="text-[0.65rem]" style={{ color: "var(--color-ink-muted)" }}>{S.testNote}</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-1">
-          {[
-            { metric: "Accuracy", value: "48.4%" },
-            { metric: "Log-loss", value: "1.025" },
-            { metric: "Brier",    value: "0.203" },
-            { metric: "RPS",      value: "0.217" },
-          ].map(({ metric, value }) => (
-            <div key={metric} className="rounded-lg p-3 text-center"
-              style={{ background: "rgba(255,255,255,0.03)" }}>
-              <div className="font-mono text-base font-bold" style={{ color: "var(--color-ink)" }}>{value}</div>
-              <div className="font-mono text-[0.6rem] mt-0.5" style={{ color: "var(--color-ink-muted)" }}>{metric}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Features */}
-      <div className={card} style={cardBg}>
-        <h3 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--color-wc-red)" }}>
-          {S.featTitle}
+      {/* Por grupo */}
+      <div className="rounded-xl p-5 space-y-3" style={cardBg}>
+        <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+          🗂️ Por grupo · J1 → J2 → J3 → FG
         </h3>
-        <p className="text-[0.65rem]" style={{ color: "var(--color-ink-muted)" }}>{S.featNote}</p>
-        <ul className="space-y-1.5 mt-1">
-          {FEATURES.map((f) => (
-            <li key={f.key} className="flex gap-3 items-start">
-              <code className="text-[0.6rem] font-mono shrink-0 mt-0.5 px-1.5 py-0.5 rounded"
-                style={{ background: "rgba(212,168,67,0.12)", color: "var(--color-wc-gold)" }}>
-                {f.key}
-              </code>
-              <span className="text-[0.65rem]" style={{ color: "var(--color-ink-muted)" }}>
-                {(f as Record<string, string>)[lang] ?? f.es}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <p className="text-[0.6rem]" style={{ color: "var(--color-ink-muted)" }}>
+          FG = total del grupo · flecha = mejora vs jornada anterior · FG delta vs J1
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {groups.map((g) => {
+            const gData = byGroup[g];
+            if (!gData) return null;
+
+            // Totales del grupo para columna FG
+            const totalHits   = Object.values(gData).reduce((s, d) => s + d.hits, 0);
+            const totalPlayed = Object.values(gData).reduce((s, d) => s + d.played, 0);
+            const fgPct  = totalPlayed > 0 ? Math.round((totalHits / totalPlayed) * 100) : null;
+            const j1Pct  = gData[1] ? Math.round((gData[1].hits / gData[1].played) * 100) : null;
+            const fgDelta = fgPct !== null && j1Pct !== null ? fgPct - j1Pct : null;
+
+            return (
+              <div key={g} className="rounded-lg p-3 space-y-2"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                {/* Group header */}
+                <span className="font-mono font-bold text-xs" style={{ color: "var(--color-wc-gold)" }}>
+                  GRP {g}
+                </span>
+                {/* J1 | J2 | J3 | FG */}
+                <div className="grid grid-cols-4 gap-1">
+                  {[1, 2, 3].map((md) => {
+                    const d   = gData[md];
+                    const prev = gData[md - 1];
+                    if (!d) return (
+                      <div key={md} className="rounded text-center py-2"
+                        style={{ background: "rgba(255,255,255,0.03)", fontSize: "0.56rem", color: "rgba(255,255,255,0.18)" }}>
+                        <div>J{md}</div><div style={{ marginTop: 2 }}>—</div>
+                      </div>
+                    );
+                    const p    = Math.round((d.hits / d.played) * 100);
+                    const prevP = prev ? Math.round((prev.hits / prev.played) * 100) : null;
+                    const delta = prevP !== null ? p - prevP : null;
+                    const gold  = p >= 50;
+                    return (
+                      <div key={md} className="rounded text-center py-1.5"
+                        style={{
+                          background: gold ? "rgba(201,152,31,0.12)" : "rgba(207,10,44,0.1)",
+                          border: `1px solid ${gold ? "rgba(201,152,31,0.2)" : "rgba(207,10,44,0.2)"}`,
+                        }}>
+                        <div style={{ fontSize: "0.56rem", color: "var(--color-ink-muted)" }}>J{md}</div>
+                        <div style={{
+                          fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: "0.68rem",
+                          color: gold ? "var(--color-wc-gold)" : "var(--color-wc-red)",
+                        }}>
+                          {p}%
+                        </div>
+                        {delta !== null ? (
+                          <div style={{
+                            fontSize: "0.5rem",
+                            color: delta > 0 ? "#34d399" : delta < 0 ? "var(--color-wc-red)" : "var(--color-ink-muted)",
+                          }}>
+                            {delta > 0 ? `▲+${delta}` : delta < 0 ? `▼${delta}` : `=`}
+                          </div>
+                        ) : (
+                          <div style={{ fontSize: "0.5rem", color: "transparent" }}>·</div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* FG — total del grupo */}
+                  {fgPct !== null ? (
+                    <div className="rounded text-center py-1.5"
+                      style={{
+                        background: fgPct >= 50 ? "rgba(201,152,31,0.18)" : "rgba(207,10,44,0.14)",
+                        border: `2px solid ${fgPct >= 50 ? "rgba(201,152,31,0.35)" : "rgba(207,10,44,0.3)"}`,
+                      }}>
+                      <div style={{ fontSize: "0.56rem", color: "var(--color-ink-muted)" }}>FG</div>
+                      <div style={{
+                        fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: "0.7rem",
+                        color: fgPct >= 50 ? "var(--color-wc-gold)" : "var(--color-wc-red)",
+                      }}>
+                        {fgPct}%
+                      </div>
+                      <div style={{ fontSize: "0.5rem", color: "var(--color-ink-muted)" }}>
+                        {totalHits}/{totalPlayed}
+                      </div>
+                      {fgDelta !== null && (
+                        <div style={{
+                          fontSize: "0.48rem",
+                          color: fgDelta > 0 ? "#34d399" : fgDelta < 0 ? "var(--color-wc-red)" : "var(--color-ink-muted)",
+                        }}>
+                          {fgDelta > 0 ? `▲+${fgDelta}pp` : fgDelta < 0 ? `▼${fgDelta}pp` : `=`}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="rounded text-center py-2"
+                      style={{ background: "rgba(255,255,255,0.03)", fontSize: "0.56rem", color: "rgba(255,255,255,0.18)" }}>
+                      <div>FG</div><div style={{ marginTop: 2 }}>—</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Limitations */}
-      <div className={card} style={{ ...cardBg, borderColor: "rgba(207,10,44,0.18)" }}>
-        <h3 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--color-wc-red)" }}>
-          {S.limTitle}
-        </h3>
-        <p className="text-[0.65rem]" style={{ color: "var(--color-ink-muted)" }}>{S.limNote}</p>
-        <ul className="space-y-2 mt-1">
-          {lims.map((lim, i) => (
-            <li key={i} className="flex gap-2 items-start">
-              <span className="shrink-0 mt-0.5 text-[0.7rem]" style={{ color: "var(--color-wc-red)" }}>›</span>
-              <span className="text-[0.65rem] leading-snug" style={{ color: "var(--color-ink-muted)" }}>{lim}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Sorpresas */}
+      {surprises.length > 0 && (
+        <div className="rounded-xl p-5 space-y-3" style={{ ...cardBg, borderColor: "rgba(207,10,44,0.15)" }}>
+          <h3 className="text-sm font-bold" style={{ color: "var(--color-wc-red)" }}>
+            ⚡ Sorpresas del torneo
+          </h3>
+          <p className="text-[0.65rem]" style={{ color: "var(--color-ink-muted)" }}>
+            Partidos donde el modelo predijo con más confianza y erró
+          </p>
+          <div className="space-y-2">
+            {surprises.map((r, i) => {
+              const actualLabel = r.actual === "t1" ? r.team1 : r.actual === "t2" ? r.team2 : "Empate";
+              const predictedLabel = r.predicted === "t1" ? r.team1 : r.predicted === "t2" ? r.team2 : "Empate";
+              return (
+                <div key={i} className="flex items-center gap-3 py-2"
+                  style={{ borderBottom: i < surprises.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                  <span className="shrink-0 font-mono text-[0.62rem]" style={{ color: "var(--color-ink-muted)" }}>
+                    {r.t1_flag}{r.team1} {r.score1}–{r.score2} {r.t2_flag}{r.team2}
+                  </span>
+                  <div className="flex-1" />
+                  <div className="text-right">
+                    <div className="text-[0.6rem]" style={{ color: "var(--color-ink-muted)" }}>
+                      Predijo: <span style={{ color: "var(--color-wc-red)" }}>{predictedLabel}</span>
+                    </div>
+                    <div className="text-[0.6rem]" style={{ color: "var(--color-ink-muted)" }}>
+                      Ganó: <span style={{ color: "var(--color-wc-gold)" }}>{actualLabel}</span>
+                    </div>
+                    <div className="font-mono text-[0.58rem]" style={{ color: "rgba(255,255,255,0.25)" }}>
+                      confianza {Math.round(r.prob * 100)}%
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
     </div>
   );

@@ -16,7 +16,7 @@ const LATAM = new Set([
   "Ecuador", "Venezuela", "Mexico", "Chile", "Peru", "Paraguay",
 ]);
 
-const N_SIMS = 2000;
+const N_SIMS = 10_000;
 
 function pct(v: number, decimals = 1) {
   return `${(v * 100).toFixed(decimals)}%`;
@@ -52,10 +52,14 @@ export default function Knockout({ teams, predictions, groups }: Props) {
   const sorted = useMemo(() => {
     if (!results) return [];
     let base = [...results];
-    if (confFilter !== "all" && confFilter !== "latam") {
-      base = base.filter((r) => r.confederation === confFilter);
-    } else if (confFilter === "latam") {
-      base = base.filter((r) => LATAM.has(r.team));
+    if (confFilter === "americas") {
+      base = base.filter((r) => r.confederation === "CONMEBOL" || r.confederation === "CONCACAF");
+    } else if (confFilter === "europe") {
+      base = base.filter((r) => r.confederation === "UEFA");
+    } else if (confFilter === "africa") {
+      base = base.filter((r) => r.confederation === "CAF");
+    } else if (confFilter === "asia") {
+      base = base.filter((r) => r.confederation === "AFC" || r.confederation === "OFC" || r.confederation === "AFC/OFC");
     }
     return base.sort((a, b) => (b[round.key] as number) - (a[round.key] as number));
   }, [results, round, confFilter]);
@@ -82,16 +86,14 @@ export default function Knockout({ teams, predictions, groups }: Props) {
         ))}
       </div>
 
-      {/* Confederation filter */}
+      {/* Continent filter */}
       <div className="flex flex-wrap gap-2 justify-center">
         {[
-          { key: "all",      label: T.allConf   },
-          { key: "latam",    label: T.latam     },
-          { key: "CONMEBOL", label: "CONMEBOL"  },
-          { key: "UEFA",     label: "UEFA"      },
-          { key: "CONCACAF", label: "CONCACAF"  },
-          { key: "CAF",      label: "CAF"       },
-          { key: "AFC",      label: "AFC"       },
+          { key: "all",     label: T.allConf            },
+          { key: "americas",label: T.continentAmericas  },
+          { key: "europe",  label: T.continentEurope    },
+          { key: "africa",  label: T.continentAfrica    },
+          { key: "asia",    label: T.continentAsia      },
         ].map(({ key, label }) => (
           <button
             key={key}

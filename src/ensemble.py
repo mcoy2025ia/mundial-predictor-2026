@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 # Pesos por defecto — ajustados tras gate A2:
 # XGB no supera al ELO-only en walk-forward global; Poisson añade señal independiente.
-DEFAULT_WEIGHTS = {"elo": 0.35, "poisson": 0.35, "xgb": 0.30}
+DEFAULT_WEIGHTS = {"elo": 0.22, "poisson": 0.58, "xgb": 0.2}
 
 
 def _elo_proba(

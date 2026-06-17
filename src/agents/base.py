@@ -28,6 +28,18 @@ class MatchContext:
     draw_odds: Optional[float] = None
     away_odds: Optional[float] = None
     query_hint: Optional[str] = None      # pista de routing del caller
+    # ── Contexto de fase de grupos ──────────────────────────────────────────
+    group_name: Optional[str] = None          # "Group A"
+    group_points_home: Optional[int] = None   # puntos acumulados en el grupo
+    group_points_away: Optional[int] = None
+    games_played_home: int = 0                # partidos jugados en el grupo
+    games_played_away: int = 0
+    days_rest_home: Optional[int] = None      # días desde el último partido
+    days_rest_away: Optional[int] = None
+    prev_city_home: Optional[str] = None      # sede del partido anterior (para viaje)
+    prev_city_away: Optional[str] = None
+    group_standings: Optional[str] = None     # "1.MEX 6pts 2.USA 3pts 3.URU 1pt 4.BOL 0pts"
+    matchday: Optional[int] = None            # 1, 2, o 3 en fase de grupos
 
 
 @dataclass

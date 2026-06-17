@@ -4,15 +4,19 @@
 
 llm:
   # Daily cap in USD — resets at midnight UTC
-  daily_limit_usd: 2.00
+  # DeepSeek cost: ~$0.14/MTok. Full group stage (48 matches × 2 agents × 700 tok) ≈ $0.01
+  daily_limit_usd: 5.00
   # Monthly cap in USD
   monthly_limit_usd: 50.00
-  # Max LLM agent calls per single pipeline run (predict_live + export)
-  max_calls_per_run: 5
+  # Max LLM agent calls per single pipeline run
+  # 48 remaining group matches × up to 2 LLM agents = 96 ceiling
+  max_calls_per_run: 100
   # Cost per 1k tokens by model (input/output averaged; update if Anthropic prices change)
   cost_per_1k_tokens:
-    claude-haiku-4-5-20251001: 0.00025     # $0.25 / MTok
-    claude-sonnet-4-6: 0.003               # $3.00 / MTok
-    claude-fable-5: 0.015                  # $15.00 / MTok (not used in agents)
+    deepseek-chat: 0.00014                 # $0.14 / MTok  — proveedor principal
+    deepseek-reasoner: 0.00055             # $0.55 / MTok  — R1, solo tareas complejas
+    claude-haiku-4-5-20251001: 0.00025     # $0.25 / MTok  — fallback
+    claude-sonnet-4-6: 0.003               # $3.00 / MTok  — fallback
+    claude-fable-5: 0.015                  # $15.00 / MTok
   # Path to the spend ledger (JSONL, one entry per call)
   ledger_path: "logs/llm_costs.jsonl"

@@ -65,9 +65,12 @@ export default function SimulatorTab({ teams, predictions, groups, fixedResults 
 
   const filtered =
     results?.filter((r) => {
-      if (filter === "latam") return LATAM.has(r.team);
       if (filter === "all") return true;
-      return r.confederation === filter;
+      if (filter === "americas") return r.confederation === "CONMEBOL" || r.confederation === "CONCACAF";
+      if (filter === "europe") return r.confederation === "UEFA";
+      if (filter === "africa") return r.confederation === "CAF";
+      if (filter === "asia") return r.confederation === "AFC" || r.confederation === "AFC/OFC" || r.confederation === "OFC";
+      return true;
     }) ?? null;
 
   return (
@@ -147,13 +150,11 @@ export default function SimulatorTab({ teams, predictions, groups, fixedResults 
           <div className="flex flex-wrap gap-3 items-center justify-between">
             <div className="flex flex-wrap gap-2">
               {[
-                { key: "all",      label: T.allTeams },
-                { key: "latam",    label: T.latam    },
-                { key: "CONMEBOL", label: "CONMEBOL" },
-                { key: "UEFA",     label: "UEFA"     },
-                { key: "CONCACAF", label: "CONCACAF" },
-                { key: "CAF",      label: "CAF"      },
-                { key: "AFC",      label: "AFC"      },
+                { key: "all",      label: T.allTeams           },
+                { key: "americas", label: T.continentAmericas  },
+                { key: "europe",   label: T.continentEurope    },
+                { key: "africa",   label: T.continentAfrica    },
+                { key: "asia",     label: T.continentAsia      },
               ].map(({ key, label }) => (
                 <button
                   key={key}

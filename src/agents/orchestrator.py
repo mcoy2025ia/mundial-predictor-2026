@@ -52,41 +52,65 @@ class OrchestratorOutput:
     agent_results: list[AgentResult] = field(default_factory=list)
 
 
-def _route(ctx: MatchContext) -> list[BaseAgent]:
-    """Determina cuáles 2 agentes llamar según el contexto disponible.
+def _is_group_stage(ctx: MatchContext) -> bool:
+    """True si el contexto corresponde a un partido de fase de grupos."""
+    if ctx.group_points_home is not None:
+        return True
+    if ctx.round_label and ("group" in ctx.round_label.lower() or "md" in ctx.round_label.lower()):
+        return True
+    return False
 
-    Prioridad: Roster (si hay lesiones) > FinOps (si hay odds) > IntMatch (siempre)
-    > Travel (si hay altitud/ciudad) > FIFA-Regs (si hay info de grupo) > Media.
-    Máximo 2 agentes por llamada (spec del orquestador).
+
+def _route(ctx: MatchContext) -> list[BaseAgent]:
+    """Determina los agentes a llamar según el contexto.
+
+    Fase de grupos: hasta 3 agentes.
+      - FIFARegs (determinístico, presión de clasificación) — siempre
+      - Travel (determinístico/LLM, clima + desplazamiento) — siempre
+      - IntMatch (LLM, táctica + presión) — siempre
+      - Roster si hay lesiones; FinOps si hay odds
+
+    Knockout: hasta 2 agentes (comportamiento original).
     """
-    queue: list[tuple[int, BaseAgent]] = []  # (priority, agent)
+    group_stage = _is_group_stage(ctx)
+    max_agents = 3 if group_stage else 2
+
+    queue: list[tuple[int, BaseAgent]] = []
 
     if ctx.injuries:
         queue.append((1, RosterScoutAgent()))
     if ctx.home_odds is not None:
         queue.append((2, FinOpsAgent()))
     queue.append((3, IntMatchAgent()))
-    if ctx.venue_altitude_m > 1500 or (
-        ctx.venue_city and ctx.venue_city in (
-            "Mexico City", "Guadalajara", "Monterrey", "Denver"
-        )
-    ):
+
+    # En fase de grupos: Travel y FIFARegs siempre entran al queue
+    if group_stage:
         queue.append((4, TravelLogisticsAgent()))
-    if ctx.round_label:
         queue.append((5, FIFARegsAgent()))
+    else:
+        # Knockout: solo si hay altitud/ciudad relevante
+        if ctx.venue_altitude_m > 1500 or (
+            ctx.venue_city and ctx.venue_city in (
+                "Mexico City", "Guadalajara", "Monterrey", "Denver"
+            )
+        ):
+            queue.append((4, TravelLogisticsAgent()))
+        if ctx.round_label:
+            queue.append((5, FIFARegsAgent()))
+
     queue.append((6, MediaSentimentAgent()))
 
-    # Dedup por nombre (evita llamar el mismo agente dos veces)
+    # Dedup por nombre
     seen: set[str] = set()
     selected: list[BaseAgent] = []
     for _, agent in sorted(queue, key=lambda x: x[0]):
         if agent.name not in seen:
             seen.add(agent.name)
             selected.append(agent)
-        if len(selected) == 2:
+        if len(selected) == max_agents:
             break
 
-    # Si query_hint sobreescribe el routing
+    # query_hint sobreescribe el primer slot
     if ctx.query_hint:
         hint = ctx.query_hint.lower()
         override: Optional[BaseAgent] = None
@@ -103,9 +127,9 @@ def _route(ctx: MatchContext) -> list[BaseAgent]:
         elif "media" in hint or "sentiment" in hint:
             override = MediaSentimentAgent()
         if override and override.name not in seen:
-            selected = [override, selected[0]] if selected else [override]
+            selected = [override] + selected[: max_agents - 1]
 
-    return selected[:2]
+    return selected[:max_agents]
 
 
 def _blend_deltas(results: list[AgentResult], prior: dict) -> dict:

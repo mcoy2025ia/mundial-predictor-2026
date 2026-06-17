@@ -30,38 +30,49 @@ function formatGroup(group: string | null): string | undefined {
 }
 
 export async function GET() {
-  const token = process.env.FOOTBALL_DATA_TOKEN;
+  // Strip BOM (U+FEFF) that PowerShell injects when piping values to CLIs
+  const raw = process.env.FOOTBALL_DATA_TOKEN ?? "";
+  const token = raw.charCodeAt(0) === 0xFEFF ? raw.slice(1).trim() : raw.trim();
   if (!token) {
     return NextResponse.json({ error: "FOOTBALL_DATA_TOKEN not set" }, { status: 503 });
   }
 
-  const res = await fetch(UPSTREAM, {
-    headers: { "X-Auth-Token": token },
-    next: { revalidate: 120 }, // 1 llamada upstream cada 2 min, sin importar el tráfico
-  });
-  if (!res.ok) {
-    return NextResponse.json({ error: `upstream ${res.status}` }, { status: 502 });
+  let rawText = "";
+  try {
+    const res = await fetch(UPSTREAM, {
+      headers: { "X-Auth-Token": token },
+      cache: "no-store",
+    });
+
+    rawText = await res.text();
+
+    if (!res.ok) {
+      return NextResponse.json({ error: `upstream ${res.status}`, body: rawText.slice(0, 200) }, { status: 502 });
+    }
+
+    const data = JSON.parse(rawText) as { matches?: FdMatch[] };
+    const matches = (data?.matches ?? []).map((m) => {
+      const finished = m.status === "FINISHED";
+      return {
+        team1: m.homeTeam?.name ?? "",
+        team2: m.awayTeam?.name ?? "",
+        score1: finished ? (m.score?.fullTime?.home ?? null) : null,
+        score2: finished ? (m.score?.fullTime?.away ?? null) : null,
+        group: formatGroup(m.group),
+        round: m.stage ?? null,
+        utcDate: m.utcDate ?? null,
+        status: m.status ?? null,
+      };
+    });
+
+    return NextResponse.json(
+      { source: "football-data.org", matches },
+      { headers: { "Cache-Control": "s-maxage=120, stale-while-revalidate=300" } }
+    );
+  } catch (err) {
+    return NextResponse.json(
+      { error: String(err), raw: rawText.slice(0, 500) },
+      { status: 500 }
+    );
   }
-
-  const data = await res.json();
-  const matches = ((data?.matches ?? []) as FdMatch[]).map((m) => {
-    // Solo se fijan marcadores de partidos TERMINADOS: la app trata
-    // un score no-nulo como resultado final (veredictos, simulador).
-    const finished = m.status === "FINISHED";
-    return {
-      team1: m.homeTeam?.name ?? "",
-      team2: m.awayTeam?.name ?? "",
-      score1: finished ? (m.score?.fullTime?.home ?? null) : null,
-      score2: finished ? (m.score?.fullTime?.away ?? null) : null,
-      group: formatGroup(m.group),
-      round: m.stage ?? undefined,
-      utcDate: m.utcDate ?? null,
-      status: m.status,
-    };
-  });
-
-  return NextResponse.json(
-    { source: "football-data.org", matches },
-    { headers: { "Cache-Control": "s-maxage=120, stale-while-revalidate=300" } }
-  );
 }

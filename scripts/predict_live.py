@@ -334,6 +334,215 @@ def predict_single_match(
 
 
 # ---------------------------------------------------------------------------
+# Contexto de grupo: standings, presión, viajes
+# ---------------------------------------------------------------------------
+
+def compute_group_standings(
+    fixture: list[dict],
+    df_wc26_played: pd.DataFrame,
+) -> dict[str, dict]:
+    """Computa puntos, GD y GF actuales para cada equipo en cada grupo.
+
+    Returns:
+        dict[group_name → dict[team → {"pts": int, "gd": int, "gf": int, "played": int}]]
+    """
+    standings: dict[str, dict] = {}
+
+    # Inicializar todos los equipos del grupo
+    for m in fixture:
+        grp = m.get("group", "")
+        if not grp:
+            continue
+        for team in (m["home_team"], m["away_team"]):
+            standings.setdefault(grp, {}).setdefault(
+                team, {"pts": 0, "gd": 0, "gf": 0, "played": 0}
+            )
+
+    # Llenar con resultados jugados
+    for _, row in df_wc26_played.iterrows():
+        home = str(row["home_team"])
+        away = str(row["away_team"])
+        hs = int(row["home_score"])
+        as_ = int(row["away_score"])
+
+        # Buscar el grupo de este partido en el fixture
+        grp = None
+        for m in fixture:
+            if m["home_team"] == home and m["away_team"] == away:
+                grp = m.get("group", "")
+                break
+        if not grp:
+            continue
+
+        s = standings.get(grp, {})
+        if home not in s or away not in s:
+            continue
+
+        # Actualizar stats
+        s[home]["gf"] += hs; s[home]["gd"] += hs - as_; s[home]["played"] += 1
+        s[away]["gf"] += as_; s[away]["gd"] += as_ - hs; s[away]["played"] += 1
+
+        if hs > as_:
+            s[home]["pts"] += 3
+        elif hs == as_:
+            s[home]["pts"] += 1; s[away]["pts"] += 1
+        else:
+            s[away]["pts"] += 3
+
+    return standings
+
+
+def get_group_context(
+    match: dict,
+    fixture: list[dict],
+    standings: dict[str, dict],
+    df_wc26_played: pd.DataFrame,
+) -> dict:
+    """Construye el contexto de grupo para un partido pendiente.
+
+    Devuelve kwargs listos para MatchContext: group_name, group_points_home/away, etc.
+    """
+    grp = match.get("group", "")
+    if not grp or grp not in standings:
+        return {}
+
+    home = match["home_team"]
+    away = match["away_team"]
+    grp_data = standings[grp]
+
+    if home not in grp_data or away not in grp_data:
+        return {}
+
+    # Ordenar para standings string
+    sorted_teams = sorted(grp_data.items(), key=lambda x: (-x[1]["pts"], -x[1]["gd"], -x[1]["gf"]))
+    standings_str = " ".join(
+        f"{i+1}.{t} {d['pts']}pts" for i, (t, d) in enumerate(sorted_teams)
+    )
+
+    # Matchday del grupo: contamos cuántos partidos del grupo se han jugado para este equipo
+    games_played_home = grp_data[home]["played"]
+    games_played_away = grp_data[away]["played"]
+    matchday = max(games_played_home, games_played_away) + 1  # 1-based, este es el siguiente
+
+    # Ciudad previa de cada equipo (último partido jugado del WC 2026)
+    def _prev_city(team: str) -> Optional[str]:
+        played_team = df_wc26_played[
+            (df_wc26_played["home_team"] == team) | (df_wc26_played["away_team"] == team)
+        ].sort_values("date")
+        if played_team.empty:
+            return None
+        last = played_team.iloc[-1]
+        last_home = str(last["home_team"]); last_away = str(last["away_team"])
+        for m in fixture:
+            if m["home_team"] == last_home and m["away_team"] == last_away:
+                return m.get("venue", m.get("ground", None))
+        return None
+
+    # Días de descanso desde el último partido
+    def _days_rest(team: str) -> Optional[int]:
+        played_team = df_wc26_played[
+            (df_wc26_played["home_team"] == team) | (df_wc26_played["away_team"] == team)
+        ].sort_values("date")
+        if played_team.empty:
+            return None
+        last_date = pd.Timestamp(played_team.iloc[-1]["date"])
+        match_date = pd.Timestamp(match["kickoff"].date())
+        return max(0, (match_date - last_date).days)
+
+    venue = match.get("venue", "")
+    # Normalizar ciudad (quitar paréntesis)
+    if "(" in venue:
+        venue = venue.split("(")[0].strip()
+
+    return {
+        "group_name": grp,
+        "group_points_home": grp_data[home]["pts"],
+        "group_points_away": grp_data[away]["pts"],
+        "games_played_home": games_played_home,
+        "games_played_away": games_played_away,
+        "matchday": matchday,
+        "days_rest_home": _days_rest(home),
+        "days_rest_away": _days_rest(away),
+        "prev_city_home": _prev_city(home),
+        "prev_city_away": _prev_city(away),
+        "group_standings": standings_str,
+        "venue_city": venue,
+    }
+
+
+def enrich_with_orchestrator(pred: dict, match: dict, group_ctx: dict,
+                              elo_ratings: dict) -> dict:
+    """Aplica el Orchestrator al prior del ensemble y devuelve probs ajustadas.
+
+    Si el Orchestrator falla (sin API key, budget agotado, etc.), devuelve pred sin cambios.
+    """
+    try:
+        from src.agents.base import MatchContext
+        from src.agents.orchestrator import Orchestrator
+
+        altitude = _CITY_ALTITUDE_M.get(group_ctx.get("venue_city", ""), 0)
+
+        ctx = MatchContext(
+            team_home=pred["home_team"],
+            team_away=pred["away_team"],
+            p_home=pred["p_home"],
+            p_draw=pred["p_draw"],
+            p_away=pred["p_away"],
+            elo_home=float(elo_ratings.get(pred["home_team"], 1500)),
+            elo_away=float(elo_ratings.get(pred["away_team"], 1500)),
+            is_neutral=pred.get("is_neutral", True),
+            venue_city=group_ctx.get("venue_city"),
+            venue_altitude_m=altitude,
+            round_label=f"{group_ctx.get('group_name', '')} MD{group_ctx.get('matchday', '')}",
+            group_name=group_ctx.get("group_name"),
+            group_points_home=group_ctx.get("group_points_home"),
+            group_points_away=group_ctx.get("group_points_away"),
+            games_played_home=group_ctx.get("games_played_home", 0),
+            games_played_away=group_ctx.get("games_played_away", 0),
+            matchday=group_ctx.get("matchday"),
+            days_rest_home=group_ctx.get("days_rest_home"),
+            days_rest_away=group_ctx.get("days_rest_away"),
+            prev_city_home=group_ctx.get("prev_city_home"),
+            prev_city_away=group_ctx.get("prev_city_away"),
+            group_standings=group_ctx.get("group_standings"),
+        )
+
+        out = Orchestrator().predict(ctx)
+        pred["p_home"] = out.adjusted["home"]
+        pred["p_draw"] = out.adjusted["draw"]
+        pred["p_away"] = out.adjusted["away"]
+        pred["agents"] = out.agents_called
+        pred["agent_notes"] = {r.agent_name: r.notes for r in out.agent_results}
+        pred["model"] = "ensemble_agent_adjusted"
+    except Exception as e:
+        logger.debug("Orchestrator skipped for %s vs %s: %s",
+                     pred.get("home_team"), pred.get("away_team"), e)
+    return pred
+
+
+# Altitudes de sedes WC 2026 (metros)
+_CITY_ALTITUDE_M: dict[str, int] = {
+    "Mexico City": 2240,
+    "Guadalajara": 1566,
+    "Monterrey":   539,
+    "Denver":      1609,
+    "Dallas":      139,
+    "Houston":     15,
+    "Miami":       2,
+    "Atlanta":     320,
+    "Kansas City": 265,
+    "Philadelphia": 12,
+    "New York":    10,
+    "Los Angeles": 71,
+    "San Francisco": 16,
+    "Seattle":     56,
+    "Boston":      9,
+    "Vancouver":   70,
+    "Toronto":     76,
+}
+
+
+# ---------------------------------------------------------------------------
 # Flujo principal
 # ---------------------------------------------------------------------------
 
@@ -353,6 +562,16 @@ def _run_live_predictions(predict_all: bool, export: bool, _ctx: dict) -> list[d
     df_live = load_live_results()
     model = load_model()
     fixture = load_fixture()
+
+    # Resultados WC 2026 jugados (de results.csv) para computar standings
+    from src.extractor import add_outcome
+    df_wc26_played = df_all[
+        (df_all["tournament"] == "FIFA World Cup") &
+        (df_all["date"].dt.year == 2026) &
+        df_all["home_score"].notna()
+    ].copy()
+
+    group_standings = compute_group_standings(fixture, df_wc26_played)
 
     results = []
     _cached_cutoff: Optional[datetime] = None
@@ -392,6 +611,13 @@ def _run_live_predictions(predict_all: bool, export: bool, _ctx: dict) -> list[d
         pred["group"] = match["group"]
         pred["venue"] = match["venue"]
         pred["round"] = match["round"]
+
+        # Enriquecer con agentes si es fase de grupos
+        if match["stage"] == "group" and _cached_ratings is not None:
+            group_ctx = get_group_context(match, fixture, group_standings, df_wc26_played)
+            if group_ctx:
+                pred = enrich_with_orchestrator(pred, match, group_ctx, _cached_ratings)
+
         results.append(pred)
 
         logger.info(
