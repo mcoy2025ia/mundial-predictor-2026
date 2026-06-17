@@ -112,6 +112,7 @@ export default function Home() {
   const [liveMatches,    setLiveMatches]    = useState<LiveMatch[]>([]);
   const [qatar,          setQatar]          = useState<QatarBacktest | null>(null);
   const [narrations,     setNarrations]     = useState<Record<string, string>>({});
+  const [agentNotes,     setAgentNotes]     = useState<Record<string, string>>({});
   const [loading,        setLoading]        = useState(true);
 
   /* Resultados reales del torneo (openfootball) — no bloquea la carga inicial.
@@ -161,12 +162,16 @@ export default function Home() {
       fetch("/data/narrations.json").then((r) => r.json()).catch(() => ({})),
     ]).then(([t, p, g, m, s, gs, gm, gst, q, lp, nar]) => {
       // Merge live_predictions (agent-adjusted) on top of base predictions
+      const notes: Record<string, string> = {};
       if (lp && Array.isArray(lp)) {
         for (const entry of lp) {
           const key = `${entry.home_team}|${entry.away_team}`;
           p[key] = { home_win: entry.p_home, draw: entry.p_draw, away_win: entry.p_away };
+          const fifaNote = entry.agent_notes?.["FIFA-Regs-Strategist"];
+          if (fifaNote) notes[key] = fifaNote;
         }
       }
+      setAgentNotes(notes);
       setTeams(t); setPredictions(p); setGroups(g); setMatches(m);
       setStats(s); setGoalscorers(gs); setGroupMatches(gm); setGroupStandings(gst);
       setQatar(q);
@@ -418,7 +423,7 @@ export default function Home() {
               )}
               {tab === "predictor" && teams && predictions && (
                 <TabPane key="predictor">
-                  <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} narrations={narrations} />
+                  <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} narrations={narrations} agentNotes={agentNotes} />
                 </TabPane>
               )}
               {tab === "grupos" && groupMatches && groupStandings && (

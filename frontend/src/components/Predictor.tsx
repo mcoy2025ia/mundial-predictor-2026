@@ -220,6 +220,99 @@ interface Props {
   matches: HistoricalMatch[];
   liveMatches?: LiveMatch[];
   narrations?: Record<string, string>;
+  agentNotes?: Record<string, string>;
+}
+
+// ── Pressure badges ────────────────────────────────────────────────────────────
+
+interface PressureInfo {
+  level: "must_win" | "comfortable";
+  pts: number;
+}
+
+function parseFifaNote(note: string): {
+  home: PressureInfo | null;
+  away: PressureInfo | null;
+  altitude: number | null;
+} {
+  const hm = note.match(/home_pressure=(\w+)\((\d+)pts\)/);
+  const am = note.match(/away_pressure=(\w+)\((\d+)pts\)/);
+  const alt = note.match(/altitude=(\d+)m/);
+  return {
+    home: hm ? { level: hm[1] as PressureInfo["level"], pts: parseInt(hm[2]) } : null,
+    away: am ? { level: am[1] as PressureInfo["level"], pts: parseInt(am[2]) } : null,
+    altitude: alt ? parseInt(alt[1]) : null,
+  };
+}
+
+function PressureBadges({
+  note, home, away,
+}: { note: string; home: string; away: string }) {
+  const { home: hp, away: ap, altitude } = parseFifaNote(note);
+  const hasPressure = hp?.level === "must_win" || ap?.level === "must_win";
+  const hasAltitude = altitude !== null && altitude >= 1500;
+  if (!hasPressure && !hasAltitude) return null;
+
+  function Badge({ label, color, bg, border }: {
+    label: string; color: string; bg: string; border: string;
+  }) {
+    return (
+      <span
+        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 font-mono"
+        style={{ fontSize: "0.62rem", letterSpacing: "0.04em", color, background: bg, border: `1px solid ${border}` }}
+      >
+        {label}
+      </span>
+    );
+  }
+
+  function pressureLabel(info: PressureInfo, name: string) {
+    if (info.level !== "must_win") return null;
+    const flag = info.pts === 0 ? "🔴" : "🟠";
+    const text = info.pts === 0
+      ? `${name} · ELIMINACIÓN SI PIERDE · ${info.pts} pts`
+      : `${name} · NECESITA GANAR · ${info.pts} pts`;
+    const isRed = info.pts === 0;
+    return (
+      <Badge
+        key={name}
+        label={`${flag} ${text}`}
+        color={isRed ? "#ff6b6b" : "#ffb347"}
+        bg={isRed ? "rgba(207,10,44,0.12)" : "rgba(255,140,0,0.12)"}
+        border={isRed ? "rgba(207,10,44,0.25)" : "rgba(255,140,0,0.25)"}
+      />
+    );
+  }
+
+  function comfortLabel(info: PressureInfo, name: string, rivalIsMustWin: boolean) {
+    if (info.level !== "comfortable" || !rivalIsMustWin) return null;
+    return (
+      <Badge
+        key={name}
+        label={`🟢 ${name} · CÓMODO · ${info.pts} pts`}
+        color="#6bcb77"
+        bg="rgba(107,203,119,0.10)"
+        border="rgba(107,203,119,0.22)"
+      />
+    );
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2 mt-3">
+      {hp && pressureLabel(hp, home)}
+      {ap && pressureLabel(ap, away)}
+      {hp && ap && comfortLabel(hp, home, ap.level === "must_win")}
+      {hp && ap && comfortLabel(ap, away, hp.level === "must_win")}
+      {hasAltitude && (
+        <Badge
+          label={`🔵 ALTITUD · ${altitude}m`}
+          color="#7ec8e3"
+          bg="rgba(126,200,227,0.10)"
+          border="rgba(126,200,227,0.22)"
+        />
+      )}
+    </div>
+  );
 }
 
 /* ══════════════════════════════════════════════════════
@@ -258,7 +351,7 @@ function mostLikelyScore(
   return best;
 }
 
-export default function Predictor({ teams, predictions, matches, liveMatches, narrations }: Props) {
+export default function Predictor({ teams, predictions, matches, liveMatches, narrations, agentNotes }: Props) {
   const T = useLang();
   const teamList = useMemo(
     () => Object.entries(teams).sort((a, b) => a[0].localeCompare(b[0])),
@@ -525,21 +618,25 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
       <AnimatePresence>
         {predicted && (() => {
           const score = mostLikelyScore(homeInfo, awayInfo, pred);
+          const fifaNote = agentNotes?.[`${home}|${away}`] ?? agentNotes?.[`${away}|${home}`] ?? "";
           return (
             <motion.div
               variants={fadeUp} initial="hidden" animate="visible" exit="exit"
-              className="rounded-2xl p-4 flex items-center gap-3 flex-wrap"
+              className="rounded-2xl p-4"
               style={{ background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.07)" }}
             >
-              <span className="text-xs uppercase tracking-widest font-mono" style={{ color: "var(--color-ink-muted)" }}>
-                {T.likelyScore}
-              </span>
-              <span className="score-final">
-                {homeInfo?.flag} {score.s1}–{score.s2} {awayInfo?.flag}
-              </span>
-              <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
-                {T.likelyScoreNote}
-              </span>
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="text-xs uppercase tracking-widest font-mono" style={{ color: "var(--color-ink-muted)" }}>
+                  {T.likelyScore}
+                </span>
+                <span className="score-final">
+                  {homeInfo?.flag} {score.s1}–{score.s2} {awayInfo?.flag}
+                </span>
+                <span className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
+                  {T.likelyScoreNote}
+                </span>
+              </div>
+              {fifaNote && <PressureBadges note={fifaNote} home={home} away={away} />}
             </motion.div>
           );
         })()}
