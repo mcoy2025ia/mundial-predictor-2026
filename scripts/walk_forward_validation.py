@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from src.extractor import add_outcome, filter_world_cups, load_results, save_wc_clean
+from src.ensemble import DEFAULT_WEIGHTS
 from src.features import HOME_ADVANTAGE_ELO, build_feature_matrix, compute_elo_ratings, expected_score
 from src.model import FEATURE_COLS, LABEL_MAP, WEIGHT_COL, build_xgb_pipeline
 
@@ -113,8 +114,11 @@ def run_walk_forward(df_features: pd.DataFrame, df_all: pd.DataFrame) -> dict:
             p_poi = proba_poisson[i]
             p_xgb = proba_xgb[i]
 
-            # Ensemble: ELO 35% + Poisson 35% + XGB 30%
-            p_ens = 0.35 * p_elo + 0.35 * p_poi + 0.30 * p_xgb
+            p_ens = (
+                DEFAULT_WEIGHTS["elo"] * p_elo
+                + DEFAULT_WEIGHTS["poisson"] * p_poi
+                + DEFAULT_WEIGHTS["xgb"] * p_xgb
+            )
             p_ens /= p_ens.sum()
 
             fold_rps["elo"].append(rps_single(y_test[i], p_elo))

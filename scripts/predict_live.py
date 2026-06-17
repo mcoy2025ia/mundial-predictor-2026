@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Optional
 
 import pandas as pd
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -35,6 +36,8 @@ from src.extractor import load_results, load_former_names
 from src.pipeline_logger import run_context
 from src.features import compute_elo_ratings, compute_current_form
 from src.model import load_model
+from src.ensemble import DEFAULT_WEIGHTS, _elo_proba as elo_proba
+from src.poisson_model import PoissonModel
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("predict_live")
@@ -253,6 +256,7 @@ def predict_single_match(
     elo_ratings: dict,
     df_combined: pd.DataFrame,
     model,
+    poisson_model: Optional[PoissonModel] = None,
     is_neutral: bool = True,
     kickoff: Optional[datetime] = None,
 ) -> dict:
@@ -320,7 +324,49 @@ def predict_single_match(
         "wc_experience_diff": _wc_exp(home_team) - _wc_exp(away_team),
     }])[FEATURE_COLS]
 
-    proba = model.predict_proba(row)[0]
+    proba_xgb = model.predict_proba(row)[0]
+    p_elo = np.array(elo_proba(elo_h, elo_a, is_neutral))
+    p_xgb = np.array([float(proba_xgb[0]), float(proba_xgb[1]), float(proba_xgb[2])])
+
+    probs = [p_elo, p_xgb]
+    weights = [DEFAULT_WEIGHTS["elo"], DEFAULT_WEIGHTS["xgb"]]
+    payload_extra = {
+        "xgb_home": round(float(p_xgb[0]), 4),
+        "xgb_draw": round(float(p_xgb[1]), 4),
+        "xgb_away": round(float(p_xgb[2]), 4),
+        "elo_home": round(float(p_elo[0]), 4),
+        "elo_draw": round(float(p_elo[1]), 4),
+        "elo_away": round(float(p_elo[2]), 4),
+    }
+
+    if poisson_model is not None:
+        try:
+            lam_h, lam_a = poisson_model.predict_goals(
+                home_team,
+                away_team,
+                is_neutral=is_neutral,
+                elo_diff=elo_h - elo_a,
+            )
+            matrix = poisson_model.scoreline_matrix(lam_h, lam_a)
+            p_poi = np.array(poisson_model.aggregate_1x2(matrix))
+            probs.append(p_poi)
+            weights.append(DEFAULT_WEIGHTS["poisson"])
+            payload_extra.update({
+                "poisson_home": round(float(p_poi[0]), 4),
+                "poisson_draw": round(float(p_poi[1]), 4),
+                "poisson_away": round(float(p_poi[2]), 4),
+                "top_scorelines": poisson_model.top_scorelines(matrix, n=5),
+                "lambda_home": round(float(lam_h), 3),
+                "lambda_away": round(float(lam_a), 3),
+            })
+        except Exception as e:
+            logger.debug("Poisson skipped for %s vs %s: %s", home_team, away_team, e)
+
+    weight_arr = np.array(weights, dtype=float)
+    weight_arr /= weight_arr.sum()
+    proba = sum(p * w for p, w in zip(probs, weight_arr))
+    proba /= proba.sum()
+
     return {
         "home_team": home_team,
         "away_team": away_team,
@@ -329,7 +375,9 @@ def predict_single_match(
         "p_away": round(float(proba[2]), 4),
         "is_neutral": is_neutral,
         "kickoff": kickoff.isoformat() if kickoff else None,
-        "model": "xgb_calibrated_live",
+        "model": "ensemble_live",
+        "ensemble_weights": DEFAULT_WEIGHTS,
+        **payload_extra,
     }
 
 
@@ -546,21 +594,35 @@ _CITY_ALTITUDE_M: dict[str, int] = {
 # Flujo principal
 # ---------------------------------------------------------------------------
 
-def run_live_predictions(predict_all: bool = False, export: bool = False) -> list[dict]:
+def run_live_predictions(
+    predict_all: bool = False,
+    export: bool = False,
+    use_agents: bool = True,
+) -> list[dict]:
     _artifacts = [ROOT / "data" / "processed" / "live_predictions.json"]
     if export:
         _artifacts.append(ROOT / "frontend" / "public" / "data" / "live_predictions.json")
     with run_context("live_update", artifacts=_artifacts) as _ctx:
-        results = _run_live_predictions(predict_all, export, _ctx)
+        results = _run_live_predictions(predict_all, export, use_agents, _ctx)
     return results
 
 
-def _run_live_predictions(predict_all: bool, export: bool, _ctx: dict) -> list[dict]:
+def _run_live_predictions(
+    predict_all: bool,
+    export: bool,
+    use_agents: bool,
+    _ctx: dict,
+) -> list[dict]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
 
     df_all = load_results()
     df_live = load_live_results()
     model = load_model()
+    try:
+        poisson_model = PoissonModel.load()
+    except Exception as e:
+        logger.warning("Poisson no disponible (%s). Live usará ELO+XGB renormalizado.", e)
+        poisson_model = None
     fixture = load_fixture()
 
     # Resultados WC 2026 jugados (de results.csv) para computar standings
@@ -599,6 +661,7 @@ def _run_live_predictions(predict_all: bool, export: bool, _ctx: dict) -> list[d
                 elo_ratings=_cached_ratings,
                 df_combined=_cached_df,
                 model=model,
+                poisson_model=poisson_model,
                 is_neutral=match["is_neutral"],
                 kickoff=kickoff,
             )
@@ -613,7 +676,7 @@ def _run_live_predictions(predict_all: bool, export: bool, _ctx: dict) -> list[d
         pred["round"] = match["round"]
 
         # Enriquecer con agentes si es fase de grupos
-        if match["stage"] == "group" and _cached_ratings is not None:
+        if use_agents and match["stage"] == "group" and _cached_ratings is not None:
             group_ctx = get_group_context(match, fixture, group_standings, df_wc26_played)
             if group_ctx:
                 pred = enrich_with_orchestrator(pred, match, group_ctx, _cached_ratings)
@@ -632,6 +695,7 @@ def _run_live_predictions(predict_all: bool, export: bool, _ctx: dict) -> list[d
         "n_predictions": len(results),
         "predict_all": predict_all,
         "export": export,
+        "use_agents": use_agents,
     }
 
     if not results:
@@ -672,6 +736,8 @@ if __name__ == "__main__":
                         help="Incluir partidos ya jugados")
     parser.add_argument("--export", action="store_true",
                         help="Copiar live_predictions.json al frontend/public/data/")
+    parser.add_argument("--no-agents", action="store_true",
+                        help="No llamar agentes LLM; exporta solo el Ensemble determinístico")
     parser.add_argument(
         "--add-result", nargs=5,
         metavar=("HOME", "AWAY", "HS", "AS", "DATE"),
@@ -683,4 +749,8 @@ if __name__ == "__main__":
         home, away, hs, as_, date = args.add_result
         add_live_result(home, away, int(hs), int(as_), date)
     else:
-        run_live_predictions(predict_all=args.all, export=args.export)
+        run_live_predictions(
+            predict_all=args.all,
+            export=args.export,
+            use_agents=not args.no_agents,
+        )

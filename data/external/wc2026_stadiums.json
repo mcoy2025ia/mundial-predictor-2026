@@ -1,0 +1,98 @@
+{
+  "Mexico City": {
+    "name": "Estadio Azteca",
+    "city": "Ciudad de México", "country": "México", "host": "Mexico",
+    "capacity": 87523, "altitude_m": 2240, "surface": "Pasto natural",
+    "note": "El estadio más alto del Mundial 2026. La altitud de 2,240m afecta significativamente el rendimiento de equipos no adaptados. Único estadio en albergar 3 finales de Copa del Mundo (1970, 1986, 2026)."
+  },
+  "Guadalajara (Zapopan)": {
+    "name": "Estadio Akron",
+    "city": "Guadalajara", "country": "México", "host": "Mexico",
+    "capacity": 49850, "altitude_m": 1566, "surface": "Pasto natural",
+    "note": "Sede del Guadalajara (Chivas). Altitud de 1,566m — condición exigente para equipos europeos. Clima caluroso y húmedo en junio."
+  },
+  "Monterrey (Guadalupe)": {
+    "name": "Estadio BBVA",
+    "city": "Monterrey", "country": "México", "host": "Mexico",
+    "capacity": 53500, "altitude_m": 538, "surface": "Pasto natural",
+    "note": "Estadio de los Rayados. Monterrey en junio alcanza 35-40°C — una de las sedes más calurosas del torneo."
+  },
+  "Vancouver": {
+    "name": "BC Place",
+    "city": "Vancouver", "country": "Canadá", "host": "Canada",
+    "capacity": 54500, "altitude_m": 0, "surface": "Césped artificial (FieldTurf)",
+    "note": "Estadio techado con cúpula retráctil. Única sede cubierta del Mundial 2026, garantizando condiciones controladas sin importar el clima."
+  },
+  "Toronto": {
+    "name": "BMO Field",
+    "city": "Toronto", "country": "Canadá", "host": "Canada",
+    "capacity": 30000, "altitude_m": 76, "surface": "Pasto natural",
+    "note": "La sede más pequeña del torneo (30,000 cap.) pero con gran ambiente. Sede habitual del Toronto FC."
+  },
+  "Atlanta": {
+    "name": "Mercedes-Benz Stadium",
+    "city": "Atlanta, Georgia", "country": "USA", "host": "United States",
+    "capacity": 71000, "altitude_m": 320, "surface": "Césped artificial (FieldTurf)",
+    "note": "Estadio con techo retráctil y diseño de 'ojo de halcón'. Sede de los Falcons (NFL) y Atlanta United (MLS)."
+  },
+  "Los Angeles (Inglewood)": {
+    "name": "SoFi Stadium",
+    "city": "Inglewood, California", "country": "USA", "host": "United States",
+    "capacity": 70240, "altitude_m": 64, "surface": "Césped natural",
+    "note": "El estadio más caro jamás construido (~$5,500M). Sede de los Rams y Chargers de la NFL. Inaugurado en 2020."
+  },
+  "Los Angeles (Pasadena)": {
+    "name": "Rose Bowl",
+    "city": "Pasadena, California", "country": "USA", "host": "United States",
+    "capacity": 92542, "altitude_m": 275, "surface": "Pasto natural",
+    "note": "El estadio más grande del Mundial 2026 y sede de la FINAL. Ya albergó la final del Mundial 1994 (Brasil vs Italia). Icónico estadio de fútbol americano universitario."
+  },
+  "San Francisco Bay Area (Santa Clara)": {
+    "name": "Levi's Stadium",
+    "city": "Santa Clara, California", "country": "USA", "host": "United States",
+    "capacity": 68500, "altitude_m": 12, "surface": "Pasto natural",
+    "note": "Sede de los 49ers de la NFL. Clima templado en junio (~20°C), ideal para el juego. Silicón Valley."
+  },
+  "Dallas": {
+    "name": "AT&T Stadium",
+    "city": "Arlington, Texas", "country": "USA", "host": "United States",
+    "capacity": 80000, "altitude_m": 183, "surface": "Césped artificial (FieldTurf)",
+    "note": "Uno de los estadios más grandes del torneo. Dallas en junio supera los 35°C. Sede de los Cowboys de la NFL. Pantalla gigante interior de 160 metros."
+  },
+  "Miami": {
+    "name": "Hard Rock Stadium",
+    "city": "Miami Gardens, Florida", "country": "USA", "host": "United States",
+    "capacity": 65326, "altitude_m": 2, "surface": "Pasto natural",
+    "note": "Humedad extrema en junio (80%+) y calor intenso (~33°C). Sede de los Dolphins (NFL) y el Miami Open de tenis."
+  },
+  "Kansas City": {
+    "name": "Arrowhead Stadium",
+    "city": "Kansas City, Missouri", "country": "USA", "host": "United States",
+    "capacity": 76416, "altitude_m": 305, "surface": "Pasto natural",
+    "note": "Uno de los estadios más ruidosos del mundo. Sede de los Chiefs de la NFL (4x Super Bowl). Clima moderado en junio."
+  },
+  "Philadelphia": {
+    "name": "Lincoln Financial Field",
+    "city": "Filadelfia, Pennsylvania", "country": "USA", "host": "United States",
+    "capacity": 69176, "altitude_m": 23, "surface": "Césped artificial",
+    "note": "Sede de los Eagles de la NFL. Filadelfia tiene clima templado en junio (~25°C). Ciudad con gran tradición futbolera."
+  },
+  "Seattle": {
+    "name": "Lumen Field",
+    "city": "Seattle, Washington", "country": "USA", "host": "United States",
+    "capacity": 72000, "altitude_m": 5, "surface": "Césped artificial (FieldTurf)",
+    "note": "Conocido por su atmósfera eléctrica. Sede del Seattle Sounders (MLS). Clima nublado y fresco en junio (~17°C) — el más frío del torneo."
+  },
+  "Boston (Foxborough)": {
+    "name": "Gillette Stadium",
+    "city": "Foxborough, Massachusetts", "country": "USA", "host": "United States",
+    "capacity": 65878, "altitude_m": 18, "surface": "Césped artificial (FieldTurf)",
+    "note": "Sede de los Patriots de la NFL y New England Revolution (MLS). Clima templado en junio (~22°C)."
+  },
+  "New York/New Jersey (East Rutherford)": {
+    "name": "MetLife Stadium",
+    "city": "East Rutherford, New Jersey", "country": "USA", "host": "United States",
+    "capacity": 82500, "altitude_m": 7, "surface": "Césped artificial (FieldTurf)",
+    "note": "El estadio más grande de la costa Este. Sede de Giants y Jets (NFL). Nueva York/Nueva Jersey — la sede con mayor proyección mediática del torneo."
+  }
+}

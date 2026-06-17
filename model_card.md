@@ -14,7 +14,7 @@
 |---|---|
 | Base model | XGBoost multi-class softmax (`xgb_calibrated`) |
 | Calibration | `CalibratedClassifierCV` with `TimeSeriesSplit(n=3)` + sigmoid |
-| Ensemble | ELO (35%) + Poisson (35%) + XGB (30%) — weighted blend |
+| Ensemble | ELO (22%) + Poisson (58%) + XGB (20%) — weighted blend |
 | Goal model | Dixon-Robinson Poisson (iterative attack/defense estimation) |
 | ELO system | Custom — K varies by tournament (WC=60, friendly=20), margin multiplier log(1+|GD|), home advantage +100 |
 | Temporal split | Train < 2018 · Calibration = 2018 · Test = WC 2022 (never in training) |
@@ -119,7 +119,8 @@ All features are computed strictly before the match (no leakage). Rolling statis
 | Date | Version | Notes |
 |---|---|---|
 | 2026-06-12 | v1.0 | Initial release: XGB calibrated + walk-forward validated |
-| 2026-06-12 | v1.1 | Added Poisson (Dixon-Robinson) + Ensemble 35/35/30 |
+| 2026-06-12 | v1.1 | Added Poisson (Dixon-Robinson) + Ensemble |
+| 2026-06-17 | v1.3 | Serving aligned to active Ensemble weights 22/58/20 |
 | 2026-06-13 | v1.2 | Live update pipeline operational; ablation confirmed rest-day features unhelpful |
 
 ---

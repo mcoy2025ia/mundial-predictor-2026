@@ -6,7 +6,7 @@ Pesos configurables; por defecto reflejan el resultado del walk-forward:
 
 Uso:
     from src.ensemble import EnsembleModel
-    ens = EnsembleModel(weights={"elo": 0.35, "poisson": 0.35, "xgb": 0.30})
+    ens = EnsembleModel(weights={"elo": 0.22, "poisson": 0.58, "xgb": 0.20})
     ens.fit(df_train, df_all=df_all)  # ajusta Poisson; XGB ya viene pre-entrenado
     proba = ens.predict_proba_match("France", "Brazil", elo_home=2050, elo_away=2080)
 """
@@ -111,7 +111,7 @@ class EnsembleModel:
         # ELO
         p_elo = _elo_proba(elo_home, elo_away, is_neutral)
         probs_list.append(p_elo)
-        w_list.append(self.weights.get("elo", 0.35))
+        w_list.append(self.weights.get("elo", DEFAULT_WEIGHTS["elo"]))
 
         # Poisson
         if self.poisson_model is not None and self.weights.get("poisson", 0) > 0:
@@ -123,12 +123,12 @@ class EnsembleModel:
                 matrix = self.poisson_model.scoreline_matrix(lam_h, lam_a)
                 p_poi = self.poisson_model.aggregate_1x2(matrix)
                 probs_list.append(p_poi)
-                w_list.append(self.weights.get("poisson", 0.35))
+                w_list.append(self.weights.get("poisson", DEFAULT_WEIGHTS["poisson"]))
             except Exception as e:
                 logger.debug("Poisson falló para %s vs %s: %s", home_team, away_team, e)
 
         # XGB
-        xgb_w = self.weights.get("xgb", 0.30)
+        xgb_w = self.weights.get("xgb", DEFAULT_WEIGHTS["xgb"])
         if self.xgb_model is not None and xgb_features is not None and xgb_w > 0:
             try:
                 p_xgb = self.xgb_model.predict_proba(xgb_features.reshape(1, -1))[0]

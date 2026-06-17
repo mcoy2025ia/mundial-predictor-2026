@@ -5,7 +5,7 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-EB5E28)
 ![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=nextdotjs&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-112%20passed-2ea44f)
+![Tests](https://img.shields.io/badge/tests-122%20passed-2ea44f)
 
 > 🇨🇦🇺🇸🇲🇽 El torneo está **en juego** (11 jun – 19 jul 2026). La web integra los resultados oficiales al final de cada partido: el modelo recalcula los ELO y actualiza todas las probabilidades con los datos reales de la copa.
 
@@ -31,7 +31,7 @@ results.csv (49k+ partidos, 1872–2026, incluye fixture WC 2026)
         └─► ELO propio (K por tipo de torneo, cronológico, pre-match)
              └─► feature matrix: ELO diff + forma reciente + H2H + experiencia mundialista
                   └─► XGBoost multi:softprob + CalibratedClassifierCV (isotónica)
-                       └─► Ensemble: XGBoost 30% + Poisson 35% + ELO 35%
+                       └─► Ensemble: ELO 22% + Poisson 58% + XGBoost 20%
                             └─► JSONs estáticos → frontend Next.js + Monte Carlo client-side
 ```
 
@@ -55,8 +55,11 @@ El ciclo se corre cada mañana antes de los partidos del día. Los días de MD2 
 # 1. Descarga resultados de ayer, recalcula ELO, reentrena (~90s)
 python scripts/live_update.py
 
-# 2. Recalcula predicciones con agentes multi-especialista
+# 2. Recalcula predicciones live con Ensemble + agentes multi-especialista
 python scripts/predict_live.py --export
+
+# Variante sin gasto LLM: Ensemble determinístico, sin agentes
+python scripts/predict_live.py --export --no-agents
 
 # 3. Genera narraciones para los partidos de HOY (DeepSeek, 1 llamada/partido)
 python scripts/precompute_narrations.py
@@ -87,7 +90,7 @@ cp .env.example .env.local              # agrega las keys (ver tabla abajo)
 npm run dev                             # http://localhost:3000
 
 # Tests
-pytest          # 112+ tests
+pytest          # 122+ tests
 ```
 
 **Variables de entorno** (`frontend/.env.local` y Vercel):
@@ -119,7 +122,7 @@ pytest          # 112+ tests
 │   ├── src/app/api/narrator/# Sirve narrations.json; LLM solo si la narración no está pre-computada
 │   ├── src/components/      # Predictor (dialecto), Groups, ModelTab (J1/J2/J3/FG), StatsTab, etc.
 │   └── public/data/         # JSONs: teams, predictions, narrations, group_matches, standings…
-├── tests/                # 112+ tests: pipeline, agentes, integridad, simulador
+├── tests/                # 122+ tests: pipeline, agentes, integridad, simulador
 ├── data/
 │   ├── raw/              # results.csv, shootouts.csv, goalscorers.csv (gitignored)
 │   └── external/         # wc2026_fixture.json · wc2026_live_results.csv

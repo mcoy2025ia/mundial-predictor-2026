@@ -15,9 +15,10 @@ import pandas as pd
 from src.extractor import load_results, load_shootouts
 from src.model import FEATURE_COLS, load_model
 from src.poisson_model import PoissonModel
-from src.ensemble import EnsembleModel, _elo_proba as elo_proba
+from src.ensemble import DEFAULT_WEIGHTS, _elo_proba as elo_proba
 from src.simulator import (
     WC2026_GROUPS,
+    WC2026_HOSTS,
     WC2026_TEAMS,
     build_shootout_stats,
     build_team_stats,
@@ -134,6 +135,29 @@ CONFEDERATION_MAP = {
 }
 
 
+def _invert_prediction_entry(entry: dict) -> dict:
+    """Deriva B|A desde A|B para preservar simetría neutral exacta."""
+    out = entry.copy()
+    for prefix in ("", "xgb_", "elo_", "ensemble_", "poisson_"):
+        home_key = f"{prefix}home_win"
+        away_key = f"{prefix}away_win"
+        draw_key = f"{prefix}draw"
+        if home_key in entry and away_key in entry:
+            out[home_key] = entry[away_key]
+            out[away_key] = entry[home_key]
+        if draw_key in entry:
+            out[draw_key] = entry[draw_key]
+    if "lambda_home" in entry and "lambda_away" in entry:
+        out["lambda_home"] = entry["lambda_away"]
+        out["lambda_away"] = entry["lambda_home"]
+    if "top_scorelines" in entry:
+        out["top_scorelines"] = [
+            {"home": s["away"], "away": s["home"], "prob": s["prob"]}
+            for s in entry["top_scorelines"]
+        ]
+    return out
+
+
 def main():
     print("Cargando modelo y datos...")
     model = load_model(ROOT / "models" / "xgb_calibrated.pkl")
@@ -210,12 +234,18 @@ def main():
             "home_win": p_xgb_h,
             "draw": p_xgb_d,
             "away_win": p_xgb_a,
+            "xgb_home_win": p_xgb_h,
+            "xgb_draw": p_xgb_d,
+            "xgb_away_win": p_xgb_a,
         }
 
         # Ensemble: ELO + Poisson + XGB
         p_elo = elo_proba(elo_h, elo_a, is_neutral)
         p_elo_arr = np.array(p_elo)
         p_xgb_arr = np.array([p_xgb_h, p_xgb_d, p_xgb_a])
+        entry["elo_home_win"] = round(float(p_elo_arr[0]), 4)
+        entry["elo_draw"] = round(float(p_elo_arr[1]), 4)
+        entry["elo_away_win"] = round(float(p_elo_arr[2]), 4)
 
         if poisson_model is not None:
             try:
@@ -229,12 +259,22 @@ def main():
                 p_poi_arr = np.array(p_poi)
                 top5 = poisson_model.top_scorelines(mat, n=5)
 
-                p_ens = 0.35 * p_elo_arr + 0.35 * p_poi_arr + 0.30 * p_xgb_arr
+                p_ens = (
+                    DEFAULT_WEIGHTS["elo"] * p_elo_arr
+                    + DEFAULT_WEIGHTS["poisson"] * p_poi_arr
+                    + DEFAULT_WEIGHTS["xgb"] * p_xgb_arr
+                )
                 p_ens /= p_ens.sum()
 
-                entry["ensemble_home_win"] = round(float(p_ens[0]), 4)
-                entry["ensemble_draw"] = round(float(p_ens[1]), 4)
-                entry["ensemble_away_win"] = round(float(p_ens[2]), 4)
+                entry["home_win"] = round(float(p_ens[0]), 4)
+                entry["draw"] = round(float(p_ens[1]), 4)
+                entry["away_win"] = round(float(p_ens[2]), 4)
+                entry["ensemble_home_win"] = entry["home_win"]
+                entry["ensemble_draw"] = entry["draw"]
+                entry["ensemble_away_win"] = entry["away_win"]
+                entry["poisson_home_win"] = round(float(p_poi_arr[0]), 4)
+                entry["poisson_draw"] = round(float(p_poi_arr[1]), 4)
+                entry["poisson_away_win"] = round(float(p_poi_arr[2]), 4)
                 entry["top_scorelines"] = top5
                 entry["lambda_home"] = round(float(lam_h), 3)
                 entry["lambda_away"] = round(float(lam_a), 3)
@@ -242,6 +282,17 @@ def main():
                 pass
 
         predictions_out[f"{t1}|{t2}"] = entry
+
+    # Para pares neutrales, derivar una dirección desde la otra evita ruido
+    # numérico entre A|B y B|A que rompe tests de paridad del simulador.
+    for t1 in WC2026_TEAMS:
+        for t2 in WC2026_TEAMS:
+            if t1 >= t2 or t1 in WC2026_HOSTS or t2 in WC2026_HOSTS:
+                continue
+            key = f"{t1}|{t2}"
+            rev = f"{t2}|{t1}"
+            if key in predictions_out:
+                predictions_out[rev] = _invert_prediction_entry(predictions_out[key])
 
     (OUT_DIR / "predictions.json").write_text(
         json.dumps(predictions_out, ensure_ascii=False), encoding="utf-8"

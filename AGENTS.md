@@ -1,0 +1,530 @@
+# AGENTS.md
+
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
+
+## Project Overview
+
+**Mundial Predictor 2026** is an end-to-end ML pipeline for predicting FIFA World Cup results using XGBoost with custom ELO ratings, feature engineering, Monte Carlo tournament simulation, live match tracking, and an AI chat assistant.
+
+**Key characteristics:**
+- Python backend: data extraction → ELO calculation → feature engineering → XGBoost training/evaluation
+- Next.js frontend: live tournament tracking, match predictor, Monte Carlo projections, multi-dialect (bogotano/paisa/boyaco/costeño/en)
+- Live update pipeline: fetches WC 2026 results from football-data.org → updates CSV → retrains model automatically
+- Client-side Monte Carlo simulator (runs in browser on pre-calculated team pairs)
+- Temporal split strategy (test = Qatar 2022 to avoid leakage in time-series data)
+- **Narrator AI** — pre-computed regional narrations (DeepSeek, run once per day) stored in `narrations.json`; zero LLM calls per user, dialect selector per match, group standings context from MD2 onward
+- AI chat assistant (DeepSeek + RAG with DashScope embeddings) with topic filter, response cache, rate limiting, and live tournament context injection
+- Multi-agent system (Orchestrator + 6 specialists) that enrich predictions with contextual analysis when API budget allows
+- 122+ pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
+
+---
+
+## Documentation Guide
+
+This repository includes several supporting documents. **Consult them when**:
+
+- **`proyecto.md`** — Starting work or needing project context. Defines what the project is, its deliverables (E1–E4), and their acceptance criteria. Essential for understanding priorities during WC 2026 window (Jun 11 – Jul 19, 2026).
+- **`model_card.md`** — Debugging model performance or presenting metrics. Contains walk-forward validation results, ensemble weights rationale, and feature ablation outcomes.
+- **`guia.md`** — Planning implementation or understanding architectural decisions (D1–D6). Maps the vision against existing code, lists design conflicts + resolutions, and defines the technical roadmap (Phases 0–6).
+- **`contracts/`** — Documenting schemas or validating data contracts. `data_contracts.md` specifies the format of `results.csv`, features, and exported JSONs; formal guarantees prevent silent failures.
+- **`agent/*.md`** — Designing or modifying a specialist agent. Each file (e.g., `intmatch_analytics_pro.md`) documents a single agent's role, input context, output (delta_P adjustment), and cost profile.
+- **`methodology.md`** — Model methodology, limitations, and responsible-use statement. Companion to `model_card.md`.
+- **`README.md`** — Quick-start for new developers; external marketing. Complementary to AGENTS.md.
+
+---
+
+## Development Commands
+
+### Setup
+
+```bash
+# Python environment
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+
+# Frontend dependencies
+cd frontend
+npm install
+cd ..
+```
+
+### Pipeline & Model Training
+
+```bash
+# Run full pipeline: raw data → ELO → features → model training → metrics
+python scripts/run_pipeline.py
+
+# Export pre-computed data for frontend (JSONs with model predictions)
+python scripts/export_frontend_data.py
+
+# Live predictions with anti-leakage (cutoff = kickoff - 60s)
+python scripts/predict_live.py            # pending matches only
+python scripts/predict_live.py --all      # all matches (including played)
+python scripts/predict_live.py --export   # also write to frontend/public/data/
+python scripts/predict_live.py --add-result HOME AWAY HS AS DATE  # record a result
+
+# Feature ablation: test whether rest-days improve RPS before adding to FEATURE_COLS
+python scripts/ablation_features.py
+
+# (Optional) Enrich goalscorer stats
+python scripts/enrich_goalscorers.py
+```
+
+### Live Update (WC 2026 — use after each matchday)
+
+```bash
+# Full cycle: fetch results → retrain → export JSONs (runs ~90s)
+python scripts/live_update.py
+
+# Preview what would be fetched without writing anything
+python scripts/live_update.py --dry-run
+
+# Force retrain even if no new matches
+python scripts/live_update.py --force
+
+# Only fetch and update results.csv (skip retrain)
+python scripts/update_wc_results.py --dry-run
+```
+
+### Daily Narrations (run after live_update + predict_live)
+
+```bash
+# Generate narrations for TODAY's matches × dialects → frontend/public/data/narrations.json
+# Group stage: bogotano only (~$0.003/run). Knockout: all 5 dialects auto (~$0.015/run).
+python scripts/precompute_narrations.py
+
+# Extend window to tomorrow's matches too (default covers today only)
+python scripts/precompute_narrations.py --days 1
+```
+
+Script always force-regenerates today's matches (fresh context). Only generates missing keys for future days.
+
+Full deploy cycle:
+```bash
+python scripts/live_update.py
+python scripts/predict_live.py --export
+python scripts/precompute_narrations.py
+cd frontend && npx vercel --prod
+```
+
+### Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run tests for a specific module
+pytest tests/test_model.py
+pytest tests/test_features.py
+pytest tests/test_simulator.py
+pytest tests/test_extractor.py
+pytest tests/test_agents.py
+pytest tests/test_cost_guard.py
+pytest tests/test_integrity.py
+pytest tests/test_poisson.py
+pytest tests/test_predict_live.py
+pytest tests/test_simulator_parity.py
+
+# Verbose with output
+pytest -v
+
+# Run a single test
+pytest tests/test_model.py::test_temporal_split_no_leakage
+
+# Test count: 122+ tests across core pipeline, agents, cost guard, and integrity checks
+```
+
+### Development Servers
+
+```bash
+# Streamlit demo app (local, shows model output)
+streamlit run src/app.py
+
+# Next.js frontend dev server (http://localhost:3000)
+cd frontend
+npm run dev
+```
+
+### Build
+
+```bash
+# Build Next.js for production
+cd frontend
+npm run build
+npm start
+```
+
+### Linting
+
+```bash
+cd frontend
+npm run lint
+```
+
+---
+
+## Architecture
+
+### Data Pipeline
+
+```
+data/raw/results.csv  (49k+ internationals, WC 2026 fixture pre-loaded with NA scores)
+    ↓ [load_results + normalize team names]
+    ↓ [filter_world_cups]
+    ↓ [add_outcome: map scores to home_win/draw/away_win]
+data/processed/wc_clean.csv
+    ↓ [compute_elo_ratings: chronological ELO update]
+data/processed/elo_current.json
+    ↓ [build_feature_matrix: add H2H, form, experience]
+data/processed/features.parquet
+    ↓ [temporal_split: train < 2018 | calib = 2018 | test = WC 2022]
+    ↓ [train XGBoost + CalibratedClassifierCV]   → models/xgb_calibrated.pkl
+    ↓ [fit PoissonModel on tournament data]       → models/poisson_model.pkl
+    ↓ [EnsembleModel: ELO 22% + Poisson 58% + XGB 20%]
+models/{xgb_calibrated, xgb_v1, poisson_model, ensemble}.pkl
+```
+
+**Key files:**
+- `src/extractor.py`: Data loading, World Cup filtering, outcome mapping, team name normalization
+- `src/features.py`: ELO (K by tournament + margin multiplier + home advantage), rolling form, H2H, WC experience, tournament_weight
+- `src/model.py`: XGBoost + TimeSeriesSplit calibration, temporal 3-way split (train/calib/test), RPS metric
+- `src/poisson_model.py`: Bivariate Poisson (attack/defense strengths), scoreline matrix, top-5 scorelines, 1X2 aggregation
+- `src/ensemble.py`: `EnsembleModel` blends ELO + Poisson + XGB with configurable weights; falls back to ELO+Poisson if XGB unavailable
+- `src/simulator.py`: Monte Carlo simulation (official 2026 bracket, host home advantage)
+- `src/pipeline_logger.py`: JSONL observability — appends one entry per run to `logs/pipeline_runs.jsonl` via `run_context()`
+- `src/cost_guard.py`: `CostGuard` reads `configs/budget.yaml`, tracks LLM spend in `logs/llm_costs.jsonl`, raises `BudgetExceeded` to trigger deterministic fallback
+- `src/agents/`: Multi-agent system — Orchestrator routes to max 2 specialists, each produces delta_P adjustments
+
+### Live Update Pipeline
+
+`scripts/update_wc_results.py` fetches finished WC 2026 matches from football-data.org and fills in the NA scores in `results.csv`. The CSV has the full WC 2026 fixture pre-loaded — only the `home_score`/`away_score` columns are NA until matches are played.
+
+`scripts/live_update.py` orchestrates the full cycle:
+1. `update_wc_results.py` — fills NA scores for finished matches
+2. `run_pipeline.py` — recomputes ELO ratings incorporating new results, retrains XGBoost
+3. `export_frontend_data.py` — regenerates all JSON files for the frontend
+
+Exit codes from `update_wc_results.py`: `0` = no new matches, `2` = matches updated, `1` = error. `live_update.py` only re-runs the pipeline if exit code is `2` (or `--force`).
+
+**Name normalization:** football-data.org uses different team names. `FD_NAME_MAP` in `update_wc_results.py` handles all known variants (e.g., `"Bosnia-Herzegovina"` → `"Bosnia and Herzegovina"`, `"Korea Republic"` → `"South Korea"`).
+
+### Feature Engineering
+
+**Features used in XGBoost:**
+- `elo_diff`, `elo_home`, `elo_away`: ELO ratings (pre-match)
+- `home_goals_scored_avg5`, `away_goals_scored_avg5`: Average goals scored in last 5 games
+- `home_goals_conceded_avg5`, `away_goals_conceded_avg5`: Average goals conceded in last 5 games
+- `h2h_home_win_pct`: Head-to-head home win percentage
+- `is_neutral`: Binary flag for neutral venue
+- `wc_experience_diff`: Difference in World Cup appearances
+
+**Label mapping:**
+```python
+{"home_win": 0, "draw": 1, "away_win": 2}
+```
+
+### Model Training
+
+- **Train/test split:** 3-way temporal: train < 2018 | calib = 2018 | test = WC 2022 (64 games)
+- **Training data:** All 49k+ internationals (use_all_matches=True); WC games weighted 1.0, friendlies 0.20
+- **Base model:** XGBoost multi-class softmax + CalibratedClassifierCV (TimeSeriesSplit n=3, sigmoid)
+- **Ensemble:** `EnsembleModel` (default weights: ELO 22% + Poisson 58% + XGB 20%) — weights were set after gate A2 found XGB does not consistently beat ELO-only on walk-forward RPS
+- **Baseline:** Logistic Regression + ELO-only for comparison
+- **Metrics:** Accuracy, log-loss, Brier score, **RPS** (Ranked Probability Score — primary metric)
+- **Walk-forward validation:** `scripts/walk_forward_validation.py` — folds 2006→2022, XGB vs ELO baseline
+- **Feature ablation:** `scripts/ablation_features.py` — tests a candidate feature set against the base FEATURE_COLS; a feature enters `FEATURE_COLS` only if it improves global RPS
+
+### Proyecciones tab (partially static)
+
+The "Proyecciones" tab has two views:
+- **Por ronda (Knockout)** — fully static; shows pre-computed probabilities from `predictions.json` / `live_predictions.json`. Only refreshes on deploy.
+- **Simulador (Monte Carlo)** — partially dynamic; `fixedResults` (built from `liveMatches`, refreshes every 5 min) locks in played results automatically, but the probabilities for unplayed matches still come from the last `predict_live.py --export` run. Running `predict_live.py --export` + deploy is what updates the Proyecciones probabilities after each matchday.
+
+### Simulator (Backend)
+
+- Reads fixture (48 teams, 12 groups, knockout rounds) from `data/external/wc2026_fixture.json`
+- For each simulation run:
+  1. Sample match outcomes using model probabilities
+  2. Update group standings (tiebreakers: goal diff, head-to-head)
+  3. Advance qualified teams to knockout
+  4. Penalties for draws (weighted by historical penalty conversion rates)
+- Output: Win probability for each team in each round, champion distribution
+
+### Frontend Architecture
+
+**Technology:** Next.js 15 + React 19 + Tailwind CSS + Recharts + Framer Motion
+
+**Key files:**
+- `src/app/page.tsx`: Main tabbed interface (Live Tournament, Predictor, Groups, Simulator, ChatTab, etc.)
+- `src/app/api/live/route.ts`: Server-side proxy to football-data.org (no-store cache, BOM-safe token parsing)
+- `src/app/api/chat/route.ts`: AI chat endpoint — topic filter + response cache + rate limit + RAG + DeepSeek streaming
+- `src/app/api/narrator/route.ts`: Scenario detection & contextual metadata (stadium names, historical matchups, confederation info) for match presentation
+- `src/lib/simulator.ts`: Client-side Monte Carlo (runs 5,000 simulations in browser)
+- `src/lib/live.ts`: Fetches live match results via `/api/live` endpoint
+- `src/lib/i18n.tsx`: Dialect context — `Lang = "bogotano"|"paisa"|"boyaco"|"costeño"|"en"`. Base `_es` + 4 dialect narrator overlays; `useI18n()` / `useLang()` hooks
+- `src/components/Predictor.tsx`: Match predictor UI — NarratorBanner (scenario detection + stadium info), CelebrationBurst, ColombiaPortugalOverlay, StadiumOverlay SVG
+- `src/components/ChatTab.tsx`: Tabbed AI conversation interface with topic filtering and response caching
+- `src/components/StatsTab.tsx`: WC 2026 live stats dashboard — goals KPIs, top scoring teams (bar chart), top scoring matches, score distribution, upsets (model misses sorted by lowest actual-winner probability). All computed client-side from `liveMatches` + `groupMatches` + `liveScores`. Replaces the ChatTab in the "Stats" tab (`curiosidades`).
+- `src/components/ModelTab.tsx`: Live model accuracy — KPI pills, per-matchday bars, per-group grid with J1/J2/J3/FG columns (FG = group total %, count, delta vs J1), surprises section
+
+**Data flow:**
+1. Pipeline exports JSON files (`export_frontend_data.py`) to `frontend/public/data/`
+2. `precompute_narrations.py` generates `narrations.json` (one DeepSeek call per match, cached)
+3. Frontend loads pre-computed model predictions, ELO ratings, and narrations at page load
+4. Live results fetched from `/api/live` (server-side proxy to football-data.org)
+5. Monte Carlo runs on client-side with current standings
+6. Chat questions → `/api/chat` → topic filter → cache check → tournament context injection → RAG → DeepSeek streaming
+7. Predictor narration: checks `narrations[home|away|dialect]` first; only calls `/api/narrator` if missing
+
+### AI Chat API (`/api/chat`)
+
+Three cost-protection layers run in order before any API call:
+
+1. **Topic filter** — keyword regex (Spanish/English/Portuguese football terms). Non-football questions get a canned reply at zero cost.
+2. **Response cache** — module-level `Map<sha256, {response, ts}>`, TTL 2h, max 400 entries. Same question within a warm serverless instance returns instantly.
+3. **Rate limit** — sliding window 20 requests/hour per IP. Returns HTTP 429 with `Retry-After: 3600` if exceeded.
+
+RAG pipeline (when `DASHSCOPE_API_KEY` is set):
+- Embeds query with Qwen3 `text-embedding-v3` (512 dims)
+- Cosine similarity over `frontend/public/data/rag_index.json`
+- Top-5 chunks injected into DeepSeek system prompt
+
+Without `DASHSCOPE_API_KEY` or without `rag_index.json`, the chat falls back to DeepSeek's general knowledge. In all cases, **tournament context is injected directly** into the system prompt: today's fixtures (UTC date filter on `group_matches.json`) and group standings (`group_standings.json`). This ensures the chat always knows what's playing today and the current table — independent of RAG.
+
+### Narrator Endpoint (`/api/narrator`)
+
+Serves pre-computed narrations from `narrations.json`. Flow:
+1. Checks `narrations[home|away|dialect]` key in the static JSON file
+2. If found: returns the text immediately (zero LLM cost per user)
+3. If missing (knockout match not yet pre-computed, or new dialect): calls DeepSeek to generate on-the-fly
+
+The static file is regenerated daily by `scripts/precompute_narrations.py`. The Predictor component passes `narrations` prop down to `UnifiedNarration`, which has its own `localLang` state (per-match dialect selector, synced to global on mount but independently switchable). Dialect cost strategy: group stage → bogotano only; knockout → all 5 dialects auto-activated by stage field.
+
+---
+
+## Key Decisions & Patterns
+
+### Temporal Split Over K-Fold
+Time-series data (match history) requires temporal validation to prevent leakage. Test set is always Qatar 2022 (never in training), not random K-folds.
+
+### Custom ELO vs FIFA Rankings
+ELO is computed from all internationals chronologically. K varies by tournament importance (WC=60, friendly=20). A margin-of-victory multiplier `log(1+|GD|)` scales each update. Home advantage adds 100 ELO points to the expected score for non-neutral venues.
+
+### Live Learning Strategy
+The model doesn't do online learning — XGBoost is re-trained from scratch each update. What changes meaningfully with each WC 2026 matchday is the ELO ratings: a team that beats a stronger opponent gains ELO, which feeds into updated features for subsequent predictions. Run `python scripts/live_update.py` after each matchday.
+
+### Live Prediction Mode (`scripts/predict_live.py`)
+
+Separate from the full pipeline. Reads `data/external/wc2026_live_results.csv` (WC 2026 results only, distinct from `results.csv`) and the full historical dataset, then re-computes ELO + form with a strict cutoff `= kickoff - 60s`. The anti-leakage assertion aborts if `features_cutoff >= match_kickoff`. Outputs `data/processed/live_predictions.json`; with `--export` also writes to `frontend/public/data/live_predictions.json`.
+
+To add a result manually: `python scripts/predict_live.py --add-result "Argentina" "France" 3 3 2026-07-19`
+
+### CostGuard & Observability
+
+- **`configs/budget.yaml`**: declares daily ($2), monthly ($50), and per-run (5 calls) LLM limits plus per-model token costs
+- **`src/cost_guard.py`**: `CostGuard.check_and_record()` raises `BudgetExceeded` before any call that would breach a limit; the Orchestrator catches it and falls back to the deterministic Ensemble
+- **`src/pipeline_logger.py`**: `run_context(run_type, artifacts)` context manager wraps every pipeline/live run and appends a JSONL entry to `logs/pipeline_runs.jsonl` with duration, status, metrics, and artifacts
+- **`logs/llm_costs.jsonl`**: one entry per LLM call (model, tokens, cost, ts)
+- **`logs/pipeline_runs.jsonl`**: one entry per pipeline run
+
+### Multi-Agent Architecture (src/agents/)
+The Orchestrator is the single API gateway. It routes each match query to at most 2 sub-agents based on available context (injuries, odds, altitude, etc.). Each agent returns a `delta_P` (adjustment to XGBoost prior). The Orchestrator blends deltas with per-agent weights and confidence, clamped to 12% max total shift, then renormalizes to sum=1.
+- **LLM agents**: IntMatch-Analytics-Pro, Roster-Data-Scout, Media-Sentiment-Parser, Travel-Logistics-Quant — all route through `src/agents/specialists/_llm.py`
+- **LLM provider**: DeepSeek (`DEEPSEEK_API_KEY`) is primary; Anthropic Codex (`ANTHROPIC_API_KEY`) is fallback. Codex model aliases in `_MODEL_MAP` are remapped to `deepseek-chat` automatically.
+- **Deterministic agents** (no LLM): FinOps-Bookmaker-Alpha (odds math), FIFA-Regs-Strategist (altitude/bracket), Travel-Logistics-Quant (haversine fallback)
+- LLM agents fail gracefully (delta=0) when neither key is set.
+- **Design specs**: see `agent/*.md` files (one per specialist) for role, input context, output schema, and cost profile. Consult when modifying or adding a new specialist.
+
+### Pre-computed Narrations (Zero LLM Cost Per User)
+`narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Dialect strategy: `DIALECTS_GROUP = ["bogotano"]` during group stage (~$0.003/run); `DIALECTS_KNOCKOUT = ["bogotano","paisa","boyaco","costeño","en"]` activates automatically when `match.stage != "group"`.
+
+### Isotonic Calibration
+Probabilities matter more than accuracy in a tournament simulator. Isotonic calibration ensures the model's predicted probabilities match observed win rates.
+
+### Client-Side Simulation
+1,128 pre-calculated team-pair matchups are embedded in frontend. Monte Carlo runs client-side (no server load) for instant projections and exploration.
+
+### Temporal Split in Tests
+Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to verify no leakage occurs between train and test sets.
+
+---
+
+## File Structure Summary
+
+```
+├── src/
+│   ├── extractor.py        # Data loading + team name normalization
+│   ├── features.py         # ELO (K by tournament + margin mult + home adv), H2H, form, weights
+│   ├── model.py            # XGBoost + TimeSeriesSplit calibration, RPS metric
+│   ├── poisson_model.py    # Bivariate Poisson: attack/defense strengths, scoreline matrix
+│   ├── ensemble.py         # EnsembleModel: ELO + Poisson + XGB blend
+│   ├── pipeline_logger.py  # JSONL run ledger → logs/pipeline_runs.jsonl
+│   ├── cost_guard.py       # CostGuard: reads budget.yaml, enforces LLM spend limits
+│   ├── simulator.py        # Tournament simulation (official 2026 bracket, host advantage)
+│   ├── app.py              # Streamlit demo interface
+│   └── agents/
+│       ├── base.py         # MatchContext, AgentResult, BaseAgent ABC
+│       ├── orchestrator.py # Routing (max 2 agents), delta blending, OrchestratorOutput
+│       └── specialists/
+│           ├── intmatch.py  # Tactical matchup (Codex Haiku)
+│           ├── roster.py    # Injury/WAR analysis (Codex Sonnet)
+│           ├── media.py     # Sentiment/morale (Codex Sonnet)
+│           ├── travel.py    # Fatigue/altitude (Codex Haiku + deterministic)
+│           ├── finops.py    # Odds implied probs (deterministic)
+│           └── fifa_regs.py # Bracket/altitude math (deterministic)
+├── agent/                  # Agent design specs (one .md per specialist)
+│   ├── intmatch_analytics_pro.md
+│   ├── roster_data_scout.md
+│   ├── media_sentiment_parser.md
+│   ├── travel_logistics_quant.md
+│   ├── finops_bookmaker_alpha.md
+│   └── fifa_regs_strategist.md
+├── contracts/              # Formal data + feature schemas (prevent silent failures)
+│   ├── data_contracts.md   # Bronze/silver/gold schemas for CSVs, parquets, JSONs
+│   └── module_contracts.md # Feature + model input/output contracts
+├── configs/
+│   └── budget.yaml         # LLM cost limits (daily/monthly/per-run) + token costs
+├── scripts/
+│   ├── run_pipeline.py             # Execute full pipeline
+│   ├── export_frontend_data.py     # Generate JSONs for frontend
+│   ├── live_update.py              # Orchestrator: fetch results → retrain → export
+│   ├── update_wc_results.py        # Fill NA scores in results.csv from football-data.org
+│   ├── predict_live.py             # Live predictions with per-match ELO cutoff (anti-leakage)
+│   ├── precompute_narrations.py    # Daily narrations × dialects → narrations.json (DeepSeek, 1 call/match)
+│   ├── ablation_features.py        # Ablation test for candidate features vs base FEATURE_COLS
+│   ├── walk_forward_validation.py  # Walk-forward RPS vs ELO baseline
+│   ├── build_rag_index.py          # Generate embedding index for chat RAG
+│   └── enrich_goalscorers.py       # Optional: goalscorer enrichment
+├── frontend/               # Next.js 15 + React 19
+│   ├── src/app/
+│   │   ├── page.tsx        # Main tabbed interface; loads narrations.json and passes as prop
+│   │   ├── api/live/       # Proxy to football-data.org
+│   │   ├── api/chat/       # AI chat: tournament context injection + topic filter + cache + RAG + DeepSeek
+│   │   └── api/narrator/   # Serves narrations.json; LLM fallback for missing keys only
+│   ├── src/components/
+│   │   ├── Predictor.tsx   # Match predictor + UnifiedNarration (localLang + dialect selector)
+│   │   ├── ModelTab.tsx    # Live model accuracy: KPIs, per-matchday bars, per-group J1/J2/J3/FG, surprises
+│   │   ├── StatsTab.tsx    # WC 2026 stats dashboard: goals, top teams, top matches, score dist, upsets
+│   │   └── ...             # Groups, Simulator, Knockout, ChatTab, etc.
+│   ├── src/lib/
+│   │   ├── simulator.ts    # Client-side Monte Carlo
+│   │   ├── live.ts         # Live results fetching + orientScore + modelVerdict
+│   │   └── i18n.tsx        # i18n context + regional dialects
+│   └── public/data/        # Exported JSONs: teams, predictions, narrations, group_matches, standings, etc.
+├── tests/                  # 122+ tests: features, model, agents, cost guard, integrity, simulator, live prediction
+├── data/
+│   ├── raw/                # results.csv (incl. WC 2026 fixture), shootouts.csv, goalscorers.csv
+│   ├── processed/          # Generated CSVs, parquets, JSONs (regenerable, gitignored)
+│   └── external/           # wc2026_fixture.json; wc2026_live_results.csv (played WC 2026 only)
+├── models/                 # Serialized models (gitignored, regenerable)
+├── logs/                   # pipeline_runs.jsonl, llm_costs.jsonl (gitignored)
+├── notebooks/              # EDA and analysis
+├── instrucciones.md        # Daily ops: MD1/MD2/MD3 cycles, double-run protocol, cost table
+├── proyecto.md             # Project definition, deliverables (E1–E5), and status
+├── model_card.md           # Model performance, walk-forward results, feature ablation
+├── methodology.md          # Model methodology, limitations, responsible-use statement
+├── guia.md                 # Technical roadmap (Phases 0–6), design decisions (D1–D6)
+├── requirements.txt        # Python dependencies
+└── README.md
+```
+
+---
+
+## Common Workflows
+
+### Updating Model After a WC 2026 Matchday
+
+```bash
+# 1. Fetch new results, retrain, export JSONs (~90s; skips if no new matches)
+python scripts/live_update.py
+
+# 2. Recalculate live predictions with multi-agent enrichment
+python scripts/predict_live.py --export
+
+# 3. Pre-compute narrations for today's matches (1 DeepSeek call/match)
+python scripts/precompute_narrations.py
+
+# 4. Deploy
+cd frontend && npx vercel --prod
+```
+
+**MD2 double-run protocol** (Jun 18–23, 4 matches/day split afternoon/evening): run the full cycle once in the morning before any match, then run steps 1–4 again in the afternoon after the first 2 results are in. This ensures evening match narrations reflect qualification pressure from the afternoon results. See `instrucciones.md` for the full MD2/MD3 calendar and cost table.
+
+### Live Predictions Without Full Retrain (between matchdays)
+
+```bash
+# Predict pending matches using current model + live ELO cutoff per match
+python scripts/predict_live.py --export
+
+# Add a result manually and re-predict
+python scripts/predict_live.py --add-result "Mexico" "Poland" 0 0 2026-06-14
+python scripts/predict_live.py --export
+```
+
+### Training a New Model
+
+1. `python scripts/run_pipeline.py` — Regenerates features and trains all models
+2. Check metrics output (accuracy, log-loss, Brier score, calibration error)
+3. Verify test set is Qatar 2022 (temporal split, no leakage)
+
+### Debugging Model Predictions
+
+- Check `src/model.py`: FEATURE_COLS, LABEL_MAP
+- Review feature values in `data/processed/features.parquet`
+- Use Streamlit app (`streamlit run src/app.py`) to inspect predictions
+- Compare baseline (LogisticRegression) vs XGBoost to isolate non-linear improvements
+
+### Building the RAG Index (requires DashScope key)
+
+```bash
+# Set key in frontend/.env.local: DASHSCOPE_API_KEY=<key>
+python scripts/build_rag_index.py
+# → generates frontend/public/data/rag_index.json
+# Chat API uses it automatically on next deploy
+```
+
+### Extending Frontend
+
+- Add new component in `src/components/`
+- Use `useI18n()` hook for multi-language support
+- Client-side simulator in `lib/simulator.ts` handles Monte Carlo; no backend call needed
+- Live results in `lib/live.ts` cache via `/api/live` (server-side proxy to football-data.org)
+
+---
+
+## Testing Strategy
+
+- **Temporal split validation:** Ensure train < test_year
+- **Feature presence:** All FEATURE_COLS present in feature matrix
+- **Calibration checks:** Brier score and log-loss on test set
+- **Simulator:** Deterministic seed (random_state=42) for reproducibility
+- **No mock DB:** Integration tests run against real data files (CSV, JSON, PKL)
+- **Data contracts:** Every pipeline run validates input/output schemas (see `contracts/data_contracts.md`). Silent data quality failures are unacceptable — all assertions are explicit.
+
+---
+
+## Environment & Secrets
+
+All secrets via env vars only — never in code.
+
+| Variable | Where | Purpose |
+|---|---|---|
+| `FOOTBALL_DATA_TOKEN` | `frontend/.env.local` + Vercel | Live match data from football-data.org |
+| `DEEPSEEK_API_KEY` | `frontend/.env.local` + Vercel + `.env` | AI chat (frontend) + primary LLM for Python agents |
+| `DASHSCOPE_API_KEY` | `frontend/.env.local` + Vercel | Query embeddings for RAG (Qwen3 text-embedding-v3) |
+| `ANTHROPIC_API_KEY` | `.env` + `frontend/.env.local` + Vercel | Fallback LLM for Python agents + frontend narrator when DeepSeek unavailable |
+
+`update_wc_results.py` auto-loads `FOOTBALL_DATA_TOKEN` from `frontend/.env.local` if not set in the environment — no need to export it manually when running locally.
+
+---
+
+## Performance Notes
+
+- **ELO calculation:** O(n) chronological pass over all matches (~49k rows)
+- **Feature matrix:** Pandas vectorized operations, no loops
+- **XGBoost training:** ~900 samples (World Cup matches only in test), ~1s training time
+- **Full live_update.py cycle:** ~90 seconds (dominated by pipeline + export)
+- **Frontend simulator:** 5,000 Monte Carlo iterations in browser (~200ms on modern hardware)
+- **Chat cache hit rate:** ~70-80% for warm serverless instances (module-level Map, SHA-256 key, TTL 2h)
+- **Chat rate limit:** 20 requests/hour/IP — prevents abuse without Redis

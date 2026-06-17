@@ -142,10 +142,10 @@ No training required. Serves as the lower bound for model evaluation.
 ### 4.4 Ensemble
 
 ```
-p_ensemble = 0.35 × p_ELO + 0.35 × p_Poisson + 0.30 × p_XGB
+p_ensemble = 0.22 × p_ELO + 0.58 × p_Poisson + 0.20 × p_XGB
 ```
 
-Weights chosen by grid search over walk-forward RPS. ELO and Poisson are given equal priority because they are independent signal sources; XGB is slightly down-weighted as it overfits more in small WC datasets.
+Weights chosen by validation and 2026 recalibration. Poisson gets the largest weight because it adds independent score-distribution signal; ELO remains the robust historical anchor; XGB is down-weighted because it does not consistently beat ELO-only across walk-forward folds.
 
 The blend is renormalised to sum=1.0 before outputting.
 
