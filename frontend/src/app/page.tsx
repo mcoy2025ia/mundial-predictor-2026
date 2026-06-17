@@ -457,7 +457,7 @@ export default function Home() {
               )}
               {tab === "chat" && (
                 <TabPane key="chat">
-                  <ChatTab />
+                  <ChatTab groupMatches={groupMatches ?? {}} />
                 </TabPane>
               )}
             </AnimatePresence>

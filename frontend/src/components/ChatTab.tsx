@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLang } from "@/lib/i18n";
+import { useLang, LangContext, type Lang } from "@/lib/i18n";
+import type { GroupMatch } from "@/types";
 
 interface Message {
   role: "user" | "assistant";
@@ -17,12 +18,85 @@ function uid() {
 /* ══════════════════════════════════════════════════════
    CHAT TAB PRINCIPAL
 ══════════════════════════════════════════════════════ */
-interface ChatTabProps {
-  initialQuestion?: string;
+// ── Sugerencias dinámicas basadas en los partidos de hoy ─────────────────────
+
+const HIGH_ALT_VENUES = ["Mexico City", "Guadalajara", "Ciudad de México", "Monterrey"];
+
+function buildTodaySuggestions(
+  groupMatches: Record<string, GroupMatch[]>,
+  lang: Lang
+): string[] {
+  const today = new Date().toLocaleDateString("en-CA");
+  const todayFixtures: Array<{ group: string; m: GroupMatch }> = [];
+
+  for (const [group, matches] of Object.entries(groupMatches)) {
+    for (const m of matches) {
+      if (m.date === today) todayFixtures.push({ group, m });
+    }
+  }
+
+  if (todayFixtures.length === 0) return [];
+
+  const sugs: string[] = [];
+  const es = lang !== "en";
+
+  // Preguntas por partido (máx 2)
+  for (const { m } of todayFixtures.slice(0, 2)) {
+    sugs.push(es
+      ? `¿Cuál es la predicción del modelo para ${m.team1} vs ${m.team2} hoy?`
+      : `What's the model prediction for ${m.team1} vs ${m.team2} today?`
+    );
+  }
+
+  // Pregunta de clasificación por grupo (máx 2 grupos distintos)
+  const groups = [...new Set(todayFixtures.map((f) => f.group))].slice(0, 2);
+  for (const grp of groups) {
+    sugs.push(es
+      ? `¿Quién clasifica del ${grp} dependiendo de los resultados de hoy?`
+      : `Who advances from ${grp} depending on today's results?`
+    );
+  }
+
+  // Forma del equipo más favorito de hoy
+  const topMatch = [...todayFixtures].sort((a, b) =>
+    Math.max(b.m.t1_win, b.m.t2_win) - Math.max(a.m.t1_win, a.m.t2_win)
+  )[0];
+  const favTeam = topMatch.m.t1_win > topMatch.m.t2_win ? topMatch.m.team1 : topMatch.m.team2;
+  sugs.push(es
+    ? `¿Cómo viene ${favTeam} en el torneo y cuáles son sus opciones de clasificar?`
+    : `How is ${favTeam} doing in the tournament and what are their chances?`
+  );
+
+  // Altitud si aplica
+  const altVenue = todayFixtures.find((f) =>
+    HIGH_ALT_VENUES.some((v) => f.m.ground?.includes(v))
+  );
+  if (altVenue) {
+    sugs.push(es
+      ? `¿Cómo afecta la altitud de ${altVenue.m.ground} a los equipos que juegan hoy?`
+      : `How does the altitude in ${altVenue.m.ground} affect today's match?`
+    );
+  }
+
+  return sugs.slice(0, 6);
 }
 
-export default function ChatTab({ initialQuestion }: ChatTabProps = {}) {
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface ChatTabProps {
+  initialQuestion?: string;
+  groupMatches?: Record<string, GroupMatch[]>;
+}
+
+export default function ChatTab({ initialQuestion, groupMatches }: ChatTabProps = {}) {
   const T = useLang();
+  const lang = useContext(LangContext);
+
+  const suggestions = useMemo(() => {
+    const dynamic = groupMatches ? buildTodaySuggestions(groupMatches, lang) : [];
+    return dynamic.length > 0 ? dynamic : (T.chatSuggestions as unknown as string[]);
+  }, [groupMatches, lang, T.chatSuggestions]);
+
   const [messages,  setMessages]  = useState<Message[]>([]);
   const [input,     setInput]     = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -160,7 +234,7 @@ export default function ChatTab({ initialQuestion }: ChatTabProps = {}) {
                 {T.chatEmpty}
               </p>
               <div className="flex flex-wrap gap-2 justify-center mt-2">
-                {(T.chatSuggestions as unknown as string[]).map((s: string, i: number) => (
+                {suggestions.map((s: string, i: number) => (
                   <motion.button
                     key={i}
                     initial={{ opacity: 0, scale: 0.9 }}
