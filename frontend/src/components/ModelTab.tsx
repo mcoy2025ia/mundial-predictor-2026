@@ -33,9 +33,18 @@ function computeResults(
 ): MatchResult[] {
   const out: MatchResult[] = [];
   for (const [group, matches] of Object.entries(groupMatches)) {
-    // Determine internal matchday by unique dates sorted
-    const uniqueDates = [...new Set(matches.map((m) => m.date))].sort();
-    const dateToMd = new Map(uniqueDates.map((d, i) => [d, i + 1]));
+    // Map global matchday number to internal JOR (1/2/3).
+    // Groups B and D have JOR-1 games split across two global matchday dates,
+    // so unique-date counting breaks for them. Use round number ranges instead:
+    //   Matchday 1-7  → JOR 1 (first game of each group)
+    //   Matchday 8-13 → JOR 2 (second game of each group)
+    //   Matchday 14+  → JOR 3 (third game, simultaneous)
+    function roundToJor(round: string): number {
+      const n = parseInt(round.replace(/\D/g, ""), 10);
+      if (n <= 7)  return 1;
+      if (n <= 13) return 2;
+      return 3;
+    }
 
     for (const m of matches) {
       const score = orientScore(m, liveScores);
@@ -45,7 +54,7 @@ function computeResults(
         score.s1 > score.s2 ? "t1" : score.s1 < score.s2 ? "t2" : "draw";
       out.push({
         group,
-        groupMd: dateToMd.get(m.date) ?? 1,
+        groupMd: roundToJor(m.round ?? "Matchday 1"),
         team1: m.team1,
         team2: m.team2,
         t1_flag: m.team1_flag,
