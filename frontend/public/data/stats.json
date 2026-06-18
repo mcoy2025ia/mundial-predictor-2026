@@ -1,7 +1,7 @@
 {
-  "total_matches": 985,
-  "total_goals": 2784,
-  "avg_goals_all": 2.826,
+  "total_matches": 987,
+  "total_goals": 2791,
+  "avg_goals_all": 2.828,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 64,
-      "matches": 21,
-      "avg": 3.048
+      "total": 71,
+      "matches": 23,
+      "avg": 3.087
     }
   ],
   "best_avg_edition": {
@@ -229,11 +229,11 @@
     {
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "matches": 74,
-      "goals_for": 104,
-      "goals_against": 68,
-      "goal_diff": 36,
-      "avg": 1.41
+      "matches": 75,
+      "goals_for": 108,
+      "goals_against": 70,
+      "goal_diff": 38,
+      "avg": 1.44
     },
     {
       "team": "Netherlands",
