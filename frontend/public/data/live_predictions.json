@@ -2,9 +2,9 @@
   {
     "home_team": "Czech Republic",
     "away_team": "South Africa",
-    "p_home": 0.4939,
-    "p_draw": 0.3195,
-    "p_away": 0.1866,
+    "p_home": 0.484,
+    "p_draw": 0.3226,
+    "p_away": 0.1934,
     "is_neutral": true,
     "kickoff": "2026-06-18T16:00:00",
     "model": "ensemble_live",
@@ -13,55 +13,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.516,
-    "xgb_draw": 0.2861,
-    "xgb_away": 0.1979,
-    "elo_home": 0.5121,
-    "elo_draw": 0.2126,
-    "elo_away": 0.2753,
-    "poisson_home": 0.4794,
-    "poisson_draw": 0.3716,
-    "poisson_away": 0.149,
+    "xgb_home": 0.4889,
+    "xgb_draw": 0.2919,
+    "xgb_away": 0.2192,
+    "elo_home": 0.4943,
+    "elo_draw": 0.2201,
+    "elo_away": 0.2857,
+    "poisson_home": 0.4785,
+    "poisson_draw": 0.3721,
+    "poisson_away": 0.1495,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2657
+        "prob": 0.2661
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2489
+        "prob": 0.2487
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1166
+        "prob": 0.1162
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1033
+        "prob": 0.1036
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0967
+        "prob": 0.0968
       }
     ],
-    "lambda_home": 0.937,
+    "lambda_home": 0.935,
     "lambda_away": 0.389,
     "stage": "group",
     "group": "Group A",
     "venue": "Atlanta",
-    "round": "Matchday 8"
+    "round": "Matchday 8",
+    "group_context": {
+      "group_name": "Group A",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Mexico 3pts 2.South Korea 3pts 3.Czech Republic 0pts 4.South Africa 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Mexico",
     "away_team": "South Korea",
-    "p_home": 0.5166,
-    "p_draw": 0.3165,
-    "p_away": 0.1669,
+    "p_home": 0.5115,
+    "p_draw": 0.3178,
+    "p_away": 0.1707,
     "is_neutral": false,
     "kickoff": "2026-06-19T01:00:00",
     "model": "ensemble_live",
@@ -70,12 +81,12 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6034,
-    "xgb_draw": 0.2491,
-    "xgb_away": 0.1476,
-    "elo_home": 0.5602,
-    "elo_draw": 0.193,
-    "elo_away": 0.2468,
+    "xgb_home": 0.5967,
+    "xgb_draw": 0.248,
+    "xgb_away": 0.1552,
+    "elo_home": 0.5428,
+    "elo_draw": 0.2,
+    "elo_away": 0.2572,
     "poisson_home": 0.4701,
     "poisson_draw": 0.3866,
     "poisson_away": 0.1432,
@@ -111,14 +122,25 @@
     "stage": "group",
     "group": "Group A",
     "venue": "Guadalajara (Zapopan)",
-    "round": "Matchday 8"
+    "round": "Matchday 8",
+    "group_context": {
+      "group_name": "Group A",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Mexico 3pts 2.South Korea 3pts 3.Czech Republic 0pts 4.South Africa 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Czech Republic",
     "away_team": "Mexico",
-    "p_home": 0.3664,
-    "p_draw": 0.3256,
-    "p_away": 0.308,
+    "p_home": 0.3633,
+    "p_draw": 0.3222,
+    "p_away": 0.3145,
     "is_neutral": false,
     "kickoff": "2026-06-25T01:00:00",
     "model": "ensemble_live",
@@ -127,55 +149,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2823,
-    "xgb_draw": 0.3149,
-    "xgb_away": 0.4028,
-    "elo_home": 0.2594,
-    "elo_draw": 0.2015,
-    "elo_away": 0.5391,
-    "poisson_home": 0.436,
-    "poisson_draw": 0.3764,
-    "poisson_away": 0.1877,
+    "xgb_home": 0.2873,
+    "xgb_draw": 0.3073,
+    "xgb_away": 0.4053,
+    "elo_home": 0.2444,
+    "elo_draw": 0.1914,
+    "elo_away": 0.5641,
+    "poisson_home": 0.4346,
+    "poisson_draw": 0.3769,
+    "poisson_away": 0.1884,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2568
+        "prob": 0.2573
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2275
+        "prob": 0.2272
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1216
+        "prob": 0.1221
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1077
+        "prob": 0.1078
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1008
+        "prob": 0.1003
       }
     ],
-    "lambda_home": 0.886,
-    "lambda_away": 0.473,
+    "lambda_home": 0.883,
+    "lambda_away": 0.474,
     "stage": "group",
     "group": "Group A",
     "venue": "Mexico City",
-    "round": "Matchday 14"
+    "round": "Matchday 14",
+    "group_context": {
+      "group_name": "Group A",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Mexico 3pts 2.South Korea 3pts 3.Czech Republic 0pts 4.South Africa 0pts",
+      "simultaneous_group_matches": "South Africa vs South Korea",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "South Africa",
     "away_team": "South Korea",
-    "p_home": 0.2059,
-    "p_draw": 0.3469,
-    "p_away": 0.4473,
+    "p_home": 0.2025,
+    "p_draw": 0.3407,
+    "p_away": 0.4568,
     "is_neutral": true,
     "kickoff": "2026-06-25T01:00:00",
     "model": "ensemble_live",
@@ -184,55 +217,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1612,
-    "xgb_draw": 0.2695,
-    "xgb_away": 0.5692,
-    "elo_home": 0.1368,
-    "elo_draw": 0.1261,
-    "elo_away": 0.737,
-    "poisson_home": 0.2474,
-    "poisson_draw": 0.4572,
-    "poisson_away": 0.2953,
+    "xgb_home": 0.159,
+    "xgb_draw": 0.245,
+    "xgb_away": 0.596,
+    "elo_home": 0.126,
+    "elo_draw": 0.1202,
+    "elo_away": 0.7538,
+    "poisson_home": 0.2466,
+    "poisson_draw": 0.4573,
+    "poisson_away": 0.2961,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.3564
+        "prob": 0.3566
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1966
+        "prob": 0.1971
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1711
+        "prob": 0.1706
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0944
+        "prob": 0.0943
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0542
+        "prob": 0.0545
       }
     ],
-    "lambda_home": 0.48,
-    "lambda_away": 0.552,
+    "lambda_home": 0.478,
+    "lambda_away": 0.553,
     "stage": "group",
     "group": "Group A",
     "venue": "Monterrey (Guadalupe)",
-    "round": "Matchday 14"
+    "round": "Matchday 14",
+    "group_context": {
+      "group_name": "Group A",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Mexico 3pts 2.South Korea 3pts 3.Czech Republic 0pts 4.South Africa 0pts",
+      "simultaneous_group_matches": "Czech Republic vs Mexico",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Switzerland",
     "away_team": "Bosnia and Herzegovina",
-    "p_home": 0.5461,
-    "p_draw": 0.2768,
-    "p_away": 0.1771,
+    "p_home": 0.5698,
+    "p_draw": 0.2686,
+    "p_away": 0.1616,
     "is_neutral": true,
     "kickoff": "2026-06-18T19:00:00",
     "model": "ensemble_live",
@@ -241,55 +285,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6077,
-    "xgb_draw": 0.2389,
-    "xgb_away": 0.1533,
-    "elo_home": 0.7988,
-    "elo_draw": 0.1044,
-    "elo_away": 0.0968,
-    "poisson_home": 0.429,
-    "poisson_draw": 0.3553,
-    "poisson_away": 0.2158,
+    "xgb_home": 0.6519,
+    "xgb_draw": 0.2229,
+    "xgb_away": 0.1252,
+    "elo_home": 0.852,
+    "elo_draw": 0.0863,
+    "elo_away": 0.0617,
+    "poisson_home": 0.4344,
+    "poisson_draw": 0.3535,
+    "poisson_away": 0.2121,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2194
+        "prob": 0.218
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2067
+        "prob": 0.208
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1261
+        "prob": 0.1241
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1188
+        "prob": 0.1184
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0974
+        "prob": 0.0992
       }
     ],
-    "lambda_home": 0.942,
-    "lambda_away": 0.575,
+    "lambda_home": 0.954,
+    "lambda_away": 0.569,
     "stage": "group",
     "group": "Group B",
     "venue": "Los Angeles (Inglewood)",
-    "round": "Matchday 8"
+    "round": "Matchday 8",
+    "group_context": {
+      "group_name": "Group B",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Canada 1pts 2.Bosnia and Herzegovina 1pts 3.Qatar 1pts 4.Switzerland 1pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Canada",
     "away_team": "Qatar",
-    "p_home": 0.5832,
-    "p_draw": 0.2795,
-    "p_away": 0.1373,
+    "p_home": 0.5997,
+    "p_draw": 0.2735,
+    "p_away": 0.1268,
     "is_neutral": false,
     "kickoff": "2026-06-18T22:00:00",
     "model": "ensemble_live",
@@ -298,55 +353,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7515,
-    "xgb_draw": 0.1541,
-    "xgb_away": 0.0944,
-    "elo_home": 0.809,
-    "elo_draw": 0.1009,
-    "elo_away": 0.0901,
-    "poisson_home": 0.4395,
-    "poisson_draw": 0.3906,
-    "poisson_away": 0.17,
+    "xgb_home": 0.763,
+    "xgb_draw": 0.1496,
+    "xgb_away": 0.0874,
+    "elo_home": 0.8588,
+    "elo_draw": 0.084,
+    "elo_away": 0.0572,
+    "poisson_home": 0.4451,
+    "poisson_draw": 0.3881,
+    "poisson_away": 0.1668,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2819
+        "prob": 0.2798
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2401
+        "prob": 0.2416
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1168
+        "prob": 0.1148
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1022
+        "prob": 0.1043
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0995
+        "prob": 0.0991
       }
     ],
-    "lambda_home": 0.852,
-    "lambda_away": 0.414,
+    "lambda_home": 0.863,
+    "lambda_away": 0.41,
     "stage": "group",
     "group": "Group B",
     "venue": "Vancouver",
-    "round": "Matchday 8"
+    "round": "Matchday 8",
+    "group_context": {
+      "group_name": "Group B",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Canada 1pts 2.Bosnia and Herzegovina 1pts 3.Qatar 1pts 4.Switzerland 1pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Switzerland",
     "away_team": "Canada",
-    "p_home": 0.6069,
-    "p_draw": 0.2677,
-    "p_away": 0.1254,
+    "p_home": 0.5713,
+    "p_draw": 0.2845,
+    "p_away": 0.1442,
     "is_neutral": false,
     "kickoff": "2026-06-24T19:00:00",
     "model": "ensemble_live",
@@ -355,55 +421,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5841,
-    "xgb_draw": 0.2837,
-    "xgb_away": 0.1322,
-    "elo_home": 0.7138,
-    "elo_draw": 0.1345,
-    "elo_away": 0.1517,
-    "poisson_home": 0.5742,
-    "poisson_draw": 0.3127,
-    "poisson_away": 0.1131,
+    "xgb_home": 0.5415,
+    "xgb_draw": 0.313,
+    "xgb_away": 0.1455,
+    "elo_home": 0.6098,
+    "elo_draw": 0.1735,
+    "elo_away": 0.2167,
+    "poisson_home": 0.567,
+    "poisson_draw": 0.3168,
+    "poisson_away": 0.1162,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2512
+        "prob": 0.2509
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2105
+        "prob": 0.2136
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1498
+        "prob": 0.1473
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0917
+        "prob": 0.0926
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.0769
+        "prob": 0.0789
       }
     ],
-    "lambda_home": 1.193,
-    "lambda_away": 0.365,
+    "lambda_home": 1.174,
+    "lambda_away": 0.369,
     "stage": "group",
     "group": "Group B",
     "venue": "Vancouver",
-    "round": "Matchday 14"
+    "round": "Matchday 14",
+    "group_context": {
+      "group_name": "Group B",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Canada 1pts 2.Bosnia and Herzegovina 1pts 3.Qatar 1pts 4.Switzerland 1pts",
+      "simultaneous_group_matches": "Bosnia and Herzegovina vs Qatar",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Bosnia and Herzegovina",
     "away_team": "Qatar",
-    "p_home": 0.4595,
-    "p_draw": 0.3212,
-    "p_away": 0.2193,
+    "p_home": 0.4148,
+    "p_draw": 0.3355,
+    "p_away": 0.2497,
     "is_neutral": true,
     "kickoff": "2026-06-24T19:00:00",
     "model": "ensemble_live",
@@ -412,55 +489,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5205,
-    "xgb_draw": 0.2673,
-    "xgb_away": 0.2122,
-    "elo_home": 0.4779,
-    "elo_draw": 0.227,
-    "elo_away": 0.2951,
-    "poisson_home": 0.4315,
-    "poisson_draw": 0.3755,
-    "poisson_away": 0.193,
+    "xgb_home": 0.4497,
+    "xgb_draw": 0.2773,
+    "xgb_away": 0.273,
+    "elo_home": 0.356,
+    "elo_draw": 0.2764,
+    "elo_away": 0.3676,
+    "poisson_home": 0.425,
+    "poisson_draw": 0.378,
+    "poisson_away": 0.197,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2539
+        "prob": 0.2561
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2244
+        "prob": 0.2229
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1236
+        "prob": 0.126
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1093
+        "prob": 0.1096
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0992
+        "prob": 0.097
       }
     ],
-    "lambda_home": 0.884,
-    "lambda_away": 0.487,
+    "lambda_home": 0.87,
+    "lambda_away": 0.492,
     "stage": "group",
     "group": "Group B",
     "venue": "Seattle",
-    "round": "Matchday 14"
+    "round": "Matchday 14",
+    "group_context": {
+      "group_name": "Group B",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Canada 1pts 2.Bosnia and Herzegovina 1pts 3.Qatar 1pts 4.Switzerland 1pts",
+      "simultaneous_group_matches": "Switzerland vs Canada",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Scotland",
     "away_team": "Morocco",
-    "p_home": 0.2707,
-    "p_draw": 0.3461,
-    "p_away": 0.3832,
+    "p_home": 0.2753,
+    "p_draw": 0.3482,
+    "p_away": 0.3765,
     "is_neutral": true,
     "kickoff": "2026-06-19T22:00:00",
     "model": "ensemble_live",
@@ -469,30 +557,30 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2288,
-    "xgb_draw": 0.2631,
-    "xgb_away": 0.5081,
-    "elo_home": 0.1958,
-    "elo_draw": 0.1605,
-    "elo_away": 0.6437,
-    "poisson_home": 0.3135,
-    "poisson_draw": 0.4451,
-    "poisson_away": 0.2414,
+    "xgb_home": 0.237,
+    "xgb_draw": 0.2669,
+    "xgb_away": 0.4962,
+    "elo_home": 0.2071,
+    "elo_draw": 0.1674,
+    "elo_away": 0.6255,
+    "poisson_home": 0.3144,
+    "poisson_draw": 0.4449,
+    "poisson_away": 0.2407,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.3398
+        "prob": 0.3397
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.202
+        "prob": 0.2024
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1648
+        "prob": 0.1643
       },
       {
         "home": 1,
@@ -502,22 +590,33 @@
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0601
+        "prob": 0.0603
       }
     ],
-    "lambda_home": 0.595,
-    "lambda_away": 0.485,
+    "lambda_home": 0.596,
+    "lambda_away": 0.484,
     "stage": "group",
     "group": "Group C",
     "venue": "Boston (Foxborough)",
-    "round": "Matchday 9"
+    "round": "Matchday 9",
+    "group_context": {
+      "group_name": "Group C",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Scotland 3pts 2.Brazil 1pts 3.Morocco 1pts 4.Haiti 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Brazil",
     "away_team": "Haiti",
-    "p_home": 0.815,
-    "p_draw": 0.1355,
-    "p_away": 0.0495,
+    "p_home": 0.8177,
+    "p_draw": 0.1333,
+    "p_away": 0.049,
     "is_neutral": true,
     "kickoff": "2026-06-20T00:30:00",
     "model": "ensemble_live",
@@ -526,15 +625,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7258,
-    "xgb_draw": 0.165,
-    "xgb_away": 0.1092,
-    "elo_home": 0.8767,
+    "xgb_home": 0.7339,
+    "xgb_draw": 0.1553,
+    "xgb_away": 0.1107,
+    "elo_home": 0.8801,
     "elo_draw": 0.08,
-    "elo_away": 0.0433,
-    "poisson_home": 0.8224,
-    "poisson_draw": 0.1464,
-    "poisson_away": 0.0312,
+    "elo_away": 0.0399,
+    "poisson_home": 0.823,
+    "poisson_draw": 0.1459,
+    "poisson_away": 0.0311,
     "top_scorelines": [
       {
         "home": 2,
@@ -544,37 +643,48 @@
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1994
+        "prob": 0.1991
       },
       {
         "home": 3,
         "away": 0,
-        "prob": 0.1521
+        "prob": 0.1524
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.0932
+        "prob": 0.0929
       },
       {
         "home": 4,
         "away": 0,
-        "prob": 0.0813
+        "prob": 0.0816
       }
     ],
-    "lambda_home": 2.139,
+    "lambda_home": 2.143,
     "lambda_away": 0.235,
     "stage": "group",
     "group": "Group C",
     "venue": "Philadelphia",
-    "round": "Matchday 9"
+    "round": "Matchday 9",
+    "group_context": {
+      "group_name": "Group C",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Scotland 3pts 2.Brazil 1pts 3.Morocco 1pts 4.Haiti 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Scotland",
     "away_team": "Brazil",
-    "p_home": 0.1666,
-    "p_draw": 0.2817,
-    "p_away": 0.5517,
+    "p_home": 0.1715,
+    "p_draw": 0.2814,
+    "p_away": 0.5471,
     "is_neutral": true,
     "kickoff": "2026-06-24T22:00:00",
     "model": "ensemble_live",
@@ -583,55 +693,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1655,
-    "xgb_draw": 0.2458,
-    "xgb_away": 0.5887,
-    "elo_home": 0.117,
-    "elo_draw": 0.1153,
-    "elo_away": 0.7677,
-    "poisson_home": 0.1858,
-    "poisson_draw": 0.3572,
-    "poisson_away": 0.4571,
+    "xgb_home": 0.1789,
+    "xgb_draw": 0.2387,
+    "xgb_away": 0.5824,
+    "elo_home": 0.1253,
+    "elo_draw": 0.1197,
+    "elo_away": 0.755,
+    "poisson_home": 0.1864,
+    "poisson_draw": 0.3575,
+    "poisson_away": 0.4561,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2316
+        "prob": 0.2318
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2231
+        "prob": 0.2228
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1157
+        "prob": 0.116
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1114
+        "prob": 0.1115
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.1075
+        "prob": 0.1071
       }
     ],
-    "lambda_home": 0.499,
-    "lambda_away": 0.963,
+    "lambda_home": 0.501,
+    "lambda_away": 0.961,
     "stage": "group",
     "group": "Group C",
     "venue": "Miami (Miami Gardens)",
-    "round": "Matchday 14"
+    "round": "Matchday 14",
+    "group_context": {
+      "group_name": "Group C",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Scotland 3pts 2.Brazil 1pts 3.Morocco 1pts 4.Haiti 0pts",
+      "simultaneous_group_matches": "Morocco vs Haiti",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Morocco",
     "away_team": "Haiti",
-    "p_home": 0.6436,
-    "p_draw": 0.2597,
-    "p_away": 0.0968,
+    "p_home": 0.6471,
+    "p_draw": 0.2573,
+    "p_away": 0.0956,
     "is_neutral": true,
     "kickoff": "2026-06-24T22:00:00",
     "model": "ensemble_live",
@@ -640,55 +761,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6803,
-    "xgb_draw": 0.201,
-    "xgb_away": 0.1188,
-    "elo_home": 0.8227,
-    "elo_draw": 0.0962,
-    "elo_away": 0.0811,
-    "poisson_home": 0.563,
-    "poisson_draw": 0.3419,
-    "poisson_away": 0.0951,
+    "xgb_home": 0.6857,
+    "xgb_draw": 0.1941,
+    "xgb_away": 0.1202,
+    "elo_home": 0.8315,
+    "elo_draw": 0.0932,
+    "elo_away": 0.0753,
+    "poisson_home": 0.5639,
+    "poisson_draw": 0.3413,
+    "poisson_away": 0.0948,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.278
+        "prob": 0.2781
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2588
+        "prob": 0.2584
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1493
+        "prob": 0.1497
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0771
+        "prob": 0.077
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.0718
+        "prob": 0.0716
       }
     ],
-    "lambda_home": 1.074,
+    "lambda_home": 1.076,
     "lambda_away": 0.277,
     "stage": "group",
     "group": "Group C",
     "venue": "Atlanta",
-    "round": "Matchday 14"
+    "round": "Matchday 14",
+    "group_context": {
+      "group_name": "Group C",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Scotland 3pts 2.Brazil 1pts 3.Morocco 1pts 4.Haiti 0pts",
+      "simultaneous_group_matches": "Scotland vs Brazil",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "United States",
     "away_team": "Australia",
-    "p_home": 0.3912,
-    "p_draw": 0.3487,
-    "p_away": 0.2601,
+    "p_home": 0.3823,
+    "p_draw": 0.3512,
+    "p_away": 0.2664,
     "is_neutral": false,
     "kickoff": "2026-06-19T19:00:00",
     "model": "ensemble_live",
@@ -697,30 +829,30 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4822,
-    "xgb_draw": 0.2893,
-    "xgb_away": 0.2285,
-    "elo_home": 0.4114,
-    "elo_draw": 0.2562,
-    "elo_away": 0.3324,
-    "poisson_home": 0.3522,
-    "poisson_draw": 0.4042,
-    "poisson_away": 0.2436,
+    "xgb_home": 0.477,
+    "xgb_draw": 0.2851,
+    "xgb_away": 0.2379,
+    "elo_home": 0.3799,
+    "elo_draw": 0.2706,
+    "elo_away": 0.3494,
+    "poisson_home": 0.3506,
+    "poisson_draw": 0.4046,
+    "poisson_away": 0.2448,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.282
+        "prob": 0.2824
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2031
+        "prob": 0.2025
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1539
+        "prob": 0.1546
       },
       {
         "home": 1,
@@ -730,22 +862,33 @@
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0731
+        "prob": 0.0726
       }
     ],
-    "lambda_home": 0.72,
-    "lambda_away": 0.546,
+    "lambda_home": 0.717,
+    "lambda_away": 0.547,
     "stage": "group",
     "group": "Group D",
     "venue": "Seattle",
-    "round": "Matchday 9"
+    "round": "Matchday 9",
+    "group_context": {
+      "group_name": "Group D",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.United States 3pts 2.Australia 3pts 3.Turkey 0pts 4.Paraguay 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Turkey",
     "away_team": "Paraguay",
-    "p_home": 0.3629,
-    "p_draw": 0.3362,
-    "p_away": 0.3008,
+    "p_home": 0.3503,
+    "p_draw": 0.3377,
+    "p_away": 0.312,
     "is_neutral": true,
     "kickoff": "2026-06-20T03:00:00",
     "model": "ensemble_live",
@@ -754,55 +897,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.45,
-    "xgb_draw": 0.3259,
-    "xgb_away": 0.224,
-    "elo_home": 0.5072,
-    "elo_draw": 0.2147,
-    "elo_away": 0.2781,
-    "poisson_home": 0.2782,
-    "poisson_draw": 0.3859,
-    "poisson_away": 0.3359,
+    "xgb_home": 0.426,
+    "xgb_draw": 0.3182,
+    "xgb_away": 0.2558,
+    "elo_home": 0.4752,
+    "elo_draw": 0.2282,
+    "elo_away": 0.2966,
+    "poisson_home": 0.2768,
+    "poisson_draw": 0.386,
+    "poisson_away": 0.3372,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2519
+        "prob": 0.2521
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1857
+        "prob": 0.1863
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1617
+        "prob": 0.1611
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1191
+        "prob": 0.119
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0684
+        "prob": 0.0688
       }
     ],
-    "lambda_home": 0.642,
-    "lambda_away": 0.737,
+    "lambda_home": 0.639,
+    "lambda_away": 0.739,
     "stage": "group",
     "group": "Group D",
     "venue": "San Francisco Bay Area (Santa Clara)",
-    "round": "Matchday 9"
+    "round": "Matchday 9",
+    "group_context": {
+      "group_name": "Group D",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.United States 3pts 2.Australia 3pts 3.Turkey 0pts 4.Paraguay 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Turkey",
     "away_team": "United States",
-    "p_home": 0.4522,
-    "p_draw": 0.3349,
-    "p_away": 0.2129,
+    "p_home": 0.4203,
+    "p_draw": 0.3401,
+    "p_away": 0.2396,
     "is_neutral": false,
     "kickoff": "2026-06-26T02:00:00",
     "model": "ensemble_live",
@@ -811,55 +965,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4341,
-    "xgb_draw": 0.3653,
-    "xgb_away": 0.2006,
-    "elo_home": 0.4936,
-    "elo_draw": 0.2204,
-    "elo_away": 0.286,
-    "poisson_home": 0.4427,
-    "poisson_draw": 0.3678,
-    "poisson_away": 0.1895,
+    "xgb_home": 0.3735,
+    "xgb_draw": 0.3488,
+    "xgb_away": 0.2777,
+    "elo_home": 0.4164,
+    "elo_draw": 0.2539,
+    "elo_away": 0.3296,
+    "poisson_home": 0.4379,
+    "poisson_draw": 0.3697,
+    "poisson_away": 0.1923,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2447
+        "prob": 0.2463
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2244
+        "prob": 0.2234
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1201
+        "prob": 0.1218
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1101
+        "prob": 0.1104
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1029
+        "prob": 0.1013
       }
     ],
-    "lambda_home": 0.917,
-    "lambda_away": 0.491,
+    "lambda_home": 0.907,
+    "lambda_away": 0.494,
     "stage": "group",
     "group": "Group D",
     "venue": "Los Angeles (Inglewood)",
-    "round": "Matchday 15"
+    "round": "Matchday 15",
+    "group_context": {
+      "group_name": "Group D",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.United States 3pts 2.Australia 3pts 3.Turkey 0pts 4.Paraguay 0pts",
+      "simultaneous_group_matches": "Paraguay vs Australia",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Paraguay",
     "away_team": "Australia",
-    "p_home": 0.2951,
-    "p_draw": 0.3282,
-    "p_away": 0.3767,
+    "p_home": 0.2816,
+    "p_draw": 0.3212,
+    "p_away": 0.3973,
     "is_neutral": true,
     "kickoff": "2026-06-26T02:00:00",
     "model": "ensemble_live",
@@ -868,30 +1033,30 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2307,
-    "xgb_draw": 0.2822,
-    "xgb_away": 0.4871,
-    "elo_home": 0.2224,
-    "elo_draw": 0.1771,
-    "elo_away": 0.6005,
-    "poisson_home": 0.3448,
-    "poisson_draw": 0.4014,
-    "poisson_away": 0.2538,
+    "xgb_home": 0.2196,
+    "xgb_draw": 0.2724,
+    "xgb_away": 0.508,
+    "elo_home": 0.181,
+    "elo_draw": 0.1516,
+    "elo_away": 0.6675,
+    "poisson_home": 0.3411,
+    "poisson_draw": 0.4023,
+    "poisson_away": 0.2566,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2767
+        "prob": 0.2777
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1981
+        "prob": 0.1968
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1574
+        "prob": 0.159
       },
       {
         "home": 1,
@@ -901,22 +1066,33 @@
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0709
+        "prob": 0.0697
       }
     ],
-    "lambda_home": 0.716,
-    "lambda_away": 0.569,
+    "lambda_home": 0.709,
+    "lambda_away": 0.573,
     "stage": "group",
     "group": "Group D",
     "venue": "San Francisco Bay Area (Santa Clara)",
-    "round": "Matchday 15"
+    "round": "Matchday 15",
+    "group_context": {
+      "group_name": "Group D",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.United States 3pts 2.Australia 3pts 3.Turkey 0pts 4.Paraguay 0pts",
+      "simultaneous_group_matches": "Turkey vs United States",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Germany",
     "away_team": "Ivory Coast",
-    "p_home": 0.5825,
-    "p_draw": 0.2556,
-    "p_away": 0.1618,
+    "p_home": 0.5634,
+    "p_draw": 0.265,
+    "p_away": 0.1716,
     "is_neutral": true,
     "kickoff": "2026-06-20T20:00:00",
     "model": "ensemble_live",
@@ -925,55 +1101,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5906,
-    "xgb_draw": 0.2167,
-    "xgb_away": 0.1928,
-    "elo_home": 0.6405,
-    "elo_draw": 0.1617,
-    "elo_away": 0.1978,
-    "poisson_home": 0.5578,
-    "poisson_draw": 0.3047,
-    "poisson_away": 0.1375,
+    "xgb_home": 0.5471,
+    "xgb_draw": 0.2426,
+    "xgb_away": 0.2103,
+    "elo_home": 0.5998,
+    "elo_draw": 0.1773,
+    "elo_away": 0.2228,
+    "poisson_home": 0.5552,
+    "poisson_draw": 0.306,
+    "poisson_away": 0.1388,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2278
+        "prob": 0.2277
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1852
+        "prob": 0.1862
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1401
+        "prob": 0.1393
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1039
+        "prob": 0.1043
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.0845
+        "prob": 0.0853
       }
     ],
-    "lambda_home": 1.23,
-    "lambda_away": 0.456,
+    "lambda_home": 1.223,
+    "lambda_away": 0.458,
     "stage": "group",
     "group": "Group E",
     "venue": "Toronto",
-    "round": "Matchday 10"
+    "round": "Matchday 10",
+    "group_context": {
+      "group_name": "Group E",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Germany 3pts 2.Ivory Coast 3pts 3.Ecuador 0pts 4.Curacao 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Ecuador",
     "away_team": "Curacao",
-    "p_home": 0.702,
-    "p_draw": 0.208,
-    "p_away": 0.09,
+    "p_home": 0.6998,
+    "p_draw": 0.2076,
+    "p_away": 0.0925,
     "is_neutral": true,
     "kickoff": "2026-06-21T00:00:00",
     "model": "ensemble_live",
@@ -982,55 +1169,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.752,
-    "xgb_draw": 0.1521,
-    "xgb_away": 0.0959,
-    "elo_home": 0.8427,
-    "elo_draw": 0.0894,
-    "elo_away": 0.0679,
-    "poisson_home": 0.6314,
-    "poisson_draw": 0.2723,
-    "poisson_away": 0.0963,
+    "xgb_home": 0.7668,
+    "xgb_draw": 0.14,
+    "xgb_away": 0.0932,
+    "elo_home": 0.8245,
+    "elo_draw": 0.0956,
+    "elo_away": 0.0799,
+    "poisson_home": 0.6294,
+    "poisson_draw": 0.2734,
+    "poisson_away": 0.0971,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2398
+        "prob": 0.2399
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1724
+        "prob": 0.1732
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1668
+        "prob": 0.1662
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.088
+        "prob": 0.0883
       },
       {
         "home": 3,
         "away": 0,
-        "prob": 0.0773
+        "prob": 0.0767
       }
     ],
-    "lambda_home": 1.391,
-    "lambda_away": 0.367,
+    "lambda_home": 1.385,
+    "lambda_away": 0.368,
     "stage": "group",
     "group": "Group E",
     "venue": "Kansas City",
-    "round": "Matchday 10"
+    "round": "Matchday 10",
+    "group_context": {
+      "group_name": "Group E",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Germany 3pts 2.Ivory Coast 3pts 3.Ecuador 0pts 4.Curacao 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Curacao",
     "away_team": "Ivory Coast",
-    "p_home": 0.0999,
-    "p_draw": 0.2177,
-    "p_away": 0.6823,
+    "p_home": 0.0911,
+    "p_draw": 0.21,
+    "p_away": 0.6989,
     "is_neutral": true,
     "kickoff": "2026-06-25T20:00:00",
     "model": "ensemble_live",
@@ -1039,55 +1237,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1328,
-    "xgb_draw": 0.1797,
-    "xgb_away": 0.6874,
-    "elo_home": 0.1244,
-    "elo_draw": 0.1193,
-    "elo_away": 0.7563,
-    "poisson_home": 0.0793,
-    "poisson_draw": 0.2682,
-    "poisson_away": 0.6525,
+    "xgb_home": 0.1201,
+    "xgb_draw": 0.1605,
+    "xgb_away": 0.7194,
+    "elo_home": 0.099,
+    "elo_draw": 0.1056,
+    "elo_away": 0.7954,
+    "poisson_home": 0.0781,
+    "poisson_draw": 0.2667,
+    "poisson_away": 0.6552,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2542
+        "prob": 0.2543
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1816
+        "prob": 0.1808
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.1779
+        "prob": 0.1789
       },
       {
         "home": 0,
         "away": 3,
-        "prob": 0.083
+        "prob": 0.0839
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0778
+        "prob": 0.0772
       }
     ],
-    "lambda_home": 0.306,
-    "lambda_away": 1.4,
+    "lambda_home": 0.304,
+    "lambda_away": 1.407,
     "stage": "group",
     "group": "Group E",
     "venue": "Philadelphia",
-    "round": "Matchday 15"
+    "round": "Matchday 15",
+    "group_context": {
+      "group_name": "Group E",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Germany 3pts 2.Ivory Coast 3pts 3.Ecuador 0pts 4.Curacao 0pts",
+      "simultaneous_group_matches": "Ecuador vs Germany",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Ecuador",
     "away_team": "Germany",
-    "p_home": 0.1812,
-    "p_draw": 0.2633,
-    "p_away": 0.5555,
+    "p_home": 0.1669,
+    "p_draw": 0.2549,
+    "p_away": 0.5782,
     "is_neutral": true,
     "kickoff": "2026-06-25T20:00:00",
     "model": "ensemble_live",
@@ -1096,55 +1305,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2485,
-    "xgb_draw": 0.2866,
-    "xgb_away": 0.4649,
-    "elo_home": 0.298,
-    "elo_draw": 0.2292,
-    "elo_away": 0.4728,
-    "poisson_home": 0.1136,
-    "poisson_draw": 0.2682,
-    "poisson_away": 0.6181,
+    "xgb_home": 0.2267,
+    "xgb_draw": 0.2802,
+    "xgb_away": 0.4931,
+    "elo_home": 0.2581,
+    "elo_draw": 0.2007,
+    "elo_away": 0.5412,
+    "poisson_home": 0.1118,
+    "poisson_draw": 0.2667,
+    "poisson_away": 0.6216,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2202
+        "prob": 0.2205
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.157
+        "prob": 0.1582
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1544
+        "prob": 0.1538
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0974
+        "prob": 0.0966
       },
       {
         "home": 0,
         "away": 3,
-        "prob": 0.0746
+        "prob": 0.0756
       }
     ],
-    "lambda_home": 0.442,
-    "lambda_away": 1.426,
+    "lambda_home": 0.438,
+    "lambda_away": 1.434,
     "stage": "group",
     "group": "Group E",
     "venue": "New York/New Jersey (East Rutherford)",
-    "round": "Matchday 15"
+    "round": "Matchday 15",
+    "group_context": {
+      "group_name": "Group E",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Germany 3pts 2.Ivory Coast 3pts 3.Ecuador 0pts 4.Curacao 0pts",
+      "simultaneous_group_matches": "Curacao vs Ivory Coast",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Netherlands",
     "away_team": "Sweden",
-    "p_home": 0.5017,
-    "p_draw": 0.2881,
-    "p_away": 0.2102,
+    "p_home": 0.485,
+    "p_draw": 0.2935,
+    "p_away": 0.2215,
     "is_neutral": true,
     "kickoff": "2026-06-20T17:00:00",
     "model": "ensemble_live",
@@ -1153,55 +1373,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5895,
-    "xgb_draw": 0.2617,
-    "xgb_away": 0.1488,
-    "elo_home": 0.6984,
-    "elo_draw": 0.1401,
-    "elo_away": 0.1614,
-    "poisson_home": 0.3968,
-    "poisson_draw": 0.3534,
-    "poisson_away": 0.2498,
+    "xgb_home": 0.5718,
+    "xgb_draw": 0.2652,
+    "xgb_away": 0.163,
+    "elo_home": 0.6475,
+    "elo_draw": 0.1591,
+    "elo_away": 0.1935,
+    "poisson_home": 0.3935,
+    "poisson_draw": 0.3542,
+    "poisson_away": 0.2522,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2089
+        "prob": 0.2096
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1903
+        "prob": 0.1895
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1369
+        "prob": 0.138
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1246
+        "prob": 0.1248
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0866
+        "prob": 0.0856
       }
     ],
-    "lambda_home": 0.911,
-    "lambda_away": 0.655,
+    "lambda_home": 0.904,
+    "lambda_away": 0.659,
     "stage": "group",
     "group": "Group F",
     "venue": "Houston",
-    "round": "Matchday 10"
+    "round": "Matchday 10",
+    "group_context": {
+      "group_name": "Group F",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Sweden 3pts 2.Netherlands 1pts 3.Japan 1pts 4.Tunisia 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Tunisia",
     "away_team": "Japan",
-    "p_home": 0.2239,
-    "p_draw": 0.3163,
-    "p_away": 0.4598,
+    "p_home": 0.2155,
+    "p_draw": 0.306,
+    "p_away": 0.4785,
     "is_neutral": true,
     "kickoff": "2026-06-21T04:00:00",
     "model": "ensemble_live",
@@ -1210,55 +1441,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1339,
-    "xgb_draw": 0.2383,
-    "xgb_away": 0.6278,
-    "elo_home": 0.1067,
-    "elo_draw": 0.1097,
-    "elo_away": 0.7836,
-    "poisson_home": 0.2994,
-    "poisson_draw": 0.4215,
-    "poisson_away": 0.2791,
+    "xgb_home": 0.1221,
+    "xgb_draw": 0.1977,
+    "xgb_away": 0.6802,
+    "elo_home": 0.0859,
+    "elo_draw": 0.0987,
+    "elo_away": 0.8154,
+    "poisson_home": 0.2969,
+    "poisson_draw": 0.4219,
+    "poisson_away": 0.2811,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.3038
+        "prob": 0.3044
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1858
+        "prob": 0.1848
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1761
+        "prob": 0.1773
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1077
+        "prob": 0.1076
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0568
+        "prob": 0.0561
       }
     ],
-    "lambda_home": 0.612,
-    "lambda_away": 0.58,
+    "lambda_home": 0.607,
+    "lambda_away": 0.582,
     "stage": "group",
     "group": "Group F",
     "venue": "Monterrey (Guadalupe)",
-    "round": "Matchday 10"
+    "round": "Matchday 10",
+    "group_context": {
+      "group_name": "Group F",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Sweden 3pts 2.Netherlands 1pts 3.Japan 1pts 4.Tunisia 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Japan",
     "away_team": "Sweden",
-    "p_home": 0.3368,
-    "p_draw": 0.2912,
-    "p_away": 0.3719,
+    "p_home": 0.3135,
+    "p_draw": 0.2972,
+    "p_away": 0.3893,
     "is_neutral": true,
     "kickoff": "2026-06-25T23:00:00",
     "model": "ensemble_live",
@@ -1267,55 +1509,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4738,
-    "xgb_draw": 0.3107,
-    "xgb_away": 0.2155,
-    "elo_home": 0.6542,
-    "elo_draw": 0.1565,
-    "elo_away": 0.1892,
-    "poisson_home": 0.1692,
-    "poisson_draw": 0.3356,
-    "poisson_away": 0.4952,
+    "xgb_home": 0.4246,
+    "xgb_draw": 0.3198,
+    "xgb_away": 0.2557,
+    "elo_home": 0.5983,
+    "elo_draw": 0.1779,
+    "elo_away": 0.2237,
+    "poisson_home": 0.1671,
+    "poisson_draw": 0.3347,
+    "poisson_away": 0.4982,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.224
+        "prob": 0.2247
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2095
+        "prob": 0.2091
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.1197
+        "prob": 0.1208
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1106
+        "prob": 0.1102
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1035
+        "prob": 0.1025
       }
     ],
-    "lambda_home": 0.494,
-    "lambda_away": 1.069,
+    "lambda_home": 0.49,
+    "lambda_away": 1.075,
     "stage": "group",
     "group": "Group F",
     "venue": "Dallas (Arlington)",
-    "round": "Matchday 15"
+    "round": "Matchday 15",
+    "group_context": {
+      "group_name": "Group F",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Sweden 3pts 2.Netherlands 1pts 3.Japan 1pts 4.Tunisia 0pts",
+      "simultaneous_group_matches": "Tunisia vs Netherlands",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Tunisia",
     "away_team": "Netherlands",
-    "p_home": 0.121,
-    "p_draw": 0.2655,
-    "p_away": 0.6135,
+    "p_home": 0.1121,
+    "p_draw": 0.2519,
+    "p_away": 0.636,
     "is_neutral": true,
     "kickoff": "2026-06-25T23:00:00",
     "model": "ensemble_live",
@@ -1324,55 +1577,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1342,
-    "xgb_draw": 0.2279,
-    "xgb_away": 0.6379,
-    "elo_home": 0.0883,
-    "elo_draw": 0.1,
-    "elo_away": 0.8117,
-    "poisson_home": 0.1289,
-    "poisson_draw": 0.3412,
-    "poisson_away": 0.5299,
+    "xgb_home": 0.1129,
+    "xgb_draw": 0.1727,
+    "xgb_away": 0.7144,
+    "elo_home": 0.0706,
+    "elo_draw": 0.0908,
+    "elo_away": 0.8386,
+    "poisson_home": 0.1275,
+    "poisson_draw": 0.3403,
+    "poisson_away": 0.5322,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2525
+        "prob": 0.2531
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2369
+        "prob": 0.2365
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.1346
+        "prob": 0.1355
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0945
+        "prob": 0.094
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.0886
+        "prob": 0.0878
       }
     ],
-    "lambda_home": 0.374,
-    "lambda_away": 1.066,
+    "lambda_home": 0.371,
+    "lambda_away": 1.07,
     "stage": "group",
     "group": "Group F",
     "venue": "Kansas City",
-    "round": "Matchday 15"
+    "round": "Matchday 15",
+    "group_context": {
+      "group_name": "Group F",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Sweden 3pts 2.Netherlands 1pts 3.Japan 1pts 4.Tunisia 0pts",
+      "simultaneous_group_matches": "Japan vs Sweden",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Belgium",
     "away_team": "Iran",
-    "p_home": 0.4539,
-    "p_draw": 0.3152,
-    "p_away": 0.2309,
+    "p_home": 0.4478,
+    "p_draw": 0.321,
+    "p_away": 0.2312,
     "is_neutral": true,
     "kickoff": "2026-06-21T19:00:00",
     "model": "ensemble_live",
@@ -1381,20 +1645,20 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5605,
-    "xgb_draw": 0.2216,
-    "xgb_away": 0.2179,
+    "xgb_home": 0.5301,
+    "xgb_draw": 0.2502,
+    "xgb_away": 0.2197,
     "elo_home": 0.4932,
     "elo_draw": 0.2205,
     "elo_away": 0.2863,
     "poisson_home": 0.4022,
     "poisson_draw": 0.3835,
-    "poisson_away": 0.2144,
+    "poisson_away": 0.2143,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2587
+        "prob": 0.2588
       },
       {
         "home": 1,
@@ -1422,14 +1686,25 @@
     "stage": "group",
     "group": "Group G",
     "venue": "Los Angeles (Inglewood)",
-    "round": "Matchday 11"
+    "round": "Matchday 11",
+    "group_context": {
+      "group_name": "Group G",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Iran 1pts 2.New Zealand 1pts 3.Belgium 1pts 4.Egypt 1pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "New Zealand",
     "away_team": "Egypt",
-    "p_home": 0.2028,
-    "p_draw": 0.3172,
-    "p_away": 0.48,
+    "p_home": 0.2036,
+    "p_draw": 0.3169,
+    "p_away": 0.4795,
     "is_neutral": true,
     "kickoff": "2026-06-22T01:00:00",
     "model": "ensemble_live",
@@ -1438,9 +1713,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2466,
-    "xgb_draw": 0.2953,
-    "xgb_away": 0.4581,
+    "xgb_home": 0.2507,
+    "xgb_draw": 0.2939,
+    "xgb_away": 0.4555,
     "elo_home": 0.2557,
     "elo_draw": 0.199,
     "elo_away": 0.5453,
@@ -1479,14 +1754,25 @@
     "stage": "group",
     "group": "Group G",
     "venue": "Vancouver",
-    "round": "Matchday 11"
+    "round": "Matchday 11",
+    "group_context": {
+      "group_name": "Group G",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Iran 1pts 2.New Zealand 1pts 3.Belgium 1pts 4.Egypt 1pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Egypt",
     "away_team": "Iran",
-    "p_home": 0.2581,
-    "p_draw": 0.3608,
-    "p_away": 0.3811,
+    "p_home": 0.2582,
+    "p_draw": 0.3601,
+    "p_away": 0.3817,
     "is_neutral": true,
     "kickoff": "2026-06-27T03:00:00",
     "model": "ensemble_live",
@@ -1495,9 +1781,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2432,
-    "xgb_draw": 0.2891,
-    "xgb_away": 0.4676,
+    "xgb_home": 0.2436,
+    "xgb_draw": 0.2859,
+    "xgb_away": 0.4706,
     "elo_home": 0.2767,
     "elo_draw": 0.2136,
     "elo_away": 0.5096,
@@ -1536,14 +1822,25 @@
     "stage": "group",
     "group": "Group G",
     "venue": "Seattle",
-    "round": "Matchday 16"
+    "round": "Matchday 16",
+    "group_context": {
+      "group_name": "Group G",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Iran 1pts 2.New Zealand 1pts 3.Belgium 1pts 4.Egypt 1pts",
+      "simultaneous_group_matches": "New Zealand vs Belgium",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "New Zealand",
     "away_team": "Belgium",
-    "p_home": 0.1092,
-    "p_draw": 0.2178,
-    "p_away": 0.673,
+    "p_home": 0.1101,
+    "p_draw": 0.2202,
+    "p_away": 0.6697,
     "is_neutral": true,
     "kickoff": "2026-06-27T03:00:00",
     "model": "ensemble_live",
@@ -1552,9 +1849,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1485,
-    "xgb_draw": 0.2204,
-    "xgb_away": 0.6311,
+    "xgb_home": 0.1531,
+    "xgb_draw": 0.2322,
+    "xgb_away": 0.6147,
     "elo_home": 0.1141,
     "elo_draw": 0.1137,
     "elo_away": 0.7722,
@@ -1593,14 +1890,25 @@
     "stage": "group",
     "group": "Group G",
     "venue": "Vancouver",
-    "round": "Matchday 16"
+    "round": "Matchday 16",
+    "group_context": {
+      "group_name": "Group G",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Iran 1pts 2.New Zealand 1pts 3.Belgium 1pts 4.Egypt 1pts",
+      "simultaneous_group_matches": "Egypt vs Iran",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Spain",
     "away_team": "Saudi Arabia",
-    "p_home": 0.7152,
-    "p_draw": 0.2172,
-    "p_away": 0.0676,
+    "p_home": 0.7163,
+    "p_draw": 0.2152,
+    "p_away": 0.0685,
     "is_neutral": true,
     "kickoff": "2026-06-21T16:00:00",
     "model": "ensemble_live",
@@ -1609,9 +1917,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6941,
-    "xgb_draw": 0.1947,
-    "xgb_away": 0.1112,
+    "xgb_home": 0.6998,
+    "xgb_draw": 0.1846,
+    "xgb_away": 0.1156,
     "elo_home": 0.9041,
     "elo_draw": 0.08,
     "elo_away": 0.0159,
@@ -1622,7 +1930,7 @@
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2677
+        "prob": 0.2678
       },
       {
         "home": 0,
@@ -1650,14 +1958,25 @@
     "stage": "group",
     "group": "Group H",
     "venue": "Atlanta",
-    "round": "Matchday 11"
+    "round": "Matchday 11",
+    "group_context": {
+      "group_name": "Group H",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Saudi Arabia 1pts 2.Uruguay 1pts 3.Spain 1pts 4.Cape Verde 1pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Uruguay",
     "away_team": "Cape Verde",
-    "p_home": 0.6855,
-    "p_draw": 0.2351,
-    "p_away": 0.0795,
+    "p_home": 0.6849,
+    "p_draw": 0.2339,
+    "p_away": 0.0812,
     "is_neutral": true,
     "kickoff": "2026-06-21T22:00:00",
     "model": "ensemble_live",
@@ -1666,9 +1985,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6722,
-    "xgb_draw": 0.2189,
-    "xgb_away": 0.1089,
+    "xgb_home": 0.6693,
+    "xgb_draw": 0.2131,
+    "xgb_away": 0.1176,
     "elo_home": 0.845,
     "elo_draw": 0.0886,
     "elo_away": 0.0664,
@@ -1707,14 +2026,25 @@
     "stage": "group",
     "group": "Group H",
     "venue": "Miami (Miami Gardens)",
-    "round": "Matchday 11"
+    "round": "Matchday 11",
+    "group_context": {
+      "group_name": "Group H",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Saudi Arabia 1pts 2.Uruguay 1pts 3.Spain 1pts 4.Cape Verde 1pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Cape Verde",
     "away_team": "Saudi Arabia",
-    "p_home": 0.2422,
-    "p_draw": 0.3714,
-    "p_away": 0.3864,
+    "p_home": 0.2408,
+    "p_draw": 0.3739,
+    "p_away": 0.3853,
     "is_neutral": true,
     "kickoff": "2026-06-27T00:00:00",
     "model": "ensemble_live",
@@ -1723,9 +2053,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2712,
-    "xgb_draw": 0.2974,
-    "xgb_away": 0.4314,
+    "xgb_home": 0.2643,
+    "xgb_draw": 0.3098,
+    "xgb_away": 0.4258,
     "elo_home": 0.3007,
     "elo_draw": 0.2313,
     "elo_away": 0.468,
@@ -1736,7 +2066,7 @@
       {
         "home": 0,
         "away": 0,
-        "prob": 0.3509
+        "prob": 0.3508
       },
       {
         "home": 0,
@@ -1764,14 +2094,25 @@
     "stage": "group",
     "group": "Group H",
     "venue": "Houston",
-    "round": "Matchday 16"
+    "round": "Matchday 16",
+    "group_context": {
+      "group_name": "Group H",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Saudi Arabia 1pts 2.Uruguay 1pts 3.Spain 1pts 4.Cape Verde 1pts",
+      "simultaneous_group_matches": "Uruguay vs Spain",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Uruguay",
     "away_team": "Spain",
-    "p_home": 0.1811,
-    "p_draw": 0.3041,
-    "p_away": 0.5149,
+    "p_home": 0.1817,
+    "p_draw": 0.303,
+    "p_away": 0.5153,
     "is_neutral": true,
     "kickoff": "2026-06-27T00:00:00",
     "model": "ensemble_live",
@@ -1780,9 +2121,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1463,
-    "xgb_draw": 0.2574,
-    "xgb_away": 0.5963,
+    "xgb_home": 0.1497,
+    "xgb_draw": 0.252,
+    "xgb_away": 0.5984,
     "elo_home": 0.1117,
     "elo_draw": 0.1124,
     "elo_away": 0.7759,
@@ -1793,7 +2134,7 @@
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2705
+        "prob": 0.2706
       },
       {
         "home": 0,
@@ -1816,19 +2157,30 @@
         "prob": 0.0846
       }
     ],
-    "lambda_home": 0.517,
+    "lambda_home": 0.516,
     "lambda_away": 0.791,
     "stage": "group",
     "group": "Group H",
     "venue": "Guadalajara (Zapopan)",
-    "round": "Matchday 16"
+    "round": "Matchday 16",
+    "group_context": {
+      "group_name": "Group H",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 1,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Saudi Arabia 1pts 2.Uruguay 1pts 3.Spain 1pts 4.Cape Verde 1pts",
+      "simultaneous_group_matches": "Cape Verde vs Saudi Arabia",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "France",
     "away_team": "Iraq",
-    "p_home": 0.6801,
-    "p_draw": 0.2314,
-    "p_away": 0.0885,
+    "p_home": 0.6865,
+    "p_draw": 0.2272,
+    "p_away": 0.0863,
     "is_neutral": true,
     "kickoff": "2026-06-22T21:00:00",
     "model": "ensemble_live",
@@ -1837,55 +2189,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6987,
-    "xgb_draw": 0.1913,
-    "xgb_away": 0.11,
-    "elo_home": 0.8833,
+    "xgb_home": 0.7191,
+    "xgb_draw": 0.1733,
+    "xgb_away": 0.1077,
+    "elo_home": 0.8895,
     "elo_draw": 0.08,
-    "elo_away": 0.0367,
-    "poisson_home": 0.5966,
-    "poisson_draw": 0.3027,
-    "poisson_away": 0.1007,
+    "elo_away": 0.0305,
+    "poisson_home": 0.5982,
+    "poisson_draw": 0.3017,
+    "poisson_away": 0.1001,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2559
+        "prob": 0.256
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2066
+        "prob": 0.2059
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1585
+        "prob": 0.1591
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0866
+        "prob": 0.0863
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.0699
+        "prob": 0.0694
       }
     ],
-    "lambda_home": 1.239,
-    "lambda_away": 0.338,
+    "lambda_home": 1.243,
+    "lambda_away": 0.337,
     "stage": "group",
     "group": "Group I",
     "venue": "Philadelphia",
-    "round": "Matchday 12"
+    "round": "Matchday 12",
+    "group_context": {
+      "group_name": "Group I",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Norway 3pts 2.France 3pts 3.Senegal 0pts 4.Iraq 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Norway",
     "away_team": "Senegal",
-    "p_home": 0.3544,
-    "p_draw": 0.3574,
-    "p_away": 0.2883,
+    "p_home": 0.3744,
+    "p_draw": 0.3498,
+    "p_away": 0.2758,
     "is_neutral": true,
     "kickoff": "2026-06-23T00:00:00",
     "model": "ensemble_live",
@@ -1894,30 +2257,30 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.3873,
-    "xgb_draw": 0.3261,
-    "xgb_away": 0.2866,
-    "elo_home": 0.4055,
-    "elo_draw": 0.2589,
-    "elo_away": 0.3356,
-    "poisson_home": 0.3236,
-    "poisson_draw": 0.4055,
-    "poisson_away": 0.2709,
+    "xgb_home": 0.4222,
+    "xgb_draw": 0.3138,
+    "xgb_away": 0.2641,
+    "elo_home": 0.4531,
+    "elo_draw": 0.2377,
+    "elo_away": 0.3092,
+    "poisson_home": 0.3282,
+    "poisson_draw": 0.4047,
+    "poisson_away": 0.2672,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.281
+        "prob": 0.28
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1903
+        "prob": 0.192
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1665
+        "prob": 0.1645
       },
       {
         "home": 1,
@@ -1927,22 +2290,33 @@
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0644
+        "prob": 0.0658
       }
     ],
-    "lambda_home": 0.677,
-    "lambda_away": 0.592,
+    "lambda_home": 0.685,
+    "lambda_away": 0.587,
     "stage": "group",
     "group": "Group I",
     "venue": "New York/New Jersey (East Rutherford)",
-    "round": "Matchday 12"
+    "round": "Matchday 12",
+    "group_context": {
+      "group_name": "Group I",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Norway 3pts 2.France 3pts 3.Senegal 0pts 4.Iraq 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Norway",
     "away_team": "France",
-    "p_home": 0.182,
-    "p_draw": 0.2835,
-    "p_away": 0.5344,
+    "p_home": 0.1854,
+    "p_draw": 0.2816,
+    "p_away": 0.533,
     "is_neutral": true,
     "kickoff": "2026-06-26T19:00:00",
     "model": "ensemble_live",
@@ -1951,15 +2325,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1917,
-    "xgb_draw": 0.2913,
-    "xgb_away": 0.5169,
-    "elo_home": 0.1615,
-    "elo_draw": 0.1401,
-    "elo_away": 0.6984,
-    "poisson_home": 0.1865,
+    "xgb_home": 0.2061,
+    "xgb_draw": 0.28,
+    "xgb_away": 0.5139,
+    "elo_home": 0.1635,
+    "elo_draw": 0.1413,
+    "elo_away": 0.6952,
+    "poisson_home": 0.1866,
     "poisson_draw": 0.3353,
-    "poisson_away": 0.4783,
+    "poisson_away": 0.478,
     "top_scorelines": [
       {
         "home": 0,
@@ -1984,22 +2358,33 @@
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1093
+        "prob": 0.1094
       }
     ],
-    "lambda_home": 0.541,
-    "lambda_away": 1.059,
+    "lambda_home": 0.542,
+    "lambda_away": 1.058,
     "stage": "group",
     "group": "Group I",
     "venue": "Boston (Foxborough)",
-    "round": "Matchday 16"
+    "round": "Matchday 16",
+    "group_context": {
+      "group_name": "Group I",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Norway 3pts 2.France 3pts 3.Senegal 0pts 4.Iraq 0pts",
+      "simultaneous_group_matches": "Senegal vs Iraq",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Senegal",
     "away_team": "Iraq",
-    "p_home": 0.4977,
-    "p_draw": 0.3292,
-    "p_away": 0.1731,
+    "p_home": 0.5021,
+    "p_draw": 0.3255,
+    "p_away": 0.1725,
     "is_neutral": true,
     "kickoff": "2026-06-26T19:00:00",
     "model": "ensemble_live",
@@ -2008,25 +2393,25 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6306,
-    "xgb_draw": 0.2384,
-    "xgb_away": 0.131,
-    "elo_home": 0.71,
-    "elo_draw": 0.1359,
-    "elo_away": 0.1541,
-    "poisson_home": 0.3714,
+    "xgb_home": 0.6484,
+    "xgb_draw": 0.2212,
+    "xgb_away": 0.1304,
+    "elo_home": 0.7131,
+    "elo_draw": 0.1348,
+    "elo_away": 0.1521,
+    "poisson_home": 0.3716,
     "poisson_draw": 0.4338,
-    "poisson_away": 0.1948,
+    "poisson_away": 0.1947,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.3321
+        "prob": 0.332
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2281
+        "prob": 0.2282
       },
       {
         "home": 0,
@@ -2049,14 +2434,25 @@
     "stage": "group",
     "group": "Group I",
     "venue": "Toronto",
-    "round": "Matchday 16"
+    "round": "Matchday 16",
+    "group_context": {
+      "group_name": "Group I",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Norway 3pts 2.France 3pts 3.Senegal 0pts 4.Iraq 0pts",
+      "simultaneous_group_matches": "Norway vs France",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Argentina",
     "away_team": "Austria",
-    "p_home": 0.5738,
-    "p_draw": 0.2594,
-    "p_away": 0.1668,
+    "p_home": 0.571,
+    "p_draw": 0.2586,
+    "p_away": 0.1704,
     "is_neutral": true,
     "kickoff": "2026-06-22T17:00:00",
     "model": "ensemble_live",
@@ -2065,25 +2461,25 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6759,
-    "xgb_draw": 0.1818,
-    "xgb_away": 0.1423,
-    "elo_home": 0.7849,
-    "elo_draw": 0.1092,
-    "elo_away": 0.1059,
-    "poisson_home": 0.4586,
-    "poisson_draw": 0.3431,
-    "poisson_away": 0.1984,
+    "xgb_home": 0.6746,
+    "xgb_draw": 0.1732,
+    "xgb_away": 0.1522,
+    "elo_home": 0.7756,
+    "elo_draw": 0.1125,
+    "elo_away": 0.1119,
+    "poisson_home": 0.4577,
+    "poisson_draw": 0.3434,
+    "poisson_away": 0.1989,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2108
+        "prob": 0.2107
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2081
+        "prob": 0.2084
       },
       {
         "home": 1,
@@ -2093,27 +2489,38 @@
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1158
+        "prob": 0.1161
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1068
+        "prob": 0.1065
       }
     ],
-    "lambda_home": 1.013,
+    "lambda_home": 1.011,
     "lambda_away": 0.557,
     "stage": "group",
     "group": "Group J",
     "venue": "Dallas (Arlington)",
-    "round": "Matchday 12"
+    "round": "Matchday 12",
+    "group_context": {
+      "group_name": "Group J",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Argentina 3pts 2.Austria 3pts 3.Jordan 0pts 4.Algeria 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Jordan",
     "away_team": "Algeria",
-    "p_home": 0.195,
-    "p_draw": 0.3278,
-    "p_away": 0.4772,
+    "p_home": 0.1915,
+    "p_draw": 0.3318,
+    "p_away": 0.4767,
     "is_neutral": true,
     "kickoff": "2026-06-23T03:00:00",
     "model": "ensemble_live",
@@ -2122,55 +2529,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1959,
-    "xgb_draw": 0.241,
-    "xgb_away": 0.5631,
-    "elo_home": 0.2399,
-    "elo_draw": 0.1884,
-    "elo_away": 0.5717,
-    "poisson_home": 0.1777,
-    "poisson_draw": 0.4106,
-    "poisson_away": 0.4118,
+    "xgb_home": 0.1901,
+    "xgb_draw": 0.2683,
+    "xgb_away": 0.5416,
+    "elo_home": 0.2304,
+    "elo_draw": 0.1822,
+    "elo_away": 0.5873,
+    "poisson_home": 0.1772,
+    "poisson_draw": 0.4104,
+    "poisson_away": 0.4124,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.3058
+        "prob": 0.3057
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2377
+        "prob": 0.238
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1246
+        "prob": 0.1243
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0969
+        "prob": 0.0968
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0924
+        "prob": 0.0927
       }
     ],
     "lambda_home": 0.407,
-    "lambda_away": 0.778,
+    "lambda_away": 0.779,
     "stage": "group",
     "group": "Group J",
     "venue": "San Francisco Bay Area (Santa Clara)",
-    "round": "Matchday 12"
+    "round": "Matchday 12",
+    "group_context": {
+      "group_name": "Group J",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Argentina 3pts 2.Austria 3pts 3.Jordan 0pts 4.Algeria 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Algeria",
     "away_team": "Austria",
-    "p_home": 0.2451,
-    "p_draw": 0.3219,
-    "p_away": 0.433,
+    "p_home": 0.2314,
+    "p_draw": 0.3163,
+    "p_away": 0.4523,
     "is_neutral": true,
     "kickoff": "2026-06-28T02:00:00",
     "model": "ensemble_live",
@@ -2179,55 +2597,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2717,
-    "xgb_draw": 0.2875,
-    "xgb_away": 0.4408,
-    "elo_home": 0.3211,
-    "elo_draw": 0.2471,
-    "elo_away": 0.4318,
-    "poisson_home": 0.2071,
-    "poisson_draw": 0.3622,
-    "poisson_away": 0.4307,
+    "xgb_home": 0.238,
+    "xgb_draw": 0.2836,
+    "xgb_away": 0.4784,
+    "elo_home": 0.2941,
+    "elo_draw": 0.2263,
+    "elo_away": 0.4797,
+    "poisson_home": 0.2053,
+    "poisson_draw": 0.3617,
+    "poisson_away": 0.433,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2314
+        "prob": 0.2313
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2134
+        "prob": 0.2142
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1253
+        "prob": 0.1244
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1155
+        "prob": 0.1152
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0984
+        "prob": 0.0992
       }
     ],
-    "lambda_home": 0.541,
-    "lambda_away": 0.922,
+    "lambda_home": 0.538,
+    "lambda_away": 0.926,
     "stage": "group",
     "group": "Group J",
     "venue": "Kansas City",
-    "round": "Matchday 17"
+    "round": "Matchday 17",
+    "group_context": {
+      "group_name": "Group J",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Argentina 3pts 2.Austria 3pts 3.Jordan 0pts 4.Algeria 0pts",
+      "simultaneous_group_matches": "Jordan vs Argentina",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Jordan",
     "away_team": "Argentina",
-    "p_home": 0.0659,
-    "p_draw": 0.2027,
-    "p_away": 0.7314,
+    "p_home": 0.0647,
+    "p_draw": 0.202,
+    "p_away": 0.7332,
     "is_neutral": true,
     "kickoff": "2026-06-28T02:00:00",
     "model": "ensemble_live",
@@ -2236,15 +2665,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1103,
-    "xgb_draw": 0.1647,
-    "xgb_away": 0.725,
-    "elo_home": 0.0372,
+    "xgb_home": 0.1131,
+    "xgb_draw": 0.1635,
+    "xgb_away": 0.7234,
+    "elo_home": 0.0309,
     "elo_draw": 0.08,
-    "elo_away": 0.8828,
-    "poisson_home": 0.0614,
-    "poisson_draw": 0.2624,
-    "poisson_away": 0.6763,
+    "elo_away": 0.8891,
+    "poisson_home": 0.0609,
+    "poisson_draw": 0.2616,
+    "poisson_away": 0.6775,
     "top_scorelines": [
       {
         "home": 0,
@@ -2253,95 +2682,49 @@
       },
       {
         "home": 0,
-        "away": 0,
+        "away": 2,
         "prob": 0.1913
       },
       {
         "home": 0,
-        "away": 2,
+        "away": 0,
         "prob": 0.1908
       },
       {
         "home": 0,
         "away": 3,
-        "prob": 0.0898
+        "prob": 0.0903
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0653
+        "prob": 0.065
       }
     ],
-    "lambda_home": 0.242,
-    "lambda_away": 1.412,
+    "lambda_home": 0.241,
+    "lambda_away": 1.416,
     "stage": "group",
     "group": "Group J",
     "venue": "Dallas (Arlington)",
-    "round": "Matchday 17"
-  },
-  {
-    "home_team": "Uzbekistan",
-    "away_team": "Colombia",
-    "p_home": 0.1581,
-    "p_draw": 0.2984,
-    "p_away": 0.5435,
-    "is_neutral": true,
-    "kickoff": "2026-06-18T02:00:00",
-    "model": "ensemble_live",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.1635,
-    "xgb_draw": 0.2544,
-    "xgb_away": 0.5822,
-    "elo_home": 0.1073,
-    "elo_draw": 0.11,
-    "elo_away": 0.7827,
-    "poisson_home": 0.1755,
-    "poisson_draw": 0.3851,
-    "poisson_away": 0.4394,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.2727
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.236
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1183
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1024
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.1022
-      }
-    ],
-    "lambda_home": 0.434,
-    "lambda_away": 0.866,
-    "stage": "group",
-    "group": "Group K",
-    "venue": "Mexico City",
-    "round": "Matchday 7"
+    "round": "Matchday 17",
+    "group_context": {
+      "group_name": "Group J",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.Argentina 3pts 2.Austria 3pts 3.Jordan 0pts 4.Algeria 0pts",
+      "simultaneous_group_matches": "Algeria vs Austria",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Portugal",
     "away_team": "Uzbekistan",
-    "p_home": 0.6277,
-    "p_draw": 0.2527,
-    "p_away": 0.1197,
+    "p_home": 0.6314,
+    "p_draw": 0.2491,
+    "p_away": 0.1194,
     "is_neutral": true,
     "kickoff": "2026-06-23T17:00:00",
     "model": "ensemble_live",
@@ -2350,9 +2733,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6318,
-    "xgb_draw": 0.2387,
-    "xgb_away": 0.1295,
+    "xgb_home": 0.6505,
+    "xgb_draw": 0.2212,
+    "xgb_away": 0.1283,
     "elo_home": 0.7375,
     "elo_draw": 0.126,
     "elo_away": 0.1365,
@@ -2386,19 +2769,30 @@
         "prob": 0.0743
       }
     ],
-    "lambda_home": 1.227,
+    "lambda_home": 1.226,
     "lambda_away": 0.365,
     "stage": "group",
     "group": "Group K",
     "venue": "Houston",
-    "round": "Matchday 13"
+    "round": "Matchday 13",
+    "group_context": {
+      "group_name": "Group K",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 0,
+      "group_standings": "1.Portugal 1pts 2.DR Congo 1pts 3.Uzbekistan 0pts 4.Colombia 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Colombia",
     "away_team": "DR Congo",
-    "p_home": 0.5715,
-    "p_draw": 0.285,
-    "p_away": 0.1436,
+    "p_home": 0.5755,
+    "p_draw": 0.2817,
+    "p_away": 0.1428,
     "is_neutral": true,
     "kickoff": "2026-06-24T02:00:00",
     "model": "ensemble_live",
@@ -2407,20 +2801,20 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6511,
-    "xgb_draw": 0.2213,
-    "xgb_away": 0.1276,
+    "xgb_home": 0.6712,
+    "xgb_draw": 0.2049,
+    "xgb_away": 0.1239,
     "elo_home": 0.8455,
     "elo_draw": 0.0885,
     "elo_away": 0.066,
     "poisson_home": 0.4401,
-    "poisson_draw": 0.3815,
+    "poisson_draw": 0.3814,
     "poisson_away": 0.1785,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2668
+        "prob": 0.2667
       },
       {
         "home": 1,
@@ -2440,7 +2834,7 @@
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1023
+        "prob": 0.1024
       }
     ],
     "lambda_home": 0.876,
@@ -2448,14 +2842,25 @@
     "stage": "group",
     "group": "Group K",
     "venue": "Guadalajara (Zapopan)",
-    "round": "Matchday 13"
+    "round": "Matchday 13",
+    "group_context": {
+      "group_name": "Group K",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 1,
+      "home_games_played": 0,
+      "away_games_played": 1,
+      "group_standings": "1.Portugal 1pts 2.DR Congo 1pts 3.Uzbekistan 0pts 4.Colombia 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Colombia",
     "away_team": "Portugal",
-    "p_home": 0.2965,
-    "p_draw": 0.3529,
-    "p_away": 0.3505,
+    "p_home": 0.2945,
+    "p_draw": 0.3513,
+    "p_away": 0.3542,
     "is_neutral": true,
     "kickoff": "2026-06-27T23:30:00",
     "model": "ensemble_live",
@@ -2464,14 +2869,14 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4315,
-    "xgb_draw": 0.3067,
-    "xgb_away": 0.2618,
+    "xgb_home": 0.4214,
+    "xgb_draw": 0.2984,
+    "xgb_away": 0.2802,
     "elo_home": 0.4329,
     "elo_draw": 0.2466,
     "elo_away": 0.3205,
-    "poisson_home": 0.1983,
-    "poisson_draw": 0.4092,
+    "poisson_home": 0.1982,
+    "poisson_draw": 0.4093,
     "poisson_away": 0.3925,
     "top_scorelines": [
       {
@@ -2505,14 +2910,25 @@
     "stage": "group",
     "group": "Group K",
     "venue": "Miami (Miami Gardens)",
-    "round": "Matchday 17"
+    "round": "Matchday 17",
+    "group_context": {
+      "group_name": "Group K",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 1,
+      "home_games_played": 0,
+      "away_games_played": 1,
+      "group_standings": "1.Portugal 1pts 2.DR Congo 1pts 3.Uzbekistan 0pts 4.Colombia 0pts",
+      "simultaneous_group_matches": "DR Congo vs Uzbekistan",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "DR Congo",
     "away_team": "Uzbekistan",
-    "p_home": 0.3091,
-    "p_draw": 0.3313,
-    "p_away": 0.3596,
+    "p_home": 0.3097,
+    "p_draw": 0.3332,
+    "p_away": 0.3571,
     "is_neutral": true,
     "kickoff": "2026-06-27T23:30:00",
     "model": "ensemble_live",
@@ -2521,15 +2937,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.3356,
-    "xgb_draw": 0.3049,
-    "xgb_away": 0.3596,
+    "xgb_home": 0.3385,
+    "xgb_draw": 0.3146,
+    "xgb_away": 0.3468,
     "elo_home": 0.2836,
     "elo_draw": 0.2186,
     "elo_away": 0.4978,
     "poisson_home": 0.3097,
     "poisson_draw": 0.3831,
-    "poisson_away": 0.3072,
+    "poisson_away": 0.3073,
     "top_scorelines": [
       {
         "home": 0,
@@ -2562,14 +2978,25 @@
     "stage": "group",
     "group": "Group K",
     "venue": "Atlanta",
-    "round": "Matchday 17"
+    "round": "Matchday 17",
+    "group_context": {
+      "group_name": "Group K",
+      "matchday": 2,
+      "home_points": 1,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 0,
+      "group_standings": "1.Portugal 1pts 2.DR Congo 1pts 3.Uzbekistan 0pts 4.Colombia 0pts",
+      "simultaneous_group_matches": "Colombia vs Portugal",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "England",
     "away_team": "Ghana",
-    "p_home": 0.6624,
-    "p_draw": 0.2434,
-    "p_away": 0.0942,
+    "p_home": 0.658,
+    "p_draw": 0.2423,
+    "p_away": 0.0997,
     "is_neutral": true,
     "kickoff": "2026-06-23T20:00:00",
     "model": "ensemble_live",
@@ -2578,55 +3005,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6637,
-    "xgb_draw": 0.2157,
-    "xgb_away": 0.1206,
-    "elo_home": 0.8794,
-    "elo_draw": 0.08,
-    "elo_away": 0.0406,
-    "poisson_home": 0.5797,
-    "poisson_draw": 0.3149,
-    "poisson_away": 0.1054,
+    "xgb_home": 0.6606,
+    "xgb_draw": 0.2051,
+    "xgb_away": 0.1343,
+    "elo_home": 0.8693,
+    "elo_draw": 0.0805,
+    "elo_away": 0.0502,
+    "poisson_home": 0.577,
+    "poisson_draw": 0.3164,
+    "poisson_away": 0.1066,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2585
+        "prob": 0.2584
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2184
+        "prob": 0.2196
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.153
+        "prob": 0.152
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0873
+        "prob": 0.0877
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.0738
+        "prob": 0.0745
       }
     ],
-    "lambda_home": 1.184,
-    "lambda_away": 0.338,
+    "lambda_home": 1.177,
+    "lambda_away": 0.339,
     "stage": "group",
     "group": "Group L",
     "venue": "Boston (Foxborough)",
-    "round": "Matchday 13"
+    "round": "Matchday 13",
+    "group_context": {
+      "group_name": "Group L",
+      "matchday": 2,
+      "home_points": 3,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.England 3pts 2.Ghana 3pts 3.Panama 0pts 4.Croatia 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Panama",
     "away_team": "Croatia",
-    "p_home": 0.1587,
-    "p_draw": 0.2601,
-    "p_away": 0.5812,
+    "p_home": 0.1469,
+    "p_draw": 0.2491,
+    "p_away": 0.604,
     "is_neutral": true,
     "kickoff": "2026-06-23T23:00:00",
     "model": "ensemble_live",
@@ -2635,55 +3073,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.272,
-    "xgb_draw": 0.2578,
-    "xgb_away": 0.4702,
-    "elo_home": 0.249,
-    "elo_draw": 0.1945,
-    "elo_away": 0.5564,
-    "poisson_home": 0.0853,
-    "poisson_draw": 0.2858,
-    "poisson_away": 0.6289,
+    "xgb_home": 0.2498,
+    "xgb_draw": 0.23,
+    "xgb_away": 0.5203,
+    "elo_home": 0.2177,
+    "elo_draw": 0.1741,
+    "elo_away": 0.6083,
+    "poisson_home": 0.0846,
+    "poisson_draw": 0.2841,
+    "poisson_away": 0.6313,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.26
+        "prob": 0.2596
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1979
+        "prob": 0.1964
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.1709
+        "prob": 0.1716
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0796
+        "prob": 0.0794
       },
       {
         "home": 0,
         "away": 3,
-        "prob": 0.0748
+        "prob": 0.0756
       }
     ],
     "lambda_home": 0.306,
-    "lambda_away": 1.314,
+    "lambda_away": 1.322,
     "stage": "group",
     "group": "Group L",
     "venue": "Toronto",
-    "round": "Matchday 13"
+    "round": "Matchday 13",
+    "group_context": {
+      "group_name": "Group L",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 0,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.England 3pts 2.Ghana 3pts 3.Panama 0pts 4.Croatia 0pts",
+      "simultaneous_group_matches": "",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Panama",
     "away_team": "England",
-    "p_home": 0.0928,
-    "p_draw": 0.1932,
-    "p_away": 0.7139,
+    "p_home": 0.0675,
+    "p_draw": 0.172,
+    "p_away": 0.7605,
     "is_neutral": true,
     "kickoff": "2026-06-27T21:00:00",
     "model": "ensemble_live",
@@ -2692,55 +3141,66 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.165,
-    "xgb_draw": 0.2379,
-    "xgb_away": 0.5971,
-    "elo_home": 0.1468,
-    "elo_draw": 0.1318,
-    "elo_away": 0.7214,
-    "poisson_home": 0.0475,
-    "poisson_draw": 0.2011,
-    "poisson_away": 0.7514,
+    "xgb_home": 0.1249,
+    "xgb_draw": 0.1877,
+    "xgb_away": 0.6873,
+    "elo_home": 0.0738,
+    "elo_draw": 0.0924,
+    "elo_away": 0.8338,
+    "poisson_home": 0.0453,
+    "poisson_draw": 0.1967,
+    "poisson_away": 0.758,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2361
+        "prob": 0.235
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.2069
+        "prob": 0.2089
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1346
+        "prob": 0.1322
       },
       {
         "home": 0,
         "away": 3,
-        "prob": 0.1209
+        "prob": 0.1238
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0596
+        "prob": 0.0579
       }
     ],
-    "lambda_home": 0.252,
-    "lambda_away": 1.753,
+    "lambda_home": 0.246,
+    "lambda_away": 1.778,
     "stage": "group",
     "group": "Group L",
     "venue": "New York/New Jersey (East Rutherford)",
-    "round": "Matchday 17"
+    "round": "Matchday 17",
+    "group_context": {
+      "group_name": "Group L",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.England 3pts 2.Ghana 3pts 3.Panama 0pts 4.Croatia 0pts",
+      "simultaneous_group_matches": "Croatia vs Ghana",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   },
   {
     "home_team": "Croatia",
     "away_team": "Ghana",
-    "p_home": 0.5797,
-    "p_draw": 0.2862,
-    "p_away": 0.1341,
+    "p_home": 0.5382,
+    "p_draw": 0.3002,
+    "p_away": 0.1615,
     "is_neutral": true,
     "kickoff": "2026-06-27T21:00:00",
     "model": "ensemble_live",
@@ -2749,47 +3209,58 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6764,
-    "xgb_draw": 0.2133,
-    "xgb_away": 0.1103,
-    "elo_home": 0.8195,
-    "elo_draw": 0.0973,
-    "elo_away": 0.0832,
-    "poisson_home": 0.4554,
-    "poisson_draw": 0.383,
-    "poisson_away": 0.1616,
+    "xgb_home": 0.6329,
+    "xgb_draw": 0.2248,
+    "xgb_away": 0.1422,
+    "elo_home": 0.6965,
+    "elo_draw": 0.1408,
+    "elo_away": 0.1627,
+    "poisson_home": 0.4455,
+    "poisson_draw": 0.3867,
+    "poisson_away": 0.1677,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2751
+        "prob": 0.2776
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2437
+        "prob": 0.2408
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1114
+        "prob": 0.115
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1079
+        "prob": 0.1044
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.0986
+        "prob": 0.0997
       }
     ],
-    "lambda_home": 0.886,
-    "lambda_away": 0.405,
+    "lambda_home": 0.867,
+    "lambda_away": 0.414,
     "stage": "group",
     "group": "Group L",
     "venue": "Philadelphia",
-    "round": "Matchday 17"
+    "round": "Matchday 17",
+    "group_context": {
+      "group_name": "Group L",
+      "matchday": 2,
+      "home_points": 0,
+      "away_points": 3,
+      "home_games_played": 1,
+      "away_games_played": 1,
+      "group_standings": "1.England 3pts 2.Ghana 3pts 3.Panama 0pts 4.Croatia 0pts",
+      "simultaneous_group_matches": "Panama vs England",
+      "third_place_context": "best_third_cutline=E:Ecuador 0pts GD-1 GF0; 1.F:Netherlands 1pts GD+0 GF2 2.G:Belgium 1pts GD+0 GF1 3.C:Morocco 1pts GD+0 GF1 4.B:Qatar 1pts GD+0 GF1 5.H:Cape Verde 1pts GD+0 GF0 6.K:Colombia 0pts GD+0 GF0 7.A:Czech Republic 0pts GD-1 GF1 8.E:Ecuador 0pts GD-1 GF0 9.L:Panama 0pts GD-1 GF0 10.J:Jordan 0pts GD-2 GF1 11.I:Senegal 0pts GD-2 GF1 12.D:Turkey 0pts GD-2 GF0"
+    }
   }
 ]

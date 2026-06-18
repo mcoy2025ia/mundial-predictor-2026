@@ -232,7 +232,17 @@ def _sync_live_results_csv(df: pd.DataFrame) -> None:
     wc2026_live_results.csv es consumido por predict_live.py y precompute_narrations.py
     para detectar qué partidos del WC 2026 ya se jugaron. Si no se sincroniza en cada
     corrida, queda obsoleto y produce narrativas/standings incoherentes con el resultado real.
+
+    Aplica la misma normalización de nombres que src.extractor.load_former_names()
+    (p.ej. "Curaçao" → "Curacao") para que los nombres coincidan exactamente con
+    los usados en group_matches.json y el resto del pipeline ya normalizado;
+    de lo contrario el matching por (home_team, away_team) falla silenciosamente
+    y el partido queda como "no jugado" en las narrativas aunque ya tenga resultado.
     """
+    sys.path.insert(0, str(ROOT))
+    from src.extractor import load_former_names
+    name_map = load_former_names()
+
     played_mask = (
         (df["tournament"] == "FIFA World Cup") &
         (df["date"].dt.year == 2026) &
@@ -242,6 +252,8 @@ def _sync_live_results_csv(df: pd.DataFrame) -> None:
         "date", "home_team", "away_team", "home_score", "away_score",
         "tournament", "city", "country", "neutral",
     ]].copy()
+    played["home_team"] = played["home_team"].apply(lambda t: name_map.get(t, t))
+    played["away_team"] = played["away_team"].apply(lambda t: name_map.get(t, t))
     played["home_score"] = played["home_score"].astype(int)
     played["away_score"] = played["away_score"].astype(int)
     played["date"] = played["date"].dt.strftime("%Y-%m-%d")

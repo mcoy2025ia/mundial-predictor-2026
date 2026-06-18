@@ -218,15 +218,6 @@
       "avg": 1.54
     },
     {
-      "team": "Spain",
-      "flag": "🇪🇸",
-      "matches": 68,
-      "goals_for": 108,
-      "goals_against": 75,
-      "goal_diff": 33,
-      "avg": 1.59
-    },
-    {
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "matches": 75,
@@ -234,6 +225,15 @@
       "goals_against": 70,
       "goal_diff": 38,
       "avg": 1.44
+    },
+    {
+      "team": "Spain",
+      "flag": "🇪🇸",
+      "matches": 68,
+      "goals_for": 108,
+      "goals_against": 75,
+      "goal_diff": 33,
+      "avg": 1.59
     },
     {
       "team": "Netherlands",
