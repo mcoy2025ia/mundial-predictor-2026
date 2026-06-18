@@ -39,6 +39,8 @@ class MatchContext:
     prev_city_home: Optional[str] = None      # sede del partido anterior (para viaje)
     prev_city_away: Optional[str] = None
     group_standings: Optional[str] = None     # "1.MEX 6pts 2.USA 3pts 3.URU 1pt 4.BOL 0pts"
+    simultaneous_group_matches: Optional[str] = None
+    third_place_context: Optional[str] = None
     matchday: Optional[int] = None            # 1, 2, o 3 en fase de grupos
 
 

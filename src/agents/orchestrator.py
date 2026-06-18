@@ -14,6 +14,7 @@ from src.agents.base import AgentResult, BaseAgent, MatchContext
 from src.agents.specialists import (
     FinOpsAgent,
     FIFARegsAgent,
+    GroupScenarioReasonerAgent,
     IntMatchAgent,
     MediaSentimentAgent,
     RosterScoutAgent,
@@ -27,7 +28,7 @@ _DETERMINISTIC_AGENTS = {"FinOps-Bookmaker-Alpha", "FIFA-Regs-Strategist"}
 logger = logging.getLogger(__name__)
 
 # Pesos de contribución de cada agente al blend final (suma ≤ 1 por diseño)
-_AGENT_WEIGHTS: dict[str, float] = {
+_BASE_AGENT_WEIGHTS: dict[str, float] = {
     "Roster-Data-Scout": 0.30,        # datos concretos de jugadores → mayor impacto
     "IntMatch-Analytics-Pro": 0.25,   # táctico + clima → impacto medio-alto
     "FinOps-Bookmaker-Alpha": 0.20,   # mercado como señal independiente
@@ -36,7 +37,34 @@ _AGENT_WEIGHTS: dict[str, float] = {
     "FIFA-Regs-Strategist": 0.05,     # bracket/altitud → determinístico, bajo peso
 }
 
+_GROUP_STAGE_AGENT_WEIGHTS: dict[int, dict[str, float]] = {
+    1: {
+        **_BASE_AGENT_WEIGHTS,
+        "Travel-Logistics-Quant": 0.15,
+        "FIFA-Regs-Strategist": 0.05,
+    },
+    2: {
+        **_BASE_AGENT_WEIGHTS,
+        "Roster-Data-Scout": 0.25,
+        "FinOps-Bookmaker-Alpha": 0.15,
+        "Travel-Logistics-Quant": 0.10,
+        "FIFA-Regs-Strategist": 0.15,
+    },
+    3: {
+        **_BASE_AGENT_WEIGHTS,
+        "Roster-Data-Scout": 0.20,
+        "FinOps-Bookmaker-Alpha": 0.15,
+        "Media-Sentiment-Parser": 0.05,
+        "Travel-Logistics-Quant": 0.05,
+        "FIFA-Regs-Strategist": 0.30,
+    },
+}
+
 # Máxima corrección total del prior por todos los agentes combinados
+_BASE_AGENT_WEIGHTS["GroupScenario-Reasoner"] = 0.10
+_GROUP_STAGE_AGENT_WEIGHTS[2]["GroupScenario-Reasoner"] = 0.25
+_GROUP_STAGE_AGENT_WEIGHTS[3]["GroupScenario-Reasoner"] = 0.30
+
 _MAX_TOTAL_SHIFT = 0.12
 
 
@@ -73,20 +101,23 @@ def _route(ctx: MatchContext) -> list[BaseAgent]:
     Knockout: hasta 2 agentes (comportamiento original).
     """
     group_stage = _is_group_stage(ctx)
-    max_agents = 3 if group_stage else 2
+    matchday = ctx.matchday or 1
+    max_agents = (5 if matchday >= 3 else 4 if matchday >= 2 else 3) if group_stage else 2
 
-    queue: list[tuple[int, BaseAgent]] = []
+    queue: list[tuple[float, BaseAgent]] = []
+    mandatory: list[BaseAgent] = []
 
     if ctx.injuries:
         queue.append((1, RosterScoutAgent()))
     if ctx.home_odds is not None:
         queue.append((2, FinOpsAgent()))
+    if group_stage and matchday >= 2:
+        queue.append((2.5, GroupScenarioReasonerAgent()))
     queue.append((3, IntMatchAgent()))
 
-    # En fase de grupos: Travel y FIFARegs siempre entran al queue
     if group_stage:
         queue.append((4, TravelLogisticsAgent()))
-        queue.append((5, FIFARegsAgent()))
+        mandatory.append(FIFARegsAgent())
     else:
         # Knockout: solo si hay altitud/ciudad relevante
         if ctx.venue_altitude_m > 1500 or (
@@ -103,12 +134,17 @@ def _route(ctx: MatchContext) -> list[BaseAgent]:
     # Dedup por nombre
     seen: set[str] = set()
     selected: list[BaseAgent] = []
+    for agent in mandatory:
+        seen.add(agent.name)
+
     for _, agent in sorted(queue, key=lambda x: x[0]):
         if agent.name not in seen:
             seen.add(agent.name)
             selected.append(agent)
-        if len(selected) == max_agents:
+        if len(selected) == max_agents - len(mandatory):
             break
+
+    selected.extend(mandatory)
 
     # query_hint sobreescribe el primer slot
     if ctx.query_hint:
@@ -132,7 +168,14 @@ def _route(ctx: MatchContext) -> list[BaseAgent]:
     return selected[:max_agents]
 
 
-def _blend_deltas(results: list[AgentResult], prior: dict) -> dict:
+def _agent_weight(agent_name: str, ctx: MatchContext) -> float:
+    if _is_group_stage(ctx):
+        matchday = max(1, min(3, ctx.matchday or 1))
+        return _GROUP_STAGE_AGENT_WEIGHTS[matchday].get(agent_name, 0.05)
+    return _BASE_AGENT_WEIGHTS.get(agent_name, 0.05)
+
+
+def _blend_deltas(results: list[AgentResult], prior: dict, ctx: MatchContext) -> dict:
     """Combina los delta_P de los agentes con sus pesos y confianzas.
 
     Formula: delta_i * weight_i * confidence_i, luego clamp a MAX_TOTAL_SHIFT,
@@ -141,7 +184,7 @@ def _blend_deltas(results: list[AgentResult], prior: dict) -> dict:
     total_delta = {"home": 0.0, "draw": 0.0, "away": 0.0}
 
     for r in results:
-        w = _AGENT_WEIGHTS.get(r.agent_name, 0.05)
+        w = _agent_weight(r.agent_name, ctx)
         scale = w * r.confidence
         total_delta["home"] += r.delta_home * scale
         total_delta["draw"] += r.delta_draw * scale
@@ -212,7 +255,7 @@ class Orchestrator:
                         result.delta_away, result.confidence, result.notes[:80])
 
         prior = {"home": ctx.p_home, "draw": ctx.p_draw, "away": ctx.p_away}
-        adjusted = _blend_deltas(results, prior)
+        adjusted = _blend_deltas(results, prior, ctx)
 
         return OrchestratorOutput(
             team_home=ctx.team_home,

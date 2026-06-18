@@ -15,6 +15,8 @@ from scripts.predict_live import (
     _norm_team,
     _parse_kickoff,
     assert_no_leakage,
+    build_simultaneous_group_context,
+    build_third_place_context,
     load_fixture,
 )
 
@@ -77,6 +79,31 @@ def test_usa_home_not_neutral():
 
 def test_neutral_match():
     assert _is_neutral("Brazil", "France", "Dallas") is True
+
+
+def test_build_simultaneous_group_context_lists_same_kickoff_peer():
+    kickoff = datetime(2026, 6, 24, 19, 0)
+    fixture = [
+        {"home_team": "A", "away_team": "B", "group": "Group X", "kickoff": kickoff},
+        {"home_team": "C", "away_team": "D", "group": "Group X", "kickoff": kickoff},
+        {"home_team": "E", "away_team": "F", "group": "Group X", "kickoff": kickoff + timedelta(hours=1)},
+    ]
+    assert build_simultaneous_group_context(fixture[0], fixture) == "C vs D"
+
+
+def test_build_third_place_context_uses_cutline_and_tiebreakers():
+    standings = {}
+    for i, pts in enumerate([6, 5, 4, 4, 3, 3, 2, 2, 1], start=1):
+        grp = f"Group {chr(64 + i)}"
+        standings[grp] = {
+            f"{grp} 1": {"pts": 6, "gd": 2, "gf": 4, "played": 2},
+            f"{grp} 2": {"pts": 5, "gd": 1, "gf": 3, "played": 2},
+            f"{grp} 3": {"pts": pts, "gd": i % 3 - 1, "gf": i, "played": 2},
+            f"{grp} 4": {"pts": 0, "gd": -3, "gf": 1, "played": 2},
+        }
+    ctx = build_third_place_context(standings)
+    assert "best_third_cutline=" in ctx
+    assert "1.A:" in ctx
 
 
 # ---------------------------------------------------------------------------

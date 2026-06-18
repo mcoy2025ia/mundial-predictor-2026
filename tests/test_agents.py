@@ -2,7 +2,9 @@
 import pytest
 from src.agents import MatchContext, Orchestrator
 from src.agents.base import AgentResult
+from src.agents.orchestrator import _agent_weight, _route
 from src.agents.specialists import FinOpsAgent, FIFARegsAgent, TravelLogisticsAgent
+from src.agents.specialists.fifa_regs import _qualification_pressure
 
 
 def _ctx(**kwargs) -> MatchContext:
@@ -65,6 +67,53 @@ def test_fifa_regs_deltas_sum_to_zero():
     assert abs(result.delta_home + result.delta_draw + result.delta_away) < 1e-4
 
 
+def test_fifa_regs_j1_group_pressure_is_neutral():
+    ctx = _ctx(
+        matchday=1,
+        group_points_home=0,
+        group_points_away=0,
+        games_played_home=0,
+        games_played_away=0,
+    )
+    result = FIFARegsAgent().safe_analyze(ctx)
+    assert result.delta_home == 0.0
+    assert result.delta_away == 0.0
+
+
+def test_fifa_regs_j3_home_must_win_boosts_home():
+    ctx = _ctx(
+        matchday=3,
+        group_points_home=0,
+        group_points_away=4,
+        games_played_home=2,
+        games_played_away=2,
+    )
+    result = FIFARegsAgent().safe_analyze(ctx)
+    assert result.delta_home > 0.0
+    assert "home_pressure=must_win" in result.notes
+
+
+def test_fifa_regs_j3_away_must_win_boosts_away():
+    ctx = _ctx(
+        matchday=3,
+        group_points_home=4,
+        group_points_away=0,
+        games_played_home=2,
+        games_played_away=2,
+    )
+    result = FIFARegsAgent().safe_analyze(ctx)
+    assert result.delta_away > 0.0
+    assert "away_pressure=must_win" in result.notes
+
+
+def test_fifa_regs_j3_three_points_tracks_best_third_risk():
+    assert _qualification_pressure(points=3, games_played=2, matchday=3) == "third_place_watch"
+
+
+def test_fifa_regs_j3_six_points_already_through():
+    assert _qualification_pressure(points=6, games_played=2, matchday=3) == "already_through"
+
+
 # ---------------------------------------------------------------------------
 # Travel (semi-determinístico para equipos lejanos)
 # ---------------------------------------------------------------------------
@@ -120,3 +169,51 @@ def test_orchestrator_prior_preserved_without_llm_key(monkeypatch):
     out = Orchestrator().predict(ctx)
     total = out.adjusted["home"] + out.adjusted["draw"] + out.adjusted["away"]
     assert abs(total - 1.0) < 1e-3
+
+
+def test_orchestrator_group_stage_always_routes_fifa_regs():
+    ctx = _ctx(
+        matchday=2,
+        group_points_home=0,
+        group_points_away=3,
+        games_played_home=1,
+        games_played_away=1,
+        injuries=["starter out"],
+        home_odds=2.10,
+    )
+    routed = [agent.name for agent in _route(ctx)]
+    assert "FIFA-Regs-Strategist" in routed
+    assert "GroupScenario-Reasoner" in routed
+    assert len(routed) <= 4
+
+
+def test_orchestrator_j3_allows_four_agents_with_fifa_regs():
+    ctx = _ctx(
+        matchday=3,
+        group_points_home=3,
+        group_points_away=0,
+        games_played_home=2,
+        games_played_away=2,
+        injuries=["starter out"],
+        home_odds=2.10,
+    )
+    routed = [agent.name for agent in _route(ctx)]
+    assert "FIFA-Regs-Strategist" in routed
+    assert "GroupScenario-Reasoner" in routed
+    assert len(routed) <= 5
+
+
+def test_orchestrator_j3_weights_raise_fifa_regs_importance():
+    ctx_j1 = _ctx(matchday=1, group_points_home=0, group_points_away=0)
+    ctx_j3 = _ctx(matchday=3, group_points_home=3, group_points_away=3)
+    assert _agent_weight("FIFA-Regs-Strategist", ctx_j3) > _agent_weight(
+        "FIFA-Regs-Strategist", ctx_j1
+    )
+
+
+def test_orchestrator_j3_weights_raise_group_reasoner_importance():
+    ctx_j2 = _ctx(matchday=2, group_points_home=0, group_points_away=3)
+    ctx_j3 = _ctx(matchday=3, group_points_home=3, group_points_away=3)
+    assert _agent_weight("GroupScenario-Reasoner", ctx_j3) >= _agent_weight(
+        "GroupScenario-Reasoner", ctx_j2
+    )

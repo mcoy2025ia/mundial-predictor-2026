@@ -440,6 +440,51 @@ def compute_group_standings(
     return standings
 
 
+def build_third_place_context(standings: dict[str, dict]) -> str:
+    """Build a compact current best-third snapshot across all groups."""
+    thirds: list[tuple[str, str, dict]] = []
+    for grp, teams in standings.items():
+        ordered = sorted(
+            teams.items(),
+            key=lambda x: (-x[1]["pts"], -x[1]["gd"], -x[1]["gf"], x[0]),
+        )
+        if len(ordered) >= 3:
+            team, data = ordered[2]
+            thirds.append((grp, team, data))
+
+    thirds.sort(key=lambda x: (-x[2]["pts"], -x[2]["gd"], -x[2]["gf"], x[1]))
+    if not thirds:
+        return ""
+
+    cut = thirds[7] if len(thirds) >= 8 else thirds[-1]
+    rows = [
+        f"{i+1}.{grp[-1]}:{team} {data['pts']}pts GD{data['gd']:+d} GF{data['gf']}"
+        for i, (grp, team, data) in enumerate(thirds[:12])
+    ]
+    cut_grp, cut_team, cut_data = cut
+    return (
+        f"best_third_cutline={cut_grp[-1]}:{cut_team} "
+        f"{cut_data['pts']}pts GD{cut_data['gd']:+d} GF{cut_data['gf']}; "
+        + " ".join(rows)
+    )
+
+
+def build_simultaneous_group_context(match: dict, fixture: list[dict]) -> str:
+    """List same-group matches with the exact same kickoff, mainly for MD3."""
+    grp = match.get("group", "")
+    kickoff = match.get("kickoff")
+    if not grp or kickoff is None:
+        return ""
+    peers = []
+    for m in fixture:
+        if m is match:
+            continue
+        if m.get("group") != grp or m.get("kickoff") != kickoff:
+            continue
+        peers.append(f"{m['home_team']} vs {m['away_team']}")
+    return "; ".join(peers)
+
+
 def get_group_context(
     match: dict,
     fixture: list[dict],
@@ -514,6 +559,8 @@ def get_group_context(
         "prev_city_home": _prev_city(home),
         "prev_city_away": _prev_city(away),
         "group_standings": standings_str,
+        "simultaneous_group_matches": build_simultaneous_group_context(match, fixture),
+        "third_place_context": build_third_place_context(standings),
         "venue_city": venue,
     }
 
@@ -553,6 +600,8 @@ def enrich_with_orchestrator(pred: dict, match: dict, group_ctx: dict,
             prev_city_home=group_ctx.get("prev_city_home"),
             prev_city_away=group_ctx.get("prev_city_away"),
             group_standings=group_ctx.get("group_standings"),
+            simultaneous_group_matches=group_ctx.get("simultaneous_group_matches"),
+            third_place_context=group_ctx.get("third_place_context"),
         )
 
         out = Orchestrator().predict(ctx)
@@ -674,6 +723,21 @@ def _run_live_predictions(
         pred["group"] = match["group"]
         pred["venue"] = match["venue"]
         pred["round"] = match["round"]
+
+        if match["stage"] == "group":
+            group_ctx = get_group_context(match, fixture, group_standings, df_wc26_played)
+            if group_ctx:
+                pred["group_context"] = {
+                    "group_name": group_ctx.get("group_name"),
+                    "matchday": group_ctx.get("matchday"),
+                    "home_points": group_ctx.get("group_points_home"),
+                    "away_points": group_ctx.get("group_points_away"),
+                    "home_games_played": group_ctx.get("games_played_home"),
+                    "away_games_played": group_ctx.get("games_played_away"),
+                    "group_standings": group_ctx.get("group_standings"),
+                    "simultaneous_group_matches": group_ctx.get("simultaneous_group_matches"),
+                    "third_place_context": group_ctx.get("third_place_context"),
+                }
 
         # Enriquecer con agentes si es fase de grupos
         if use_agents and match["stage"] == "group" and _cached_ratings is not None:

@@ -40,6 +40,12 @@ Tu trabajo es convertir el JSON compacto recibido en una narración futbolera, c
 Usa únicamente los datos recibidos.
 No inventes lesiones, jugadores, cuotas, clima, sanciones, historial ni resultados.
 
+Si el JSON incluye `competitive_context`, usalo como fuente principal para explicar:
+- presion de J2/J3 por puntos y partidos jugados
+- si el partido es ganable, duro o minimo para empatar
+- tabla del grupo y corte de mejores terceros
+- partidos simultaneos del grupo en J3
+
 ## Dialectos disponibles
 
 Usa el dialecto indicado en `dialecto`:
@@ -269,6 +275,20 @@ def _build_user_payload(
         "agent_summary": agent_summary,
     }
 
+    group_context = match.get("group_context", {})
+    if group_context:
+        payload["competitive_context"] = {
+            "group_name": group_context.get("group_name"),
+            "matchday": group_context.get("matchday"),
+            "home_points": group_context.get("home_points"),
+            "away_points": group_context.get("away_points"),
+            "home_games_played": group_context.get("home_games_played"),
+            "away_games_played": group_context.get("away_games_played"),
+            "group_standings": group_context.get("group_standings"),
+            "simultaneous_group_matches": group_context.get("simultaneous_group_matches"),
+            "third_place_context": group_context.get("third_place_context"),
+        }
+
     # Tabla real del grupo (solo si hay partidos jugados)
     if group_standings:
         payload["group_standings"] = [
@@ -363,7 +383,7 @@ def main() -> None:
             kickoff_date = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00")).date()
         except Exception:
             continue
-        if kickoff_date == today:
+        if today <= kickoff_date <= cutoff:
             is_group = m.get("stage", "group") == "group"
             dialects = DIALECTS_GROUP if is_group else DIALECTS_KNOCKOUT
             for lang in dialects:

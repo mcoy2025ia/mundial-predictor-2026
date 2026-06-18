@@ -81,9 +81,22 @@ const CACHE_MAX     = 400;
 interface CacheEntry { response: string; ts: number }
 const _responseCache = new Map<string, CacheEntry>();
 
-function cacheKey(msg: string): string {
+const TOURNAMENT_TIME_ZONE = "America/Bogota";
+
+function todayInTournamentTimeZone(date = new Date()): string {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: TOURNAMENT_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const byType = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+  return `${byType.year}-${byType.month}-${byType.day}`;
+}
+
+function cacheKey(msg: string, scope = ""): string {
   const normalized = msg.trim().toLowerCase().replace(/\s+/g, " ");
-  return createHash("sha256").update(normalized).digest("hex").slice(0, 16);
+  return createHash("sha256").update(`${scope}::${normalized}`).digest("hex").slice(0, 16);
 }
 
 function cacheGet(key: string): string | null {
@@ -184,7 +197,7 @@ function loadGroupStandings(): Record<string, StandingEntry[]> {
 }
 
 function buildTournamentContext(): string {
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD UTC
+  const today = todayInTournamentTimeZone();
   const groupMatches = loadGroupMatches();
   const standings = loadGroupStandings();
 
@@ -220,7 +233,7 @@ function buildTournamentContext(): string {
   }
 
   const lines: string[] = [
-    `FECHA HOY (UTC): ${today}`,
+    `FECHA HOY (${TOURNAMENT_TIME_ZONE}): ${today}`,
     "",
     todayMatches.length > 0
       ? `PARTIDOS DE HOY (${today}):\n${todayMatches.join("\n")}`
@@ -463,7 +476,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ── 3. Response cache ─────────────────────────────────────────────────────
-  const key     = cacheKey(message);
+  const key     = cacheKey(message, todayInTournamentTimeZone());
   const cached  = cacheGet(key);
   if (cached) {
     return new Response(streamText(cached), {
