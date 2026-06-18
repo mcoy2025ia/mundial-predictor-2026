@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 RESULTS_CSV = ROOT / "data" / "raw" / "results.csv"
+LIVE_RESULTS_CSV = ROOT / "data" / "external" / "wc2026_live_results.csv"
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("update_wc_results")
@@ -203,18 +204,52 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
         updated, skipped_done, len(not_found),
     )
 
-    if updated == 0:
-        logger.info("Sin cambios — todos los partidos ya están al día.")
-        return 0
-
     if dry_run:
-        logger.info("[DRY-RUN] No se escribió nada en results.csv.")
+        if updated == 0:
+            logger.info("Sin cambios — todos los partidos ya están al día.")
+        else:
+            logger.info("[DRY-RUN] No se escribió nada en results.csv.")
         return updated
 
-    # Escribir CSV preservando el formato original (sin comillas innecesarias)
-    df.to_csv(RESULTS_CSV, index=False)
-    logger.info("results.csv guardado con %d score(s) actualizado(s).", updated)
+    if updated > 0:
+        # Escribir CSV preservando el formato original (sin comillas innecesarias)
+        df.to_csv(RESULTS_CSV, index=False)
+        logger.info("results.csv guardado con %d score(s) actualizado(s).", updated)
+    else:
+        logger.info("Sin cambios — todos los partidos ya están al día.")
+
+    # Siempre sincronizar wc2026_live_results.csv con el estado actual de results.csv,
+    # incluso si esta corrida no trajo partidos nuevos (corrige desincronizaciones previas).
+    _sync_live_results_csv(df)
+
     return updated
+
+
+def _sync_live_results_csv(df: pd.DataFrame) -> None:
+    """Regenera wc2026_live_results.csv a partir de results.csv (fuente única de verdad).
+
+    results.csv es la única fuente actualizada automáticamente por football-data.org.
+    wc2026_live_results.csv es consumido por predict_live.py y precompute_narrations.py
+    para detectar qué partidos del WC 2026 ya se jugaron. Si no se sincroniza en cada
+    corrida, queda obsoleto y produce narrativas/standings incoherentes con el resultado real.
+    """
+    played_mask = (
+        (df["tournament"] == "FIFA World Cup") &
+        (df["date"].dt.year == 2026) &
+        df["home_score"].notna() & df["away_score"].notna()
+    )
+    played = df.loc[played_mask, [
+        "date", "home_team", "away_team", "home_score", "away_score",
+        "tournament", "city", "country", "neutral",
+    ]].copy()
+    played["home_score"] = played["home_score"].astype(int)
+    played["away_score"] = played["away_score"].astype(int)
+    played["date"] = played["date"].dt.strftime("%Y-%m-%d")
+    played = played.sort_values("date")
+
+    LIVE_RESULTS_CSV.parent.mkdir(parents=True, exist_ok=True)
+    played.to_csv(LIVE_RESULTS_CSV, index=False)
+    logger.info("wc2026_live_results.csv sincronizado: %d partido(s) jugado(s).", len(played))
 
 
 if __name__ == "__main__":
