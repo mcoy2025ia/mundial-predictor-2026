@@ -128,6 +128,55 @@ Entrega solo Markdown. Usa esta estructura:
 Genera la narración final lista para mostrarse en la app."""
 
 
+GROUP_NARRATIVE_SYSTEM = """# Rol
+Eres GroupNarrative-Preview, un analista narrativo de futbol internacional especializado en fases de grupos del Mundial 2026.
+
+# Objetivo
+Convierte standings, partidos de jornada, localia, probabilidades del predictor y contexto competitivo en una previa clara de grupo.
+
+# Reglas
+- Usa unicamente la informacion entregada en el JSON.
+- No inventes lesiones, estados animicos, sanciones, clima, cuotas ni resultados.
+- Si falta un dato, dilo como incertidumbre.
+- No recalcules probabilidades ni des probabilidades exactas que no vengan en el input.
+- Recuerda que clasifican los dos primeros de cada grupo y tambien los mejores terceros.
+- Diferencia "depende de si mismo" de "depende de otros resultados".
+- En J2 pesa mas la urgencia de sumar y no quedar contra la pared.
+- En J3 pesa mas la clasificacion directa, diferencia de gol y pelea por mejores terceros.
+
+# Salida
+Entrega solo Markdown en espanol colombiano, tono analitico, futbolero y narrativo.
+
+## Panorama general de la jornada
+1 o 2 parrafos.
+
+## Grupo [LETRA]
+
+### Tabla actual
+Resume posiciones, puntos y diferencia de gol. Si no hay tabla real, dilo.
+
+### Partidos de la jornada
+Lista partidos, horario, sede/localia si esta disponible.
+
+### Narrativa del grupo
+Que esta en juego emocional y competitivamente.
+
+### Quien depende de quien
+Seleccion por seleccion: que pasa si gana, empata o pierde, y si depende de si misma o de otros.
+
+### Rival mas dificil
+Equipo mas dificil de ganarle segun datos entregados.
+
+### Rival mas accesible
+Equipo mas accesible segun datos entregados, sin decir que es facil si no hay evidencia.
+
+### Partido clave
+Partido que puede romper el grupo.
+
+## Frase final para narrador
+Frase corta, potente y lista para video, transmision o post."""
+
+
 def _load_env() -> None:
     for path in [ROOT / ".env", ROOT / "frontend" / ".env.local"]:
         if not path.exists():
@@ -235,6 +284,114 @@ def _compute_group_standings(
     return rows
 
 
+def _group_letter(value: str | None) -> str:
+    if not value:
+        return ""
+    value = value.strip()
+    if value.lower().startswith("group "):
+        return value.split()[-1].strip()
+    return value
+
+
+def _kickoff_date(match: dict) -> str:
+    kickoff = match.get("kickoff") or match.get("date") or ""
+    if not kickoff:
+        return ""
+    return kickoff.split("T", 1)[0]
+
+
+def _matchday_from_round(round_name: str | None) -> int | None:
+    if not round_name:
+        return None
+    digits = "".join(ch for ch in round_name if ch.isdigit())
+    if not digits:
+        return None
+    number = int(digits)
+    if number <= 7:
+        return 1
+    if number <= 13:
+        return 2
+    return 3
+
+
+def _model_for_group_narrative(payload: dict) -> str:
+    matchday = payload.get("matchday")
+    competitive = payload.get("competitive_context") or {}
+    if matchday == 3:
+        return "deepseek-reasoner"
+    if competitive.get("third_place_context") or competitive.get("simultaneous_group_matches"):
+        return "deepseek-reasoner"
+    return "deepseek-chat"
+
+
+def _build_group_narrative_payload(
+    group_letter: str,
+    jornada_date: str,
+    matches: list[dict],
+    actual_standings: list[dict],
+) -> dict:
+    """Build the JSON input for GroupNarrative-Preview."""
+    normalized_group = _group_letter(group_letter)
+    ordered_matches = sorted(matches, key=lambda m: m.get("kickoff", ""))
+    first_context = next((m.get("group_context") for m in ordered_matches if m.get("group_context")), {})
+    matchday = first_context.get("matchday")
+    if matchday is None and ordered_matches:
+        matchday = _matchday_from_round(ordered_matches[0].get("round"))
+
+    fixtures = []
+    for match in ordered_matches:
+        fixtures.append(
+            {
+                "home": match.get("home_team"),
+                "away": match.get("away_team"),
+                "kickoff": match.get("kickoff"),
+                "venue": match.get("venue"),
+                "round": match.get("round"),
+                "prob_home": round(match.get("p_home", 0) * 100, 1) if "p_home" in match else None,
+                "prob_draw": round(match.get("p_draw", 0) * 100, 1) if "p_draw" in match else None,
+                "prob_away": round(match.get("p_away", 0) * 100, 1) if "p_away" in match else None,
+                "model": match.get("model"),
+                "localia": "home" if match.get("is_neutral") is False else "neutral_or_unknown",
+                "agent_notes": match.get("agent_notes", {}),
+            }
+        )
+
+    standings = [
+        {
+            "pos": i + 1,
+            "team": row["team"],
+            "pts": row["pts"],
+            "P": row["P"],
+            "W": row["W"],
+            "D": row["D"],
+            "L": row["L"],
+            "GF": row["GF"],
+            "GA": row["GA"],
+            "GD": row["GD"],
+        }
+        for i, row in enumerate(actual_standings)
+    ]
+
+    return {
+        "agent": "GroupNarrative-Preview",
+        "dialecto": "bogotano",
+        "group": normalized_group,
+        "jornada_date": jornada_date,
+        "matchday": matchday,
+        "qualification_rules": "Top 2 qualify directly; best third-place teams can also qualify.",
+        "actual_standings": standings,
+        "matches": fixtures,
+        "competitive_context": {
+            "group_name": first_context.get("group_name") or f"Group {normalized_group}",
+            "matchday": matchday,
+            "group_standings": first_context.get("group_standings"),
+            "simultaneous_group_matches": first_context.get("simultaneous_group_matches"),
+            "third_place_context": first_context.get("third_place_context"),
+        },
+        "missing_data_policy": "If emotional momentum, injuries or exact standings are missing, state that uncertainty instead of assuming it.",
+    }
+
+
 def _build_user_payload(
     match: dict,
     teams: dict,
@@ -318,6 +475,19 @@ def _call_deepseek(client: OpenAI, payload: dict) -> str:
     return response.choices[0].message.content or ""
 
 
+def _call_group_narrative(client: OpenAI, payload: dict) -> str:
+    user_msg = json.dumps(payload, ensure_ascii=False)
+    response = client.chat.completions.create(
+        model=_model_for_group_narrative(payload),
+        max_tokens=1600,
+        messages=[
+            {"role": "system", "content": GROUP_NARRATIVE_SYSTEM},
+            {"role": "user", "content": user_msg},
+        ],
+    )
+    return response.choices[0].message.content or ""
+
+
 def main() -> None:
     _load_env()
     api_key = os.environ.get("DEEPSEEK_API_KEY", "")
@@ -376,6 +546,15 @@ def main() -> None:
             narrations = {}
     logger.info("%d narraciones pre-existentes en narrations.json", len(narrations))
 
+    group_narratives_path = FRONTEND_DATA / "group_narratives.json"
+    group_narratives: dict[str, str] = {}
+    if group_narratives_path.exists():
+        try:
+            group_narratives = json.loads(group_narratives_path.read_text(encoding="utf-8"))
+        except Exception:
+            group_narratives = {}
+    logger.info("%d previas de grupo pre-existentes en group_narratives.json", len(group_narratives))
+
     # Forzar regeneración de partidos de HOY (contexto siempre fresco)
     for m in pending:
         kickoff_str = m.get("kickoff", "")
@@ -390,6 +569,16 @@ def main() -> None:
                 key = f"{m['home_team']}|{m['away_team']}|{lang}"
                 narrations.pop(key, None)  # borra para que se regenere con contexto fresco
 
+    group_batches: dict[tuple[str, str], list[dict]] = {}
+    for m in pending:
+        group_letter = _group_letter(m.get("group") or team_to_group.get(m.get("home_team", ""), ""))
+        jornada_date = _kickoff_date(m)
+        if group_letter and jornada_date:
+            group_batches.setdefault((group_letter, jornada_date), []).append(m)
+
+    for group_letter, jornada_date in group_batches:
+        group_narratives.pop(f"{group_letter}|{jornada_date}|bogotano", None)
+
     generated = 0
     skipped = 0
     for match in pending:
@@ -397,7 +586,7 @@ def main() -> None:
         away = match["away_team"]
         is_group = match.get("stage", "group") == "group"
         dialects = DIALECTS_GROUP if is_group else DIALECTS_KNOCKOUT
-        group_letter = match.get("group", team_to_group.get(home, ""))
+        group_letter = _group_letter(match.get("group") or team_to_group.get(home, ""))
         standings = _compute_group_standings(live_results_path, team_to_group, group_letter)
         if standings:
             logger.info("Grupo %s: tabla con %d equipos con partidos jugados", group_letter, len(standings))
@@ -422,6 +611,36 @@ def main() -> None:
                 logger.error("Error en %s [%s]: %s", key, lang, e)
 
     logger.info("Listo: %d nuevas narraciones, %d ya existían → total %d", generated, skipped, len(narrations))
+    group_generated = 0
+    group_skipped = 0
+    for (group_letter, jornada_date), group_pending in sorted(group_batches.items()):
+        key = f"{group_letter}|{jornada_date}|bogotano"
+        if key in group_narratives:
+            group_skipped += 1
+            continue
+
+        standings = _compute_group_standings(live_results_path, team_to_group, group_letter)
+        payload = _build_group_narrative_payload(group_letter, jornada_date, group_pending, standings)
+        model = _model_for_group_narrative(payload)
+        logger.info("Generando previa de grupo: %s %s [%s]", group_letter, jornada_date, model)
+        try:
+            text = _call_group_narrative(client, payload)
+            group_narratives[key] = text
+            group_generated += 1
+            group_narratives_path.write_text(
+                json.dumps(group_narratives, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            time.sleep(0.5)
+        except Exception as e:
+            logger.error("Error en previa %s: %s", key, e)
+
+    logger.info(
+        "Previas de grupo: %d nuevas, %d ya existian -> total %d",
+        group_generated,
+        group_skipped,
+        len(group_narratives),
+    )
     if generated == 0:
         logger.info("Nada nuevo que generar.")
 

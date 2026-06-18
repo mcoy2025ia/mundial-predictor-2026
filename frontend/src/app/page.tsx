@@ -112,6 +112,7 @@ export default function Home() {
   const [liveMatches,    setLiveMatches]    = useState<LiveMatch[]>([]);
   const [qatar,          setQatar]          = useState<QatarBacktest | null>(null);
   const [narrations,     setNarrations]     = useState<Record<string, string>>({});
+  const [groupNarratives,setGroupNarratives]= useState<Record<string, string>>({});
   const [agentNotes,     setAgentNotes]     = useState<Record<string, string>>({});
   const [loading,        setLoading]        = useState(true);
 
@@ -160,7 +161,8 @@ export default function Home() {
       fetch("/data/qatar2022.json").then((r) => r.json()).catch(() => null),
       fetch("/data/live_predictions.json").then((r) => r.json()).catch(() => null),
       fetch("/data/narrations.json").then((r) => r.json()).catch(() => ({})),
-    ]).then(([t, p, g, m, s, gs, gm, gst, q, lp, nar]) => {
+      fetch("/data/group_narratives.json").then((r) => r.json()).catch(() => ({})),
+    ]).then(([t, p, g, m, s, gs, gm, gst, q, lp, nar, groupNar]) => {
       // Merge live_predictions (agent-adjusted) on top of base predictions
       const notes: Record<string, string> = {};
       if (lp && Array.isArray(lp)) {
@@ -176,6 +178,7 @@ export default function Home() {
       setStats(s); setGoalscorers(gs); setGroupMatches(gm); setGroupStandings(gst);
       setQatar(q);
       if (nar && typeof nar === "object") setNarrations(nar);
+      if (groupNar && typeof groupNar === "object") setGroupNarratives(groupNar);
       setLoading(false);
     });
   }, []);
@@ -428,7 +431,7 @@ export default function Home() {
               )}
               {tab === "grupos" && groupMatches && groupStandings && (
                 <TabPane key="grupos">
-                  <Groups groupMatches={groupMatches} groupStandings={groupStandings} liveScores={liveScores} />
+                  <Groups groupMatches={groupMatches} groupStandings={groupStandings} liveScores={liveScores} groupNarratives={groupNarratives} />
                 </TabPane>
               )}
               {tab === "proyecciones" && teams && predictions && groups && (

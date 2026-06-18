@@ -10,6 +10,7 @@ interface Props {
   groupMatches: Record<string, GroupMatch[]>;
   groupStandings: Record<string, GroupStandingEntry[]>;
   liveScores?: ScoreMap;
+  groupNarratives?: Record<string, string>;
 }
 
 function fmt(n: number) { return `${(n * 100).toFixed(0)}%`; }
@@ -28,7 +29,7 @@ function fill(template: string, teams: string[]) {
   return template.replace(/\{(\d)\}/g, (_, i) => teams[parseInt(i)] ?? "");
 }
 
-function GroupNarrator({ standings, groupName }: { standings: GroupStandingEntry[]; groupName: string }) {
+function GroupNarrator({ standings, groupName, narrative }: { standings: GroupStandingEntry[]; groupName: string; narrative?: string }) {
   const T = useLang();
   const sorted = [...standings].sort((a, b) => b.first - a.first);
   const teamNames = sorted.map((s) => `${s.flag} ${s.team}`);
@@ -49,6 +50,7 @@ function GroupNarrator({ standings, groupName }: { standings: GroupStandingEntry
     balance:  { label: T.groupNarScenarioBalance,  color: "#a3e635" },
   };
   const tag = scenarioTag[scenario];
+  const hasAiNarrative = Boolean(narrative?.trim());
 
   return (
     <div style={{
@@ -73,18 +75,45 @@ function GroupNarrator({ standings, groupName }: { standings: GroupStandingEntry
             background: `${tag.color}18`, border: `1px solid ${tag.color}40`,
             color: tag.color,
           }}>
-            {tag.label}
+            {hasAiNarrative ? "GroupNarrative-Preview" : tag.label}
           </span>
         </div>
-        <p style={{
+        <div style={{
           fontFamily: "var(--font-body)", fontSize: "clamp(0.82rem, 1.4vw, 0.92rem)",
-          lineHeight: 1.7, color: "var(--text)", margin: 0, fontStyle: "italic",
+          lineHeight: 1.7, color: "var(--text)", margin: 0,
+          fontStyle: hasAiNarrative ? "normal" : "italic",
+          whiteSpace: hasAiNarrative ? "pre-line" : "normal",
         }}>
-          {text}
-        </p>
+          {hasAiNarrative ? narrative : text}
+        </div>
       </div>
     </div>
   );
+}
+
+function todayBogota() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Bogota",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+function selectGroupNarrative(groupNarratives: Record<string, string> | undefined, groupName: string) {
+  if (!groupNarratives) return undefined;
+  const today = todayBogota();
+  const todayKey = `${groupName}|${today}|bogotano`;
+  if (groupNarratives[todayKey]) return groupNarratives[todayKey];
+
+  const keys = Object.keys(groupNarratives)
+    .filter((key) => key.startsWith(`${groupName}|`) && key.endsWith("|bogotano"))
+    .sort();
+  const future = keys.find((key) => key.split("|")[1] >= today);
+  const fallback = future ?? keys.at(-1);
+  return fallback ? groupNarratives[fallback] : undefined;
 }
 
 /* ── Tarjeta de partido ── */
@@ -199,7 +228,7 @@ function StandingsCard({ standings }: { standings: GroupStandingEntry[] }) {
 }
 
 /* ── Componente principal ── */
-export default function Groups({ groupMatches, groupStandings, liveScores }: Props) {
+export default function Groups({ groupMatches, groupStandings, liveScores, groupNarratives }: Props) {
   const T = useLang();
   const groups = Object.keys(groupMatches).sort();
   const [selected, setSelected] = useState(groups.includes("K") ? "K" : groups[0] ?? "A");
@@ -210,6 +239,7 @@ export default function Groups({ groupMatches, groupStandings, liveScores }: Pro
     .slice()
     .sort((a, b) => a.date.localeCompare(b.date));
   const standings = groupStandings[selected] ?? [];
+  const selectedNarrative = selectGroupNarrative(groupNarratives, selected);
 
   const { played, hits } = modelRecord(groupMatches, liveScores ?? new Map());
 
@@ -342,7 +372,7 @@ export default function Groups({ groupMatches, groupStandings, liveScores }: Pro
         >
           {/* Narrador */}
           {standings.length > 0 && (
-            <GroupNarrator standings={standings} groupName={selected} />
+            <GroupNarrator standings={standings} groupName={selected} narrative={selectedNarrative} />
           )}
 
           {/* Grid: posiciones + partidos */}
