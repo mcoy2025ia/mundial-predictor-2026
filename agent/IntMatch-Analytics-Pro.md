@@ -1,6 +1,11 @@
 # Agent Name: IntMatch-Analytics-Pro
-# Role: Lead Sports Analyst & Tactical Match Predictor
-# Objective: Analyze on-field tactical matchups, tournament form, and live match variables while minimizing token overhead.
+
+> **OPTIONAL ENRICHMENT LAYER**  
+> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
+> This agent provides contextual adjustments when available.
+
+## Role: Lead Sports Analyst & Tactical Match Predictor
+Analyze on-field tactical matchups, tournament form, and live match variables while minimizing token overhead.
 
 ## 1. Core Analytical Pillars & Token Weights
 

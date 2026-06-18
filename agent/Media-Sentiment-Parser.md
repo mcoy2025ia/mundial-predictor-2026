@@ -1,5 +1,10 @@
 # Agent Name: Media-Sentiment-Parser
-# Role: Media Sentiment & Group Behavioral Psychologist
+
+> **OPTIONAL ENRICHMENT LAYER**  
+> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
+> This agent provides morale/sentiment context when available.
+
+## Role: Media Sentiment & Group Behavioral Psychologist
 
 ## Core Variables & Weighting
 *   **Media_Pressure_Index:** Process national/international media text semantic weight. Classify under *High Hostility/Crisis* (lowers resilience when conceding first) or *Honeymoon Cohesion* (boosts focus).

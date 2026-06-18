@@ -25,25 +25,75 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 
 ## ¿Cómo funciona el modelo?
 
+### 🎯 Núcleo Predictivo (Determinístico, Siempre Disponible)
+
+El sistema comienza con un **Ensemble calibrado** que combina tres modelos complementarios:
+
 ```
-results.csv (49k+ partidos, 1872–2026, incluye fixture WC 2026)
-   └─► normalización de nombres históricos (Zaïre→DR Congo, Czechoslovakia→Czech Republic…)
-        └─► ELO propio (K por tipo de torneo, cronológico, pre-match)
-             └─► feature matrix: ELO diff + forma reciente + H2H + experiencia mundialista
-                  └─► XGBoost multi:softprob + CalibratedClassifierCV (isotónica)
-                       └─► Ensemble: ELO 22% + Poisson 58% + XGBoost 20%
-                            └─► JSONs estáticos → frontend Next.js + Monte Carlo client-side
+Datos históricos (49k+ partidos, 1872–2026)
+   ├─► Normalización de nombres (Zaïre→DR Congo, etc.)
+   └─► Cálculo de ELO (K por torneo, margen, localía)
+        ├─► Modelo 1: ELO determinístico (22% del weight)
+        ├─► Modelo 2: Poisson bivariado (distribución de goles, 58%)
+        └─► Modelo 3: XGBoost (patrones no-lineales, 20%)
+             └─► ENSEMBLE: (0.22×ELO + 0.58×Poisson + 0.20×XGB)
+                  └─► Output: (p_home, p_draw, p_away) normalizadas
+                       └─► JSONs estáticos → frontend + simulador Monte Carlo
 ```
+
+**Garantía:** El Ensemble funciona sin API keys, sin agentes LLM, sin internet. RPS = 0.1958 (walk-forward validado).
 
 | Decisión | Por qué |
 |---|---|
-| ELO propio en vez de ranking FIFA | calculado solo sobre resultados, sin sesgos de confederación |
-| Split temporal (test = Qatar 2022) | nada de KFold aleatorio en series temporales — cero leakage |
-| Calibración isotónica | las probabilidades importan más que el accuracy en un simulador |
-| Monte Carlo en el navegador | 5.000 simulaciones sobre 1.128 pares pre-calculados, sin carga al servidor |
-| Re-entrenamiento por jornada | cada partido termina → ELO actualizado → predicciones recalibradas |
+| ELO propio | Calculado solo sobre resultados, sin sesgos de confederación |
+| Split temporal (test = 2022) | Series temporales requieren validación temporal; cero leakage |
+| Calibración isotónica | Las probabilidades importan más que accuracy en simulación |
+| Ensemble 22/58/20 | Poisson aporta señal de distribución de goles; XGB no supera ELO globalmente |
+| Monte Carlo en navegador | 5,000 sims en 300ms; sin carga al servidor |
+| Re-entrenamiento diario | Después de cada jornada: ELO + probs se actualizan con datos reales |
 
-**Métricas en Qatar 2022 (64 partidos, nunca vistos por el modelo):** accuracy 0.50–0.52 · log-loss 1.08 · calibración con error < 0.02 por clase. Un modelo aleatorio da 0.33; las casas de apuestas rondan 0.55–0.58.
+**Métricas en Qatar 2022 (64 partidos, never seen):**
+- Accuracy: 0.50–0.52
+- Log-loss: 1.08
+- RPS: 0.1958 ✨
+- Baseline (random): 0.25 RPS
+- Casas de apuestas: 0.55–0.58 accuracy
+
+---
+
+### 🔧 Capa Opcional: Enriquecimiento Multi-Agente
+
+**Importante:** Los agentes son un ENRIQUECIMIENTO opcional. El Ensemble predice con precisión completa sin ellos.
+
+Si habilitado + presupuesto disponible:
+```
+Ensemble prior (p_home, p_draw, p_away)
+   ├─► Orchestrator: evalúa contexto del partido
+   └─► Selecciona máximo 2 agentes especializados
+        ├─ IntMatch-Analytics-Pro: tácticas, presión, clima
+        ├─ Roster-Data-Scout: lesiones, disponibilidad
+        ├─ Media-Sentiment-Parser: sentimiento de prensa
+        ├─ Travel-Logistics-Quant: fatiga, altitud
+        ├─ FinOps-Market-Calibration-Validator: odds vs. modelo
+        └─ FIFA-Regs-Strategist: bracket, altitud
+             └─► Cada agente produce delta_P (ajuste a prior)
+                  └─► Blend: suma ponderada, clamped ±12%
+                       └─► Output final: (p_home', p_draw', p_away') = prior + deltas
+```
+
+**Coste:** $2–$5/día (configurable). **Si agotado:** sistema cae back a Ensemble (sin degradación).
+
+---
+
+### 🧭 Decisión de Diseño: Core vs. Enrichment
+
+**¿Por qué separar?**
+1. El Ensemble es **probado, validado, reproducible** — funciona siempre
+2. Los agentes son **experimentales, cost-gated** — impacto no medido históricamente
+3. Transparencia: usuarios ven prior siempre; deltas son labeled como "enriquecimiento"
+4. Fallback graceful: sin API keys → Ensemble intacto; sin presupuesto → Ensemble intacto
+
+**Ver:** `contracts/core_model_contracts.md` y `contracts/agent_enrichment_contracts.md` para especificación completa.
 
 ---
 

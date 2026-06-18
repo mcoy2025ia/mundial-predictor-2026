@@ -121,7 +121,7 @@ class PoissonModel:
 ## `src/ensemble.py`
 
 ```python
-DEFAULT_WEIGHTS: dict = {"elo": 0.35, "poisson": 0.35, "xgb": 0.30}
+DEFAULT_WEIGHTS: dict = {"elo": 0.22, "poisson": 0.58, "xgb": 0.20}
 
 class EnsembleModel:
     def fit(self, df_train, df_all=None, xgb_model=None) -> EnsembleModel

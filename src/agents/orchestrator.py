@@ -1,6 +1,32 @@
-"""WorldCup2026-Core-Orchestrator: single entry point for the multi-agent system.
+"""Orchestrator: Multi-agent routing with cost guardrails.
 
-Routes to at most 2 sub-agents per call, strips tokens, applies weighted delta blending.
+PRIMARY PURPOSE: Route each match context to 0–2 specialist agents that can provide
+relevant tactical, roster, market, or logistics insights. Each agent produces a delta_P
+(probability adjustment). Deltas are blended, clamped, and applied to the Ensemble prior.
+
+CRITICAL CLARIFICATION:
+  The Ensemble (ELO + Poisson + XGB) is the deterministic CORE that always predicts.
+  This Orchestrator is an OPTIONAL enrichment layer.
+
+  If cost limit exceeded, API unavailable, or context missing → agents skip (delta=0).
+  The Ensemble prior is ALWAYS valid and delivered.
+
+FLOW:
+  1. Ensemble prior always computed and returned
+  2. If budget available: Orchestrator selects up to 2 agents by context
+  3. Each agent produces delta_P (adjustment to home/draw/away)
+  4. Deltas blended with confidence weights, clamped to ±12%, renormalized
+  5. Final output: prior + blended_deltas (clamped)
+
+GRACEFUL DEGRADATION:
+  - No DEEPSEEK_API_KEY? → Agents fail gracefully (delta=0); Ensemble still predicts
+  - Budget exhausted? → LLM agents skip; deterministic agents only; Ensemble predicts
+  - Missing context? → Agent returns delta=0; Ensemble predicts
+
+  Result: Never a prediction failure. Ensemble accuracy always intact.
+
+See contracts/core_model_contracts.md and contracts/agent_enrichment_contracts.md
+for formal specifications.
 """
 from __future__ import annotations
 
@@ -23,7 +49,7 @@ from src.agents.specialists import (
 from src.cost_guard import BudgetExceeded, get_guard
 
 # Agentes que NO usan LLM (siempre seguros de llamar)
-_DETERMINISTIC_AGENTS = {"FinOps-Bookmaker-Alpha", "FIFA-Regs-Strategist"}
+_DETERMINISTIC_AGENTS = {"FinOps-Market-Calibration-Validator", "FIFA-Regs-Strategist"}
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +57,7 @@ logger = logging.getLogger(__name__)
 _BASE_AGENT_WEIGHTS: dict[str, float] = {
     "Roster-Data-Scout": 0.30,        # datos concretos de jugadores → mayor impacto
     "IntMatch-Analytics-Pro": 0.25,   # táctico + clima → impacto medio-alto
-    "FinOps-Bookmaker-Alpha": 0.20,   # mercado como señal independiente
+    "FinOps-Market-Calibration-Validator": 0.20,   # mercado como señal independiente
     "Media-Sentiment-Parser": 0.10,   # psicológico → señal complementaria
     "Travel-Logistics-Quant": 0.10,   # logística → efecto pequeño pero real
     "FIFA-Regs-Strategist": 0.05,     # bracket/altitud → determinístico, bajo peso
@@ -46,14 +72,14 @@ _GROUP_STAGE_AGENT_WEIGHTS: dict[int, dict[str, float]] = {
     2: {
         **_BASE_AGENT_WEIGHTS,
         "Roster-Data-Scout": 0.25,
-        "FinOps-Bookmaker-Alpha": 0.15,
+        "FinOps-Market-Calibration-Validator": 0.15,
         "Travel-Logistics-Quant": 0.10,
         "FIFA-Regs-Strategist": 0.15,
     },
     3: {
         **_BASE_AGENT_WEIGHTS,
         "Roster-Data-Scout": 0.20,
-        "FinOps-Bookmaker-Alpha": 0.15,
+        "FinOps-Market-Calibration-Validator": 0.15,
         "Media-Sentiment-Parser": 0.05,
         "Travel-Logistics-Quant": 0.05,
         "FIFA-Regs-Strategist": 0.30,

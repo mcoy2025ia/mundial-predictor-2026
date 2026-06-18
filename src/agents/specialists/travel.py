@@ -58,17 +58,22 @@ _HEAT_ADAPTED: frozenset[str] = frozenset({
     "Brazil", "Mexico", "United States",
 })
 
-_SYSTEM = """You are Travel-Logistics-Quant, a biometric fatigue analyst for FIFA World Cup 2026.
-Analyze the match context JSON and return ONLY a JSON object:
-- delta_home: float [-0.05, 0.05] — net fatigue/climate adjustment for home team (positive = benefits home)
-- delta_draw: float [-0.03, 0.03]
-- delta_away: float [-0.05, 0.05] — net fatigue/climate adjustment for away team
-- confidence: float [0.0, 1.0]
-- notes: string — max 1 line: dominant factor identified
+_SYSTEM = """You are Travel-Logistics-Quant, analyzing fatigue and climate factors.
 
-Constraints: delta_home + delta_draw + delta_away must equal 0.
-Prioritize: (1) inter-city displacement km since last match, (2) heat+humidity at venue,
-(3) altitude > 1500m, (4) timezone shifts. Days of rest amplifies or reduces all effects."""
+Return ONLY a JSON object:
+{
+  "delta_home": float in [-0.05, 0.05],   // fatigue/climate adjustment
+  "delta_draw": float in [-0.03, 0.03],
+  "delta_away": float in [-0.05, 0.05],
+  "confidence": float in [0.0, 1.0],
+  "notes": string                         // 1-sentence dominant factor
+}
+
+CONSTRAINTS:
+- Deltas sum to 0 (redistribution only)
+- Prioritize: (1) intercity km since last match, (2) heat+humidity, (3) altitude, (4) timezone
+- Rest days reduce fatigue effects
+- Be conservative; small effects are hard to predict"""
 
 
 def _haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:

@@ -1,6 +1,10 @@
-"""FinOps-Bookmaker-Alpha: extrae probabilidades implícitas del mercado y detecta value.
+"""FinOps-Market-Calibration-Validator: Compare bookmaker odds with Ensemble prior.
 
-Agente determinístico — no usa LLM. Opera directamente sobre odds decimales.
+IMPORTANT: This agent does NOT recommend bets or capital allocation.
+It only detects if market implied probabilities diverge significantly from model.
+This is a calibration check, not a betting tool.
+
+Deterministic agent — no LLM call needed.
 """
 from __future__ import annotations
 
@@ -15,13 +19,15 @@ _MAX_MARKET_WEIGHT = 0.15
 
 
 class FinOpsAgent(BaseAgent):
-    """Compara prior XGBoost con probabilidades implícitas del mercado.
+    """Market calibration validator: compare odds with Ensemble prior.
 
-    Si el mercado mueve >= MIN_VALUE_EDGE respecto al prior, ajusta delta_P
-    proporcionalmente (limitado a MAX_MARKET_WEIGHT).
+    If market consensus diverges >= MIN_VALUE_EDGE from prior, adjust delta_P
+    proportionally (capped at MAX_MARKET_WEIGHT).
+
+    NO betting recommendations. Calibration check only.
     """
 
-    name = "FinOps-Bookmaker-Alpha"
+    name = "FinOps-Market-Calibration-Validator"
 
     def analyze(self, ctx: MatchContext) -> AgentResult:
         if None in (ctx.home_odds, ctx.draw_odds, ctx.away_odds):

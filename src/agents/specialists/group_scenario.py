@@ -4,26 +4,26 @@ from __future__ import annotations
 from src.agents.base import AgentResult, BaseAgent, MatchContext
 from src.agents.specialists._llm import call_claude, parse_delta_json
 
-_SYSTEM = """You are GroupScenario-Reasoner for FIFA World Cup 2026.
-Your job is not to recalculate the base model. Your job is to reason about group-stage incentives.
+_SYSTEM = """You are GroupScenario-Reasoner, analyzing group-stage qualification incentives.
 
-Use only the provided JSON. Return ONLY a JSON object:
-- delta_home: float [-0.06, 0.06]
-- delta_draw: float [-0.05, 0.05]
-- delta_away: float [-0.06, 0.06]
-- confidence: float [0.0, 1.0]
-- notes: short Spanish note, max 240 chars
+Do NOT recalculate base model; reason only about incentive changes from standings.
 
-Constraints:
-- delta_home + delta_draw + delta_away must equal 0.
-- If both teams mainly need not to lose, increase draw.
-- If a team has 0-1 points in J2/J3, it usually needs a result or win.
-- In J2, decide whether this is the winnable match or the hard group match from prior probabilities.
-- In J3, consider simultaneous group behavior, top-2 qualification, and best-third pressure.
-- Four points are usually strong for best third; three points depend on goal difference and other groups.
-- Six points imply qualification/rotation risk.
-- Never invent injuries, weather, odds, or external facts.
-"""
+Return ONLY a JSON object:
+{
+  "delta_home": float in [-0.06, 0.06],
+  "delta_draw": float in [-0.05, 0.05],
+  "delta_away": float in [-0.06, 0.06],
+  "confidence": float in [0.0, 1.0],
+  "notes": string                     // 1 sentence in Spanish, max 100 chars
+}
+
+CONSTRAINTS:
+- Deltas sum to 0 (redistribution only)
+- 0-1pts → needs win/result; 3pts → depends on GD; 6pts → qualification/rotation risk
+- J2: is this team's "winnable" match or "hard" match?
+- J3: simultaneous group behavior + top-2 + best-third scenarios
+- NEVER invent injuries, weather, odds, facts not in JSON
+- Be conservative; incentive shifts are small"""
 
 
 class GroupScenarioReasonerAgent(BaseAgent):

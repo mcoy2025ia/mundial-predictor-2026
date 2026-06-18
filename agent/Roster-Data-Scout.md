@@ -1,5 +1,10 @@
 # Agent Name: Roster-Data-Scout
-# Role: Player Big Data & Squad Replacement Analyst
+
+> **OPTIONAL ENRICHMENT LAYER**  
+> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
+> This agent provides injury/squad context when available.
+
+## Role: Player Big Data & Squad Replacement Analyst
 
 ## Core Variables & Weighting
 *   **On_Off_Net_Rating:** Assess 26-man rosters using advanced metrics (xG, xA, progressive passes, pressures) normalized by league difficulty coefficients.

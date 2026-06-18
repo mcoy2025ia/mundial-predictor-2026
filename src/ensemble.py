@@ -23,9 +23,11 @@ ROOT = Path(__file__).parent.parent
 MODELS_DIR = ROOT / "models"
 logger = logging.getLogger(__name__)
 
-# Pesos por defecto — ajustados tras gate A2:
-# XGB no supera al ELO-only en walk-forward global; Poisson añade señal independiente.
-DEFAULT_WEIGHTS = {"elo": 0.22, "poisson": 0.58, "xgb": 0.2}
+# Pesos por defecto — ajustados tras validación walk-forward 2026-06-17:
+# Poisson (58%): aporta señal independiente de distribución de goles
+# ELO (22%): anclaje robusto multi-torneo, simple e interpretable
+# XGB (20%): captura patrones no-lineales pero no supera a ELO en RPS global
+DEFAULT_WEIGHTS = {"elo": 0.22, "poisson": 0.58, "xgb": 0.20}
 
 
 def _elo_proba(
