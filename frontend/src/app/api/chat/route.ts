@@ -243,7 +243,20 @@ function livePredictionLine(p: LivePrediction, localDate = dateInTournamentTimeZ
   return `${localDate} ${p.group ?? ""}: ${p.home_team} vs ${p.away_team} - ${p.venue ?? "sede ?"} - Modelo vivo ${p.model ?? "live"}: ${p.home_team} ${fmtPct(p.p_home)}, Empate ${fmtPct(p.p_draw)}, ${p.away_team} ${fmtPct(p.p_away)} (${p.round ?? ""})${pressure}${simultaneous}${thirds}${agents}`;
 }
 
-function buildTournamentContext(): string {
+function detectVenueQuery(message: string): string | null {
+  const q = message.toLowerCase();
+  if (q.includes("mexico city") || q.includes("ciudad de mexico") || q.includes("ciudad de méxico")) {
+    return "Mexico City";
+  }
+  if (q.includes("guadalajara")) return "Guadalajara";
+  if (q.includes("monterrey")) return "Monterrey";
+  if (q.includes("atlanta")) return "Atlanta";
+  if (q.includes("houston")) return "Houston";
+  if (q.includes("miami")) return "Miami";
+  return null;
+}
+
+function buildTournamentContext(message = ""): string {
   const today = todayInTournamentTimeZone();
   const groupMatches = loadGroupMatches();
   const standings = loadGroupStandings();
@@ -281,6 +294,10 @@ function buildTournamentContext(): string {
     })
     .sort((a, b) => String(a.kickoff ?? "").localeCompare(String(b.kickoff ?? "")))
     .slice(0, 16);
+  const requestedVenue = detectVenueQuery(message);
+  const liveTodayAtVenue = requestedVenue
+    ? liveToday.filter((p) => (p.venue ?? "").toLowerCase().includes(requestedVenue.toLowerCase()))
+    : [];
 
   // Group standings summary
   const standingLines: string[] = [];
@@ -310,6 +327,12 @@ function buildTournamentContext(): string {
     "",
     liveUpcoming.length > 0
       ? `PREDICCIONES VIVAS PROXIMAS:\n${liveUpcoming.map((p) => livePredictionLine(p)).join("\n")}`
+      : "",
+    "",
+    requestedVenue
+      ? liveTodayAtVenue.length > 0
+        ? `FILTRO DE SEDE SOLICITADA HOY (${requestedVenue}):\n${liveTodayAtVenue.map((p) => livePredictionLine(p, today)).join("\n")}`
+        : `FILTRO DE SEDE SOLICITADA HOY (${requestedVenue}): no hay partidos hoy en esta sede. No sustituyas por partidos en otra ciudad.`
       : "",
   ];
   return [...lines, ...liveLines].filter((l) => l !== undefined).join("\n");
@@ -567,8 +590,16 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const tournamentCtx = buildTournamentContext();
-  const systemContent = SYSTEM_PROMPT
+  const tournamentCtx = buildTournamentContext(message);
+  const venueGuard = [
+    "REGLAS CRITICAS DE FILTRO:",
+    "- Si la pregunta menciona una sede o ciudad, filtra por sede exacta antes de hablar de equipos.",
+    "- No confundas Mexico City con la seleccion Mexico.",
+    "- Si no hay partido hoy en la sede mencionada, dilo explicitamente y no sustituyas por otro partido en otra ciudad.",
+    "- Para preguntas con 'hoy', prioriza PREDICCIONES VIVAS DE HOY sobre otros bloques.",
+    "",
+  ].join("\n");
+  const systemContent = venueGuard + SYSTEM_PROMPT
     .replace("{TOURNAMENT_CONTEXT}", tournamentCtx)
     .replace("{RAG_CONTEXT}", contextText || "Sin contexto RAG adicional.");
 
