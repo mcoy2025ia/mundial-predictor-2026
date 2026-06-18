@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_mundial_predictor_2026",
+  "buildCommand": "cd frontend && npm run build",
+  "outputDirectory": "frontend/.next",
+  "env": {
+    "FOOTBALL_DATA_TOKEN": "@football_data_token",
+    "DEEPSEEK_API_KEY": "@deepseek_api_key",
+    "ANTHROPIC_API_KEY": "@anthropic_api_key",
+    "DASHSCOPE_API_KEY": "@dashscope_api_key"
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
+}
