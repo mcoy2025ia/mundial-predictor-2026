@@ -141,6 +141,9 @@ Convierte standings, partidos de jornada, localia, probabilidades del predictor 
 - No recalcules probabilidades ni des probabilidades exactas que no vengan en el input.
 - Recuerda que clasifican los dos primeros de cada grupo y tambien los mejores terceros.
 - Diferencia "depende de si mismo" de "depende de otros resultados".
+- No digas que una seleccion esta matematicamente eliminada salvo que el input lo demuestre de forma explicita.
+- Si el input entrega hora Bogota, nombrala como hora Colombia/Bogota; no la llames hora local de la sede.
+- No inventes banderas, emojis de paises ni nacionalidades si no vienen en el input.
 - En J2 pesa mas la urgencia de sumar y no quedar contra la pared.
 - En J3 pesa mas la clasificacion directa, diferencia de gol y pelea por mejores terceros.
 
@@ -297,7 +300,34 @@ def _kickoff_date(match: dict) -> str:
     kickoff = match.get("kickoff") or match.get("date") or ""
     if not kickoff:
         return ""
+    if "T" in kickoff:
+        try:
+            from datetime import datetime
+            from zoneinfo import ZoneInfo
+
+            dt = datetime.fromisoformat(kickoff.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=ZoneInfo("UTC"))
+            return dt.astimezone(ZoneInfo("America/Bogota")).date().isoformat()
+        except Exception:
+            pass
     return kickoff.split("T", 1)[0]
+
+
+def _kickoff_bogota(match: dict) -> str:
+    kickoff = match.get("kickoff") or ""
+    if not kickoff:
+        return ""
+    try:
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+
+        dt = datetime.fromisoformat(kickoff.replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=ZoneInfo("UTC"))
+        return dt.astimezone(ZoneInfo("America/Bogota")).strftime("%Y-%m-%d %H:%M")
+    except Exception:
+        return kickoff
 
 
 def _matchday_from_round(round_name: str | None) -> int | None:
@@ -344,7 +374,8 @@ def _build_group_narrative_payload(
             {
                 "home": match.get("home_team"),
                 "away": match.get("away_team"),
-                "kickoff": match.get("kickoff"),
+                "kickoff_utc": match.get("kickoff"),
+                "kickoff_bogota": _kickoff_bogota(match),
                 "venue": match.get("venue"),
                 "round": match.get("round"),
                 "prob_home": round(match.get("p_home", 0) * 100, 1) if "p_home" in match else None,
@@ -388,6 +419,7 @@ def _build_group_narrative_payload(
             "simultaneous_group_matches": first_context.get("simultaneous_group_matches"),
             "third_place_context": first_context.get("third_place_context"),
         },
+        "timezone_note": "kickoff_bogota is America/Bogota. Venue local timezone is not provided; do not call it local time.",
         "missing_data_policy": "If emotional momentum, injuries or exact standings are missing, state that uncertainty instead of assuming it.",
     }
 
@@ -509,6 +541,7 @@ def main() -> None:
     # Ventana de generación: solo hoy y mañana (contexto válido)
     # Argumento opcional --days N para ampliar la ventana (default 2)
     days_ahead = 2
+    groups_only = "--groups-only" in sys.argv[1:]
     for i, arg in enumerate(sys.argv[1:]):
         if arg == "--days" and i + 1 < len(sys.argv) - 1:
             try:
@@ -556,7 +589,7 @@ def main() -> None:
     logger.info("%d previas de grupo pre-existentes en group_narratives.json", len(group_narratives))
 
     # Forzar regeneración de partidos de HOY (contexto siempre fresco)
-    for m in pending:
+    for m in ([] if groups_only else pending):
         kickoff_str = m.get("kickoff", "")
         try:
             kickoff_date = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00")).date()
@@ -576,12 +609,18 @@ def main() -> None:
         if group_letter and jornada_date:
             group_batches.setdefault((group_letter, jornada_date), []).append(m)
 
+    refresh_start = today.isoformat()
+    refresh_end = cutoff.isoformat()
     for group_letter, jornada_date in group_batches:
         group_narratives.pop(f"{group_letter}|{jornada_date}|bogotano", None)
+        for existing_key in list(group_narratives):
+            parts = existing_key.split("|")
+            if len(parts) == 3 and parts[0] == group_letter and refresh_start <= parts[1] <= refresh_end:
+                group_narratives.pop(existing_key, None)
 
     generated = 0
     skipped = 0
-    for match in pending:
+    for match in ([] if groups_only else pending):
         home = match["home_team"]
         away = match["away_team"]
         is_group = match.get("stage", "group") == "group"

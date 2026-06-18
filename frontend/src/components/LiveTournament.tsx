@@ -15,6 +15,7 @@ interface Props {
   liveMatches: LiveMatch[];
   stats: LiveStats;
   verdicts: MatchVerdict[];
+  groupNarratives?: Record<string, string>;
 }
 
 type LiveSection = "resultados" | "posiciones" | "proximos";
@@ -24,7 +25,7 @@ const MVR_PREVIEW = 6;
 function fmtPct(n: number) { return `${(n * 100).toFixed(0)}%`; }
 
 export default function LiveTournament({
-  teams, predictions, groups, liveMatches, stats, verdicts,
+  teams, predictions, groups, liveMatches, stats, verdicts, groupNarratives,
 }: Props) {
   const T = useLang();
   const [section, setSection] = useState<LiveSection>("resultados");
@@ -76,6 +77,11 @@ export default function LiveTournament({
   }, [liveMatches, groups]);
 
   const today = new Date().toLocaleDateString("en-CA");
+  const bogotaToday = todayBogota();
+  const dailyGroupNarratives = useMemo(
+    () => selectDailyGroupNarratives(groupNarratives, bogotaToday),
+    [groupNarratives, bogotaToday]
+  );
   const upcoming = useMemo(() => {
     const pending = liveMatches.filter(
       (m) =>
@@ -158,6 +164,30 @@ export default function LiveTournament({
       )}
 
       {/* ── Sub-navegación ── */}
+      {dailyGroupNarratives.length > 0 && (
+        <motion.section variants={fadeUp} className="space-y-3">
+          <SectionTitle title="Previas de grupos" note="GroupNarrative-Preview" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+            {dailyGroupNarratives.map(({ group, text }) => (
+              <div key={group} className="stat-card !p-4 text-left">
+                <p
+                  className="text-[10px] uppercase tracking-[0.18em] mb-2"
+                  style={{ fontFamily: "var(--font-mono)", color: "var(--wc-gold)" }}
+                >
+                  Grupo {group}
+                </p>
+                <div
+                  className="text-sm"
+                  style={{ color: "var(--text)", lineHeight: 1.65, whiteSpace: "pre-line" }}
+                >
+                  {compactNarrative(text)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.section>
+      )}
+
       <motion.div variants={fadeUp}>
         <div style={{
           display: "flex", gap: 4,
@@ -409,6 +439,42 @@ export default function LiveTournament({
 }
 
 /* ── Piezas ─────────────────────────────────────────── */
+function todayBogota() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Bogota",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "";
+  return `${get("year")}-${get("month")}-${get("day")}`;
+}
+
+function selectDailyGroupNarratives(groupNarratives: Record<string, string> | undefined, today: string) {
+  if (!groupNarratives) return [];
+  const entries = Object.entries(groupNarratives)
+    .map(([key, text]) => {
+      const [group, date, lang] = key.split("|");
+      return { group, date, lang, text };
+    })
+    .filter((entry) => entry.lang === "bogotano" && entry.text?.trim());
+
+  return entries
+    .filter((entry) => entry.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date) || a.group.localeCompare(b.group))
+    .slice(0, 4)
+    .map(({ group, text }) => ({ group, text }));
+}
+
+function compactNarrative(text: string) {
+  const cleaned = text
+    .replace(/^#{1,3}\s*/gm, "")
+    .replace(/\*\*/g, "")
+    .trim();
+  const paragraphs = cleaned.split(/\n{2,}/).filter(Boolean);
+  return paragraphs.slice(0, 3).join("\n\n");
+}
+
 function Kpi({ label, value, sub, gold }: {
   label: string; value: string; sub?: string; gold?: boolean;
 }) {

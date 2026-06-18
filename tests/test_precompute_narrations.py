@@ -2,6 +2,7 @@
 from scripts.precompute_narrations import (
     _build_group_narrative_payload,
     _build_user_payload,
+    _kickoff_date,
     _model_for_group_narrative,
 )
 
@@ -77,6 +78,7 @@ def test_build_group_narrative_payload_keeps_group_context():
     assert payload["group"] == "K"
     assert payload["matchday"] == 2
     assert payload["matches"][0]["prob_home"] == 48.0
+    assert payload["matches"][0]["kickoff_bogota"] == "2026-06-23 13:00"
     assert payload["actual_standings"][0]["team"] == "Portugal"
     assert payload["missing_data_policy"].startswith("If emotional momentum")
 
@@ -97,3 +99,9 @@ def test_group_narrative_uses_chat_for_simple_matchday_two():
     payload = {"matchday": 2, "competitive_context": {}}
 
     assert _model_for_group_narrative(payload) == "deepseek-chat"
+
+
+def test_group_narrative_date_uses_bogota_day():
+    match = {"kickoff": "2026-06-19T01:00:00+00:00"}
+
+    assert _kickoff_date(match) == "2026-06-18"

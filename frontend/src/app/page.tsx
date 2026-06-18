@@ -421,6 +421,7 @@ export default function Home() {
                   <LiveTournament
                     teams={teams} predictions={predictions} groups={groups}
                     liveMatches={liveMatches} stats={liveStats} verdicts={verdicts}
+                    groupNarratives={groupNarratives}
                   />
                 </TabPane>
               )}
