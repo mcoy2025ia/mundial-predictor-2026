@@ -785,9 +785,29 @@ def main() -> None:
     all_group = [m for m in live_preds if m.get("stage") == "group"]
     logger.info("%d partidos de grupo en live_predictions.json", len(all_group))
 
-    # Filtrar solo partidos dentro de la ventana (hoy y mañana)
+    # Cargar resultados ya jugados para filtrar partidos pendientes
+    played_set = set()
+    if live_results_path.exists():
+        import csv
+        with live_results_path.open(encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                home, away = row.get("home_team", ""), row.get("away_team", "")
+                if home and away:
+                    try:
+                        home_score = int(row.get("home_score", -1))
+                        away_score = int(row.get("away_score", -1))
+                        if home_score >= 0 and away_score >= 0:
+                            played_set.add((home, away))
+                    except (ValueError, TypeError):
+                        pass
+
+    # Filtrar solo partidos dentro de la ventana (hoy y mañana) que TODAVIA NO SE HAN JUGADO
     pending = []
     for m in all_group:
+        home, away = m.get("home_team"), m.get("away_team")
+        if (home, away) in played_set:
+            continue  # Este partido ya se jugó, no incluir en pendientes
         kickoff_str = m.get("kickoff", "")
         try:
             kickoff_date = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00")).date()
