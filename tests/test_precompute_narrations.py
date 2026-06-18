@@ -72,7 +72,42 @@ def test_build_group_narrative_payload_keeps_group_context():
         {"team": "Colombia", "pts": 1, "P": 1, "W": 0, "D": 1, "L": 0, "GF": 1, "GA": 1, "GD": 0},
     ]
 
-    payload = _build_group_narrative_payload("Group K", "2026-06-23", matches, standings)
+    group_matches = {
+        "K": [
+            {
+                "team1": "Colombia",
+                "team2": "Portugal",
+                "t1_win": 0.31,
+                "draw": 0.28,
+                "t2_win": 0.41,
+            },
+            {
+                "team1": "Colombia",
+                "team2": "DR Congo",
+                "t1_win": 0.48,
+                "draw": 0.27,
+                "t2_win": 0.25,
+            },
+        ]
+    }
+    played_results = [
+        {
+            "date": "2026-06-17",
+            "home_team": "Colombia",
+            "away_team": "Portugal",
+            "home_score": 1,
+            "away_score": 1,
+        }
+    ]
+
+    payload = _build_group_narrative_payload(
+        "Group K",
+        "2026-06-23",
+        matches,
+        standings,
+        group_matches,
+        played_results,
+    )
 
     assert payload["agent"] == "GroupNarrative-Preview"
     assert payload["group"] == "K"
@@ -80,6 +115,11 @@ def test_build_group_narrative_payload_keeps_group_context():
     assert payload["matches"][0]["prob_home"] == 48.0
     assert payload["matches"][0]["kickoff_bogota"] == "2026-06-23 13:00"
     assert payload["actual_standings"][0]["team"] == "Portugal"
+    colombia_profile = next(profile for profile in payload["team_profiles"] if profile["team"] == "Colombia")
+    assert colombia_profile["previous_result"]["opponent"] == "Portugal"
+    assert colombia_profile["previous_result"]["opponent_strength"] == "favorito/fuerte"
+    assert colombia_profile["previous_result"]["result_quality_hint"] == "muy alta: empate contra rival fuerte"
+    assert colombia_profile["next_opponent"] == "DR Congo"
     assert payload["missing_data_policy"].startswith("If emotional momentum")
 
 

@@ -144,8 +144,31 @@ Convierte standings, partidos de jornada, localia, probabilidades del predictor 
 - No digas que una seleccion esta matematicamente eliminada salvo que el input lo demuestre de forma explicita.
 - Si el input entrega hora Bogota, nombrala como hora Colombia/Bogota; no la llames hora local de la sede.
 - No inventes banderas, emojis de paises ni nacionalidades si no vienen en el input.
+- No uses preambulos tipo "aca tienes", "te presento" o "aqui va"; empieza directo con "## Panorama general de la jornada".
+- No uses voseo ni expresiones ajenas al espanol colombiano bogotano normal.
 - En J2 pesa mas la urgencia de sumar y no quedar contra la pared.
 - En J3 pesa mas la clasificacion directa, diferencia de gol y pelea por mejores terceros.
+- El analisis debe hacerse por cada seleccion del grupo, no solo para el grupo completo.
+- Para cada equipo evalua puntos actuales, resultado anterior, rival anterior, fuerza del rival anterior, calidad del resultado, estado de animo probable, presion siguiente, dependencia, dificultad actual y cambio de peligrosidad frente al proximo rival.
+- No clasifiques a un equipo solo por nombre historico. Clasificalo por evidencia reciente entregada en team_profiles.
+- Si no hay resultado anterior para un equipo, dilo como falta de evidencia reciente y evita convertirlo en "Favorito solido" solo por historia.
+- Si un equipo chico empato contra una favorita, sube su nivel de peligro.
+- Si una favorita empato contra un rival menor, marca mas presion.
+- Si un equipo gano contra el rival mas debil del grupo, no lo infles demasiado.
+- Si un equipo perdio por poco contra una potencia, no lo trates automaticamente como debil.
+- Si un equipo perdio por goleada, marcalo como golpeado o vulnerable.
+- Si juega de local, aumenta su impulso emocional y presion competitiva.
+- Si llega con 0 puntos, puede ser vulnerable, pero tambien desesperado y peligroso.
+
+# Categorias obligatorias de nivel de peligro
+Asigna una categoria a cada seleccion:
+- Favorito solido
+- Favorito presionado
+- Rival peligroso
+- Rival incomodo
+- Rival accesible
+- Rival desesperado
+- Rival trampa
 
 # Salida
 Entrega solo Markdown en espanol colombiano, tono analitico, futbolero y narrativo.
@@ -166,6 +189,19 @@ Que esta en juego emocional y competitivamente.
 
 ### Quien depende de quien
 Seleccion por seleccion: que pasa si gana, empata o pierde, y si depende de si misma o de otros.
+
+### Analisis por seleccion
+Para cada seleccion usa exactamente este formato:
+
+#### [Nombre del equipo]
+- Puntos:
+- Resultado anterior:
+- Calidad del resultado:
+- Estado de animo:
+- Presion:
+- Dependencia:
+- Nivel de peligro:
+- Lectura narrativa:
 
 ### Rival mas dificil
 Equipo mas dificil de ganarle segun datos entregados.
@@ -344,6 +380,180 @@ def _matchday_from_round(round_name: str | None) -> int | None:
     return 3
 
 
+def _teams_for_group(group_letter: str, group_matches: dict[str, list[dict]] | None) -> list[str]:
+    teams: list[str] = []
+    for match in (group_matches or {}).get(_group_letter(group_letter), []):
+        for team in [match.get("team1"), match.get("team2")]:
+            if team and team not in teams:
+                teams.append(team)
+    return teams
+
+
+def _fixture_for_pair(group_letter: str, home: str, away: str, group_matches: dict[str, list[dict]] | None) -> dict:
+    pair = {home, away}
+    for match in (group_matches or {}).get(_group_letter(group_letter), []):
+        if {match.get("team1"), match.get("team2")} == pair:
+            return match
+    return {}
+
+
+def _team_win_probability(team: str, fixture: dict) -> float | None:
+    if not fixture:
+        return None
+    if fixture.get("team1") == team:
+        return fixture.get("t1_win")
+    if fixture.get("team2") == team:
+        return fixture.get("t2_win")
+    return None
+
+
+def _rival_strength(probability: float | None) -> str:
+    if probability is None:
+        return "desconocido"
+    if probability >= 0.40:
+        return "favorito/fuerte"
+    if probability >= 0.34:
+        return "medio"
+    return "debil o accesible"
+
+
+def _result_quality(outcome: str, goals_for: int, goals_against: int, rival_strength: str) -> str:
+    margin = goals_for - goals_against
+    if margin <= -3:
+        return "preocupante: derrota amplia"
+    if outcome == "win" and "favorito" in rival_strength:
+        return "muy alta: victoria contra rival fuerte"
+    if outcome == "draw" and "favorito" in rival_strength:
+        return "muy alta: empate contra rival fuerte"
+    if outcome == "loss" and "favorito" in rival_strength and margin == -1:
+        return "competitiva: derrota corta contra rival fuerte"
+    if outcome == "win" and "debil" in rival_strength:
+        return "normal: gano contra rival accesible, sin inflarlo de mas"
+    if outcome == "draw" and "debil" in rival_strength:
+        return "preocupante: dejo puntos contra rival accesible"
+    if outcome == "loss":
+        return "preocupante"
+    if outcome == "draw":
+        return "normal o positiva segun contexto"
+    return "positiva"
+
+
+def _outcome_label(outcome: str) -> str:
+    return {"win": "gano", "draw": "empato", "loss": "perdio"}.get(outcome, "sin resultado")
+
+
+def _load_group_results(
+    live_results_path: Path,
+    team_to_group: dict[str, str],
+    group_letter: str,
+) -> list[dict]:
+    import csv
+
+    if not live_results_path.exists():
+        return []
+
+    rows = []
+    with live_results_path.open(encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            home, away = row.get("home_team", ""), row.get("away_team", "")
+            if team_to_group.get(home) != _group_letter(group_letter):
+                continue
+            try:
+                row["home_score"] = int(row["home_score"])
+                row["away_score"] = int(row["away_score"])
+            except (ValueError, KeyError, TypeError):
+                continue
+            rows.append(row)
+    return rows
+
+
+def _build_team_profiles(
+    group_letter: str,
+    group_matches: dict[str, list[dict]] | None,
+    actual_standings: list[dict],
+    played_results: list[dict],
+    upcoming_matches: list[dict] | None = None,
+) -> list[dict]:
+    standing_map = {row["team"]: row for row in actual_standings}
+    teams = _teams_for_group(group_letter, group_matches)
+    for row in actual_standings:
+        if row["team"] not in teams:
+            teams.append(row["team"])
+
+    profiles = []
+    for team in teams:
+        standing = standing_map.get(team, {})
+        team_results = [
+            row for row in played_results
+            if row.get("home_team") == team or row.get("away_team") == team
+        ]
+        team_results.sort(key=lambda row: row.get("date", ""))
+        previous = team_results[-1] if team_results else None
+
+        previous_payload = None
+        if previous:
+            is_home = previous["home_team"] == team
+            opponent = previous["away_team"] if is_home else previous["home_team"]
+            gf = previous["home_score"] if is_home else previous["away_score"]
+            ga = previous["away_score"] if is_home else previous["home_score"]
+            outcome = "win" if gf > ga else "draw" if gf == ga else "loss"
+            fixture = _fixture_for_pair(group_letter, previous["home_team"], previous["away_team"], group_matches)
+            opponent_prob = _team_win_probability(opponent, fixture)
+            strength = _rival_strength(opponent_prob)
+            previous_payload = {
+                "date": previous.get("date"),
+                "opponent": opponent,
+                "score": f"{gf}-{ga}",
+                "outcome": outcome,
+                "result_label": f"{_outcome_label(outcome)} {gf}-{ga} contra {opponent}",
+                "opponent_pre_match_win_probability": round(opponent_prob * 100, 1) if opponent_prob is not None else None,
+                "opponent_strength": strength,
+                "result_quality_hint": _result_quality(outcome, gf, ga, strength),
+            }
+
+        next_match = next(
+            (
+                match for match in (upcoming_matches or [])
+                if match.get("home_team") == team or match.get("away_team") == team
+            ),
+            {},
+        )
+        next_opponent = ""
+        if next_match:
+            next_opponent = next_match.get("away_team") if next_match.get("home_team") == team else next_match.get("home_team")
+
+        profiles.append(
+            {
+                "team": team,
+                "points": standing.get("pts", 0),
+                "played": standing.get("P", 0),
+                "goal_difference": standing.get("GD", 0),
+                "previous_result": previous_payload,
+                "next_opponent": next_opponent,
+                "analysis_required": {
+                    "points": True,
+                    "previous_result": True,
+                    "previous_opponent_strength": True,
+                    "result_quality": True,
+                    "mood": True,
+                    "pressure": True,
+                    "dependency": True,
+                    "danger_level_category": [
+                        "Favorito solido",
+                        "Favorito presionado",
+                        "Rival peligroso",
+                        "Rival incomodo",
+                        "Rival accesible",
+                        "Rival desesperado",
+                        "Rival trampa",
+                    ],
+                },
+            }
+        )
+    return profiles
+
+
 def _model_for_group_narrative(payload: dict) -> str:
     matchday = payload.get("matchday")
     competitive = payload.get("competitive_context") or {}
@@ -359,6 +569,8 @@ def _build_group_narrative_payload(
     jornada_date: str,
     matches: list[dict],
     actual_standings: list[dict],
+    group_matches: dict[str, list[dict]] | None = None,
+    played_results: list[dict] | None = None,
 ) -> dict:
     """Build the JSON input for GroupNarrative-Preview."""
     normalized_group = _group_letter(group_letter)
@@ -412,6 +624,13 @@ def _build_group_narrative_payload(
         "qualification_rules": "Top 2 qualify directly; best third-place teams can also qualify.",
         "actual_standings": standings,
         "matches": fixtures,
+        "team_profiles": _build_team_profiles(
+            normalized_group,
+            group_matches,
+            actual_standings,
+            played_results or [],
+            ordered_matches,
+        ),
         "competitive_context": {
             "group_name": first_context.get("group_name") or f"Group {normalized_group}",
             "matchday": matchday,
@@ -517,7 +736,17 @@ def _call_group_narrative(client: OpenAI, payload: dict) -> str:
             {"role": "user", "content": user_msg},
         ],
     )
-    return response.choices[0].message.content or ""
+    return _sanitize_group_narrative(response.choices[0].message.content or "")
+
+
+def _sanitize_group_narrative(text: str) -> str:
+    return (
+        text
+        .replace("淘汰", "la eliminacion")
+        .replace("Acá tenés", "")
+        .replace("aca tienes", "")
+        .strip()
+    )
 
 
 def main() -> None:
@@ -659,7 +888,15 @@ def main() -> None:
             continue
 
         standings = _compute_group_standings(live_results_path, team_to_group, group_letter)
-        payload = _build_group_narrative_payload(group_letter, jornada_date, group_pending, standings)
+        played_results = _load_group_results(live_results_path, team_to_group, group_letter)
+        payload = _build_group_narrative_payload(
+            group_letter,
+            jornada_date,
+            group_pending,
+            standings,
+            group_matches,
+            played_results,
+        )
         model = _model_for_group_narrative(payload)
         logger.info("Generando previa de grupo: %s %s [%s]", group_letter, jornada_date, model)
         try:
