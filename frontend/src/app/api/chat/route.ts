@@ -176,9 +176,24 @@ function loadRagIndex(): RagChunk[] {
 // ─────────────────────────────────────────────────────────────────────────────
 interface GroupMatch { date: string; round: string; ground: string; team1: string; team2: string; team1_flag: string; team2_flag: string; t1_win: number; draw: number; t2_win: number }
 interface StandingEntry { team: string; flag: string; first: number; second: number }
+interface LivePrediction {
+  home_team: string;
+  away_team: string;
+  p_home: number;
+  p_draw: number;
+  p_away: number;
+  kickoff?: string;
+  group?: string;
+  venue?: string;
+  round?: string;
+  model?: string;
+  group_context?: Record<string, unknown>;
+  agent_notes?: Record<string, string>;
+}
 
 let _groupMatches: Record<string, GroupMatch[]> | null = null;
 let _groupStandings: Record<string, StandingEntry[]> | null = null;
+let _livePredictions: LivePrediction[] | null = null;
 
 function loadGroupMatches(): Record<string, GroupMatch[]> {
   if (_groupMatches) return _groupMatches;
@@ -196,10 +211,43 @@ function loadGroupStandings(): Record<string, StandingEntry[]> {
   return _groupStandings!;
 }
 
+function loadLivePredictions(): LivePrediction[] {
+  if (_livePredictions) return _livePredictions;
+  const p = join(process.cwd(), "public", "data", "live_predictions.json");
+  try { _livePredictions = JSON.parse(readFileSync(p, "utf-8")); }
+  catch { _livePredictions = []; }
+  return _livePredictions!;
+}
+
+function dateInTournamentTimeZone(value?: string): string {
+  if (!value) return "";
+  const d = new Date(value.endsWith("Z") ? value : `${value}Z`);
+  if (Number.isNaN(d.getTime())) return "";
+  return todayInTournamentTimeZone(d);
+}
+
+function fmtPct(n: number): string {
+  return `${Math.round(n * 1000) / 10}%`;
+}
+
+function livePredictionLine(p: LivePrediction, localDate = dateInTournamentTimeZone(p.kickoff)): string {
+  const ctx = p.group_context ?? {};
+  const pressure = ctx.matchday
+    ? ` | J${ctx.matchday}: ${p.home_team} ${ctx.home_points ?? "?"}pts, ${p.away_team} ${ctx.away_points ?? "?"}pts`
+    : "";
+  const simultaneous = ctx.simultaneous_group_matches ? ` | Simultaneo grupo: ${ctx.simultaneous_group_matches}` : "";
+  const thirds = ctx.third_place_context ? ` | Mejores terceros: ${ctx.third_place_context}` : "";
+  const agents = p.agent_notes
+    ? ` | Agentes: ${Object.entries(p.agent_notes).map(([k, v]) => `${k}: ${v}`).join(" ; ")}`
+    : "";
+  return `${localDate} ${p.group ?? ""}: ${p.home_team} vs ${p.away_team} - ${p.venue ?? "sede ?"} - Modelo vivo ${p.model ?? "live"}: ${p.home_team} ${fmtPct(p.p_home)}, Empate ${fmtPct(p.p_draw)}, ${p.away_team} ${fmtPct(p.p_away)} (${p.round ?? ""})${pressure}${simultaneous}${thirds}${agents}`;
+}
+
 function buildTournamentContext(): string {
   const today = todayInTournamentTimeZone();
   const groupMatches = loadGroupMatches();
   const standings = loadGroupStandings();
+  const livePredictions = loadLivePredictions();
 
   // Matches today
   const todayMatches: string[] = [];
@@ -225,6 +273,15 @@ function buildTournamentContext(): string {
   upcoming.sort();
   const next3Days = upcoming.slice(0, 16);
 
+  const liveToday = livePredictions.filter((p) => dateInTournamentTimeZone(p.kickoff) === today);
+  const liveUpcoming = livePredictions
+    .filter((p) => {
+      const d = dateInTournamentTimeZone(p.kickoff);
+      return d && d > today;
+    })
+    .sort((a, b) => String(a.kickoff ?? "").localeCompare(String(b.kickoff ?? "")))
+    .slice(0, 16);
+
   // Group standings summary
   const standingLines: string[] = [];
   for (const [group, teams] of Object.entries(standings)) {
@@ -245,7 +302,17 @@ function buildTournamentContext(): string {
     "",
     `PROBABILIDADES DE CLASIFICAR PRIMERO POR GRUPO (modelo):\n${standingLines.join("\n")}`,
   ];
-  return lines.filter((l) => l !== undefined).join("\n");
+  const liveLines: string[] = [
+    "",
+    liveToday.length > 0
+      ? `PREDICCIONES VIVAS DE HOY (${today}) - fuente preferida para preguntas de partidos:\n${liveToday.map((p) => livePredictionLine(p, today)).join("\n")}`
+      : `No hay predicciones vivas para hoy (${today}).`,
+    "",
+    liveUpcoming.length > 0
+      ? `PREDICCIONES VIVAS PROXIMAS:\n${liveUpcoming.map((p) => livePredictionLine(p)).join("\n")}`
+      : "",
+  ];
+  return [...lines, ...liveLines].filter((l) => l !== undefined).join("\n");
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
