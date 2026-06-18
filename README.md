@@ -14,10 +14,10 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 ## ¿Qué hace?
 
 - **En Vivo · Modelo vs Realidad** — marcadores del torneo, veredicto del modelo por partido terminado, posiciones por grupo y próximos partidos con pronóstico
-- **Predictor de partido** — probabilidades victoria/empate/derrota para cualquier cruce entre las 48 selecciones, con **Narrator AI** que genera una narración futbolera regional (dialecto bogotano/paisa/boyacense/costeño/EN) pre-computada una vez por día, sin costo por usuario
+- **Predictor de partido** — probabilidades victoria/empate/derrota para cualquier cruce entre las 48 selecciones, con **Narrator AI** que genera una narración futbolera regional pre-computada una vez por día, sin costo por usuario
 - **Stats WC 2026** — dashboard en tiempo real: goles totales, promedio por partido, equipos más goleadores, partidos más goleadores, marcadores frecuentes y mayores sorpresas del torneo
 - **Rendimiento del modelo** — precisión por jornada interna (J1/J2/J3) con flecha de mejora, desglose por grupo con columna FG (total del grupo + conteo + delta vs J1), y top sorpresas donde el modelo erró
-- **Fase de grupos** — predicción de los 72 partidos y posiciones finales de cada grupo (5.000 simulaciones Monte Carlo)
+- **Fase de grupos** — predicción de los 72 partidos, posiciones finales de cada grupo (5.000 simulaciones Monte Carlo) y previas narrativas por grupo con tabla, presión, localía, resultado anterior, dependencia y lectura por selección
 - **Proyecciones del torneo** — probabilidad de cada selección de llegar a cada ronda y de ser campeona; se actualiza con el ciclo diario (`predict_live.py --export`)
 - **Chat IA** — pregunta sobre partidos del día, tabla de grupos, predicciones; usa contexto real del torneo + DeepSeek, con filtro de temas, caché y límite por IP
 
@@ -49,7 +49,7 @@ results.csv (49k+ partidos, 1872–2026, incluye fixture WC 2026)
 
 ## Ciclo diario durante el torneo
 
-El ciclo se corre cada mañana antes de los partidos del día. Los días de MD2 hay una segunda corrida en la tarde (ver `instrucciones.md`).
+El ciclo se corre cada mañana antes de los partidos del día. En J2/MD2 hay una segunda corrida en la tarde cuando ya terminaron los primeros dos partidos, para que los partidos de la noche y las previas de grupo incorporen la presión real de puntos, diferencia de gol y mejores terceros. En J3/MD3 se recalculan escenarios de clasificación con partidos simultáneos por grupo.
 
 ```bash
 # 1. Descarga resultados de ayer, recalcula ELO, reentrena (~90s)
@@ -61,16 +61,22 @@ python scripts/predict_live.py --export
 # Variante sin gasto LLM: Ensemble determinístico, sin agentes
 python scripts/predict_live.py --export --no-agents
 
-# 3. Genera narraciones para los partidos de HOY (DeepSeek, 1 llamada/partido)
+# 3. Genera narraciones de partidos y previas de grupos (DeepSeek)
 python scripts/precompute_narrations.py
+
+# Solo recalcular previas de grupos (útil después de ajustar prompts o contexto J2/J3)
+python scripts/precompute_narrations.py --groups-only --days 1
 
 # 4. Despliega
 cd frontend && npx vercel --prod
 ```
 
-- **Fase de grupos**: narración solo en dialecto bogotano (~$0.015/día)
+- **Fase de grupos**: narración solo en español bogotano/neutro por ahora; los dialectos quedan pausados hasta estabilizar el flujo
 - **Fase eliminatoria**: 5 dialectos activados automáticamente (~$0.025/día)
-- El contexto de la narración incluye la tabla real del grupo (puntos, GD) desde MD2 en adelante
+- `narrations.json` alimenta el predictor partido a partido; `group_narratives.json` alimenta las tarjetas y el detalle de grupos
+- Las previas de grupo analizan cada selección: puntos, resultado anterior, fuerza del rival anterior, calidad del resultado, estado de ánimo, presión, dependencia, nivel de peligro y rival siguiente
+- El contexto de la narración incluye tabla real del grupo, localía, horarios Colombia/Bogotá, probabilidades del predictor y presión de clasificación desde MD2 en adelante
+- Los archivos JSON públicos deben escribirse siempre como UTF-8. Evita reescribirlos con `Get-Content | Set-Content` en PowerShell; usa los scripts Python del proyecto para no producir texto tipo `MÃ©xico` o `arrancÃ³`
 
 ---
 
@@ -113,7 +119,7 @@ pytest          # 122+ tests
 ├── scripts/
 │   ├── live_update.py           # Ciclo completo: fetch → retrain → export (~90s)
 │   ├── predict_live.py          # Predicciones con agentes + anti-leakage por partido
-│   ├── precompute_narrations.py # Narraciones diarias × dialectos → narrations.json
+│   ├── precompute_narrations.py # Narraciones diarias + previas de grupo → narrations.json / group_narratives.json
 │   ├── run_pipeline.py          # Pipeline completo desde cero
 │   └── export_frontend_data.py  # Exporta todos los JSONs al frontend
 ├── frontend/             # Next.js 15 + React 19 + Tailwind + Recharts + Framer Motion

@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Live update pipeline: fetches WC 2026 results from football-data.org → updates CSV → retrains model automatically
 - Client-side Monte Carlo simulator (runs in browser on pre-calculated team pairs)
 - Temporal split strategy (test = Qatar 2022 to avoid leakage in time-series data)
-- **Narrator AI** — pre-computed regional narrations (DeepSeek, run once per day) stored in `narrations.json`; zero LLM calls per user, dialect selector per match, group standings context from MD2 onward
+- **Narrator AI** — pre-computed match narrations and group previews (DeepSeek, run once/twice per day depending on matchday) stored in `narrations.json` and `group_narratives.json`; zero LLM calls per user for cached content, Bogotá/neutral Spanish during group-stage stabilization, group standings context from MD2 onward
 - AI chat assistant (DeepSeek + RAG with DashScope embeddings) with topic filter, response cache, rate limiting, and live tournament context injection
 - Multi-agent system (Orchestrator + 6 specialists) that enrich predictions with contextual analysis when API budget allows
 - 112+ pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
@@ -87,18 +87,33 @@ python scripts/live_update.py --force
 python scripts/update_wc_results.py --dry-run
 ```
 
-### Daily Narrations (run after live_update + predict_live)
+### Daily Narrations & Group Previews (run after live_update + predict_live)
 
 ```bash
 # Generate narrations for TODAY's matches × dialects → frontend/public/data/narrations.json
-# Group stage: bogotano only (~$0.003/run). Knockout: all 5 dialects auto (~$0.015/run).
+# Group stage: Bogotá/neutral Spanish only while the flow is stable.
+# Knockout: all 5 dialects auto (~$0.015/run).
 python scripts/precompute_narrations.py
 
 # Extend window to tomorrow's matches too (default covers today only)
 python scripts/precompute_narrations.py --days 1
+
+# Recompute only group narrative previews → frontend/public/data/group_narratives.json
+python scripts/precompute_narrations.py --groups-only --days 1
 ```
 
-Script always force-regenerates today's matches (fresh context). Only generates missing keys for future days.
+Script always force-regenerates today's matches and group previews so standings, pressure, and context stay fresh. It only generates missing match keys for future days unless the key belongs to today's window.
+
+Group previews must analyze each team individually, not only the group as a whole. The payload includes standings, match schedule, local venue, live predictions, prior group results, and deterministic `team_profiles` with:
+- current points and goal difference
+- previous result and opponent
+- estimated strength of the previous opponent using model probabilities
+- result quality (`muy alta`, `positiva`, `normal`, `preocupante`, or no evidence)
+- likely mood, pressure, dependency, next opponent, and next match probability
+
+J2/MD2 has a double-run protocol: run the full cycle before the first match window, then run it again after the first two results are in so evening predictions and narratives reflect real qualification pressure. J3/MD3 focuses on simultaneous group matches and best-third qualification scenarios.
+
+Encoding rule: JSON files under `frontend/public/data/` must remain UTF-8. Do not rewrite generated JSON with PowerShell `Get-Content | Set-Content`; use Python scripts or `Path.write_text(..., encoding="utf-8")`. Watch for mojibake markers such as `MÃ©xico`, `arrancÃ³`, `Â`, `â€`, or `ðŸ`.
 
 Full deploy cycle:
 ```bash
@@ -270,7 +285,7 @@ The "Proyecciones" tab has two views:
 
 **Data flow:**
 1. Pipeline exports JSON files (`export_frontend_data.py`) to `frontend/public/data/`
-2. `precompute_narrations.py` generates `narrations.json` (one DeepSeek call per match, cached)
+2. `precompute_narrations.py` generates `narrations.json` (one DeepSeek call per match, cached) and `group_narratives.json` (one DeepSeek call per group/day preview)
 3. Frontend loads pre-computed model predictions, ELO ratings, and narrations at page load
 4. Live results fetched from `/api/live` (server-side proxy to football-data.org)
 5. Monte Carlo runs on client-side with current standings
@@ -299,7 +314,29 @@ Serves pre-computed narrations from `narrations.json`. Flow:
 2. If found: returns the text immediately (zero LLM cost per user)
 3. If missing (knockout match not yet pre-computed, or new dialect): calls DeepSeek to generate on-the-fly
 
-The static file is regenerated daily by `scripts/precompute_narrations.py`. The Predictor component passes `narrations` prop down to `UnifiedNarration`, which has its own `localLang` state (per-match dialect selector, synced to global on mount but independently switchable). Dialect cost strategy: group stage → bogotano only; knockout → all 5 dialects auto-activated by stage field.
+The static file is regenerated daily by `scripts/precompute_narrations.py`. The Predictor component passes `narrations` prop down to `UnifiedNarration`, which has its own `localLang` state (per-match dialect selector, synced to global on mount but independently switchable). Dialect cost strategy: group stage → Bogotá/neutral Spanish only while the flow is stable; knockout → all 5 dialects auto-activated by stage field.
+
+### Group Narrative Previews
+
+`frontend/public/data/group_narratives.json` stores pre-computed narrative previews for the group tab and live tournament cards. Key format: `"GROUP|YYYY-MM-DD|bogotano"`, for example `"A|2026-06-18|bogotano"`.
+
+Generation:
+```bash
+python scripts/precompute_narrations.py --groups-only --days 1
+```
+
+These previews use heavier DeepSeek reasoning than single-match blurbs because they must combine standings, prior results, local venue, model probabilities, and per-team pressure. They should never invent data: if a team has not played, the output must say there is no recent tournament evidence rather than classifying only by historical name.
+
+Frontend rendering:
+- `frontend/src/components/GroupNarrativeCard.tsx` renders the Markdown-like output as styled sections, tables, team blocks, and narrator phrases.
+- `frontend/src/components/LiveTournament.tsx` shows compact previews for the current day.
+- `frontend/src/components/Groups.tsx` shows the full group narrative.
+
+Operational expectations:
+- J1: preview focuses on baseline favorites, uncertainty, venue, and first-match risk.
+- J2: preview must reflect current points, previous results, pressure to win/draw, and how evening matches change after afternoon results.
+- J3: preview must emphasize simultaneous matches, goal difference, direct qualification, and best-third scenarios.
+- The prompt requires per-team fields: points, previous result, previous opponent strength, result quality, mood, pressure, dependency, danger category, and narrative reading.
 
 ---
 
@@ -337,7 +374,7 @@ The Orchestrator is the single API gateway. It routes each match query to at mos
 - **Design specs**: see `agent/*.md` files (one per specialist) for role, input context, output schema, and cost profile. Consult when modifying or adding a new specialist.
 
 ### Pre-computed Narrations (Zero LLM Cost Per User)
-`narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Dialect strategy: `DIALECTS_GROUP = ["bogotano"]` during group stage (~$0.003/run); `DIALECTS_KNOCKOUT = ["bogotano","paisa","boyaco","costeño","en"]` activates automatically when `match.stage != "group"`.
+`narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Group-stage dialect strategy is intentionally restrained: keep `DIALECTS_GROUP = ["bogotano"]` until the prediction/narration flow is stable; `DIALECTS_KNOCKOUT = ["bogotano","paisa","boyaco","costeño","en"]` activates automatically when `match.stage != "group"`.
 
 ### Isotonic Calibration
 Probabilities matter more than accuracy in a tournament simulator. Isotonic calibration ensures the model's predicted probabilities match observed win rates.
@@ -442,14 +479,19 @@ python scripts/live_update.py
 # 2. Recalculate live predictions with multi-agent enrichment
 python scripts/predict_live.py --export
 
-# 3. Pre-compute narrations for today's matches (1 DeepSeek call/match)
+# 3. Pre-compute match narrations + group previews for today's context
 python scripts/precompute_narrations.py
+
+# Optional: group previews only, after prompt/context changes or MD2 afternoon results
+python scripts/precompute_narrations.py --groups-only --days 1
 
 # 4. Deploy
 cd frontend && npx vercel --prod
 ```
 
-**MD2 double-run protocol** (Jun 18–23, 4 matches/day split afternoon/evening): run the full cycle once in the morning before any match, then run steps 1–4 again in the afternoon after the first 2 results are in. This ensures evening match narrations reflect qualification pressure from the afternoon results. See `instrucciones.md` for the full MD2/MD3 calendar and cost table.
+**MD2 double-run protocol** (Jun 18–23, 4 matches/day split afternoon/evening): run the full cycle once in the morning before any match, then run steps 1–4 again in the afternoon after the first 2 results are in. This ensures evening match predictions and group previews reflect qualification pressure from the afternoon results. See `instrucciones.md` for the full MD2/MD3 calendar and cost table.
+
+**MD3 simultaneous protocol:** group matches kick off at the same hour, so standings must be interpreted as scenario probabilities rather than sequential results. Group previews should emphasize direct qualification, goal difference, and best-third pressure.
 
 ### Live Predictions Without Full Retrain (between matchdays)
 
