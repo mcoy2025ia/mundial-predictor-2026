@@ -7,6 +7,7 @@ import type { LiveStats, MatchVerdict } from "@/lib/live";
 import { computeGroupStandings } from "@/lib/live";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 import { useLang } from "@/lib/i18n";
+import GroupNarrativeCard from "./GroupNarrativeCard";
 
 interface Props {
   teams: Record<string, TeamInfo>;
@@ -169,20 +170,7 @@ export default function LiveTournament({
           <SectionTitle title="Previas de grupos" note="GroupNarrative-Preview" />
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {dailyGroupNarratives.map(({ group, text }) => (
-              <div key={group} className="stat-card !p-4 text-left">
-                <p
-                  className="text-[10px] uppercase tracking-[0.18em] mb-2"
-                  style={{ fontFamily: "var(--font-mono)", color: "var(--wc-gold)" }}
-                >
-                  Grupo {group}
-                </p>
-                <div
-                  className="text-sm"
-                  style={{ color: "var(--text)", lineHeight: 1.65, whiteSpace: "pre-line" }}
-                >
-                  {compactNarrative(text)}
-                </div>
-              </div>
+              <GroupNarrativeCard key={group} group={group} text={text} variant="compact" />
             ))}
           </div>
         </motion.section>
@@ -464,15 +452,6 @@ function selectDailyGroupNarratives(groupNarratives: Record<string, string> | un
     .sort((a, b) => a.date.localeCompare(b.date) || a.group.localeCompare(b.group))
     .slice(0, 4)
     .map(({ group, text }) => ({ group, text }));
-}
-
-function compactNarrative(text: string) {
-  const cleaned = text
-    .replace(/^#{1,3}\s*/gm, "")
-    .replace(/\*\*/g, "")
-    .trim();
-  const paragraphs = cleaned.split(/\n{2,}/).filter(Boolean);
-  return paragraphs.slice(0, 3).join("\n\n");
 }
 
 function Kpi({ label, value, sub, gold }: {

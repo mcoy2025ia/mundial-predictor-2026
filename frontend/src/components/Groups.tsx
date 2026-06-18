@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { GroupMatch, GroupStandingEntry } from "@/types";
 import { useLang } from "@/lib/i18n";
 import { modelRecord, modelVerdict, orientScore, type ScoreMap } from "@/lib/live";
+import GroupNarrativeCard from "./GroupNarrativeCard";
 
 interface Props {
   groupMatches: Record<string, GroupMatch[]>;
@@ -29,7 +30,7 @@ function fill(template: string, teams: string[]) {
   return template.replace(/\{(\d)\}/g, (_, i) => teams[parseInt(i)] ?? "");
 }
 
-function GroupNarrator({ standings, groupName, narrative }: { standings: GroupStandingEntry[]; groupName: string; narrative?: string }) {
+function GroupNarrator({ standings, groupName }: { standings: GroupStandingEntry[]; groupName: string }) {
   const T = useLang();
   const sorted = [...standings].sort((a, b) => b.first - a.first);
   const teamNames = sorted.map((s) => `${s.flag} ${s.team}`);
@@ -50,7 +51,6 @@ function GroupNarrator({ standings, groupName, narrative }: { standings: GroupSt
     balance:  { label: T.groupNarScenarioBalance,  color: "#a3e635" },
   };
   const tag = scenarioTag[scenario];
-  const hasAiNarrative = Boolean(narrative?.trim());
 
   return (
     <div style={{
@@ -75,17 +75,15 @@ function GroupNarrator({ standings, groupName, narrative }: { standings: GroupSt
             background: `${tag.color}18`, border: `1px solid ${tag.color}40`,
             color: tag.color,
           }}>
-            {hasAiNarrative ? "GroupNarrative-Preview" : tag.label}
+            {tag.label}
           </span>
         </div>
-        <div style={{
+        <p style={{
           fontFamily: "var(--font-body)", fontSize: "clamp(0.82rem, 1.4vw, 0.92rem)",
-          lineHeight: 1.7, color: "var(--text)", margin: 0,
-          fontStyle: hasAiNarrative ? "normal" : "italic",
-          whiteSpace: hasAiNarrative ? "pre-line" : "normal",
+          lineHeight: 1.7, color: "var(--text)", margin: 0, fontStyle: "italic",
         }}>
-          {hasAiNarrative ? narrative : text}
-        </div>
+          {text}
+        </p>
       </div>
     </div>
   );
@@ -372,7 +370,9 @@ export default function Groups({ groupMatches, groupStandings, liveScores, group
         >
           {/* Narrador */}
           {standings.length > 0 && (
-            <GroupNarrator standings={standings} groupName={selected} narrative={selectedNarrative} />
+            selectedNarrative
+              ? <GroupNarrativeCard group={selected} text={selectedNarrative} />
+              : <GroupNarrator standings={standings} groupName={selected} />
           )}
 
           {/* Grid: posiciones + partidos */}
