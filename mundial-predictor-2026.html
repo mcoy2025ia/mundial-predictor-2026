@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mundial Predictor 2026 | Caso técnico de ML, simulación e IA explicable</title>
-  <meta name="description" content="Caso técnico de Mundial Predictor 2026: sistema predictivo reproducible con ML, actualizaciones con resultados reales, simulación Monte Carlo y narrativas explicables con IA bajo control de costos." />
+  <title>Mundial Predictor 2026 | Arquitectura multiagente evaluable y FinOps IA</title>
+  <meta name="description" content="Caso técnico de Mundial Predictor 2026: laboratorio multiagente con modelos DeepSeek por fase, predicciones evaluables, benchmark ML, cache, RAG controlado y FinOps IA." />
   <style>
     :root {
       color-scheme: dark;
@@ -404,6 +404,229 @@
       transition: width .8s cubic-bezier(.22,1,.36,1);
     }
     .bar-value { color: #d8fbe9; font-variant-numeric: tabular-nums; text-align: right; }
+    .cost-hero {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .cost-tile {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.045);
+      padding: 16px;
+    }
+    .cost-tile strong {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(1.45rem, 3vw, 2.35rem);
+      line-height: 1;
+      margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .cost-tile span { color: var(--muted); font-size: 0.92rem; }
+    .finops-board {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .gauge-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(circle at 50% 22%, rgba(48, 209, 88, 0.12), transparent 42%),
+        rgba(255, 255, 255, 0.035);
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 330px;
+    }
+    .gauge-wrap { position: relative; width: min(260px, 100%); aspect-ratio: 1; }
+    .gauge-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .gauge-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .gauge-center strong {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .gauge-center span { color: var(--muted); font-size: 0.88rem; margin-top: 8px; }
+    .scenario-board {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .scenario-row {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.035);
+      padding: 14px;
+    }
+    .scenario-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .scenario-top b { color: var(--ink); }
+    .scenario-top span { color: var(--muted); font-size: 0.88rem; }
+    .scenario-scale {
+      height: 26px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+    }
+    .scenario-fill {
+      width: var(--w);
+      background: linear-gradient(90deg, var(--c1), var(--c2));
+      border-radius: 999px;
+    }
+    .model-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .model-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: rgba(255,255,255,0.035);
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+    }
+    .model-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--c);
+    }
+    .model-card b { display: block; color: var(--ink); margin: 6px 0 8px; }
+    .model-card strong { display: block; color: #d8fbe9; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
+    .model-card span { color: var(--muted); font-size: 0.82rem; }
+    .call-visual {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 16px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    .mini-stack {
+      display: grid;
+      gap: 8px;
+    }
+    .mini-pill {
+      border: 1px solid rgba(240, 190, 74, 0.34);
+      border-radius: 999px;
+      background: rgba(240, 190, 74, 0.08);
+      color: #ffe9a8;
+      padding: 8px 11px;
+      font-size: 0.86rem;
+      font-weight: 800;
+      text-align: center;
+    }
+    .call-equals {
+      color: var(--ink);
+      font-size: 2rem;
+      font-weight: 900;
+    }
+    .cost-stack {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.035);
+      margin-bottom: 18px;
+    }
+    .stack-bar {
+      display: flex;
+      height: 36px;
+      overflow: hidden;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.06);
+      margin: 12px 0;
+    }
+    .stack-segment {
+      width: var(--w);
+      background: var(--c);
+      display: grid;
+      place-items: center;
+      color: #06130d;
+      font-size: 0.78rem;
+      font-weight: 900;
+      min-width: 46px;
+      white-space: nowrap;
+    }
+    .stack-legend {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .legend-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+    .legend-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: var(--c);
+      margin-right: 6px;
+    }
+    .legend-item b { color: var(--ink); font-size: 0.88rem; }
+    .legend-item span { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 3px; }
+    .cost-equation {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      margin: 16px 0 0;
+      text-align: center;
+    }
+    .equation-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.045);
+      color: var(--ink);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .call-matrix {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .call-cell {
+      border: 1px solid rgba(240, 190, 74, 0.32);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(240, 190, 74, 0.08);
+      text-align: center;
+    }
+    .call-cell b { display: block; color: var(--ink); font-size: 0.9rem; }
+    .call-cell span { color: var(--muted); font-size: 0.78rem; }
     .learning-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18px; align-items: start; }
     .phase-list { display: grid; gap: 10px; }
     .phase-item {
@@ -431,7 +654,8 @@
     .footer { padding: 34px 0 60px; color: var(--muted); border-top: 1px solid var(--line); }
 
     @media (max-width: 920px) {
-      .hero, .grid-2, .grid-3, .grid-4, .flow, .learning-grid { grid-template-columns: 1fr; }
+      .hero, .grid-2, .grid-3, .grid-4, .flow, .learning-grid, .cost-hero, .stack-legend, .call-matrix, .finops-board, .model-cards, .call-visual { grid-template-columns: 1fr; }
+      .cost-equation { grid-template-columns: 1fr; }
       .topbar-inner { align-items: flex-start; flex-direction: column; padding: 14px 0; }
       nav { justify-content: flex-start; }
       section { padding: 34px 0; }
@@ -468,77 +692,77 @@
   <main id="inicio" class="shell">
     <section class="hero" aria-labelledby="hero-title">
       <div>
-        <div class="eyebrow">Caso técnico · ML aplicado a fútbol internacional</div>
-        <h1 id="hero-title">Sistema predictivo reproducible para el Mundial 2026</h1>
-        <p class="lead">Predice resultados, actualiza probabilidades con marcadores reales, simula el torneo completo y genera narrativas explicables con IA bajo control de costos.</p>
-        <div class="thesis"><strong>Tesis del proyecto:</strong> construir una plataforma de predicción deportiva que combine un núcleo estadístico reproducible con una capa de explicación narrativa, sin depender de llamadas LLM por usuario y sin presentar el sistema como una herramienta de apuestas.</div>
+        <div class="eyebrow">Caso técnico · Arquitectura de agentes aplicada a un torneo real</div>
+        <h1 id="hero-title">Laboratorio multiagente para razonar el Mundial 2026</h1>
+        <p class="lead">Varios agentes predicen el mismo partido desde lógicas distintas, compiten contra un modelo estadístico base y son evaluados contra el resultado real para ajustar confianza, pesos y uso de modelos por fase.</p>
+        <div class="thesis"><strong>Tesis del proyecto:</strong> demostrar que una arquitectura de agentes puede entender la lógica cambiante de un Mundial, usar modelos DeepSeek según complejidad, controlar costos con cache y precomputación, y convertir cada resultado real en feedback medible.</div>
         <div class="badges" aria-label="Capacidades principales">
-          <span class="badge">Ensemble ELO + Poisson + XGBoost</span>
-          <span class="badge">Monte Carlo 2026</span>
-          <span class="badge">Actualización con resultados reales</span>
-          <span class="badge">IA opcional con guardrails de costo</span>
+          <span class="badge">4 pronósticos por partido</span>
+          <span class="badge">Modelo ML como benchmark</span>
+          <span class="badge">DeepSeek por fase</span>
+          <span class="badge">USD 8.87-11.15 proyectados</span>
         </div>
       </div>
       <aside class="hero-card" aria-label="Datos clave">
         <div class="metric-grid">
-          <div class="metric"><strong>49k+</strong><span>partidos internacionales históricos usados por el pipeline, según el artefacto consultado.</span></div>
-          <div class="metric"><strong>0.1958 RPS</strong><span>resultado global del ensemble en walk-forward validation documentada.</span></div>
-          <div class="metric"><strong>64 partidos</strong><span>Qatar 2022 como test set temporal retenido.</span></div>
-          <div class="metric"><strong>104 partidos</strong><span>fixture completo del Mundial 2026 en simulación y seguimiento.</span></div>
+          <div class="metric"><strong>4 lecturas</strong><span>Group Analyst, Tactical Scout, Sentiment Reader y Consensus para el mismo partido.</span></div>
+          <div class="metric"><strong>1 benchmark</strong><span>Ensemble ELO + Poisson + XGBoost como piso reproducible y barato.</span></div>
+          <div class="metric"><strong>J1/J2/J3</strong><span>prompts, pesos y modelos cambian según presión competitiva y reglas de clasificación.</span></div>
+          <div class="metric"><strong>FinOps</strong><span>cache, RAG controlado y narraciones precomputadas evitan llamadas por clic.</span></div>
         </div>
       </aside>
     </section>
 
     <section id="resumen" aria-labelledby="resumen-title">
       <div class="section-head">
-        <h2 id="resumen-title">Qué Es Y Qué No Es</h2>
-        <p>El proyecto se entiende mejor si se separan sus capas. El predictor base es estadístico y reproducible; la IA ayuda a explicar contexto, no reemplaza la predicción validada.</p>
+        <h2 id="resumen-title">Qué Demuestra El Proyecto</h2>
+        <p>El fútbol es el entorno de prueba; el producto demostrado es una arquitectura de agentes evaluables, con costos controlados y lógica distinta por fase del torneo.</p>
       </div>
       <div class="grid-3">
         <article class="card">
-          <div class="kicker">Núcleo ML</div>
-          <h3>Predicción reproducible</h3>
-          <p>Calcula probabilidades 1X2 con un ensemble de ELO, Poisson y XGBoost calibrado. Puede correr sin API keys, sin agentes y sin conexión a servicios LLM.</p>
+          <div class="kicker">Benchmark estadístico</div>
+          <h3>Modelo base medible</h3>
+          <p>El ensemble ELO + Poisson + XGBoost produce una predicción reproducible y barata. No compite por protagonismo: sirve como punto de comparación contra los agentes.</p>
         </article>
         <article class="card">
-          <div class="kicker">Simulación</div>
-          <h3>Torneo completo</h3>
-          <p>Usa Monte Carlo para estimar avance por rondas, campeón probable y escenarios de grupos a medida que entran resultados reales.</p>
+          <div class="kicker">Arquitectura multiagente</div>
+          <h3>Varios razonamientos, mismo partido</h3>
+          <p>Cada agente mira una señal distinta: presión de grupo, táctica, ánimo o consenso. Todos dejan una predicción estructurada que luego se evalúa contra el marcador real.</p>
         </article>
         <article class="card">
-          <div class="kicker">IA explicable</div>
-          <h3>Narrativas controladas</h3>
-          <p>Genera narraciones precomputadas y respuestas de chat con contexto del torneo. La capa IA tiene caché, rate limit, RAG y fallback cuando no hay presupuesto.</p>
+          <div class="kicker">FinOps IA</div>
+          <h3>Gastar donde aporta</h3>
+          <p>DeepSeek Reasoner se reserva para debates complejos. Narraciones, predicciones y contexto quedan cacheados o precomputados para evitar llamadas LLM por cada clic.</p>
         </article>
       </div>
-      <div class="notice" style="margin-top:18px;"><strong>No es una herramienta de apuestas.</strong> El sistema no recomienda apostar ni promete precisión futura. Sus salidas son probabilidades, simulaciones y explicaciones para análisis de producto, datos y experiencia de usuario.</div>
+      <div class="notice" style="margin-top:18px;"><strong>No es una app para apostar.</strong> Es una demostración de buenas prácticas: orquestación de agentes, uso selectivo de modelos, trazabilidad de predicciones, evaluación posterior y control de consumo.</div>
     </section>
 
     <section id="arquitectura" aria-labelledby="arquitectura-title">
       <div class="section-head">
-        <h2 id="arquitectura-title">Arquitectura Del Sistema</h2>
-        <p>El diseño evita mezclar responsabilidades: el modelo predice, el simulador proyecta, la IA explica y los agentes experimentales enriquecen algunos partidos cuando hay presupuesto.</p>
+        <h2 id="arquitectura-title">Arquitectura De Agentes Evaluables</h2>
+        <p>El diseño separa responsabilidades: el modelo base entrega el benchmark, los agentes generan hipótesis, el evaluador compara contra resultados reales y FinOps decide cuándo usar modelos caros.</p>
       </div>
       <div class="tabs" role="tablist" aria-label="Capas del sistema">
-        <button class="tab-button" role="tab" aria-selected="true" aria-controls="tab-core" id="tab-core-button" data-tab="tab-core">Core ML</button>
-        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-ai" id="tab-ai-button" data-tab="tab-ai">IA narrativa</button>
-        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-agents" id="tab-agents-button" data-tab="tab-agents">Agent Debate</button>
+        <button class="tab-button" role="tab" aria-selected="true" aria-controls="tab-core" id="tab-core-button" data-tab="tab-core">Benchmark ML</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-ai" id="tab-ai-button" data-tab="tab-ai">IA cacheada</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-agents" id="tab-agents-button" data-tab="tab-agents">Debate de agentes</button>
       </div>
       <div id="tab-core" class="tab-panel active" role="tabpanel" aria-labelledby="tab-core-button">
         <div class="grid-2">
           <div class="card">
-            <h3>Pipeline predictivo</h3>
-            <p>El pipeline carga resultados históricos, normaliza nombres de selecciones, calcula ELO cronológico, construye features, entrena/calibra modelos y exporta JSON estáticos para el frontend.</p>
+            <h3>Benchmark reproducible</h3>
+            <p>El pipeline estadístico calcula una predicción base sin depender de LLM. Esa salida permite saber si los agentes realmente agregan valor o solo generan una explicación más bonita.</p>
             <pre><code>results.csv
   -> ELO + features
   -> XGBoost calibrado + Poisson + ELO
   -> Ensemble 22/58/20
-  -> live_predictions.json</code></pre>
+  -> benchmark para agentes</code></pre>
           </div>
           <div class="card">
-            <h3>Razón del ensemble</h3>
-            <p>XGBoost captura patrones no lineales, Poisson aporta distribución de goles y ELO entrega una señal estable de fuerza relativa. La mezcla reduce dependencia de un único modelo.</p>
-            <p class="small">Pesos actuales documentados: 22% ELO, 58% Poisson, 20% XGBoost.</p>
+            <h3>Por qué sigue siendo necesario</h3>
+            <p>El modelo base es barato, estable y auditable. Si los agentes fallan, no hay presupuesto o no existe contexto suficiente, el sistema mantiene una predicción mínima confiable.</p>
+            <p class="small">El benchmark evita que el caso se vuelva puro storytelling: cada agente debe ganarse su peso con resultados.</p>
           </div>
         </div>
       </div>
@@ -546,23 +770,23 @@
         <div class="grid-2">
           <div class="card">
             <h3>Narraciones precomputadas</h3>
-            <p>Las narrativas se generan una vez por jornada y quedan en JSON. En fase de grupos se prioriza el tono base de Bogotá para mantener estabilidad antes de activar variaciones regionales.</p>
+            <p>Las narrativas no se generan cada vez que alguien abre la app. Se calculan por jornada, quedan en JSON y se actualizan cuando cambian resultados, presión de grupo o contexto competitivo.</p>
           </div>
           <div class="card">
-            <h3>Chat con contexto del torneo</h3>
-            <p>El chat inyecta partidos del día, tablas y RAG cuando hay embeddings disponibles. Tiene filtro temático, caché y límite por IP para bajar costo y reducir respuestas fuera de dominio.</p>
+            <h3>RAG cerrado y caché</h3>
+            <p>El chat no consulta un RAG abierto sin control. Usa contexto del torneo, filtro temático, caché y límites por IP para evitar alucinaciones, respuestas fuera de dominio y consumo repetido.</p>
           </div>
         </div>
       </div>
       <div id="tab-agents" class="tab-panel" role="tabpanel" aria-labelledby="tab-agents-button">
         <div class="grid-2">
           <div class="card">
-            <h3>Capa separada y experimental</h3>
-            <p>El debate de agentes analiza presión de grupo, momentum, localía, dificultad del rival y escenarios de clasificación. No debe confundirse con el modelo ML base.</p>
+            <h3>Cuatro hipótesis trazables</h3>
+            <p>Group Analyst, Tactical Scout, Sentiment Reader y Consensus predicen el mismo partido. Cada salida queda guardada para evaluar 1X2, marcador exacto y desempeño por jornada.</p>
           </div>
           <div class="card">
-            <h3>Uso responsable</h3>
-            <p>Los agentes pueden aportar contexto y marcador exacto candidato, pero su impacto histórico todavía debe medirse. Si falla la API o el presupuesto, el sistema vuelve al ensemble determinístico.</p>
+            <h3>Aprendizaje operativo</h3>
+            <p>Los agentes no aprenden mágicamente: el sistema compara predicción vs resultado, identifica quién acertó más y ajusta pesos, prompts y modelos según la fase del Mundial.</p>
           </div>
         </div>
       </div>
@@ -575,32 +799,32 @@
           </defs>
           <g font-family="Inter, sans-serif">
             <rect x="10" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="95" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">1. Datos</text>
-            <text x="95" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Histórico + fixture + live</text>
+            <text x="95" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">1. Contexto</text>
+            <text x="95" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Fixture + tabla + resultados</text>
 
             <line x1="180" y1="60" x2="218" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
             <rect x="220" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="305" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">2. Features</text>
-            <text x="305" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">ELO, forma, H2H, localía</text>
+            <text x="305" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">2. Benchmark</text>
+            <text x="305" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">ELO + Poisson + XGB</text>
 
             <line x1="390" y1="60" x2="428" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
             <rect x="430" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="515" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">3. Ensemble</text>
-            <text x="515" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">ELO 22% · Poisson 58% · XGB 20%</text>
+            <text x="515" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">3. Agentes</text>
+            <text x="515" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">4 pronósticos trazables</text>
 
             <line x1="600" y1="60" x2="638" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
             <rect x="640" y="28" width="170" height="64" rx="10" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
-            <text x="725" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">4. Simulación</text>
-            <text x="725" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Grupos, terceros, bracket</text>
+            <text x="725" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">4. Evaluación</text>
+            <text x="725" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">modelo vs agentes</text>
 
             <line x1="810" y1="60" x2="848" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
             <rect x="850" y="28" width="140" height="64" rx="10" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
-            <text x="920" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">5. Narrativa</text>
-            <text x="920" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Chat + Narrator AI</text>
+            <text x="920" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">5. Ajuste</text>
+            <text x="920" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">pesos, prompts, modelos</text>
           </g>
         </svg>
       </div>
@@ -608,15 +832,16 @@
 
     <section id="evidencia" aria-labelledby="evidencia-title">
       <div class="section-head">
-        <h2 id="evidencia-title">Evidencia Y Métricas</h2>
-        <p>Los números se presentan con cautela: el fútbol tiene alta varianza, el tamaño de muestra mundialista es pequeño y la métrica principal es probabilística, no solo aciertos.</p>
+        <h2 id="evidencia-title">Evidencia: Modelo Vs Agentes</h2>
+        <p>La métrica principal del caso no es “adivinar partidos”, sino comparar hipótesis: modelo base, agentes individuales y consenso contra el resultado real.</p>
       </div>
       <div class="grid-2">
         <div class="card">
-          <h3>Validación documentada</h3>
+          <h3>Benchmark estadístico</h3>
           <table>
             <thead><tr><th>Elemento</th><th>Valor</th></tr></thead>
             <tbody>
+              <tr><td>Uso en el caso</td><td>Piso estadístico reproducible para comparar contra agentes.</td></tr>
               <tr><td>Test temporal</td><td>Qatar 2022, 64 partidos retenidos.</td></tr>
               <tr><td>Walk-forward</td><td>5 Mundiales, 320 predicciones agregadas.</td></tr>
               <tr><td>RPS ensemble</td><td>0.1958 global, menor es mejor.</td></tr>
@@ -626,13 +851,13 @@
           </table>
         </div>
         <div class="card">
-          <h3>Qué se corrigió en la narrativa</h3>
+          <h3>Evaluación multiagente</h3>
           <ul>
-            <li>Se eliminó el tono de promesa absoluta y se reemplazó por evidencia medible.</li>
-            <li>Se separó modelo base, narrador IA y Agent Debate.</li>
-            <li>Se evita presentar accuracy como única medida de calidad.</li>
-            <li>Se declara la incertidumbre de datos vivos y marcadores recientes.</li>
-            <li>Se reemplaza la orientación de apuestas por análisis explicable.</li>
+            <li>Cada partido debatido guarda 4 predicciones: 3 agentes + consenso.</li>
+            <li>Después del resultado, se evalúa 1X2, marcador exacto y desempeño por jornada.</li>
+            <li>La muestra actual es temprana: 4 partidos jugados con debate evaluable.</li>
+            <li>Group Analyst lidera la muestra inicial en J2 porque entiende puntos, presión y clasificación.</li>
+            <li>La decisión futura no es “usar más IA”, sino usar el agente correcto en la fase correcta.</li>
           </ul>
         </div>
       </div>
@@ -641,7 +866,65 @@
     <section id="finops-agentes" aria-labelledby="finops-agentes-title">
       <div class="section-head">
         <h2 id="finops-agentes-title">FinOps IA Y Aprendizaje De Agentes</h2>
-        <p>La IA no solo debe explicar bien: también debe mostrar cuánto cuesta y si mejora con retroalimentación real. Este bloque usa datos registrados en logs y resultados jugados hasta la última revisión local.</p>
+        <p>La demostración no es gastar más IA: es saber qué modelo usar, cuándo usarlo y cómo evitar llamadas repetidas con cache, RAG cerrado y narraciones precomputadas.</p>
+      </div>
+      <div class="viz-shell" style="margin-bottom:18px;">
+        <div class="kicker">Foto financiera del torneo</div>
+        <h3>El costo se mantiene bajo porque el stack no llama LLM por cada clic</h3>
+        <div class="finops-board">
+          <div class="gauge-card" aria-label="Gasto actual frente a proyección alta">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 120 120" role="img" aria-label="USD 0.51 gastado de un máximo proyectado de USD 11.15">
+                <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>
+                <circle cx="60" cy="60" r="48" fill="none" stroke="#30d158" stroke-width="12" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="287.8"/>
+              </svg>
+              <div class="gauge-center">
+                <div>
+                  <strong>$0.51</strong>
+                  <span>gastado a hoy<br>~4.6% del escenario alto</span>
+                </div>
+              </div>
+            </div>
+            <p class="muted small" style="margin:0;">La cifra importante no es solo el gasto bajo, sino que el sistema sabe en qué parte se consume.</p>
+          </div>
+          <div class="scenario-board">
+            <div class="scenario-row">
+              <div class="scenario-top"><b>Costo por partido full-stack</b><span>Agent Debate + Narrator + agentes ligeros</span></div>
+              <div class="scenario-scale"><span class="scenario-fill" style="--w:100%;--c1:#0a84ff;--c2:#30d158"></span></div>
+              <div class="cost-equation"><span class="equation-chip">$0.08-0.10 Reasoner</span><span>+</span><span class="equation-chip">$0.016 Narrator</span><span>+</span><span class="equation-chip">$0.01-0.02 agentes</span></div>
+            </div>
+            <div class="scenario-row">
+              <div class="scenario-top"><b>Proyección restante</b><span>76 partidos por jugar</span></div>
+              <div class="scenario-scale">
+                <span class="scenario-fill" style="--w:78%;--c1:#f0be4a;--c2:#ff9f0a"></span>
+              </div>
+              <div class="cost-equation"><span class="equation-chip">$8.36 bajo</span><span>→</span><span class="equation-chip">$10.64 alto</span></div>
+            </div>
+            <div class="scenario-row">
+              <div class="scenario-top"><b>Total hasta la final</b><span>si se mantiene la arquitectura controlada</span></div>
+              <div class="scenario-scale">
+                <span class="scenario-fill" style="--w:100%;--c1:#30d158;--c2:#f0be4a"></span>
+              </div>
+              <div class="cost-equation"><span class="equation-chip">$0.51 hoy</span><span>+</span><span class="equation-chip">$8.36-10.64</span><span>=</span><span class="equation-chip">$8.87-11.15</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cost-stack">
+          <div class="kicker">76 partidos restantes · costo por modelo y fase</div>
+          <div class="stack-bar" aria-label="Costo restante apilado por fase y modelo">
+            <div class="stack-segment" style="--w:16.2%;--c:#0a84ff">1.54</div>
+            <div class="stack-segment" style="--w:41.7%;--c:#f0be4a">3.96</div>
+            <div class="stack-segment" style="--w:11.8%;--c:#30d158">1.12</div>
+            <div class="stack-segment" style="--w:30.3%;--c:#ff9f0a">2.88</div>
+          </div>
+          <div class="model-cards">
+            <div class="model-card" style="--c:#0a84ff"><b>Grupos · Flash/Chat</b><strong>$1.54</strong><span>44 partidos · Narrator AI + agentes ligeros</span></div>
+            <div class="model-card" style="--c:#f0be4a"><b>Grupos · Reasoner</b><strong>$3.96</strong><span>44 partidos · Agent Debate, 9 llamadas por partido</span></div>
+            <div class="model-card" style="--c:#30d158"><b>Eliminatorias · Flash/Chat</b><strong>$1.12</strong><span>32 partidos · narraciones y contexto liviano</span></div>
+            <div class="model-card" style="--c:#ff9f0a"><b>Eliminatorias · Reasoner</b><strong>$2.88</strong><span>32 partidos · debate selectivo de alta presión</span></div>
+          </div>
+        </div>
+        <p class="muted small" style="margin-bottom:0;">El bloque caro no es la narración: es el <strong>Agent Debate</strong>. Reasoner domina porque cada partido debatido dispara 9 llamadas y cobra tokens de pensamiento interno. El resto se contiene con <code>deepseek-chat-v3-flash</code>, <code>deepseek-chat</code>, cache y precomputación.</p>
       </div>
       <div class="viz-shell">
         <div class="kicker">Control de costos</div>
@@ -726,33 +1009,34 @@
           <p class="muted small" style="margin-bottom:0;margin-top:16px;">El Agent Debate domina el costo porque usa <code>deepseek-reasoner</code>, hace 9 llamadas por partido y el pensamiento interno del modelo también consume tokens facturables aunque no se muestre al usuario. Narrator AI y los agentes de enriquecimiento usan <code>deepseek-chat-v3-flash</code>/<code>deepseek-chat</code>, mucho más económicos.</p>
         </div>
         <div class="viz-shell">
-          <div class="kicker">Costo restante del torneo</div>
-          <h3>USD por modelo DeepSeek y fase</h3>
-          <p class="muted small">44 partidos de grupos + 32 de eliminatorias restantes, divididos por el modelo que realmente consume el gasto.</p>
-          <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:6px auto 0" role="img" aria-label="Costo por modelo y fase">
-            <g font-family="Inter, sans-serif">
-              <text x="0" y="16" fill="#9fb8b5" font-size="11.5">Grupos · Flash/Chat</text>
-              <rect x="0" y="22" width="148" height="18" rx="4" fill="#0a84ff"/>
-              <text x="156" y="36" fill="#d8fbe9" font-size="12" font-weight="700">USD 1.54</text>
-
-              <text x="0" y="58" fill="#9fb8b5" font-size="11.5">Grupos · Reasoner (Agent Debate)</text>
-              <rect x="0" y="64" width="380" height="18" rx="4" fill="#f0be4a"/>
-              <text x="388" y="78" fill="#d8fbe9" font-size="12" font-weight="700">USD 3.96</text>
-
-              <text x="0" y="100" fill="#9fb8b5" font-size="11.5">Eliminatorias · Flash/Chat</text>
-              <rect x="0" y="106" width="108" height="18" rx="4" fill="#0a84ff"/>
-              <text x="116" y="120" fill="#d8fbe9" font-size="12" font-weight="700">USD 1.12</text>
-
-              <text x="0" y="142" fill="#9fb8b5" font-size="11.5">Eliminatorias · Reasoner (Agent Debate)</text>
-              <rect x="0" y="148" width="276" height="18" rx="4" fill="#f0be4a"/>
-              <text x="284" y="162" fill="#d8fbe9" font-size="12" font-weight="700">USD 2.88</text>
-
-              <rect x="0" y="182" width="12" height="12" rx="3" fill="#0a84ff"/>
-              <text x="18" y="192" fill="#9fb8b5" font-size="10.5">Flash/Chat (Narrator + agentes)</text>
-              <rect x="220" y="182" width="12" height="12" rx="3" fill="#f0be4a"/>
-              <text x="238" y="192" fill="#9fb8b5" font-size="10.5">Reasoner (Agent Debate)</text>
-            </g>
-          </svg>
+          <div class="kicker">Por qué domina Reasoner</div>
+          <h3>1 partido debatido = 9 llamadas caras</h3>
+          <p class="muted small">Cada agente no solo responde una vez: razona, rebate y participa en el consenso. Esa arquitectura da trazabilidad, pero concentra el costo en <code>deepseek-reasoner</code>.</p>
+          <div class="call-visual" aria-label="Ecuación visual de llamadas Reasoner">
+            <div class="mini-stack">
+              <div class="mini-pill">Group Analyst</div>
+              <div class="mini-pill">Tactical Scout</div>
+              <div class="mini-pill">Sentiment Reader</div>
+            </div>
+            <div class="call-equals">× 3 rondas = 9</div>
+            <div class="mini-stack">
+              <div class="mini-pill">Lectura inicial</div>
+              <div class="mini-pill">Rebate</div>
+              <div class="mini-pill">Ajuste final</div>
+            </div>
+          </div>
+          <div class="call-matrix" aria-label="Nueve llamadas del Agent Debate">
+            <div class="call-cell"><b>Group Analyst</b><span>R1 · lectura inicial</span></div>
+            <div class="call-cell"><b>Tactical Scout</b><span>R1 · lectura inicial</span></div>
+            <div class="call-cell"><b>Sentiment Reader</b><span>R1 · lectura inicial</span></div>
+            <div class="call-cell"><b>Group Analyst</b><span>R2 · rebate</span></div>
+            <div class="call-cell"><b>Tactical Scout</b><span>R2 · rebate</span></div>
+            <div class="call-cell"><b>Sentiment Reader</b><span>R2 · rebate</span></div>
+            <div class="call-cell"><b>Group Analyst</b><span>R3 · ajuste final</span></div>
+            <div class="call-cell"><b>Tactical Scout</b><span>R3 · ajuste final</span></div>
+            <div class="call-cell"><b>Sentiment Reader</b><span>R3 · ajuste final</span></div>
+          </div>
+          <p class="muted small" style="margin-bottom:0;margin-top:14px;">Por eso la optimización no es eliminar Reasoner, sino usarlo donde sí paga: J2/J3, escenarios simultáneos, mejores terceros y partidos de alta presión.</p>
         </div>
       </div>
       <div class="viz-shell" style="margin-top:18px;">
@@ -823,31 +1107,32 @@
       <table>
         <thead><tr><th>Decisión</th><th>Trade-off</th><th>Resultado</th></tr></thead>
         <tbody>
-          <tr><td>Split temporal</td><td>Menos datos para test, pero evita leakage.</td><td>Qatar 2022 queda fuera del entrenamiento.</td></tr>
-          <tr><td>JSON estáticos para frontend</td><td>Menos dinamismo instantáneo, más estabilidad de despliegue.</td><td>La app carga rápido y reduce dependencia del backend.</td></tr>
-          <tr><td>Narraciones precomputadas</td><td>No todo se genera en tiempo real.</td><td>Menor costo por usuario y menos riesgo de latencia.</td></tr>
-          <tr><td>Agentes como capa opcional</td><td>Su impacto debe validarse aparte.</td><td>El core sigue funcionando aunque no haya LLM.</td></tr>
+          <tr><td>Modelo como benchmark</td><td>No todo lo resuelve el agente.</td><td>Cada predicción IA se compara contra un piso estadístico reproducible.</td></tr>
+          <tr><td>DeepSeek por fase</td><td>El modelo caro no se usa para todo.</td><td>Reasoner se reserva para J3, debate y escenarios complejos.</td></tr>
+          <tr><td>Cache y precomputación</td><td>Menos respuesta instantánea libre.</td><td>No se paga una llamada LLM por cada clic, narración o usuario.</td></tr>
+          <tr><td>RAG cerrado</td><td>Menos amplitud de respuesta.</td><td>Más control: fixtures, standings, resultados y contexto del torneo.</td></tr>
+          <tr><td>Evaluación posterior</td><td>Requiere guardar predicciones antes del partido.</td><td>Permite saber qué agente acertó más y ajustar pesos por fase.</td></tr>
         </tbody>
       </table>
     </section>
 
     <section id="estado" aria-labelledby="estado-title">
       <div class="section-head">
-        <h2 id="estado-title">Estado Del Proyecto</h2>
-        <p>Esta sección separa lo que ya está implementado, lo que está en validación y lo que debe tratarse como experimental o pendiente.</p>
+        <h2 id="estado-title">Estado Del Laboratorio</h2>
+        <p>La madurez se mide por trazabilidad: qué predijo cada capa, cuánto costó, qué acertó y qué regla debe cambiar después del resultado.</p>
       </div>
       <div class="grid-4">
-        <article class="card"><span class="status done">Implementado</span><h3>Core predictor</h3><p>Pipeline ML, ensemble, export de datos, frontend, simulador y seguimiento de grupos.</p></article>
-        <article class="card"><span class="status validating">En validación</span><h3>Resultados en vivo</h3><p>Actualización diaria y recalculo por jornada, con atención especial a J2 y J3.</p></article>
-        <article class="card"><span class="status experimental">Experimental</span><h3>Agent Debate</h3><p>Análisis contextual con DeepSeek para presión, momentum y marcador exacto candidato.</p></article>
-        <article class="card"><span class="status pending">Pendiente</span><h3>Medición continua</h3><p>Comparar agente vs ML por jornada, grupo, score exacto y cambios post-resultados.</p></article>
+        <article class="card"><span class="status done">Implementado</span><h3>Benchmark + agentes</h3><p>Modelo base, Agent Debate, 4 pronósticos estructurados y evaluación por resultado.</p></article>
+        <article class="card"><span class="status validating">En validación</span><h3>Pesos por fase</h3><p>J2/J3 ajustan importancia de presión, puntos, diferencia de gol y mejores terceros.</p></article>
+        <article class="card"><span class="status experimental">Experimental</span><h3>Routing DeepSeek</h3><p>Uso progresivo de modelos: ligero en J1, más capacidad en J2 y Reasoner para escenarios complejos.</p></article>
+        <article class="card"><span class="status pending">Pendiente</span><h3>Autoajuste formal</h3><p>Convertir la evaluación histórica en reglas automáticas de confianza por agente y fase.</p></article>
       </div>
     </section>
 
     <section id="operacion" aria-labelledby="operacion-title">
       <div class="section-head">
         <h2 id="operacion-title">Operación Durante El Mundial</h2>
-        <p>La operación diaria debe mantener tres artefactos alineados: resultados reales, predicciones recalculadas y narrativas actualizadas.</p>
+        <p>La operación diaria mantiene alineados cuatro artefactos: resultado real, benchmark ML, pronósticos de agentes y narrativas cacheadas.</p>
       </div>
       <div class="grid-2">
         <div class="card">
@@ -859,8 +1144,8 @@ cd frontend
 npx vercel --prod</code></pre>
         </div>
         <div class="card">
-          <h3>J2 y J3 requieren más cuidado</h3>
-          <p>En J2, los partidos del segundo bloque deben leer los resultados del primer bloque. En J3, los partidos de cada grupo se juegan al mismo tiempo y la narrativa debe enfocarse en clasificación directa, diferencia de gol y mejores terceros.</p>
+          <h3>J2 y J3 requieren más capacidad</h3>
+          <p>En J2, los agentes deben leer presión real: quién necesita ganar, quién puede empatar y quién se complica. En J3, Reasoner se justifica porque aparecen simultaneidad, diferencia de gol y pelea por mejores terceros.</p>
         </div>
       </div>
     </section>
@@ -868,12 +1153,12 @@ npx vercel --prod</code></pre>
     <section id="limitaciones" aria-labelledby="limitaciones-title">
       <div class="section-head">
         <h2 id="limitaciones-title">Limitaciones Serias</h2>
-        <p>Declarar límites hace que el proyecto se vea más maduro, no menos ambicioso.</p>
+        <p>La arquitectura es potente precisamente porque declara cuándo no sabe, cuándo no debe gastar y cuándo una predicción todavía no tiene muestra suficiente.</p>
       </div>
       <div class="grid-3">
-        <article class="card"><h3>Varianza deportiva</h3><p>Un partido único puede girar por expulsiones, lesiones, clima o decisiones arbitrales. Las probabilidades no son certezas.</p></article>
-        <article class="card"><h3>Datos vivos</h3><p>Si la fuente de resultados llega tarde o el fixture cambia, la app puede mostrar contexto desactualizado hasta el siguiente ciclo.</p></article>
-        <article class="card"><h3>LLM y narrativa</h3><p>Las respuestas generativas pueden equivocarse si el input está incompleto. Por eso se prefiere contexto explícito, cache y fallback.</p></article>
+        <article class="card"><h3>Muestra pequeña</h3><p>El desempeño inicial de agentes no debe venderse como verdad definitiva. Cada jornada aumenta la evidencia y reduce ruido.</p></article>
+        <article class="card"><h3>Datos vivos</h3><p>Si resultados, horarios o tablas llegan tarde, los agentes pueden razonar sobre contexto viejo hasta el siguiente ciclo de actualización.</p></article>
+        <article class="card"><h3>LLM no es oráculo</h3><p>Reasoner ayuda en escenarios complejos, pero no reemplaza evaluación. Toda salida debe quedar guardada y compararse contra el resultado real.</p></article>
       </div>
     </section>
 
@@ -895,8 +1180,8 @@ npx vercel --prod</code></pre>
 
   <footer class="footer">
     <div class="shell">
-      <p><strong>Mundial Predictor 2026</strong> presenta análisis probabilístico y narrativas explicables. No ofrece asesoría de apuestas ni garantiza resultados deportivos.</p>
-      <p class="small">Última revisión editorial: 2026-06-19. Mantener métricas sincronizadas con <code>model_card.md</code>, <code>methodology.md</code> y los resultados reales exportados al frontend.</p>
+      <p><strong>Mundial Predictor 2026</strong> es una demostración de arquitectura multiagente, evaluación continua y FinOps IA aplicada a un dominio real. No ofrece asesoría de apuestas ni garantiza resultados deportivos.</p>
+      <p class="small">Última revisión editorial: 2026-06-19. Mantener métricas sincronizadas con resultados reales, costos LLM, <code>model_card.md</code>, <code>methodology.md</code> y desempeño por agente.</p>
     </div>
   </footer>
 
@@ -947,40 +1232,40 @@ npx vercel --prod</code></pre>
       {
         key: 'j1',
         title: 'J1 · Línea base',
-        subtitle: 'primer resultado real y momentum inicial',
+        subtitle: 'modelos ligeros y señales iniciales',
         bullets: [
-          'El sistema identifica marcador anterior, rival y calidad del resultado.',
-          'Se evita inflar a un equipo solo por nombre histórico.',
-          'La mejora esperada es calibrar qué resultados fueron realmente fuertes o preocupantes.'
+          'DeepSeek ligero para narración y contexto: favoritos, localía, ELO y primera lectura del grupo.',
+          'El sistema evita gastar Reasoner cuando todavía no hay presión acumulada ni escenarios cruzados.',
+          'La evaluación inicial calibra qué resultados fueron realmente fuertes, normales o preocupantes.'
         ]
       },
       {
         key: 'j2',
         title: 'J2 · Presión de puntos',
-        subtitle: 'partidos ganables, urgencia y margen de error',
+        subtitle: 'más capacidad para presión, urgencia y margen de error',
         bullets: [
           'Muestra evaluada: 4 partidos con debate y resultado final.',
           'Group Analyst va 4/4 en 1X2; Consensus va 3/4.',
-          'La lectura que más aporta hoy es puntos + diferencia de gol + presión por clasificación.'
+          'Sube el peso de agentes que entienden puntos, diferencia de gol, rival ganable y obligación de no quedar contra la pared.'
         ]
       },
       {
         key: 'j3',
         title: 'J3 · Clasificación y mejores terceros',
-        subtitle: 'simultaneidad por grupo y diferencia de gol',
+        subtitle: 'Reasoner para simultaneidad y escenarios cruzados',
         bullets: [
-          'No debe asumir información de partidos simultáneos si no existe input en vivo.',
-          'El agente de grupo debe subir peso: clasificación directa, segundo puesto y mejores terceros.',
+          'DeepSeek Reasoner se justifica porque aparecen clasificación directa, mejores terceros y partidos simultáneos.',
+          'No debe asumir información del otro partido del grupo si no existe input en vivo.',
           'La métrica clave será si el debate mejora escenarios de supervivencia, no solo 1X2.'
         ]
       },
       {
         key: 'ko',
         title: 'Eliminatorias · Alta varianza',
-        subtitle: 'prórroga, penales, bajas y gestión emocional',
+        subtitle: 'Reasoner selectivo, no gasto automático',
         bullets: [
           'El core ML sigue entregando probabilidades base.',
-          'Los agentes deben tratar contexto táctico, lesiones y fatiga como enriquecimiento, no como certeza.',
+          'Reasoner se usa solo cuando el contexto lo amerita: bajas, fatiga, penales, presión o señales contradictorias.',
           'La evaluación debe separar ganador en 90 minutos, clasificado y marcador exacto.'
         ]
       }
