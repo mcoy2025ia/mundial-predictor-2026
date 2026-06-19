@@ -1,1614 +1,781 @@
-<!DOCTYPE html>
-<html lang="es">
+﻿<!doctype html>
+<html lang="es-CO">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mundial Predictor 2026 — MCOY AI + Data Strategy</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#090B12;
-  --bg2:#0E1220;
-  --bg3:#141826;
-  --bg4:#1A2035;
-  --border:#1E2840;
-  --border2:#2A3A5C;
-  --blue:#1565F5;
-  --blue2:#2A7BFF;
-  --blue3:#4A96FF;
-  --blue-glow:rgba(21,101,245,0.18);
-  --blue-faint:rgba(21,101,245,0.08);
-  --text:#E8EDF8;
-  --text2:#8B9BB4;
-  --text3:#4E607A;
-  --green:#00D97E;
-  --green-bg:rgba(0,217,126,0.08);
-  --amber:#F5A623;
-  --amber-bg:rgba(245,166,35,0.08);
-  --red:#FF4D6A;
-  --red-bg:rgba(255,77,106,0.08);
-  --mono:'JetBrains Mono',monospace;
-  --sans:'Inter',sans-serif;
-  --radius:8px;
-  --radius-lg:12px;
-}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;font-size:14px;min-height:100vh}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mundial Predictor 2026 | Caso técnico de ML, simulación e IA explicable</title>
+  <meta name="description" content="Caso técnico de Mundial Predictor 2026: sistema predictivo reproducible con ML, actualizaciones con resultados reales, simulación Monte Carlo y narrativas explicables con IA bajo control de costos." />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c1117;
+      --panel: #121a22;
+      --panel-2: #17222d;
+      --ink: #eef4f7;
+      --muted: #9fb0bd;
+      --line: rgba(159, 176, 189, 0.2);
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --warn: #facc15;
+      --risk: #fb7185;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-/* HEADER */
-.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0}
-.header-inner{max-width:1100px;margin:0 auto;padding:1.5rem 2rem;display:flex;align-items:center;gap:1.5rem}
-.logo-wrap{flex-shrink:0}
-.logo-img{height:64px;width:auto;display:block}
-.header-divider{width:1px;height:48px;background:var(--border2);flex-shrink:0}
-.header-text h1{font-size:22px;font-weight:700;letter-spacing:-.02em;color:#fff;margin-bottom:3px}
-.header-text h1 span{color:var(--blue2)}
-.header-text p{font-size:12px;color:var(--text2);letter-spacing:.04em;text-transform:uppercase}
-.header-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:.75rem}
-.badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;letter-spacing:.04em;text-transform:uppercase;border:1px solid}
-.b-green{background:var(--green-bg);color:var(--green);border-color:rgba(0,217,126,0.3)}
-.b-blue{background:var(--blue-faint);color:var(--blue3);border-color:rgba(74,150,255,0.3)}
-.b-amber{background:var(--amber-bg);color:var(--amber);border-color:rgba(245,166,35,0.3)}
-.b-gray{background:rgba(255,255,255,0.04);color:var(--text2);border-color:var(--border)}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      font-size: 16px;
+    }
 
-/* ACCENT LINE */
-.accent-line{height:2px;background:linear-gradient(90deg,var(--blue) 0%,var(--blue2) 40%,transparent 100%)}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, rgba(34, 197, 94, 0.13), transparent 28%),
+        linear-gradient(220deg, rgba(56, 189, 248, 0.10), transparent 32%),
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.07), transparent 38%);
+      opacity: 0.85;
+      z-index: -1;
+    }
 
-/* NAV TABS */
-.tabs-wrap{background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.tabs{max-width:1100px;margin:0 auto;padding:0 2rem;display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab-btn{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--text2);background:none;border:none;border-bottom:2px solid transparent;padding:.9rem 1.1rem;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;letter-spacing:.01em}
-.tab-btn:hover{color:var(--text)}
-.tab-btn.active{color:var(--blue2);border-bottom-color:var(--blue)}
+    a { color: var(--accent-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-/* MAIN LAYOUT */
-.main{max-width:1100px;margin:0 auto;padding:2rem}
-.panel{display:none}
-.panel.active{display:block}
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
 
-/* TYPOGRAPHY */
-.section-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue2);margin-bottom:.5rem}
-.section-title{font-size:20px;font-weight:600;color:#fff;margin-bottom:.5rem;letter-spacing:-.01em}
-.section-body{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:1.5rem}
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(12, 17, 23, 0.86);
+      backdrop-filter: blur(14px);
+    }
 
-/* CARDS */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1rem}
-.card-header{padding:1rem 1.25rem;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem}
-.card-icon{font-size:18px;color:var(--blue2);flex-shrink:0}
-.card-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:2px}
-.card-sub{font-size:12px;color:var(--text3)}
-.card-body{padding:1.25rem}
+    .topbar-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
 
-/* FEATURE LIST */
-.feat{display:flex;gap:.75rem;margin-bottom:.9rem;align-items:flex-start}
-.feat:last-child{margin-bottom:0}
-.feat-dot{width:5px;height:5px;border-radius:50%;background:var(--blue);margin-top:7px;flex-shrink:0}
-.feat-text{font-size:13.5px;color:var(--text2);line-height:1.65}
-.feat-text strong{color:var(--text);font-weight:500}
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      font-weight: 760;
+      letter-spacing: 0;
+    }
 
-/* GRID */
-.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:1.25rem}
-.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1.25rem}
-.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.25rem}
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #16a34a, #0ea5e9);
+      color: #031015;
+      font-weight: 900;
+    }
 
-/* METRIC BOXES */
-.metric{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;text-align:center}
-.metric-val{font-size:24px;font-weight:700;color:var(--blue2);margin-bottom:4px;font-variant-numeric:tabular-nums}
-.metric-val.green{color:var(--green)}
-.metric-val.amber{color:var(--amber)}
-.metric-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
-.metric-ctx{font-size:11px;color:var(--text3)}
+    nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    nav a {
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+    }
+    nav a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.07); text-decoration: none; }
 
-/* STACK LAYERS */
-.layer{border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:.75rem;overflow:hidden}
-.layer-header{padding:.75rem 1.25rem;background:var(--bg3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem}
-.layer-name{font-size:13px;font-weight:600;color:#fff}
-.layer-desc{font-size:11px;color:var(--text3);margin-top:1px}
-.layer-items{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:8px;padding:1rem 1.25rem}
-.stack-item{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem .9rem;transition:border-color .15s}
-.stack-item:hover{border-color:var(--border2)}
-.stack-item-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
-.stack-item-role{font-size:11px;color:var(--text3);line-height:1.5}
+    .hero {
+      padding: 72px 0 44px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 36px;
+      align-items: start;
+    }
 
-/* CODE BLOCKS */
-.code-block{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;font-family:var(--mono);font-size:12px;color:#9DB8DD;line-height:1.9;overflow-x:auto;white-space:pre;margin-bottom:1rem}
-.code-comment{color:var(--text3)}
-.code-key{color:var(--blue3)}
-.code-val{color:var(--green)}
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: #b7f7ca;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
 
-/* DIAGRAMS */
-.diagram-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.25rem;overflow-x:auto}
-.diagram-title{font-size:12px;font-weight:600;color:var(--blue2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem}
+    h1, h2, h3 { line-height: 1.12; letter-spacing: 0; margin: 0; }
+    h1 { font-size: clamp(2.6rem, 6vw, 5.6rem); max-width: 920px; }
+    h2 { font-size: clamp(1.9rem, 3vw, 3rem); margin-bottom: 14px; }
+    h3 { font-size: 1.15rem; margin-bottom: 8px; }
 
-/* CHECK ROWS */
-.check-row{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.65rem;font-size:13px;color:var(--text2);line-height:1.6}
-.check-row:last-child{margin-bottom:0}
-.check-icon{color:var(--green);font-size:14px;flex-shrink:0;margin-top:2px}
-.check-icon.warn{color:var(--amber)}
+    .lead {
+      margin: 24px 0 0;
+      max-width: 850px;
+      color: #cfe0e7;
+      font-size: clamp(1.08rem, 1.5vw, 1.28rem);
+    }
 
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:13px}
-.tbl th{text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);padding:.6rem .9rem;border-bottom:1px solid var(--border)}
-.tbl td{padding:.7rem .9rem;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top}
-.tbl td:first-child{font-family:var(--mono);font-size:11px;color:var(--blue3)}
-.tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:rgba(255,255,255,.02)}
+    .thesis {
+      margin-top: 28px;
+      padding: 22px;
+      border: 1px solid rgba(34, 197, 94, 0.34);
+      border-left: 5px solid var(--accent);
+      border-radius: var(--radius);
+      background: rgba(18, 26, 34, 0.78);
+      box-shadow: var(--shadow);
+      font-size: 1.06rem;
+      color: #e9f7ee;
+    }
 
-/* STEP LIST */
-.steps-list{margin-bottom:1rem}
-.step{display:flex;gap:1rem;margin-bottom:1.25rem;align-items:flex-start}
-.step-num{width:30px;height:30px;border-radius:50%;background:var(--blue-faint);border:1px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue2);flex-shrink:0;font-variant-numeric:tabular-nums}
-.step-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:.25rem}
-.step-desc{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:.5rem}
+    .hero-card {
+      border: 1px solid var(--line);
+      background: rgba(18, 26, 34, 0.86);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
 
-/* OPS TABS */
-.inner-tabs{border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1rem}
-.inner-tab-bar{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--border)}
-.inner-tab-btn{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--text2);background:var(--bg3);border:none;border-right:1px solid var(--border);padding:.75rem .5rem;cursor:pointer;text-align:center;transition:background .15s,color .15s}
-.inner-tab-btn:last-child{border-right:none}
-.inner-tab-btn.active{background:var(--bg4);color:var(--blue2)}
-.inner-tab-panel{display:none;padding:1.25rem}
-.inner-tab-panel.active{display:block}
+    .metric-grid { display: grid; gap: 12px; }
+    .metric {
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--line);
+    }
+    .metric strong { display: block; font-size: 1.3rem; color: var(--ink); }
+    .metric span { color: var(--muted); font-size: 0.92rem; }
 
-/* AGENT COST */
-.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:1.25rem}
-.agent-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem}
-.agent-name{font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px}
-.agent-cost-val{font-size:20px;font-weight:700;color:var(--blue2);margin-bottom:3px}
-.agent-cost-val.free{color:var(--green)}
-.agent-type{font-size:11px;color:var(--text3)}
+    .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .badge {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.055);
+      color: #d8e7ed;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
 
-/* PREREQS */
-.prereq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:1.25rem}
-.prereq{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;display:flex;align-items:center;gap:.6rem}
-.prereq-icon{font-size:20px;flex-shrink:0}
-.prereq-name{font-size:13px;font-weight:500;color:var(--text)}
-.prereq-ver{font-size:11px;color:var(--text3)}
+    section { padding: 44px 0; border-top: 1px solid var(--line); }
+    .section-head { max-width: 820px; margin-bottom: 24px; }
+    .section-head p { color: var(--muted); margin: 0; font-size: 1.02rem; }
 
-/* ENV TABLE REQ BADGE */
-.req-yes{background:var(--green-bg);color:var(--green);border:1px solid rgba(0,217,126,.25);font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;white-space:nowrap}
-.req-rec{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(245,166,35,.25);font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;white-space:nowrap}
-.req-opt{background:rgba(255,255,255,.04);color:var(--text3);border:1px solid var(--border);font-size:10px;font-weight:600;padding:2px 8px;border-radius:12px;white-space:nowrap}
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 
-/* TEST ROW */
-.test-row{display:flex;justify-content:space-between;align-items:center;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:13px}
-.test-row:last-child{border-bottom:none}
-.test-name{font-family:var(--mono);font-size:11.5px;color:var(--blue3)}
-.test-pass{font-size:11px;font-weight:600;color:var(--green)}
+    .card {
+      display: block;
+      border: 1px solid var(--line);
+      background: rgba(18, 26, 34, 0.76);
+      border-radius: var(--radius);
+      padding: 20px;
+      min-height: 100%;
+      color: inherit;
+      text-decoration: none;
+    }
+    a.card:hover { border-color: rgba(56, 189, 248, 0.55); text-decoration: none; }
+    .card p, .card li { color: var(--muted); }
+    .card p:last-child { margin-bottom: 0; }
 
-/* BUSINESS RULES */
-.rule-category{margin-bottom:1.5rem}
-.rule-category-title{font-size:13px;font-weight:700;color:var(--blue2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
-.rule{background:var(--bg3);border-left:3px solid var(--blue);border-radius:0 var(--radius) var(--radius) 0;padding:.9rem 1.1rem;margin-bottom:.6rem}
-.rule-id{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:3px}
-.rule-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px}
-.rule-desc{font-size:12.5px;color:var(--text2);line-height:1.6}
-.rule.warn{border-left-color:var(--amber)}
-.rule.critical{border-left-color:var(--red)}
-.rule.green{border-left-color:var(--green)}
+    .kicker { color: var(--accent); font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .muted { color: var(--muted); }
+    .small { font-size: 0.92rem; }
 
-/* MERMAID */
-.mermaid-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1.25rem;overflow-x:auto;text-align:center}
-.mermaid-label{font-size:11px;font-weight:600;color:var(--blue2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;text-align:left}
+    .stack { display: grid; gap: 14px; }
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .step {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+    .step b { color: var(--ink); display: block; margin-bottom: 4px; }
+    .step span { color: var(--muted); font-size: 0.9rem; }
 
-/* FINOPS DAILY */
-.finops-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(18, 26, 34, 0.78);
+    }
+    th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: #dff7e8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; background: rgba(34, 197, 94, 0.08); }
+    td { color: var(--muted); }
+    tr:last-child td { border-bottom: 0; }
 
-/* DIVIDER */
-.divider{height:1px;background:var(--border);margin:1.5rem 0}
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+    .done { color: #b7f7ca; background: rgba(34, 197, 94, 0.14); }
+    .validating { color: #bae6fd; background: rgba(56, 189, 248, 0.14); }
+    .experimental { color: #fde68a; background: rgba(250, 204, 21, 0.14); }
+    .pending { color: #fecdd3; background: rgba(251, 113, 133, 0.14); }
 
-/* FOOTER */
-.footer{border-top:1px solid var(--border);background:var(--bg2);padding:1.25rem 2rem;text-align:center}
-.footer-inner{max-width:1100px;margin:0 auto;font-size:12px;color:var(--text3)}
-.footer-inner a{color:var(--blue2);text-decoration:none}
+    code, pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+    code { color: #dff7e8; background: rgba(255, 255, 255, 0.08); padding: 2px 5px; border-radius: 5px; }
+    pre {
+      margin: 0;
+      padding: 16px;
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: #071017;
+      color: #d7fbe5;
+    }
 
-@media(max-width:640px){
-  .header-inner{flex-direction:column;align-items:flex-start;gap:1rem;padding:1.25rem}
-  .main{padding:1rem}
-  .grid-4{grid-template-columns:1fr 1fr}
-  .finops-row{grid-template-columns:1fr}
-}
-</style>
+    .notice {
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      background: rgba(250, 204, 21, 0.08);
+      border-radius: var(--radius);
+      padding: 18px;
+      color: #f8e9a5;
+    }
+
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+    .tab-button {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: 999px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+    }
+    .tab-button[aria-selected="true"] { color: #06130d; background: var(--accent); border-color: var(--accent); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .viz-shell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(18, 26, 34, 0.76);
+      padding: 20px;
+    }
+    .viz-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .viz-button {
+      border: 1px solid var(--line);
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 750;
+    }
+    .viz-button.active { color: #06130d; background: var(--accent-2); border-color: var(--accent-2); }
+    .bar-list { display: grid; gap: 12px; }
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 220px) minmax(0, 1fr) 92px;
+      gap: 12px;
+      align-items: center;
+    }
+    .bar-label { color: var(--ink); font-weight: 750; }
+    .bar-track {
+      min-height: 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+    .bar-fill {
+      display: block;
+      min-height: 16px;
+      width: var(--w);
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      border-radius: 999px;
+    }
+    .bar-value { color: #dff7e8; font-variant-numeric: tabular-nums; text-align: right; }
+    .learning-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18px; align-items: start; }
+    .phase-list { display: grid; gap: 10px; }
+    .phase-item {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.045);
+      border-radius: var(--radius);
+      padding: 14px;
+      cursor: pointer;
+    }
+    .phase-item.active { border-color: rgba(56, 189, 248, 0.7); background: rgba(56, 189, 248, 0.12); }
+    .phase-item b { display: block; color: var(--ink); }
+    .phase-item span { display: block; color: var(--muted); font-size: 0.9rem; margin-top: 3px; }
+    .insight-box {
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      border-radius: var(--radius);
+      background: rgba(56, 189, 248, 0.08);
+      padding: 18px;
+      min-height: 210px;
+    }
+    .insight-box ul { margin-bottom: 0; }
+
+    .footer { padding: 34px 0 60px; color: var(--muted); border-top: 1px solid var(--line); }
+
+    @media (max-width: 920px) {
+      .hero, .grid-2, .grid-3, .grid-4, .flow, .learning-grid { grid-template-columns: 1fr; }
+      .topbar-inner { align-items: flex-start; flex-direction: column; padding: 14px 0; }
+      nav { justify-content: flex-start; }
+      section { padding: 34px 0; }
+    }
+
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 24px, 1180px); }
+      h1 { font-size: 2.4rem; }
+      .hero { padding-top: 42px; }
+      th, td { padding: 11px; }
+    }
+  </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header class="header">
-  <div class="accent-line"></div>
-  <div class="header-inner">
-    <div class="logo-wrap">
-      <img src="data:image/png;base64,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" alt="MCOY AI + Data Strategy" class="logo-img">
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#inicio" aria-label="Ir al inicio">
+        <span class="mark">MP</span>
+        <span>Mundial Predictor 2026</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <a href="#resumen">Resumen</a>
+        <a href="#arquitectura">Arquitectura</a>
+        <a href="#evidencia">Evidencia</a>
+        <a href="#finops-agentes">FinOps IA</a>
+        <a href="#estado">Estado</a>
+        <a href="#operacion">Operación</a>
+        <a href="#documentos">Docs</a>
+      </nav>
     </div>
-    <div class="header-divider"></div>
-    <div class="header-text">
-      <h1>Mundial Predictor <span>2026</span></h1>
-      <p>MCOY AI + Data Strategy · Portfolio Project · ML Engineering</p>
-      <div class="header-badges">
-        <span class="badge b-green">✓ Production-Ready</span>
-        <span class="badge b-blue">RPS 0.1958 · Qatar 2022</span>
-        <span class="badge b-blue">141 passed, 1 skipped</span>
-        <span class="badge b-amber">Torneo en vivo · Jun–Jul 2026</span>
-        <span class="badge b-gray">Python 3.11</span>
-        <span class="badge b-gray">Next.js 15</span>
-        <span class="badge b-gray">49,765 partidos históricos</span>
-      </div>
-    </div>
-  </div>
-</header>
+  </header>
 
-<!-- TABS NAV -->
-<div class="tabs-wrap">
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab(0)">Funcionalidades</button>
-    <button class="tab-btn" onclick="switchTab(1)">Stack tecnológico</button>
-    <button class="tab-btn" onclick="switchTab(2)">Arquitectura</button>
-    <button class="tab-btn" onclick="switchTab(3)">Integridad & Validación</button>
-    <button class="tab-btn" onclick="switchTab(4)">MLOps & Ciclo Operativo</button>
-    <button class="tab-btn" onclick="switchTab(5)">FinOps IA</button>
-    <button class="tab-btn" onclick="switchTab(6)">Reglas de Negocio</button>
-    <button class="tab-btn" onclick="switchTab(7)">Quick Start</button>
-  </div>
-</div>
-
-<main class="main">
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 0: FUNCIONALIDADES
-═══════════════════════════════════════════════════════ -->
-<div class="panel active" id="panel-0">
-  <div class="section-eyebrow">Sistema completo</div>
-  <div class="section-title">Módulos del sistema</div>
-  <div class="section-body">Seis módulos funcionales independientes que se sirven desde una plataforma unificada. El núcleo ML opera sin dependencias externas; los módulos de enriquecimiento y experiencia de usuario se activan sobre él.</div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">⚡</span>
-      <div><div class="card-title">En Vivo · Modelo vs Realidad</div><div class="card-sub">Resultados oficiales integrados · ELO recalculado partido a partido</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Marcadores en tiempo real</strong> desde football-data.org (proxy cacheado en Next.js API Route). Cada resultado oficial actualiza automáticamente el veredicto del modelo: si acertó la predicción, qué probabilidad le asignó, y el delta de ELO post-resultado.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Tabla de posiciones en vivo por grupo</strong> con puntos, goles a favor, goles en contra y diferencia de goles. Destacado automático de clasificados y eliminados por color según estado de clasificación.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Próximos partidos con pronóstico previo</strong>: probabilidades del Ensemble + narración pre-computada en español bogotano/neutro durante fase de grupos. Horarios en zona Colombia/Bogotá.</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🎯</span>
-      <div><div class="card-title">Predictor de partido</div><div class="card-sub">48 selecciones · Cualquier cruce · Narrator AI bogotano</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Probabilidades victoria/empate/derrota</strong> del Ensemble para cualquier cruce entre las 48 selecciones del torneo. ELO actualizado diariamente con resultados reales. Probabilidades calibradas isotónicamente para que un 60% corresponda a 60% de frecuencia real.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Narrator AI</strong>: narración futbolera en español bogotano con contexto real del partido (tabla del grupo, localía, probabilidades, presión de clasificación). Pre-computada una vez al día — cero costo LLM por usuario para contenido cacheado desde <code>narrations.json</code> estático.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Fallback LLM automático</strong>: si una narración no existe en cache (partidos knockout no pre-computados), el sistema genera sobre la marcha sin degradar la experiencia del usuario. Hit rate objetivo: ≥95% desde JSON estático.</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">📊</span>
-      <div><div class="card-title">Stats WC 2026</div><div class="card-sub">Dashboard de estadísticas del torneo en tiempo real</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Goles totales y promedio por partido</strong> con actualización automática al cierre de cada resultado oficial. Equipos más goleadores del torneo con comparativa visual.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Distribución de marcadores</strong>: marcadores más frecuentes del torneo, partidos con más goles, análisis de resultados por tipo (victoria local, empate, victoria visitante).</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Mayores sorpresas del torneo</strong>: partidos donde el modelo asignó baja probabilidad al resultado real, con delta de ELO, probabilidad asignada y narrativa del upsets.</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">📈</span>
-      <div><div class="card-title">Rendimiento del modelo</div><div class="card-sub">Accuracy por jornada · Desglose por grupo · Top sorpresas donde el modelo erró</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Accuracy por jornada interna (J1/J2/J3)</strong> con flecha de mejora o degradación entre jornadas. El modelo re-aprende de cada partido gracias al re-entrenamiento diario con ELO actualizado — la accuracy de J3 incorpora los resultados de J1 y J2.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Desglose por grupo con columna FG</strong> (total del grupo + conteo de partidos + delta vs J1). Identifica en qué grupos el modelo tiene mayor o menor dificultad predictiva.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Top sorpresas donde el modelo erró</strong>: los resultados más inesperados según la probabilidad asignada, con contexto narrativo de por qué puede haber fallado (lesiones, momentum, clima).</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🌐</span>
-      <div><div class="card-title">Fase de grupos & Proyecciones del torneo</div><div class="card-sub">72 partidos · Monte Carlo 5.000 sims · Previas narrativas individuales por equipo</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Predicción de los 72 partidos de fase de grupos</strong>. Posiciones finales proyectadas por grupo con 5.000 simulaciones Monte Carlo corridas completamente en el navegador (~200ms en hardware moderno, sin carga al servidor).</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Previas narrativas por grupo</strong>: tabla en vivo, presión de clasificación desde MD2, localía, resultado anterior de cada selección, calidad del resultado (muy alta / positiva / normal / preocupante), dependencia y rival siguiente. Análisis individual por equipo, no solo por grupo.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Proyecciones del torneo completo</strong>: probabilidad de cada selección de llegar a Ronda de 32, Octavos, Cuartos, Semis y Final, y de ser campeona. Se actualiza con el ciclo diario <code>predict_live.py --export</code>.</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">💬</span>
-      <div><div class="card-title">Chat IA con RAG</div><div class="card-sub">DeepSeek + contexto real del torneo · Caché SHA-256 · Rate limit 20 req/hr/IP</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Preguntas sobre el torneo en lenguaje natural</strong>: partidos del día, tabla de grupos, predicciones específicas, historial de resultados. El sistema inyecta contexto real (standings actualizados, resultados, probabilidades del Ensemble) antes de cada llamada LLM.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>RAG con embeddings DashScope</strong> (Qwen3 text-embedding-v3). Índice pre-construido en <code>rag_index.json</code>. Cache de respuestas con clave SHA-256 y TTL 2 horas, ~70-80% hit rate en instancias warm de Vercel.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Filtro de temas y rate limit</strong> de 20 req/hora/IP sin Redis (module-level Map). Temas fuera del scope del torneo son rechazados antes de consumir tokens. Fallback Anthropic Claude si DeepSeek no responde.</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <span class="card-icon">🤖</span>
-      <div><div class="card-title">Agent Debate System</div><div class="card-sub">3 agentes expertos · Razonamiento lógico · 4 predicciones por partido</div></div>
-    </div>
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>3 agentes debaten en 3 rondas</strong> usando DeepSeek Reasoner (extended thinking): Group Analyst (presión de clasificación + puntos + GD), Tactical Scout (estilos de juego + táctica), Sentiment Reader (momentum psicológico de MD1/MD2). No usan el modelo ML — razonan solo desde lógica de torneo.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>4 predicciones por partido</strong>: 3 individuales (una por agente) + 1 consenso. Cada predicción incluye marcador esperado y probabilidad. Permite evaluar cuál tipo de razonamiento (clasificación, tácticas, sentimiento) es más predictivo históricamente.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Evaluación granular</strong>: fronted muestra precision individual por agente (1X2 y marcador exacto). Identifica qué razonador acierta más en contextos específicos. Aparece en el Predictor y en "En Vivo → Próximos".</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Forward-only</strong>: debates se ejecutan manualmente para partidos puntuales antes de que se jueguen. No hay backfill retroactivo de partidos ya jugados. Acumulativo: nueva data se agrega sin pisar debates previos.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 1: STACK TECNOLÓGICO
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-1">
-  <div class="section-eyebrow">Por capas del sistema</div>
-  <div class="section-title">Stack tecnológico</div>
-  <div class="section-body">Cinco capas con responsabilidades claras. El núcleo ML es completamente determinístico y no requiere ninguna API key. Las capas de agentes y frontend son opcionales o de enriquecimiento.</div>
-
-  <div class="layer">
-    <div class="layer-header">
-      <span style="font-size:18px">🗄️</span>
-      <div><div class="layer-name">Capa de datos</div><div class="layer-desc">Ingesta, procesamiento histórico y actualización en vivo</div></div>
-    </div>
-    <div class="layer-items">
-      <div class="stack-item"><div class="stack-item-name">Kaggle / martj42</div><div class="stack-item-role">49,765 partidos internacionales 1872–2026. Fuente primaria de entrenamiento. Descarga vía kagglehub — CSV no versionados en repo.</div></div>
-      <div class="stack-item"><div class="stack-item-name">football-data.org</div><div class="stack-item-role">API oficial de resultados WC 2026. Tier gratuito. Proxy cacheado en Next.js API Route (/api/live) para evitar CORS y proteger el token.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Pandas + Parquet</div><div class="stack-item-role">Feature matrix vectorizada. Pipeline Bronze→Silver→Gold con contratos de datos formales. Validación de schemas explícita en cada run.</div></div>
-      <div class="stack-item"><div class="stack-item-name">DVC</div><div class="stack-item-role">Versionado de datos y artefactos ML. Reproducibilidad garantizada: cualquier commit reproduce el mismo modelo con los mismos datos.</div></div>
-      <div class="stack-item"><div class="stack-item-name">JSON / CSV UTF-8</div><div class="stack-item-role">wc2026_fixture.json, wc2026_live_results.csv, narrations.json, group_narratives.json. Encoding verificado en cada escritura — sin mojibake.</div></div>
-      <div class="stack-item"><div class="stack-item-name">openfootball/worldcup.json</div><div class="stack-item-role">Fallback de fixture para casos sin API key de football-data.org. Fuente pública en GitHub.</div></div>
-    </div>
-  </div>
-
-  <div class="layer">
-    <div class="layer-header">
-      <span style="font-size:18px">🧠</span>
-      <div><div class="layer-name">Núcleo ML — Ensemble</div><div class="layer-desc">Determinístico · Zero dependencias externas · Siempre disponible · RPS 0.1958</div></div>
-    </div>
-    <div class="layer-items">
-      <div class="stack-item"><div class="stack-item-name">Sistema ELO propio</div><div class="stack-item-role">K variable por torneo, margen de victoria, factor de localía. Calculado solo sobre resultados — sin sesgos de confederación. Peso: 22%.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Poisson Bivariado</div><div class="stack-item-role">Distribución de goles esperados por equipo. Señal de distribución de score que ni ELO ni XGB capturan individualmente. Peso: 58%.</div></div>
-      <div class="stack-item"><div class="stack-item-name">XGBoost 2.0</div><div class="stack-item-role">Patrones no-lineales sobre feature matrix histórica. Complementa a Poisson en interacciones complejas. Peso: 20%.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Calibración Isotónica</div><div class="stack-item-role">Post-hoc sobre el Ensemble. Garantiza que las probabilidades sean confiables para simulación Monte Carlo: p=0.60 → 60% frecuencia real.</div></div>
-      <div class="stack-item"><div class="stack-item-name">MLflow</div><div class="stack-item-role">Tracking de experimentos, métricas por run (RPS, log-loss, Brier, ECE), comparación de modelos y registro de artefactos serializados.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Monte Carlo (TypeScript)</div><div class="stack-item-role">5,000 simulaciones del torneo completo en el navegador. ~200ms en hardware moderno. Sin ninguna llamada al servidor. Seed determinístico (42).</div></div>
-      <div class="stack-item"><div class="stack-item-name">scikit-learn</div><div class="stack-item-role">Pipeline de preprocessing, calibración isotónica, validación de modelos base, ablation testing de features candidatas.</div></div>
-      <div class="stack-item"><div class="stack-item-name">scipy + statsmodels</div><div class="stack-item-role">Distribución de Poisson bivariada, cálculo de probabilidades de resultados exactos y distribuciones de goles.</div></div>
-    </div>
-  </div>
-
-  <div class="layer">
-    <div class="layer-header">
-      <span style="font-size:18px">🤖</span>
-      <div><div class="layer-name">Capa de agentes</div><div class="layer-desc">Enriquecimiento opcional · Cost-gated · Fallback graceful al Ensemble · Máx. 2 agentes por consulta</div></div>
-    </div>
-    <div class="layer-items">
-      <div class="stack-item"><div class="stack-item-name">DeepSeek (primario)</div><div class="stack-item-role">LLM principal para agentes LLM-based (IntMatch, Roster, Media, Travel). Costo por llamada significativamente menor que GPT-4.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Anthropic Claude</div><div class="stack-item-role">Fallback LLM si DeepSeek no responde. Travel agent usa Claude Haiku para lógica de fatiga + componente determinístico de altitud/distancia.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Orchestrator Python</div><div class="stack-item-role">API Gateway único. Routing a máx. 2 agentes por consulta. Context stripping antes de cada llamada. Budget guard con budget.yaml.</div></div>
-      <div class="stack-item"><div class="stack-item-name">FinOps Agent (det.)</div><div class="stack-item-role">Costo $0. Overround de casas de apuestas, implied probs limpias, edge detection, Kelly conservador. Siempre corre independiente del presupuesto.</div></div>
-      <div class="stack-item"><div class="stack-item-name">FIFA-Regs (det.)</div><div class="stack-item-role">Costo $0. Bracket math, mejores terceros por grupo, desempate por fair-play, proyección de clasificación en partidos simultáneos.</div></div>
-      <div class="stack-item"><div class="stack-item-name">DashScope</div><div class="stack-item-role">Qwen3 text-embedding-v3 para índice RAG del chat IA. Índice pre-construido en rag_index.json — zero costo en producción por usuario.</div></div>
-    </div>
-  </div>
-
-  <div class="layer">
-    <div class="layer-header">
-      <span style="font-size:18px">🖥️</span>
-      <div><div class="layer-name">Frontend</div><div class="layer-desc">Next.js 15 · React 19 · App Router · SSG + ISR · Multi-dialecto</div></div>
-    </div>
-    <div class="layer-items">
-      <div class="stack-item"><div class="stack-item-name">Next.js 15</div><div class="stack-item-role">App Router, API Routes (proxy live, chat, narrator). SSG para datos estáticos, ISR para standings. Manejo de encoding UTF-8 en JSONs públicos.</div></div>
-      <div class="stack-item"><div class="stack-item-name">React 19</div><div class="stack-item-role">Componentes funcionales con hooks. Predictor.tsx, ModelTab.tsx, StatsTab.tsx, Groups.tsx, Simulator.tsx, ChatTab.tsx, Knockout.tsx.</div></div>
-      <div class="stack-item"><div class="stack-item-name">TypeScript</div><div class="stack-item-role">Tipado estricto en todo el frontend. Contratos de tipos entre API Routes y componentes. Interfaces para todos los schemas de datos.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Tailwind CSS</div><div class="stack-item-role">Estilos utilitarios. Dark mode automático. Responsive sin breakpoints manuales adicionales. Zero runtime CSS-in-JS.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Recharts</div><div class="stack-item-role">Gráficas de accuracy por jornada, distribución de goles, comparativas de probabilidades. Responsive con ResponsiveContainer.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Framer Motion</div><div class="stack-item-role">Transiciones de tab, animaciones de entrada de resultados y predicciones, micro-interacciones en hover de tarjetas.</div></div>
-    </div>
-  </div>
-
-  <div class="layer">
-    <div class="layer-header">
-      <span style="font-size:18px">⚙️</span>
-      <div><div class="layer-name">Infra, Observabilidad & Testing</div><div class="layer-desc">Vercel · Logs de costos LLM · 122+ tests pytest · budget.yaml</div></div>
-    </div>
-    <div class="layer-items">
-      <div class="stack-item"><div class="stack-item-name">Vercel</div><div class="stack-item-role">Deploy serverless del frontend. Env vars seguras por entorno. CDN global. Deploy en ~30s vía CLI. Función de proxy a football-data.org.</div></div>
-      <div class="stack-item"><div class="stack-item-name">pytest (122+ tests)</div><div class="stack-item-role">Cobertura completa: pipeline, features, modelo, agentes, cost guard, integridad, simulador, predicción live. Sin mocks de DB — tests contra datos reales.</div></div>
-      <div class="stack-item"><div class="stack-item-name">JSONL Logs</div><div class="stack-item-role">pipeline_runs.jsonl y llm_costs.jsonl para tracking de costos por agente, por run y acumulado del día. Consultables para FinOps.</div></div>
-      <div class="stack-item"><div class="stack-item-name">budget.yaml</div><div class="stack-item-role">Límites daily_limit, monthly_limit, per_run_limit de gasto LLM. Cost guard que corta el flujo de agentes antes de superar el tope.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Docker + Airflow</div><div class="stack-item-role">Orquestación del pipeline de datos en entornos reproducibles. Containerización para portabilidad del pipeline entre máquinas.</div></div>
-      <div class="stack-item"><div class="stack-item-name">Streamlit</div><div class="stack-item-role">App de inspección local del modelo (src/app.py). Permite depurar predicciones y comparar modelos sin frontend completo.</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 2: ARQUITECTURA
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-2">
-  <div class="section-eyebrow">Diagramas de arquitectura</div>
-  <div class="section-title">Cómo interactúan modelos y agentes</div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.5rem">1. Pipeline del Ensemble predictivo</div>
-  <div class="section-body">Desde los datos históricos hasta el output de probabilidades. Completamente determinístico — funciona sin API keys, sin agentes LLM, sin internet.</div>
-  <div class="mermaid-wrap">
-    <div class="mermaid-label">Ensemble pipeline · flujo de datos</div>
-    <svg viewBox="0 0 660 820" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;display:block;margin:0 auto">
-<defs>
-  <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#4A6699" stroke-width="1.5" stroke-linecap="round"/>
-  </marker>
-</defs>
-<!-- Row 1: Input -->
-<rect x="180" y="20" width="300" height="48" rx="8" fill="#1a3a6b" stroke="#2A5DAF" stroke-width="1"/>
-<text x="330" y="40" text-anchor="middle" fill="#9DC8FF" font-size="13" font-family="Inter,sans-serif" font-weight="600">Datos históricos</text>
-<text x="330" y="58" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif">49,765 partidos · 1872–2026</text>
-<line x1="330" y1="68" x2="330" y2="88" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 2 -->
-<rect x="180" y="90" width="300" height="44" rx="8" fill="#141826" stroke="#1E2840" stroke-width="1"/>
-<text x="330" y="108" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="500">Normalización</text>
-<text x="330" y="125" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">nombres y confederaciones</text>
-<line x1="330" y1="134" x2="330" y2="154" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 3 -->
-<rect x="180" y="156" width="300" height="44" rx="8" fill="#141826" stroke="#1E2840" stroke-width="1"/>
-<text x="330" y="174" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="500">Sistema ELO propio</text>
-<text x="330" y="191" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">K por torneo · margen · localía</text>
-<line x1="330" y1="200" x2="330" y2="220" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 4 -->
-<rect x="180" y="222" width="300" height="44" rx="8" fill="#141826" stroke="#1E2840" stroke-width="1"/>
-<text x="330" y="240" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="500">Feature Engineering</text>
-<text x="330" y="257" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">Parquet vectorizado · contratos</text>
-<line x1="330" y1="266" x2="330" y2="286" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 5: Split -->
-<rect x="155" y="288" width="350" height="44" rx="8" fill="#1a2a5a" stroke="#2A5DAF" stroke-width="1"/>
-<text x="330" y="306" text-anchor="middle" fill="#9DC8FF" font-size="12" font-family="Inter,sans-serif" font-weight="600">Split temporal — sin leakage</text>
-<text x="330" y="323" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif">Train ≤ 2021 · Test = Qatar 2022</text>
-
-<!-- 3 arrows fanning out -->
-<line x1="245" y1="332" x2="145" y2="378" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-<line x1="330" y1="332" x2="330" y2="378" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-<line x1="415" y1="332" x2="515" y2="378" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 6: 3 models -->
-<rect x="40" y="380" width="210" height="52" rx="8" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="145" y="401" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="600">Modelo 1 · ELO</text>
-<text x="145" y="416" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">Determinístico</text>
-<text x="145" y="429" text-anchor="middle" fill="#1565F5" font-size="11" font-family="Inter,sans-serif" font-weight="700">peso 22%</text>
-
-<rect x="225" y="380" width="210" height="52" rx="8" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="330" y="401" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="600">Modelo 2 · Poisson</text>
-<text x="330" y="416" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">Bivariado · score dist</text>
-<text x="330" y="429" text-anchor="middle" fill="#1565F5" font-size="11" font-family="Inter,sans-serif" font-weight="700">peso 58%</text>
-
-<rect x="410" y="380" width="210" height="52" rx="8" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="515" y="401" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="600">Modelo 3 · XGBoost</text>
-<text x="515" y="416" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">Patrones no-lineales</text>
-<text x="515" y="429" text-anchor="middle" fill="#1565F5" font-size="11" font-family="Inter,sans-serif" font-weight="700">peso 20%</text>
-
-<!-- 3 arrows converging -->
-<line x1="145" y1="432" x2="270" y2="508" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-<line x1="330" y1="432" x2="330" y2="508" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-<line x1="515" y1="432" x2="390" y2="508" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 7: Ensemble -->
-<rect x="120" y="510" width="420" height="52" rx="8" fill="#1a2a5a" stroke="#2A5DAF" stroke-width="1.5"/>
-<text x="330" y="531" text-anchor="middle" fill="#9DC8FF" font-size="13" font-family="Inter,sans-serif" font-weight="700">Ensemble blend</text>
-<text x="330" y="549" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif">0.22 × ELO + 0.58 × Poisson + 0.20 × XGBoost</text>
-<line x1="330" y1="562" x2="330" y2="582" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 8: Calibration -->
-<rect x="180" y="584" width="300" height="44" rx="8" fill="#141826" stroke="#1E2840" stroke-width="1"/>
-<text x="330" y="602" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="500">Calibración isotónica</text>
-<text x="330" y="619" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">post-hoc · p calibrado a frecuencia real</text>
-<line x1="330" y1="628" x2="330" y2="648" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<!-- Row 9: Output -->
-<rect x="155" y="650" width="350" height="48" rx="8" fill="#0a3020" stroke="#10B981" stroke-width="1.5"/>
-<text x="330" y="670" text-anchor="middle" fill="#6EE7B7" font-size="13" font-family="Inter,sans-serif" font-weight="700">Output probabilístico</text>
-<text x="330" y="688" text-anchor="middle" fill="#34D399" font-size="11" font-family="Inter,sans-serif">p_home · p_draw · p_away → suma = 1.0</text>
-
-<!-- Row 9: 2 outputs -->
-<line x1="260" y1="698" x2="175" y2="754" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-<line x1="400" y1="698" x2="485" y2="754" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a1)"/>
-
-<rect x="60" y="756" width="230" height="44" rx="8" fill="#0E1220" stroke="#1E2840" stroke-width="1"/>
-<text x="175" y="774" text-anchor="middle" fill="#6A9ADF" font-size="12" font-family="Inter,sans-serif" font-weight="500">JSONs estáticos</text>
-<text x="175" y="791" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">frontend/public/data/</text>
-
-<rect x="370" y="756" width="230" height="44" rx="8" fill="#0E1220" stroke="#1E2840" stroke-width="1"/>
-<text x="485" y="774" text-anchor="middle" fill="#6A9ADF" font-size="12" font-family="Inter,sans-serif" font-weight="500">Monte Carlo</text>
-<text x="485" y="791" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">5,000 sims en browser</text>
-</svg>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.5rem">2. Sistema multi-agente: routing y enriquecimiento</div>
-  <div class="section-body">El Orchestrator actúa como API Gateway único. Selecciona máximo 2 agentes especializados por consulta, aplica context stripping para optimizar tokens, y produce deltas de probabilidad (±12% máx.) sobre el prior del Ensemble. Si el presupuesto se agota, el sistema cae al Ensemble sin degradación.</div>
-  <div class="mermaid-wrap">
-    <div class="mermaid-label">Multi-agent routing · deltas sobre prior</div>
-    <svg viewBox="0 0 680 740" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;display:block;margin:0 auto">
-<defs>
-  <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#4A6699" stroke-width="1.5" stroke-linecap="round"/>
-  </marker>
-</defs>
-<!-- Prior -->
-<rect x="215" y="10" width="250" height="44" rx="8" fill="#0a3020" stroke="#10B981" stroke-width="1.5"/>
-<text x="340" y="28" text-anchor="middle" fill="#6EE7B7" font-size="12" font-family="Inter,sans-serif" font-weight="600">Ensemble prior</text>
-<text x="340" y="45" text-anchor="middle" fill="#34D399" font-size="11" font-family="Inter,sans-serif">p_home · p_draw · p_away</text>
-<line x1="340" y1="54" x2="340" y2="74" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a2)"/>
-
-<!-- Orchestrator -->
-<rect x="130" y="76" width="420" height="56" rx="8" fill="#1a2a5a" stroke="#2A5DAF" stroke-width="1.5"/>
-<text x="340" y="97" text-anchor="middle" fill="#9DC8FF" font-size="13" font-family="Inter,sans-serif" font-weight="700">Orchestrator</text>
-<text x="340" y="113" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif">API Gateway · Context stripping · Budget guard · Máx. 2 agentes</text>
-
-<!-- Fan lines to 6 agents -->
-<line x1="195" y1="132" x2="60" y2="198" stroke="#4A6699" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a2)"/>
-<line x1="245" y1="132" x2="175" y2="198" stroke="#4A6699" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a2)"/>
-<line x1="300" y1="132" x2="290" y2="198" stroke="#4A6699" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a2)"/>
-<line x1="380" y1="132" x2="390" y2="198" stroke="#4A6699" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a2)"/>
-<line x1="435" y1="132" x2="505" y2="198" stroke="#4A6699" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a2)"/>
-<line x1="485" y1="132" x2="620" y2="198" stroke="#4A6699" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#a2)"/>
-
-<!-- 6 agents (2 rows of 3) -->
-<!-- Agent 1 -->
-<rect x="10" y="200" width="100" height="70" rx="6" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="60" y="219" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">IntMatch</text>
-<text x="60" y="232" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Analytics Pro</text>
-<text x="60" y="247" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Táctica · Clima</text>
-<text x="60" y="259" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Disciplinary Risk</text>
-<text x="60" y="272" text-anchor="middle" fill="#1565F5" font-size="9" font-family="Inter,sans-serif" font-weight="600">LLM</text>
-
-<!-- Agent 2 -->
-<rect x="125" y="200" width="100" height="70" rx="6" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="175" y="219" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Roster</text>
-<text x="175" y="232" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Data Scout</text>
-<text x="175" y="247" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">On/Off Rating</text>
-<text x="175" y="259" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Injury · WAR</text>
-<text x="175" y="272" text-anchor="middle" fill="#1565F5" font-size="9" font-family="Inter,sans-serif" font-weight="600">LLM</text>
-
-<!-- Agent 3 -->
-<rect x="240" y="200" width="100" height="70" rx="6" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="290" y="219" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Media</text>
-<text x="290" y="232" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Sentiment Parser</text>
-<text x="290" y="247" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Pressure Index</text>
-<text x="290" y="259" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Team Cohesion</text>
-<text x="290" y="272" text-anchor="middle" fill="#1565F5" font-size="9" font-family="Inter,sans-serif" font-weight="600">LLM</text>
-
-<!-- Agent 4 -->
-<rect x="355" y="200" width="100" height="70" rx="6" fill="#0E1A3A" stroke="#1E2840" stroke-width="1"/>
-<text x="405" y="219" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Travel</text>
-<text x="405" y="232" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif" font-weight="600">Logistics Quant</text>
-<text x="405" y="247" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Jet Lag · Altitud</text>
-<text x="405" y="259" text-anchor="middle" fill="#4E607A" font-size="9" font-family="Inter,sans-serif">Fatiga acumulada</text>
-<text x="405" y="272" text-anchor="middle" fill="#1565F5" font-size="9" font-family="Inter,sans-serif" font-weight="600">LLM</text>
-
-<!-- Agent 5 - deterministic (green) -->
-<rect x="470" y="200" width="100" height="70" rx="6" fill="#0a2a20" stroke="#10B981" stroke-width="1"/>
-<text x="520" y="219" text-anchor="middle" fill="#6EE7B7" font-size="10" font-family="Inter,sans-serif" font-weight="600">FinOps Market</text>
-<text x="520" y="232" text-anchor="middle" fill="#6EE7B7" font-size="10" font-family="Inter,sans-serif" font-weight="600">Calibration</text>
-<text x="520" y="247" text-anchor="middle" fill="#34D399" font-size="9" font-family="Inter,sans-serif">Overround</text>
-<text x="520" y="259" text-anchor="middle" fill="#34D399" font-size="9" font-family="Inter,sans-serif">Edge detection</text>
-<text x="520" y="272" text-anchor="middle" fill="#00D97E" font-size="9" font-family="Inter,sans-serif" font-weight="700">$0 det.</text>
-
-<!-- Agent 6 - deterministic (green) -->
-<rect x="585" y="200" width="86" height="70" rx="6" fill="#0a2a20" stroke="#10B981" stroke-width="1"/>
-<text x="628" y="219" text-anchor="middle" fill="#6EE7B7" font-size="10" font-family="Inter,sans-serif" font-weight="600">FIFA Regs</text>
-<text x="628" y="232" text-anchor="middle" fill="#6EE7B7" font-size="10" font-family="Inter,sans-serif" font-weight="600">Strategist</text>
-<text x="628" y="247" text-anchor="middle" fill="#34D399" font-size="9" font-family="Inter,sans-serif">Bracket math</text>
-<text x="628" y="259" text-anchor="middle" fill="#34D399" font-size="9" font-family="Inter,sans-serif">Best 3rd places</text>
-<text x="628" y="272" text-anchor="middle" fill="#00D97E" font-size="9" font-family="Inter,sans-serif" font-weight="700">$0 det.</text>
-
-<!-- Delta labels -->
-<text x="340" y="316" text-anchor="middle" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">cada agente produce delta_P clamped ±12%</text>
-
-<!-- Converging arrows to blend -->
-<line x1="60" y1="270" x2="240" y2="336" stroke="#4A6699" stroke-width="1" marker-end="url(#a2)"/>
-<line x1="175" y1="270" x2="270" y2="336" stroke="#4A6699" stroke-width="1" marker-end="url(#a2)"/>
-<line x1="290" y1="270" x2="305" y2="336" stroke="#4A6699" stroke-width="1" marker-end="url(#a2)"/>
-<line x1="405" y1="270" x2="375" y2="336" stroke="#4A6699" stroke-width="1" marker-end="url(#a2)"/>
-<line x1="520" y1="270" x2="410" y2="336" stroke="#4A6699" stroke-width="1" marker-end="url(#a2)"/>
-<line x1="628" y1="270" x2="440" y2="336" stroke="#4A6699" stroke-width="1" marker-end="url(#a2)"/>
-
-<!-- Blend node -->
-<rect x="155" y="338" width="370" height="52" rx="8" fill="#1a1a4a" stroke="#2A5DAF" stroke-width="1"/>
-<text x="340" y="358" text-anchor="middle" fill="#9DC8FF" font-size="12" font-family="Inter,sans-serif" font-weight="600">Blend ponderado</text>
-<text x="340" y="374" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif">suma de deltas · clamped ±12% · renormalizado a 1.0</text>
-<line x1="340" y1="390" x2="340" y2="410" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a2)"/>
-
-<!-- Output enriched -->
-<rect x="155" y="412" width="370" height="48" rx="8" fill="#0a3020" stroke="#10B981" stroke-width="1.5"/>
-<text x="340" y="432" text-anchor="middle" fill="#6EE7B7" font-size="13" font-family="Inter,sans-serif" font-weight="700">Output enriquecido</text>
-<text x="340" y="450" text-anchor="middle" fill="#34D399" font-size="11" font-family="Inter,sans-serif">p_home' · p_draw' · p_away' = prior + deltas</text>
-
-<!-- Fallback path -->
-<line x1="340" y1="132" x2="340" y2="480" stroke="#D97706" stroke-width="1" stroke-dasharray="5,4"/>
-<rect x="215" y="482" width="250" height="52" rx="8" fill="#3a2000" stroke="#D97706" stroke-width="1"/>
-<text x="340" y="502" text-anchor="middle" fill="#FCD34D" font-size="12" font-family="Inter,sans-serif" font-weight="600">Fallback graceful</text>
-<text x="340" y="518" text-anchor="middle" fill="#F59E0B" font-size="11" font-family="Inter,sans-serif">Ensemble intacto · $0 · Sin degradación</text>
-<text x="270" y="476" text-anchor="middle" fill="#D97706" font-size="10" font-family="Inter,sans-serif">budget agotado</text>
-
-<!-- Legend -->
-<rect x="10" y="560" width="12" height="12" rx="2" fill="#0E1A3A" stroke="#1E2840"/>
-<text x="28" y="571" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">Agente LLM (DeepSeek)</text>
-<rect x="165" y="560" width="12" height="12" rx="2" fill="#0a2a20" stroke="#10B981"/>
-<text x="183" y="571" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">Agente determinístico ($0)</text>
-<rect x="350" y="560" width="12" height="3" fill="#D97706"/>
-<text x="368" y="571" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">Ruta de fallback</text>
-</svg>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.5rem">3. Ciclo operativo diario MD1 → MD2 → MD3</div>
-  <div class="section-body">El pipeline completo se corre cada mañana. MD2 tiene protocolo de doble corrida (mañana + tarde). MD3 maneja partidos simultáneos por grupo con análisis de escenarios de clasificación.</div>
-  <div class="mermaid-wrap">
-    <div class="mermaid-label">Sequence diagram · ciclo diario</div>
-    <svg viewBox="0 0 660 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;display:block;margin:0 auto">
-<defs>
-  <marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#4A6699" stroke-width="1.5" stroke-linecap="round"/>
-  </marker>
-</defs>
-<!-- Participant lanes headers -->
-<rect x="0" y="0" width="660" height="36" rx="0" fill="#0E1220"/>
-<rect x="10" y="6" width="108" height="24" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="64" y="22" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif" font-weight="600">football-data</text>
-<rect x="130" y="6" width="108" height="24" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="184" y="22" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif" font-weight="600">live_update.py</text>
-<rect x="250" y="6" width="108" height="24" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="304" y="22" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif" font-weight="600">predict_live.py</text>
-<rect x="370" y="6" width="108" height="24" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="424" y="22" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif" font-weight="600">narrations.py</text>
-<rect x="490" y="6" width="160" height="24" rx="6" fill="#1a2a5a" stroke="#2A5DAF"/>
-<text x="570" y="22" text-anchor="middle" fill="#9DC8FF" font-size="11" font-family="Inter,sans-serif" font-weight="600">Vercel Frontend</text>
-
-<!-- Lifelines -->
-<line x1="64" y1="36" x2="64" y2="490" stroke="#1E2840" stroke-width="1" stroke-dasharray="4,4"/>
-<line x1="184" y1="36" x2="184" y2="490" stroke="#1E2840" stroke-width="1" stroke-dasharray="4,4"/>
-<line x1="304" y1="36" x2="304" y2="490" stroke="#1E2840" stroke-width="1" stroke-dasharray="4,4"/>
-<line x1="424" y1="36" x2="424" y2="490" stroke="#1E2840" stroke-width="1" stroke-dasharray="4,4"/>
-<line x1="570" y1="36" x2="570" y2="490" stroke="#1E2840" stroke-width="1" stroke-dasharray="4,4"/>
-
-<!-- Note: Corrida matutina -->
-<rect x="10" y="44" width="630" height="20" rx="4" fill="#1a2a5a" stroke="#2A5DAF" stroke-width="0.5"/>
-<text x="330" y="58" text-anchor="middle" fill="#9DC8FF" font-size="10" font-family="Inter,sans-serif" font-weight="600">Corrida matutina · todos los matchdays</text>
-
-<!-- Msg 1: LP -> R -->
-<line x1="184" y1="76" x2="76" y2="76" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="130" y="72" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">fetch resultados</text>
-<!-- R -> LP -->
-<line x1="64" y1="96" x2="172" y2="96" stroke="#4A96FF" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a3)"/>
-<text x="118" y="92" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">scores oficiales</text>
-<!-- LP self: recalcula ELO -->
-<path d="M184 116 Q210 116 210 128 Q210 140 184 140" fill="none" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="230" y="126" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">recalcula ELO</text>
-<!-- LP self: reentrena -->
-<path d="M184 152 Q210 152 210 164 Q210 176 184 176" fill="none" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="230" y="162" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">reentrena ~90s</text>
-<!-- LP -> FE -->
-<line x1="184" y1="192" x2="558" y2="192" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="375" y="188" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">exporta JSONs</text>
-<!-- PL self: predict -->
-<path d="M304 208 Q330 208 330 220 Q330 232 304 232" fill="none" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="350" y="218" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">predict_live --export</text>
-<!-- PL -> FE -->
-<line x1="304" y1="248" x2="558" y2="248" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="435" y="244" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">predicciones</text>
-<!-- PN self: narrations -->
-<path d="M424 264 Q450 264 450 276 Q450 288 424 288" fill="none" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="470" y="274" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">narraciones LLM</text>
-<!-- PN -> FE -->
-<line x1="424" y1="304" x2="558" y2="304" stroke="#4A96FF" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="494" y="300" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">narrations.json</text>
-<!-- FE deploy -->
-<path d="M570 320 Q596 320 596 332 Q596 344 570 344" fill="none" stroke="#00D97E" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="610" y="330" fill="#00D97E" font-size="10" font-family="Inter,sans-serif">deploy prod</text>
-
-<!-- Note: MD2 -->
-<rect x="10" y="360" width="630" height="20" rx="4" fill="#3a2000" stroke="#D97706" stroke-width="0.5"/>
-<text x="330" y="374" text-anchor="middle" fill="#FCD34D" font-size="10" font-family="Inter,sans-serif" font-weight="600">Solo MD2 · segunda corrida tarde (tras primeros 2 resultados)</text>
-
-<!-- MD2 messages compressed -->
-<line x1="184" y1="394" x2="76" y2="394" stroke="#D97706" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="130" y="390" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">fetch 2 resultados tarde</text>
-<line x1="64" y1="410" x2="172" y2="410" stroke="#D97706" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a3)"/>
-<text x="118" y="406" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">scores actualizados</text>
-<line x1="184" y1="430" x2="304" y2="430" stroke="#D97706" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="244" y="426" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">predict con presión real</text>
-<line x1="304" y1="450" x2="558" y2="450" stroke="#D97706" stroke-width="1.5" marker-end="url(#a3)"/>
-<text x="435" y="446" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">deploy nocturno actualizado</text>
-
-<!-- Note: MD3 -->
-<rect x="10" y="468" width="630" height="20" rx="4" fill="#1a3a1a" stroke="#10B981" stroke-width="0.5"/>
-<text x="330" y="482" text-anchor="middle" fill="#6EE7B7" font-size="10" font-family="Inter,sans-serif" font-weight="600">MD3 · partidos simultáneos · ELO cutoff independiente por partido</text>
-</svg>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.5rem">4. Arquitectura del Narrator AI</div>
-  <div class="section-body">Costo cero por usuario. Las narraciones se pre-computan una vez al día y se sirven desde JSON estático. El LLM solo actúa como fallback cuando una clave no existe en el cache.</div>
-  <div class="mermaid-wrap">
-    <div class="mermaid-label">Narrator AI · flujo online vs offline</div>
-    <svg viewBox="0 0 660 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;display:block;margin:0 auto">
-<defs>
-  <marker id="a4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#4A6699" stroke-width="1.5" stroke-linecap="round"/>
-  </marker>
-</defs>
-<!-- OFFLINE subgraph -->
-<rect x="10" y="10" width="290" height="180" rx="10" fill="none" stroke="#1E2840" stroke-width="1" stroke-dasharray="6,3"/>
-<text x="26" y="28" fill="#4E607A" font-size="10" font-family="Inter,sans-serif" font-weight="600" text-transform="uppercase">OFFLINE · una vez por día</text>
-
-<rect x="24" y="36" width="122" height="52" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="85" y="57" text-anchor="middle" fill="#8B9BB4" font-size="11" font-family="Inter,sans-serif" font-weight="500">Contexto partido</text>
-<text x="85" y="72" text-anchor="middle" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">tabla · prob · presión</text>
-
-<line x1="146" y1="62" x2="168" y2="62" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a4)"/>
-
-<rect x="170" y="36" width="116" height="52" rx="6" fill="#1a2a5a" stroke="#2A5DAF"/>
-<text x="228" y="57" text-anchor="middle" fill="#9DC8FF" font-size="11" font-family="Inter,sans-serif" font-weight="600">DeepSeek LLM</text>
-<text x="228" y="72" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">~$0.015 por run</text>
-
-<line x1="228" y1="88" x2="228" y2="108" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a4)"/>
-
-<rect x="154" y="110" width="132" height="52" rx="6" fill="#0a3020" stroke="#10B981"/>
-<text x="220" y="131" text-anchor="middle" fill="#6EE7B7" font-size="11" font-family="Inter,sans-serif" font-weight="600">narrations.json</text>
-<text x="220" y="147" text-anchor="middle" fill="#34D399" font-size="10" font-family="Inter,sans-serif">match_id × dialecto</text>
-
-<!-- ONLINE subgraph -->
-<rect x="320" y="10" width="330" height="280" rx="10" fill="none" stroke="#1E2840" stroke-width="1" stroke-dasharray="6,3"/>
-<text x="336" y="28" fill="#4E607A" font-size="10" font-family="Inter,sans-serif" font-weight="600">ONLINE · por usuario · costo $0</text>
-
-<rect x="336" y="36" width="130" height="44" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="401" y="55" text-anchor="middle" fill="#8B9BB4" font-size="11" font-family="Inter,sans-serif" font-weight="500">Usuario abre</text>
-<text x="401" y="70" text-anchor="middle" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">Predictor</text>
-
-<line x1="401" y1="80" x2="401" y2="100" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a4)"/>
-
-<rect x="336" y="102" width="130" height="36" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="401" y="124" text-anchor="middle" fill="#8B9BB4" font-size="11" font-family="Inter,sans-serif" font-weight="500">/api/narrator</text>
-
-<line x1="401" y1="138" x2="401" y2="158" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a4)"/>
-
-<!-- Diamond decision -->
-<polygon points="401,160 460,185 401,210 342,185" fill="#141826" stroke="#2A5DAF" stroke-width="1"/>
-<text x="401" y="182" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif">¿Clave en</text>
-<text x="401" y="196" text-anchor="middle" fill="#8B9BB4" font-size="10" font-family="Inter,sans-serif">narrations.json?</text>
-
-<!-- Hit path -->
-<line x1="342" y1="185" x2="336" y2="185" stroke="#00D97E" stroke-width="1.5"/>
-<line x1="336" y1="185" x2="336" y2="240" stroke="#00D97E" stroke-width="1.5" marker-end="url(#a4)"/>
-<text x="310" y="216" text-anchor="middle" fill="#00D97E" font-size="10" font-family="Inter,sans-serif">Hit 95%</text>
-
-<!-- Miss path -->
-<line x1="460" y1="185" x2="546" y2="185" stroke="#F59E0B" stroke-width="1.5" marker-end="url(#a4)"/>
-<text x="506" y="180" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">Miss</text>
-
-<rect x="488" y="162" width="130" height="44" rx="6" fill="#3a2000" stroke="#D97706"/>
-<text x="553" y="181" text-anchor="middle" fill="#FCD34D" font-size="11" font-family="Inter,sans-serif" font-weight="500">LLM fallback</text>
-<text x="553" y="196" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">edge cases</text>
-
-<line x1="553" y1="206" x2="553" y2="256" stroke="#F59E0B" stroke-width="1.5"/>
-<line x1="553" y1="256" x2="470" y2="256" stroke="#F59E0B" stroke-width="1.5" marker-end="url(#a4)"/>
-
-<!-- Serve node -->
-<rect x="326" y="242" width="140" height="44" rx="6" fill="#0a3020" stroke="#10B981" stroke-width="1.5"/>
-<text x="396" y="261" text-anchor="middle" fill="#6EE7B7" font-size="11" font-family="Inter,sans-serif" font-weight="600">Sirve narración</text>
-<text x="396" y="276" text-anchor="middle" fill="#34D399" font-size="10" font-family="Inter,sans-serif">Costo $0 por usuario</text>
-
-<!-- Arrow from offline JSON to online decision -->
-<line x1="286" y1="136" x2="320" y2="185" stroke="#4A6699" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#a4)"/>
-<text x="296" y="168" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">lee cache</text>
-</svg>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 3: INTEGRIDAD & VALIDACIÓN
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-3">
-  <div class="section-eyebrow">Rigor metodológico</div>
-  <div class="section-title">Integridad del modelo & Validación</div>
-  <div class="section-body">Lo que diferencia este proyecto de un notebook de Kaggle: temporal split, anti-leakage por partido, walk-forward validation, calibración isotónica, contratos de datos formales y 141 tests automatizados (1 skipped).</div>
-
-  <div class="grid-4">
-    <div class="metric"><div class="metric-label">RPS Walk-forward</div><div class="metric-val green">0.1958</div><div class="metric-ctx">Qatar 2022 · never-seen</div></div>
-    <div class="metric"><div class="metric-label">Baseline random</div><div class="metric-val">0.25</div><div class="metric-ctx">Referencia inferior</div></div>
-    <div class="metric"><div class="metric-label">Accuracy</div><div class="metric-val">0.50–0.52</div><div class="metric-ctx">Casas: 0.55–0.58</div></div>
-    <div class="metric"><div class="metric-label">Log-loss</div><div class="metric-val">1.08</div><div class="metric-ctx">64 partidos test</div></div>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header"><div class="card-title">Split temporal · anti-leakage de entrenamiento</div></div>
-      <div class="card-body">
-        <div class="check-row"><span class="check-icon">✓</span>Train set: todos los partidos hasta 2021 inclusive. Zero información del futuro filtrada al pasado.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Test set: Qatar 2022 completo — 64 partidos never-seen por el modelo durante entrenamiento.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Series temporales requieren validación temporal, no cross-validation aleatoria que filtra el futuro.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Verificado por pytest: <code>test_temporal_split_no_leakage</code> falla si train_year ≥ test_year.</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Walk-forward validation · RPS por jornada</div></div>
-      <div class="card-body">
-        <div class="check-row"><span class="check-icon">✓</span>Validación por jornada interna J1, J2, J3 sobre Qatar 2022. El modelo re-aprende con resultados reales.</div>
-        <div class="check-row"><span class="check-icon">✓</span>RPS (Ranked Probability Score): penaliza más los errores con alta confianza incorrecta. Más riguroso que accuracy.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Comparativa: RPS 0.1958 vs baseline aleatorio 0.25 — mejor RPS significa menos error probabilístico.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Script reproducible: <code>walk_forward_validation.py</code>. Resultados idénticos con mismos datos.</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Anti-leakage por partido · predicción en vivo</div></div>
-      <div class="card-body">
-        <div class="check-row"><span class="check-icon">✓</span>En <code>predict_live.py</code>, cada partido aplica un ELO cutoff individual: kickoff − 60 segundos exactos.</div>
-        <div class="check-row"><span class="check-icon">✓</span>El modelo no puede ver resultados de partidos del mismo día que aún no se han jugado — crítico en MD3 con partidos simultáneos.</div>
-        <div class="check-row"><span class="check-icon">✓</span>El ELO de cada partido se calcula sobre el estado exacto del mundo justo antes de ese kickoff, no del día completo.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Cubierto por <code>test_predict_live.py</code> con casos de partidos simultáneos y secuenciales.</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Calibración de probabilidades</div></div>
-      <div class="card-body">
-        <div class="check-row"><span class="check-icon">✓</span>Calibración isotónica post-hoc sobre el Ensemble completo — no sobre modelos individuales.</div>
-        <div class="check-row"><span class="check-icon">✓</span>En simulación Monte Carlo, las probabilidades deben ser confiables: un 60% debe corresponder a 60% de frecuencia observada.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Brier Score y ECE (Expected Calibration Error) verificados en cada pipeline run. Un modelo bien calibrado es más valioso que uno con alta accuracy.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Decisión de diseño: pesos 22/58/20 validados por ablation — Poisson domina porque aporta señal de score distribution.</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Contratos de datos formales</div></div>
-      <div class="card-body">
-        <div class="check-row"><span class="check-icon">✓</span>Schemas Bronze/Silver/Gold formalizados en <code>contracts/data_contracts.md</code>. Cada etapa del pipeline tiene input/output definidos.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Contratos de módulo en <code>contracts/module_contracts.md</code>: feature matrix, model input/output, agent delta format.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Fallo silencioso de datos = inaceptable. Todas las aserciones de schema son explícitas y levantan excepciones descriptivas.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Encoding UTF-8 verificado en cada escritura de JSON: sin mojibake (MÃ©xico, arrancÃ³) en archivos públicos. Regla estricta: usar Python, no PowerShell Get-Content|Set-Content.</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><div class="card-title">Decisiones de diseño del Ensemble</div></div>
-      <div class="card-body">
-        <div class="check-row"><span class="check-icon">✓</span>ELO propio — no de terceros: calculado solo sobre resultados históricos, sin sesgos de confederación ni puntos FIFA.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Poisson al 58%: aporta distribución de goles esperados que XGB no captura bien globalmente en el contexto de mundiales (900 muestras de entrenamiento efectivas).</div>
-        <div class="check-row"><span class="check-icon">✓</span>XGBoost no supera a ELO globalmente — pero aporta en interacciones no-lineales. Peso 20% vs 22% del ELO refleja esta realidad.</div>
-        <div class="check-row"><span class="check-icon">✓</span>Ablation testing con <code>ablation_features.py</code>: cada feature candidata debe mejorar el RPS base antes de incorporarse a FEATURE_COLS.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Cobertura de tests por módulo</div>
-  <div class="card">
-    <div class="card-body" style="padding:.5rem 1.25rem">
-      <div class="test-row"><span class="test-name">test_model.py</span><span class="test-pass">✓ Temporal split · calibración · Brier score · ECE · log-loss</span></div>
-      <div class="test-row"><span class="test-name">test_features.py</span><span class="test-pass">✓ Feature presence · FEATURE_COLS integridad · no NaNs · tipos</span></div>
-      <div class="test-row"><span class="test-name">test_simulator.py</span><span class="test-pass">✓ Monte Carlo determinístico (seed=42) · distribuciones válidas</span></div>
-      <div class="test-row"><span class="test-name">test_extractor.py</span><span class="test-pass">✓ Pipeline raw → ELO → features → parquet · schemas</span></div>
-      <div class="test-row"><span class="test-name">test_agents.py</span><span class="test-pass">✓ Routing correcto · deltas ±12% · output schema por agente</span></div>
-      <div class="test-row"><span class="test-name">test_cost_guard.py</span><span class="test-pass">✓ Budget enforcement · fallback al Ensemble · logs de costo</span></div>
-      <div class="test-row"><span class="test-name">test_integrity.py</span><span class="test-pass">✓ Data contracts · schemas · encoding UTF-8 · no mojibake</span></div>
-      <div class="test-row"><span class="test-name">test_poisson.py</span><span class="test-pass">✓ Distribución bivariada · normalización · goles esperados</span></div>
-      <div class="test-row"><span class="test-name">test_predict_live.py</span><span class="test-pass">✓ Anti-leakage por partido · ELO cutoff · partidos simultáneos MD3</span></div>
-      <div class="test-row"><span class="test-name">test_simulator_parity.py</span><span class="test-pass">✓ Paridad Python ↔ TypeScript en resultados Monte Carlo</span></div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 4: MLOPS & CICLO OPERATIVO
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-4">
-  <div class="section-eyebrow">Pipeline en vivo durante el torneo</div>
-  <div class="section-title">MLOps & Ciclo Operativo</div>
-  <div class="section-body">El sistema operó en producción durante 39 días (11 Jun – 19 Jul 2026). Ciclo diario automatizado con protocolo de doble corrida en MD2 y manejo especial de partidos simultáneos en MD3.</div>
-
-  <div class="inner-tabs">
-    <div class="inner-tab-bar">
-      <button class="inner-tab-btn active" onclick="switchInner(0)">MD1 — Matchday 1</button>
-      <button class="inner-tab-btn" onclick="switchInner(1)">MD2 — Doble corrida</button>
-      <button class="inner-tab-btn" onclick="switchInner(2)">MD3 — Simultáneos</button>
-    </div>
-    <div class="inner-tab-panel active" id="inner-0">
-      <div class="step"><div class="step-num">1</div><div><div class="step-title">Fetch resultados del día anterior</div><div class="step-desc"><code>live_update.py</code> descarga marcadores oficiales de football-data.org e integra en <code>wc2026_live_results.csv</code>. Modo <code>--dry-run</code> disponible para preview sin escritura.</div></div></div>
-      <div class="step"><div class="step-num">2</div><div><div class="step-title">Recalcular ELO y re-entrenar Ensemble</div><div class="step-desc">ELO se recalcula cronológicamente sobre todos los resultados incluyendo los nuevos. El Ensemble se reentrena con features actualizadas. El modelo aprende de cada partido jugado. Tiempo: ~80s.</div></div></div>
-      <div class="step"><div class="step-num">3</div><div><div class="step-title">Predicciones live con anti-leakage por partido</div><div class="step-desc"><code>predict_live.py --export</code> genera probabilidades para cada partido pendiente con ELO cutoff individual (kickoff − 60s). Agentes opcionales si presupuesto disponible. Exporta a <code>frontend/public/data/</code>.</div></div></div>
-      <div class="step"><div class="step-num">4</div><div><div class="step-title">Pre-computar narraciones y previas de grupo</div><div class="step-desc"><code>precompute_narrations.py</code> genera narraciones para los partidos de hoy × dialectos activos (español bogotano en grupos). Fuerza-regenera narraciones del día actual y previas de grupo. Una llamada LLM por partido — cero por usuario.</div></div></div>
-      <div class="step"><div class="step-num">5</div><div><div class="step-title">Deploy a Vercel</div><div class="step-desc"><code>npx vercel --prod</code>. CDN global actualizado en ~30s. Dashboard muestra resultados reales, probabilidades actualizadas y narraciones del día.</div></div></div>
-    </div>
-    <div class="inner-tab-panel" id="inner-1">
-      <div class="step"><div class="step-num">🌅</div><div><div class="step-title">Corrida matutina completa (igual que MD1)</div><div class="step-desc">Ciclo completo antes de los primeros partidos del día: fetch → ELO → retrain → predict → narrations → deploy. MD2 tiene 4 partidos/día split en ventanas tarde/noche.</div></div></div>
-      <div class="step"><div class="step-num">⚽</div><div><div class="step-title">Primeros 2 partidos se juegan (tarde)</div><div class="step-desc">Los resultados de los primeros 2 partidos del día cambian radicalmente la presión de clasificación para los equipos que juegan de noche. Sin actualización, las predicciones nocturnas ignoran esta presión real.</div></div></div>
-      <div class="step"><div class="step-num">🔁</div><div><div class="step-title">Segunda corrida (tarde): resultados → predicciones nocturnas</div><div class="step-desc"><code>live_update.py</code> → <code>predict_live.py --export</code>. Las predicciones de los partidos nocturnos incorporan presión real de puntos y diferencia de goles de los partidos de tarde. Tiempo: ~90s.</div></div></div>
-      <div class="step"><div class="step-num">📖</div><div><div class="step-title">Actualizar solo previas de grupo (segunda corrida)</div><div class="step-desc"><code>precompute_narrations.py --groups-only --days 1</code>. Las previas narrativas de los grupos con partidos nocturnos reflejan la presión real de clasificación de los equipos que ya jugaron. Costo: ~$0.005.</div></div></div>
-      <div class="step"><div class="step-num">🚀</div><div><div class="step-title">Deploy nocturno actualizado</div><div class="step-desc">Segundo deploy del día. El dashboard refleja resultados de tarde y predicciones con contexto real de clasificación para los partidos de noche. Usuarios que vean el predictor antes del partido nocturno ven probabilidades actualizadas.</div></div></div>
-    </div>
-    <div class="inner-tab-panel" id="inner-2">
-      <div class="step"><div class="step-num">⚡</div><div><div class="step-title">Protocolo de partidos simultáneos</div><div class="step-desc">En MD3, todos los partidos de un grupo arrancan a la misma hora. Los standings se interpretan como distribuciones de probabilidad de escenarios, no como secuencia de resultados. El ELO cutoff es aún más crítico.</div></div></div>
-      <div class="step"><div class="step-num">1</div><div><div class="step-title">Corrida pre-MD3: ELO cutoff independiente por partido</div><div class="step-desc"><code>predict_live.py</code> calcula ELO cutoff para cada partido simultáneo de forma independiente. Partido A del Grupo X y Partido B del Grupo X tienen el mismo ELO base porque ninguno de los dos se ha jugado aún.</div></div></div>
-      <div class="step"><div class="step-num">2</div><div><div class="step-title">Análisis best-third y escenarios de clasificación</div><div class="step-desc">FIFA-Regs-Strategist proyecta cuáles equipos clasificarán como mejor tercero de cada grupo. Las previas narrativas enfatizan presión directa, diferencia de goles y escenarios de clasificación compartida entre grupos.</div></div></div>
-      <div class="step"><div class="step-num">3</div><div><div class="step-title">Post-MD3: deploy final de fase de grupos</div><div class="step-desc">Con los 72 partidos de grupos completados, se exportan los standings definitivos, los 32 clasificados por posición/grupo y la tabla del bracket de eliminatoria directa para la siguiente fase.</div></div></div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Comandos del pipeline</div>
-  <div class="code-block"><span class="code-comment"># Ciclo completo (ejecutar en orden)</span>
-python scripts/live_update.py            <span class="code-comment"># fetch → ELO → retrain → export (~90s)</span>
-python scripts/predict_live.py --export  <span class="code-comment"># predicciones anti-leakage + agentes</span>
-python scripts/precompute_narrations.py  <span class="code-comment"># narraciones × dialectos (DeepSeek)</span>
-cd frontend && npx vercel --prod         <span class="code-comment"># deploy a producción</span>
-
-<span class="code-comment"># Agent Debate (opcional, forward-only por partido)</span>
-python scripts/run_agent_debate.py "Mexico" "South Korea" "Argentina" "Brazil"
-python scripts/export_frontend_data.py   <span class="code-comment"># exporta debate results</span>
-cd frontend && npx vercel --prod         <span class="code-comment"># deploy</span>
-
-<span class="code-comment"># Variantes útiles</span>
-python scripts/predict_live.py --no-agents             <span class="code-comment"># Ensemble $0, sin LLM</span>
-python scripts/predict_live.py --add-result MEX POL 0 0 2026-06-14
-python scripts/precompute_narrations.py --groups-only --days 1
-python scripts/live_update.py --dry-run                <span class="code-comment"># preview sin escribir</span>
-python scripts/live_update.py --force                  <span class="code-comment"># fuerza retrain sin nuevos resultados</span>
-python scripts/run_agent_debate.py --force "Mexico" "South Korea"  <span class="code-comment"># re-run debate</span></div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Performance del pipeline</div>
-  <div class="grid-4">
-    <div class="metric"><div class="metric-label">Ciclo completo</div><div class="metric-val">~90s</div><div class="metric-ctx">live_update.py end-to-end</div></div>
-    <div class="metric"><div class="metric-label">Monte Carlo browser</div><div class="metric-val">~200ms</div><div class="metric-ctx">5,000 sims en cliente</div></div>
-    <div class="metric"><div class="metric-label">Cache hit rate chat</div><div class="metric-val green">70–80%</div><div class="metric-ctx">Instancias warm Vercel</div></div>
-    <div class="metric"><div class="metric-label">ELO computation</div><div class="metric-val">O(n)</div><div class="metric-ctx">Pass cronológico 49k rows</div></div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 5: FINOPS IA
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-5">
-  <div class="section-eyebrow">Gestión de costos</div>
-  <div class="section-title">FinOps de la capa IA</div>
-  <div class="section-body">El Ensemble predice con costo $0 — siempre. Los agentes son enriquecimiento opcional con presupuesto configurable. El Narrator AI tiene costo fijo por día, independiente del número de usuarios.</div>
-
-  <div class="grid-4">
-    <div class="metric"><div class="metric-label">Costo diario con agentes</div><div class="metric-val amber">$2–$5</div><div class="metric-ctx">Configurable en budget.yaml</div></div>
-    <div class="metric"><div class="metric-label">Narrator AI / día</div><div class="metric-val">$0.025</div><div class="metric-ctx">Solo narraciones, sin agentes</div></div>
-    <div class="metric"><div class="metric-label">Costo por usuario final</div><div class="metric-val green">$0</div><div class="metric-ctx">Narrador pre-computado</div></div>
-    <div class="metric"><div class="metric-label">Agentes determinísticos</div><div class="metric-val green">$0</div><div class="metric-ctx">FinOps + FIFA-Regs</div></div>
-  </div>
-
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Costo por agente especializado</div>
-  <div class="agent-grid">
-    <div class="agent-card"><div class="agent-name">IntMatch-Analytics-Pro</div><div class="agent-cost-val">~$0.008</div><div class="agent-type">LLM · DeepSeek · por llamada</div></div>
-    <div class="agent-card"><div class="agent-name">Roster-Data-Scout</div><div class="agent-cost-val">~$0.006</div><div class="agent-type">LLM · DeepSeek · por llamada</div></div>
-    <div class="agent-card"><div class="agent-name">Media-Sentiment-Parser</div><div class="agent-cost-val">~$0.005</div><div class="agent-type">LLM · DeepSeek · por llamada</div></div>
-    <div class="agent-card"><div class="agent-name">Travel-Logistics-Quant</div><div class="agent-cost-val">~$0.004</div><div class="agent-type">LLM · Claude Haiku + det.</div></div>
-    <div class="agent-card"><div class="agent-name">FinOps-Market-Calibration</div><div class="agent-cost-val free">$0.000</div><div class="agent-type">Determinístico · siempre corre</div></div>
-    <div class="agent-card"><div class="agent-name">FIFA-Regs-Strategist</div><div class="agent-cost-val free">$0.000</div><div class="agent-type">Determinístico · bracket math</div></div>
-    <div class="agent-card"><div class="agent-name">Agent Debate System</div><div class="agent-cost-val amber">~$0.08–$0.10</div><div class="agent-type">DeepSeek Reasoner · por partido (9 llamadas: 3 agentes × 3 rondas)</div></div>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Arquitectura FinOps: 3 capas de protección</div>
-  <div class="mermaid-wrap">
-    <div class="mermaid-label">Budget guard · flujo de decisión</div>
-    <svg viewBox="0 0 660 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;display:block;margin:0 auto">
-<defs>
-  <marker id="a5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#4A6699" stroke-width="1.5" stroke-linecap="round"/>
-  </marker>
-</defs>
-<!-- Input -->
-<rect x="215" y="10" width="230" height="44" rx="8" fill="#141826" stroke="#1E2840"/>
-<text x="330" y="28" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="500">Consulta de predicción</text>
-<line x1="330" y1="54" x2="330" y2="74" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-
-<!-- Budget Guard -->
-<rect x="155" y="76" width="350" height="60" rx="8" fill="#1a2a5a" stroke="#2A5DAF" stroke-width="1.5"/>
-<text x="330" y="98" text-anchor="middle" fill="#9DC8FF" font-size="13" font-family="Inter,sans-serif" font-weight="700">Budget Guard</text>
-<text x="330" y="114" text-anchor="middle" fill="#6A9ADF" font-size="11" font-family="Inter,sans-serif">Lee budget.yaml · daily · monthly · per_run limits</text>
-
-<!-- Fork: available vs depleted -->
-<line x1="240" y1="136" x2="155" y2="166" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-<text x="170" y="158" text-anchor="middle" fill="#6A9ADF" font-size="10" font-family="Inter,sans-serif">disponible</text>
-<line x1="420" y1="136" x2="505" y2="166" stroke="#D97706" stroke-width="1.5" marker-end="url(#a5)"/>
-<text x="490" y="158" text-anchor="middle" fill="#F59E0B" font-size="10" font-family="Inter,sans-serif">agotado</text>
-
-<!-- Orchestrator -->
-<rect x="20" y="168" width="270" height="52" rx="8" fill="#141826" stroke="#1E2840"/>
-<text x="155" y="189" text-anchor="middle" fill="#8B9BB4" font-size="12" font-family="Inter,sans-serif" font-weight="600">Orchestrator</text>
-<text x="155" y="205" text-anchor="middle" fill="#4E607A" font-size="11" font-family="Inter,sans-serif">selecciona máx. 2 agentes · context stripping</text>
-
-<!-- Fallback -->
-<rect x="380" y="168" width="260" height="52" rx="8" fill="#3a2000" stroke="#D97706" stroke-width="1.5"/>
-<text x="510" y="189" text-anchor="middle" fill="#FCD34D" font-size="12" font-family="Inter,sans-serif" font-weight="600">Fallback Ensemble</text>
-<text x="510" y="205" text-anchor="middle" fill="#F59E0B" font-size="11" font-family="Inter,sans-serif">Sin LLM · $0 · Sin degradación</text>
-
-<!-- Orchestrator forks to det + llm agents -->
-<line x1="90" y1="220" x2="90" y2="260" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-<line x1="220" y1="220" x2="220" y2="260" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-
-<!-- Deterministic agents -->
-<rect x="20" y="262" width="140" height="56" rx="8" fill="#0a2a20" stroke="#10B981"/>
-<text x="90" y="282" text-anchor="middle" fill="#6EE7B7" font-size="11" font-family="Inter,sans-serif" font-weight="600">Agentes det.</text>
-<text x="90" y="297" text-anchor="middle" fill="#34D399" font-size="10" font-family="Inter,sans-serif">FinOps + FIFA-Regs</text>
-<text x="90" y="311" text-anchor="middle" fill="#00D97E" font-size="10" font-family="Inter,sans-serif" font-weight="700">$0 · siempre corren</text>
-
-<!-- LLM agents -->
-<rect x="170" y="262" width="140" height="56" rx="8" fill="#0E1A3A" stroke="#1E2840"/>
-<text x="240" y="282" text-anchor="middle" fill="#8B9BB4" font-size="11" font-family="Inter,sans-serif" font-weight="600">Agentes LLM</text>
-<text x="240" y="297" text-anchor="middle" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">IntMatch · Roster</text>
-<text x="240" y="311" text-anchor="middle" fill="#4E607A" font-size="10" font-family="Inter,sans-serif">Media · Travel</text>
-
-<!-- Both to LOG -->
-<line x1="90" y1="318" x2="170" y2="368" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-<line x1="240" y1="318" x2="240" y2="368" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-
-<!-- LOG -->
-<rect x="80" y="370" width="240" height="52" rx="8" fill="#0a3020" stroke="#10B981"/>
-<text x="200" y="391" text-anchor="middle" fill="#6EE7B7" font-size="12" font-family="Inter,sans-serif" font-weight="600">llm_costs.jsonl</text>
-<text x="200" y="407" text-anchor="middle" fill="#34D399" font-size="11" font-family="Inter,sans-serif">costo por agente · por run · acumulado día</text>
-
-<line x1="200" y1="422" x2="200" y2="442" stroke="#4A6699" stroke-width="1.5" marker-end="url(#a5)"/>
-
-<!-- Monitor -->
-<rect x="60" y="444" width="280" height="28" rx="6" fill="#141826" stroke="#1E2840"/>
-<text x="200" y="462" text-anchor="middle" fill="#8B9BB4" font-size="11" font-family="Inter,sans-serif">Monitoreo · alerta antes de superar tope</text>
-</svg>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Principios de diseño FinOps</div>
-  <div class="card">
-    <div class="card-body">
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Core primero, agentes opcionales.</strong> El Ensemble predice con precisión completa (RPS 0.1958) sin ningún agente LLM. Los agentes son enriquecimiento experimental — su impacto no está medido históricamente.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Fallback graceful sin degradación.</strong> Si el presupuesto se agota durante el ciclo, el sistema cae automáticamente al Ensemble. El usuario no nota diferencia funcional — solo ausencia de delta de enriquecimiento.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Transparencia de deltas.</strong> El frontend siempre muestra el prior del Ensemble. Los deltas de los agentes están explícitamente labeled como "enriquecimiento opcional" — el usuario sabe qué es el modelo y qué es contexto adicional.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Narrator AI pre-computado = costo fijo.</strong> $0.015–$0.025/día independientemente del número de usuarios simultáneos. Sin sorpresas de costo a escala.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Orquestador como rate limiter natural.</strong> Máximo 2 agentes por consulta. Context stripping elimina fluff conversacional antes de cada llamada. Compresión de payload mediante tablas Markdown/JSON en lugar de prosa libre.</div></div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Estimación de costo total de producción — torneo completo</div>
-
-  <div style="background:var(--blue-faint);border:1px solid rgba(21,101,245,0.25);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;font-size:13px;color:var(--text2);line-height:1.7">
-    El torneo tiene 3 jornadas de fase de grupos (J1/J2/J3) con complejidad y modelo LLM escalonados.
-    J1 usó DeepSeek Flash (el más económico). J2 y J3 escalan a modelos más potentes para capturar
-    presión de clasificación real, dependencias de grupos y escenarios simultáneos. Las narraciones se generan en español bogotano (un solo dialecto) en todas las fases.
-    <strong style="color:var(--text)">Estimación total con Agent Debate System: ~$13.15–$15.15 USD para el torneo completo (bogotano solamente).</strong>
-  </div>
-
-  <!-- Cost breakdown table by component -->
-  <div class="card" style="margin-bottom:1rem">
-    <div class="card-header">
-      <span class="card-icon">📋</span>
-      <div><div class="card-title">Desglose por componente y jornada</div><div class="card-sub">Estimación real basada en uso observado en J1 + proyección conservadora para J2/J3</div></div>
-    </div>
-    <div class="card-body" style="padding:.25rem 0">
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th>Componente</th>
-            <th>Modelo usado</th>
-            <th>J1 (real)</th>
-            <th>J2 (est.)</th>
-            <th>J3 (est.)</th>
-            <th>Total est.</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Predicciones + agentes LLM</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">DeepSeek Flash → V3 → R1</td>
-            <td><span style="color:var(--green);font-weight:600">&lt; $0.05</span></td>
-            <td><span style="color:var(--amber)">~$0.40</span></td>
-            <td><span style="color:var(--amber)">~$0.60</span></td>
-            <td><span style="color:var(--text);font-weight:600">~$1.05</span></td>
-          </tr>
-          <tr>
-            <td>Narrador AI — fase de grupos</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">DeepSeek Flash · 1 dialecto</td>
-            <td><span style="color:var(--green);font-weight:600">~$0.015</span></td>
-            <td><span style="color:var(--green)">~$0.015</span></td>
-            <td><span style="color:var(--green)">~$0.015</span></td>
-            <td><span style="color:var(--text);font-weight:600">~$0.045</span></td>
-          </tr>
-          <tr>
-            <td>Narrador AI — eliminatorias (bogotano)</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">DeepSeek V3 · 1 dialecto</td>
-            <td><span style="color:var(--text3)">—</span></td>
-            <td><span style="color:var(--text3)">—</span></td>
-            <td><span style="color:var(--text3)">—</span></td>
-            <td><span style="color:var(--amber);font-weight:600">~$0.47</span></td>
-          </tr>
-          <tr>
-            <td>Agent Debate System (3 agentes × 3 rondas)</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">DeepSeek Reasoner · bogotano</td>
-            <td><span style="color:var(--red);font-weight:600">~$0.51*</span></td>
-            <td><span style="color:var(--red)">~$3.06</span></td>
-            <td><span style="color:var(--red)">~$5.58</span></td>
-            <td><span style="color:var(--text);font-weight:600">~$9.15</span></td>
-          </tr>
-          <tr>
-            <td>Chat IA RAG (inferencia LLM)</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">DeepSeek Flash · cache 75%</td>
-            <td><span style="color:var(--green);font-weight:600">&lt; $0.01</span></td>
-            <td><span style="color:var(--green)">~$0.05</span></td>
-            <td><span style="color:var(--green)">~$0.05</span></td>
-            <td><span style="color:var(--text);font-weight:600">~$0.11</span></td>
-          </tr>
-          <tr>
-            <td>Embeddings RAG (DashScope)</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">Qwen3 text-embedding-v3</td>
-            <td><span style="color:var(--green);font-weight:600">&lt; $0.01</span></td>
-            <td><span style="color:var(--text3)">índice estático</span></td>
-            <td><span style="color:var(--text3)">índice estático</span></td>
-            <td><span style="color:var(--text);font-weight:600">~$0.01</span></td>
-          </tr>
-          <tr>
-            <td>Agentes determinísticos (FinOps + FIFA-Regs)</td>
-            <td style="color:var(--text2);font-family:var(--sans);font-size:12px">Sin LLM · lógica Python</td>
-            <td><span style="color:var(--green);font-weight:600">$0.00</span></td>
-            <td><span style="color:var(--green)">$0.00</span></td>
-            <td><span style="color:var(--green)">$0.00</span></td>
-            <td><span style="color:var(--green);font-weight:700">$0.00</span></td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr style="border-top:2px solid var(--border2)">
-            <td colspan="5" style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--text);padding:.75rem">
-              Total estimado torneo completo (escenario conservador, bogotano solamente)
-            </td>
-            <td style="font-family:var(--sans);font-size:15px;font-weight:700;color:var(--blue2);padding:.75rem">
-              ~$13.15–$15.15 USD
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-  </div>
-
-  <!-- Model escalation strategy -->
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Estrategia de escalado de modelos por jornada</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:1rem">
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem">
-      <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">J1 · Matchday 1 (real)</div>
-      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:.3rem">DeepSeek Flash</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:.5rem">deepseek-chat-v3-flash</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6">Partidos sin historial previo en el torneo. Contexto liviano: solo ELO + fixture. Flash es suficiente. Costo real: centavos de dólar.</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1rem">
-      <div style="font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">J2 · Matchday 2</div>
-      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:.3rem">DeepSeek V3</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:.5rem">deepseek-chat</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6">Incorpora resultados reales de J1. Presión de clasificación, momentum, reacción táctica. Contexto más rico requiere modelo más potente.</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-top:2px solid var(--blue);border-radius:var(--radius-lg);padding:1rem">
-      <div style="font-size:10px;font-weight:700;color:var(--blue2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">J3 · Matchday 3</div>
-      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:.3rem">DeepSeek R1</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:.5rem">deepseek-reasoner</div>
-      <div style="font-size:12px;color:var(--text2);line-height:1.6">Partidos simultáneos por grupo. Análisis de escenarios de clasificación, best-third, dependencias cruzadas entre grupos. Máxima complejidad analítica.</div>
-    </div>
-  </div>
-
-  <!-- Narrator escalation -->
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Costo de narraciones: el componente más significativo</div>
-  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;margin-bottom:1rem">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+  <main id="inicio" class="shell">
+    <section class="hero" aria-labelledby="hero-title">
       <div>
-        <div style="font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">Fase de grupos (72 partidos)</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.7">
-          1 dialecto · español bogotano/neutro · DeepSeek Flash<br>
-          <strong style="color:var(--text)">~$0.015/día × 3 jornadas = $0.045</strong>
+        <div class="eyebrow">Caso técnico · ML aplicado a fútbol internacional</div>
+        <h1 id="hero-title">Sistema predictivo reproducible para el Mundial 2026</h1>
+        <p class="lead">Predice resultados, actualiza probabilidades con marcadores reales, simula el torneo completo y genera narrativas explicables con IA bajo control de costos.</p>
+        <div class="thesis"><strong>Tesis del proyecto:</strong> construir una plataforma de predicción deportiva que combine un núcleo estadístico reproducible con una capa de explicación narrativa, sin depender de llamadas LLM por usuario y sin presentar el sistema como una herramienta de apuestas.</div>
+        <div class="badges" aria-label="Capacidades principales">
+          <span class="badge">Ensemble ELO + Poisson + XGBoost</span>
+          <span class="badge">Monte Carlo 2026</span>
+          <span class="badge">Actualización con resultados reales</span>
+          <span class="badge">IA opcional con guardrails de costo</span>
         </div>
       </div>
-      <div>
-        <div style="font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">Fase eliminatoria (bogotano, ~30 partidos)</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.7">
-          1 dialecto × 30 partidos · DeepSeek V3<br>
-          <strong style="color:var(--text)">Estimación: ~$0.47 (narrations bogotano)</strong><br>
-          <span style="font-size:11px;color:var(--text3)">~$0.016/partido × 1 dialecto (bogotano solamente)</span>
+      <aside class="hero-card" aria-label="Datos clave">
+        <div class="metric-grid">
+          <div class="metric"><strong>49k+</strong><span>partidos internacionales históricos usados por el pipeline, según el artefacto consultado.</span></div>
+          <div class="metric"><strong>0.1958 RPS</strong><span>resultado global del ensemble en walk-forward validation documentada.</span></div>
+          <div class="metric"><strong>64 partidos</strong><span>Qatar 2022 como test set temporal retenido.</span></div>
+          <div class="metric"><strong>104 partidos</strong><span>fixture completo del Mundial 2026 en simulación y seguimiento.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="resumen" aria-labelledby="resumen-title">
+      <div class="section-head">
+        <h2 id="resumen-title">Qué Es Y Qué No Es</h2>
+        <p>El proyecto se entiende mejor si se separan sus capas. El predictor base es estadístico y reproducible; la IA ayuda a explicar contexto, no reemplaza la predicción validada.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="kicker">Núcleo ML</div>
+          <h3>Predicción reproducible</h3>
+          <p>Calcula probabilidades 1X2 con un ensemble de ELO, Poisson y XGBoost calibrado. Puede correr sin API keys, sin agentes y sin conexión a servicios LLM.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Simulación</div>
+          <h3>Torneo completo</h3>
+          <p>Usa Monte Carlo para estimar avance por rondas, campeón probable y escenarios de grupos a medida que entran resultados reales.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">IA explicable</div>
+          <h3>Narrativas controladas</h3>
+          <p>Genera narraciones precomputadas y respuestas de chat con contexto del torneo. La capa IA tiene caché, rate limit, RAG y fallback cuando no hay presupuesto.</p>
+        </article>
+      </div>
+      <div class="notice" style="margin-top:18px;"><strong>No es una herramienta de apuestas.</strong> El sistema no recomienda apostar ni promete precisión futura. Sus salidas son probabilidades, simulaciones y explicaciones para análisis de producto, datos y experiencia de usuario.</div>
+    </section>
+
+    <section id="arquitectura" aria-labelledby="arquitectura-title">
+      <div class="section-head">
+        <h2 id="arquitectura-title">Arquitectura Del Sistema</h2>
+        <p>El diseño evita mezclar responsabilidades: el modelo predice, el simulador proyecta, la IA explica y los agentes experimentales enriquecen algunos partidos cuando hay presupuesto.</p>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Capas del sistema">
+        <button class="tab-button" role="tab" aria-selected="true" aria-controls="tab-core" id="tab-core-button" data-tab="tab-core">Core ML</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-ai" id="tab-ai-button" data-tab="tab-ai">IA narrativa</button>
+        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-agents" id="tab-agents-button" data-tab="tab-agents">Agent Debate</button>
+      </div>
+      <div id="tab-core" class="tab-panel active" role="tabpanel" aria-labelledby="tab-core-button">
+        <div class="grid-2">
+          <div class="card">
+            <h3>Pipeline predictivo</h3>
+            <p>El pipeline carga resultados históricos, normaliza nombres de selecciones, calcula ELO cronológico, construye features, entrena/calibra modelos y exporta JSON estáticos para el frontend.</p>
+            <pre><code>results.csv
+  -> ELO + features
+  -> XGBoost calibrado + Poisson + ELO
+  -> Ensemble 22/58/20
+  -> live_predictions.json</code></pre>
+          </div>
+          <div class="card">
+            <h3>Razón del ensemble</h3>
+            <p>XGBoost captura patrones no lineales, Poisson aporta distribución de goles y ELO entrega una señal estable de fuerza relativa. La mezcla reduce dependencia de un único modelo.</p>
+            <p class="small">Pesos actuales documentados: 22% ELO, 58% Poisson, 20% XGBoost.</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);line-height:1.6">
-      <strong style="color:var(--text2)">Nota sobre costs:</strong> Los $0.51 USD marcados con * en J1 son gastos reales en pruebas y Jornada 1 (completados). El resto son proyecciones para J2/J3 y knockout.
-      <br/><br/>
-      <strong style="color:var(--text2)">Diseño que contiene el costo:</strong> las narraciones se pre-computan una vez al día y se cachean en JSON estático. El cost es fijo por torneo, no por usuario. Si 10,000 usuarios abren el predictor, el costo de narración sigue siendo el mismo (bogotano solamente). Agent Debate System es un componente adicional de análisis lógico sin ML.
-    </div>
-  </div>
+      <div id="tab-ai" class="tab-panel" role="tabpanel" aria-labelledby="tab-ai-button">
+        <div class="grid-2">
+          <div class="card">
+            <h3>Narraciones precomputadas</h3>
+            <p>Las narrativas se generan una vez por jornada y quedan en JSON. En fase de grupos se prioriza el tono base de Bogotá para mantener estabilidad antes de activar variaciones regionales.</p>
+          </div>
+          <div class="card">
+            <h3>Chat con contexto del torneo</h3>
+            <p>El chat inyecta partidos del día, tablas y RAG cuando hay embeddings disponibles. Tiene filtro temático, caché y límite por IP para bajar costo y reducir respuestas fuera de dominio.</p>
+          </div>
+        </div>
+      </div>
+      <div id="tab-agents" class="tab-panel" role="tabpanel" aria-labelledby="tab-agents-button">
+        <div class="grid-2">
+          <div class="card">
+            <h3>Capa separada y experimental</h3>
+            <p>El debate de agentes analiza presión de grupo, momentum, localía, dificultad del rival y escenarios de clasificación. No debe confundirse con el modelo ML base.</p>
+          </div>
+          <div class="card">
+            <h3>Uso responsable</h3>
+            <p>Los agentes pueden aportar contexto y marcador exacto candidato, pero su impacto histórico todavía debe medirse. Si falla la API o el presupuesto, el sistema vuelve al ensemble determinístico.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flow" aria-label="Flujo de datos">
+        <div class="step"><b>1. Datos</b><span>Histórico, fixture 2026 y resultados en vivo.</span></div>
+        <div class="step"><b>2. Features</b><span>ELO, forma, H2H, localía y experiencia mundialista.</span></div>
+        <div class="step"><b>3. Modelos</b><span>ELO, Poisson, XGBoost calibrado y ensemble.</span></div>
+        <div class="step"><b>4. Simulación</b><span>Grupos, mejores terceros, bracket y campeón.</span></div>
+        <div class="step"><b>5. Narrativa</b><span>Explicaciones, presión de jornada y chat contextual.</span></div>
+      </div>
+    </section>
 
+    <section id="evidencia" aria-labelledby="evidencia-title">
+      <div class="section-head">
+        <h2 id="evidencia-title">Evidencia Y Métricas</h2>
+        <p>Los números se presentan con cautela: el fútbol tiene alta varianza, el tamaño de muestra mundialista es pequeño y la métrica principal es probabilística, no solo aciertos.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Validación documentada</h3>
+          <table>
+            <thead><tr><th>Elemento</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td>Test temporal</td><td>Qatar 2022, 64 partidos retenidos.</td></tr>
+              <tr><td>Walk-forward</td><td>5 Mundiales, 320 predicciones agregadas.</td></tr>
+              <tr><td>RPS ensemble</td><td>0.1958 global, menor es mejor.</td></tr>
+              <tr><td>XGBoost calibrado</td><td>RPS 0.217 en Qatar 2022.</td></tr>
+              <tr><td>Dataset</td><td>49k+ internacionales; los conteos varían entre filas históricas, partidos con score y matriz de features.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Qué se corrigió en la narrativa</h3>
+          <ul>
+            <li>Se eliminó el tono de promesa absoluta y se reemplazó por evidencia medible.</li>
+            <li>Se separó modelo base, narrador IA y Agent Debate.</li>
+            <li>Se evita presentar accuracy como única medida de calidad.</li>
+            <li>Se declara la incertidumbre de datos vivos y marcadores recientes.</li>
+            <li>Se reemplaza la orientación de apuestas por análisis explicable.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
-  <!-- Budget yaml reference -->
-  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:.9rem 1.25rem">
-    <div style="font-size:12px;font-weight:600;color:var(--blue2);margin-bottom:.5rem">Configuración en budget.yaml</div>
-    <div style="font-family:var(--mono);font-size:12px;color:#9DB8DD;line-height:1.9">
-      <span style="color:var(--text3)"># Límites configurables por run y por período</span><br>
-      per_run_limit: <span style="color:var(--green)">0.50</span>  <span style="color:var(--text3)"># máx. $0.50 por ejecución del ciclo diario</span><br>
-      daily_limit: <span style="color:var(--green)">1.00</span>    <span style="color:var(--text3)"># máx. $1.00 por día (incluye narraciones)</span><br>
-      monthly_limit: <span style="color:var(--green)">8.00</span>  <span style="color:var(--text3)"># margen holgado sobre el estimado de $4–6</span><br>
-      narrator_model_groups: <span style="color:var(--blue2)">"deepseek-chat-v3-flash"</span><br>
-      narrator_model_knockout: <span style="color:var(--blue2)">"deepseek-chat"</span><br>
-      agents_model_j1: <span style="color:var(--blue2)">"deepseek-chat-v3-flash"</span><br>
-      agents_model_j2: <span style="color:var(--blue2)">"deepseek-chat"</span><br>
-      agents_model_j3: <span style="color:var(--blue2)">"deepseek-reasoner"</span>
-    </div>
-  </div>
+    <section id="finops-agentes" aria-labelledby="finops-agentes-title">
+      <div class="section-head">
+        <h2 id="finops-agentes-title">FinOps IA Y Aprendizaje De Agentes</h2>
+        <p>La IA no solo debe explicar bien: también debe mostrar cuánto cuesta y si mejora con retroalimentación real. Este bloque usa datos registrados en logs y resultados jugados hasta la última revisión local.</p>
+      </div>
+      <div class="grid-2">
+        <div class="viz-shell">
+          <div class="kicker">FinOps actual + proyección</div>
+          <h3>USD por fase operativa</h3>
+          <p class="muted small">Gasto operativo a hoy: <strong>USD 0.51</strong>. Costo completo estimado por partido: <strong>USD 0.11-0.14</strong>. Si se corre el stack completo para los 76 partidos restantes, el total proyectado hasta la final queda cerca de <strong>USD 8.87-11.15</strong>.</p>
+          <div class="viz-controls" aria-label="Cambiar vista de costos">
+            <button class="viz-button active" type="button" data-cost-view="phase">Costo/partido</button>
+            <button class="viz-button" type="button" data-cost-view="current">Acumulado</button>
+            <button class="viz-button" type="button" data-cost-view="forecast">Hasta la final</button>
+            <button class="viz-button" type="button" data-cost-view="model">Por modelo</button>
+          </div>
+          <div id="costChart" class="bar-list" aria-live="polite"></div>
+          <p class="muted small" style="margin-bottom:0;margin-top:16px;">El Agent Debate domina el costo porque usa <code>deepseek-reasoner</code>, hace 9 llamadas por partido y el pensamiento interno del modelo también consume tokens facturables aunque no se muestre al usuario. Narrator AI y los agentes de enriquecimiento usan <code>deepseek-chat-v3-flash</code>/<code>deepseek-chat</code>, mucho más económicos.</p>
+        </div>
+        <div class="viz-shell">
+          <div class="kicker">Feedback real</div>
+          <h3>4 predicciones por debate</h3>
+          <p class="muted small">Cada partido con Agent Debate produce 4 lecturas: Group Analyst, Tactical Scout, Sentiment Reader y Consensus. La medición actual evalúa 4 partidos ya jugados.</p>
+          <div id="agentChart" class="bar-list" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="viz-shell" style="margin-top:18px;">
+        <div class="learning-grid">
+          <div>
+            <div class="kicker">Ciclo de mejora</div>
+            <h3>Cómo aprenden de cada fase</h3>
+            <p class="muted small">No es fine-tuning automático: es aprendizaje operativo. Los resultados reales alimentan evaluación, ajuste de prompts, pesos y reglas por jornada.</p>
+            <div id="phaseList" class="phase-list"></div>
+          </div>
+          <div id="phaseInsight" class="insight-box" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
 
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 6: REGLAS DE NEGOCIO
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-6">
-  <div class="section-eyebrow">Reglas de negocio</div>
-  <div class="section-title">Invariantes del sistema</div>
-  <div class="section-body">Reglas que el sistema debe cumplir siempre, independientemente del contexto. Divididas por dominio: integridad del modelo, agentes, FinOps, frontend y operaciones. Violaciones de reglas críticas deben generar alerta inmediata o bloquear el pipeline.</div>
-
-  <!-- MODELO -->
-  <div class="rule-category">
-    <div class="rule-category-title">Modelo & Predicción</div>
-    <div class="rule critical">
-      <div class="rule-id">RN-MOD-01 · CRÍTICA</div>
-      <div class="rule-title">Zero data leakage en entrenamiento</div>
-      <div class="rule-desc">El conjunto de entrenamiento nunca puede contener datos posteriores al año de test. Train ≤ 2021. Test = Qatar 2022. Esta regla es verificada automáticamente por <code>test_temporal_split_no_leakage</code> — si falla, el pipeline se aborta.</div>
-    </div>
-    <div class="rule critical">
-      <div class="rule-id">RN-MOD-02 · CRÍTICA</div>
-      <div class="rule-title">Anti-leakage por partido en predicción live</div>
-      <div class="rule-desc">Cada partido en vivo debe usar un ELO calculado con cutoff exacto de kickoff − 60 segundos. Nunca usar el ELO del fin del día. En partidos simultáneos (MD3), cada partido tiene su propio ELO independiente basado en el estado del mundo justo antes de su kickoff.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-MOD-03 · ALTA</div>
-      <div class="rule-title">Probabilidades siempre normalizadas a 1.0</div>
-      <div class="rule-desc">El output final (p_home + p_draw + p_away) debe sumar exactamente 1.0 después de cada blend de Ensemble y después de cada ajuste de deltas de agentes. El Orchestrator es responsable de renormalizar antes de exportar.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-MOD-04 · ALTA</div>
-      <div class="rule-title">Ablation testing antes de incorporar nuevas features</div>
-      <div class="rule-desc">Ninguna feature nueva puede agregarse a FEATURE_COLS sin demostrar mejora de RPS vs el base mediante <code>ablation_features.py</code>. Una feature que no mejora el RPS no se incorpora, aunque parezca lógica desde el dominio.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-MOD-05 · MEDIA</div>
-      <div class="rule-title">ELO propio, no de terceros</div>
-      <div class="rule-desc">El sistema ELO se calcula internamente sobre los 49,765 partidos históricos con K variable por torneo y factor de margen de victoria. No se acepta importar ELO de fuentes externas (FIFA rankings, clubelo.com) — introduce sesgos no controlados.</div>
-    </div>
-  </div>
-
-  <!-- AGENTES -->
-  <div class="rule-category">
-    <div class="rule-category-title">Sistema Multi-Agente</div>
-    <div class="rule critical">
-      <div class="rule-id">RN-AGE-01 · CRÍTICA</div>
-      <div class="rule-title">Máximo 2 agentes por consulta de predicción</div>
-      <div class="rule-desc">El Orchestrator nunca puede invocar más de 2 agentes especializados por partido. Esta regla controla el costo por llamada y mantiene el tiempo de respuesta bajo. Si el routing sugiere 3+ agentes, el Orchestrator prioriza los 2 de mayor impacto esperado.</div>
-    </div>
-    <div class="rule critical">
-      <div class="rule-id">RN-AGE-02 · CRÍTICA</div>
-      <div class="rule-title">Delta de cada agente clamped a ±12%</div>
-      <div class="rule-desc">Ningún agente puede proponer un delta de probabilidad mayor a ±12% en ninguna dirección (home/draw/away). El Orchestrator clampea antes de aplicar. La suma de deltas también debe resultar en probabilidades no negativas para ninguno de los tres outcomes.</div>
-    </div>
-    <div class="rule warn">
-      <div class="rule-id">RN-AGE-03 · ALTA</div>
-      <div class="rule-title">FinOps-Market-Calibration NO es herramienta de apuestas</div>
-      <div class="rule-desc">El agente de calibración de mercado detecta divergencias entre el modelo y las casas de apuestas — nunca recomienda apostar. El output es exclusivamente un signal de calibración (¿difiere el mercado del modelo?) para uso interno del pipeline, no para consumo directo del usuario.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-AGE-04 · ALTA</div>
-      <div class="rule-title">Context stripping obligatorio antes de llamadas LLM</div>
-      <div class="rule-desc">El Orchestrator elimina fluff conversacional, turnos de contexto redundantes e información histórica no relevante para el partido específico antes de pasar el payload a cada agente. Solo se pasa el estado actual del partido y las variables necesarias para el cálculo.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-AGE-05 · MEDIA</div>
-      <div class="rule-title">Agentes determinísticos siempre corren, independiente del presupuesto</div>
-      <div class="rule-desc">FinOps-Market-Calibration y FIFA-Regs-Strategist tienen costo $0 y no consumen tokens LLM. Deben ejecutarse en todas las predicciones, incluso cuando el budget guard ha bloqueado los agentes LLM. Su output enriquece el prior sin costo adicional.</div>
-    </div>
-  </div>
-
-  <!-- AGENT DEBATE -->
-  <div class="rule-category">
-    <div class="rule-category-title">Agent Debate System</div>
-    <div class="rule critical">
-      <div class="rule-id">RN-DEB-01 · CRÍTICA</div>
-      <div class="rule-title">4 predicciones por partido: 3 agentes individuales + 1 consenso</div>
-      <div class="rule-desc">El JSON output debe siempre contener: group_analyst, tactical_scout, sentiment_reader, consensus. Cada predicción incluye home_goals, away_goals, probability. El consenso es el blend de los 3 individuales, no un cuarto agente independiente. Todas las 4 predicciones deben evaluarse contra el resultado real.</div>
-    </div>
-    <div class="rule critical">
-      <div class="rule-id">RN-DEB-02 · CRÍTICA</div>
-      <div class="rule-title">Forward-only: sin backfill retroactivo</div>
-      <div class="rule-desc">Los debates se ejecutan manualmente para partidos puntuales ANTES de que se jueguen. No existe corrida automática ni backfill retroactivo de partidos ya jugados. El script run_agent_debate.py es idempotente: acumula nuevos resultados sin pisar debates previos a menos que se use --force.</div>
-    </div>
-    <div class="rule warn">
-      <div class="rule-id">RN-DEB-03 · ALTA</div>
-      <div class="rule-title">max_tokens=4500 para consenso con deepseek-reasoner</div>
-      <div class="rule-desc">El deepseek-reasoner cuenta los thinking tokens contra el límite de max_tokens. Con 4 predicciones (3 individuales + 1 consenso) y razonamiento extendido, se requieren mínimo 4500 tokens. Si se agota antes de terminar, el response viene vacío con HTTP 200 — el script debe detectar esto y retry o reportar.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-DEB-04 · MEDIA</div>
-      <div class="rule-title">Agent attribution obligatoria en output</div>
-      <div class="rule-desc">Cada predicción en el JSON debe incluir un campo <code>agent</code> (Group Analyst, Tactical Scout, Sentiment Reader, Consensus) para permitir evaluación granular de precisión por tipo de razonador. Sin atribución, no se puede medir cuál agente es más predictivo.</div>
-    </div>
-  </div>
-
-  <!-- FINOPS -->
-  <div class="rule-category">
-    <div class="rule-category-title">FinOps & Costos</div>
-    <div class="rule critical">
-      <div class="rule-id">RN-FIN-01 · CRÍTICA</div>
-      <div class="rule-title">Fallback graceful al Ensemble cuando el presupuesto se agota</div>
-      <div class="rule-desc">Si el daily_limit, monthly_limit o per_run_limit definidos en budget.yaml se alcanzan, el sistema DEBE continuar operando con el Ensemble determinístico. Nunca bloquear la predicción completa — solo bloquear el enriquecimiento LLM. El usuario recibe predicción, no error.</div>
-    </div>
-    <div class="rule warn">
-      <div class="rule-id">RN-FIN-02 · ALTA</div>
-      <div class="rule-title">Logging obligatorio de cada llamada LLM</div>
-      <div class="rule-desc">Cada llamada a cualquier LLM (DeepSeek, Claude) debe generar una entrada en <code>logs/llm_costs.jsonl</code> con: timestamp, agente, modelo, tokens_input, tokens_output, costo estimado, partido. Sin esta información no es posible auditar el gasto real vs presupuestado.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-FIN-03 · ALTA</div>
-      <div class="rule-title">Narrator AI: una llamada LLM por partido por día, máximo</div>
-      <div class="rule-desc">El script <code>precompute_narrations.py</code> genera narraciones una vez al día por partido × dialecto. Nunca re-generar si la clave ya existe en narrations.json del día actual (a menos que sea forzado explícitamente). El LLM en /api/narrator es únicamente fallback para claves faltantes.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-FIN-04 · MEDIA</div>
-      <div class="rule-title">Narrador solo en español bogotano</div>
-      <div class="rule-desc">Todas las narraciones (grupos, knockout, final) se generan exclusivamente en español bogotano. No hay selector de dialecto ni múltiples variantes regionales. Esto simplifica el costo y el mantenimiento: $0.016/partido independientemente de la fase.</div>
-    </div>
-  </div>
-
-  <!-- DATOS -->
-  <div class="rule-category">
-    <div class="rule-category-title">Integridad de datos</div>
-    <div class="rule critical">
-      <div class="rule-id">RN-DAT-01 · CRÍTICA</div>
-      <div class="rule-title">Todos los JSONs públicos deben ser UTF-8 válido</div>
-      <div class="rule-desc">Cualquier JSON bajo <code>frontend/public/data/</code> debe escribirse con encoding UTF-8 explícito usando Python (<code>Path.write_text(encoding='utf-8')</code>). Nunca usar PowerShell Get-Content | Set-Content para reescribir estos archivos — produce mojibake (MÃ©xico, arrancÃ³) que rompe el frontend. Test en test_integrity.py.</div>
-    </div>
-    <div class="rule critical">
-      <div class="rule-id">RN-DAT-02 · CRÍTICA</div>
-      <div class="rule-title">Fallo silencioso de datos = inaceptable</div>
-      <div class="rule-desc">Todas las aserciones de schema de datos son explícitas y levantan excepciones descriptivas. No se permite que el pipeline continúe con datos malformados o schemas incorrectos. Un DataFrame con NaNs en FEATURE_COLS debe generar error con nombre de columna, no producir predicciones silenciosamente incorrectas.</div>
-    </div>
-    <div class="rule warn">
-      <div class="rule-id">RN-DAT-03 · ALTA</div>
-      <div class="rule-title">Modelos y features son regenerables, nunca la fuente de verdad</div>
-      <div class="rule-desc">Los archivos en <code>models/</code> y <code>data/processed/</code> están en .gitignore y son completamente regenerables con <code>run_pipeline.py</code>. La fuente de verdad son los scripts Python y los CSV raw. Nunca commitear modelos entrenados — pueden quedar desincronizados con el código.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-DAT-04 · ALTA</div>
-      <div class="rule-title">Secrets nunca en código — solo en variables de entorno</div>
-      <div class="rule-desc">FOOTBALL_DATA_TOKEN, DEEPSEEK_API_KEY, ANTHROPIC_API_KEY y DASHSCOPE_API_KEY deben vivir exclusivamente en .env (local) o en las variables de entorno de Vercel (producción). Los archivos .env están en .gitignore. Ningún test debe requerir keys reales — usar mocks.</div>
-    </div>
-  </div>
-
-  <!-- FRONTEND -->
-  <div class="rule-category">
-    <div class="rule-category-title">Frontend & UX</div>
-    <div class="rule warn">
-      <div class="rule-id">RN-FE-01 · ALTA</div>
-      <div class="rule-title">El Ensemble siempre es visible — los deltas son etiquetados</div>
-      <div class="rule-desc">El frontend debe mostrar siempre el prior del Ensemble como la predicción base. Si hay enriquecimiento de agentes, el delta debe estar labeled explícitamente como "enriquecimiento opcional". El usuario nunca debe ver solo la probabilidad final sin contexto de cómo se calculó.</div>
-    </div>
-    <div class="rule warn">
-      <div class="rule-id">RN-FE-02 · ALTA</div>
-      <div class="rule-title">Chat IA: rate limit 20 req/hora/IP sin Redis</div>
-      <div class="rule-desc">El API Route de chat implementa rate limiting de 20 requests/hora por IP usando module-level Map con TTL. No se requiere Redis. El límite debe rechazar requests con HTTP 429 y mensaje claro, nunca silenciosamente ignorarlos. Los temas fuera de scope del torneo se rechazan antes de consumir tokens.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-FE-03 · MEDIA</div>
-      <div class="rule-title">Monte Carlo corre 100% en el cliente — nunca en servidor</div>
-      <div class="rule-desc">Las 5,000 simulaciones del torneo se ejecutan en TypeScript en el navegador del usuario. No existe endpoint de servidor para Monte Carlo. Los datos base (probabilidades pre-calculadas por par de equipos) se sirven desde JSON estático. Esto garantiza escalabilidad sin costo de cómputo adicional.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-FE-04 · MEDIA</div>
-      <div class="rule-title">Horarios siempre en zona Colombia/Bogotá (UTC-5)</div>
-      <div class="rule-desc">Todos los horarios mostrados en el dashboard (partidos del día, próximos partidos, ciclo de actualización) deben presentarse en hora de Colombia (UTC-5), independientemente de la zona horaria del usuario. El contexto principal es el espectador colombiano.</div>
-    </div>
-    <div class="rule green">
-      <div class="rule-id">RN-FE-05 · MEDIA</div>
-      <div class="rule-title">Narrador AI: cero llamadas LLM en tiempo real por usuario</div>
-      <div class="rule-desc">El endpoint /api/narrator sirve exclusivamente desde narrations.json pre-computado. Solo se hace una llamada LLM (fallback) si la clave específica (match_id + dialecto) no existe en el archivo. El hit rate objetivo es ≥95%. Un miss rate >5% indica que el ciclo diario no se ejecutó correctamente.</div>
-    </div>
-  </div>
-
-  <!-- OPERACIONES -->
-  <div class="rule-category">
-    <div class="rule-category-title">Operaciones & Ciclo diario</div>
-    <div class="rule warn">
-      <div class="rule-id">RN-OPS-01 · ALTA</div>
-      <div class="rule-title">Protocolo MD2: doble corrida obligatoria</div>
-      <div class="rule-desc">En Matchday 2, el ciclo completo debe ejecutarse dos veces: una vez por la mañana (antes del primer partido) y una vez por la tarde (después de los primeros 2 resultados). Sin la segunda corrida, los partidos nocturnos se predicen sin contexto de presión real de clasificación generada por los partidos de tarde.</div>
-    </div>
-    <div class="rule warn">
-      <div class="rule-id">RN-OPS-02 · ALTA</div>
-      <div class="rule-title">MD3: partidos simultáneos requieren ELO cutoff independiente</div>
-      <div class="rule-desc">En Matchday 3, todos los partidos de un grupo arrancan a la misma hora. El sistema no debe usar el resultado de Partido A para calcular el ELO del Partido B del mismo grupo — ambos tienen el mismo ELO base. Los standings de MD3 son escenarios probabilísticos, no secuenciales.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-OPS-03 · MEDIA</div>
-      <div class="rule-title">El ciclo diario siempre termina con deploy</div>
-      <div class="rule-desc">Ningún paso del ciclo (live_update, predict_live, precompute_narrations) es opcional en producción durante el torneo. El paso 4 (npx vercel --prod) es mandatorio — ejecutar los primeros 3 pasos sin deploy deja el frontend desactualizado y el usuario ve predicciones del día anterior.</div>
-    </div>
-    <div class="rule">
-      <div class="rule-id">RN-OPS-04 · MEDIA</div>
-      <div class="rule-title">141 tests deben pasar antes de cualquier deploy a producción</div>
-      <div class="rule-desc">Nunca hacer deploy si algún test del suite falla. La suite cubre pipeline, features, modelo, agentes, cost guard, integridad, simulador y agent debate. Tests que fallan indican regresiones potenciales que pueden romper predicciones en vivo. Ejecutar con <code>pytest -v</code> antes de cada deploy manual.</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TAB 7: QUICK START
-═══════════════════════════════════════════════════════ -->
-<div class="panel" id="panel-7">
-  <div class="section-eyebrow">Instrucciones de despliegue</div>
-  <div class="section-title">Quick Start</div>
-  <div class="section-body">El sistema puede levantarse en local en menos de 10 minutos. El único pre-requisito crítico es Python 3.11 — el resto es instalable con pip y npm.</div>
-
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Pre-requisitos</div>
-  <div class="prereq-grid">
-    <div class="prereq"><span class="prereq-icon">🐍</span><div><div class="prereq-name">Python</div><div class="prereq-ver">3.11 requerido exacto</div></div></div>
-    <div class="prereq"><span class="prereq-icon">📦</span><div><div class="prereq-name">Node.js</div><div class="prereq-ver">18+ para Next.js 15</div></div></div>
-    <div class="prereq"><span class="prereq-icon">🐳</span><div><div class="prereq-name">Docker</div><div class="prereq-ver">Opcional (Airflow)</div></div></div>
-    <div class="prereq"><span class="prereq-icon">🔑</span><div><div class="prereq-name">API Keys</div><div class="prereq-ver">Ver tabla abajo</div></div></div>
-    <div class="prereq"><span class="prereq-icon">📊</span><div><div class="prereq-name">Kaggle CLI</div><div class="prereq-ver">Para descargar dataset</div></div></div>
-    <div class="prereq"><span class="prereq-icon">🚀</span><div><div class="prereq-name">Vercel CLI</div><div class="prereq-ver">npm i -g vercel</div></div></div>
-  </div>
-
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Variables de entorno requeridas</div>
-  <div class="card" style="margin-bottom:1.5rem">
-    <div class="card-body" style="padding:.25rem 0">
-      <table class="tbl">
-        <thead><tr><th>Variable</th><th>Dónde obtenerla</th><th>Uso</th><th>¿Requerida?</th></tr></thead>
+    <section id="decisiones" aria-labelledby="decisiones-title">
+      <div class="section-head">
+        <h2 id="decisiones-title">Decisiones De Diseño</h2>
+        <p>El valor del proyecto no está solo en predecir; también está en las decisiones que hacen que el sistema sea mantenible durante un torneo real.</p>
+      </div>
+      <table>
+        <thead><tr><th>Decisión</th><th>Trade-off</th><th>Resultado</th></tr></thead>
         <tbody>
-          <tr><td>FOOTBALL_DATA_TOKEN</td><td>football-data.org (tier gratis)</td><td>Resultados oficiales WC 2026 en vivo</td><td><span class="req-yes">Sí</span></td></tr>
-          <tr><td>DEEPSEEK_API_KEY</td><td>platform.deepseek.com</td><td>Chat IA + Narrator AI + agentes LLM (primario)</td><td><span class="req-yes">Sí</span></td></tr>
-          <tr><td>ANTHROPIC_API_KEY</td><td>console.anthropic.com</td><td>Fallback LLM si DeepSeek no responde</td><td><span class="req-rec">Recomendado</span></td></tr>
-          <tr><td>DASHSCOPE_API_KEY</td><td>dashscope.aliyuncs.com</td><td>Embeddings RAG para chat IA (Qwen3)</td><td><span class="req-opt">Opcional</span></td></tr>
+          <tr><td>Split temporal</td><td>Menos datos para test, pero evita leakage.</td><td>Qatar 2022 queda fuera del entrenamiento.</td></tr>
+          <tr><td>JSON estáticos para frontend</td><td>Menos dinamismo instantáneo, más estabilidad de despliegue.</td><td>La app carga rápido y reduce dependencia del backend.</td></tr>
+          <tr><td>Narraciones precomputadas</td><td>No todo se genera en tiempo real.</td><td>Menor costo por usuario y menos riesgo de latencia.</td></tr>
+          <tr><td>Agentes como capa opcional</td><td>Su impacto debe validarse aparte.</td><td>El core sigue funcionando aunque no haya LLM.</td></tr>
         </tbody>
       </table>
+    </section>
+
+    <section id="estado" aria-labelledby="estado-title">
+      <div class="section-head">
+        <h2 id="estado-title">Estado Del Proyecto</h2>
+        <p>Esta sección separa lo que ya está implementado, lo que está en validación y lo que debe tratarse como experimental o pendiente.</p>
+      </div>
+      <div class="grid-4">
+        <article class="card"><span class="status done">Implementado</span><h3>Core predictor</h3><p>Pipeline ML, ensemble, export de datos, frontend, simulador y seguimiento de grupos.</p></article>
+        <article class="card"><span class="status validating">En validación</span><h3>Resultados en vivo</h3><p>Actualización diaria y recalculo por jornada, con atención especial a J2 y J3.</p></article>
+        <article class="card"><span class="status experimental">Experimental</span><h3>Agent Debate</h3><p>Análisis contextual con DeepSeek para presión, momentum y marcador exacto candidato.</p></article>
+        <article class="card"><span class="status pending">Pendiente</span><h3>Medición continua</h3><p>Comparar agente vs ML por jornada, grupo, score exacto y cambios post-resultados.</p></article>
+      </div>
+    </section>
+
+    <section id="operacion" aria-labelledby="operacion-title">
+      <div class="section-head">
+        <h2 id="operacion-title">Operación Durante El Mundial</h2>
+        <p>La operación diaria debe mantener tres artefactos alineados: resultados reales, predicciones recalculadas y narrativas actualizadas.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Ciclo diario recomendado</h3>
+          <pre><code>python scripts/live_update.py
+python scripts/predict_live.py --export
+python scripts/precompute_narrations.py
+cd frontend
+npx vercel --prod</code></pre>
+        </div>
+        <div class="card">
+          <h3>J2 y J3 requieren más cuidado</h3>
+          <p>En J2, los partidos del segundo bloque deben leer los resultados del primer bloque. En J3, los partidos de cada grupo se juegan al mismo tiempo y la narrativa debe enfocarse en clasificación directa, diferencia de gol y mejores terceros.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="limitaciones" aria-labelledby="limitaciones-title">
+      <div class="section-head">
+        <h2 id="limitaciones-title">Limitaciones Serias</h2>
+        <p>Declarar límites hace que el proyecto se vea más maduro, no menos ambicioso.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card"><h3>Varianza deportiva</h3><p>Un partido único puede girar por expulsiones, lesiones, clima o decisiones arbitrales. Las probabilidades no son certezas.</p></article>
+        <article class="card"><h3>Datos vivos</h3><p>Si la fuente de resultados llega tarde o el fixture cambia, la app puede mostrar contexto desactualizado hasta el siguiente ciclo.</p></article>
+        <article class="card"><h3>LLM y narrativa</h3><p>Las respuestas generativas pueden equivocarse si el input está incompleto. Por eso se prefiere contexto explícito, cache y fallback.</p></article>
+      </div>
+    </section>
+
+    <section id="documentos" aria-labelledby="documentos-title">
+      <div class="section-head">
+        <h2 id="documentos-title">Documentación De Apoyo</h2>
+        <p>El HTML queda como caso ejecutivo/técnico. La profundidad operativa se deja en documentos especializados para evitar una landing interminable.</p>
+      </div>
+      <div class="grid-3">
+        <a class="card" href="docs/architecture.md"><h3>Architecture Brief</h3><p>Capas, flujo de datos, artefactos y límites entre ML, IA y agentes.</p></a>
+        <a class="card" href="docs/ml-validation.md"><h3>ML Validation Brief</h3><p>Métricas, validación temporal, interpretación de RPS y riesgos de muestra.</p></a>
+        <a class="card" href="docs/finops.md"><h3>AI FinOps Brief</h3><p>CostGuard, caché, rate limit, RAG, narraciones precomputadas y fallbacks.</p></a>
+        <a class="card" href="docs/runbook.md"><h3>Live Runbook</h3><p>Ciclo diario, protocolo J2/J3 y orden correcto de recalculo.</p></a>
+        <a class="card" href="model_card.md"><h3>Model Card</h3><p>Resultados técnicos, pesos del ensemble y limitaciones del modelo.</p></a>
+        <a class="card" href="methodology.md"><h3>Methodology</h3><p>Metodología completa de datos, features, modelos y validación.</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">
+      <p><strong>Mundial Predictor 2026</strong> presenta análisis probabilístico y narrativas explicables. No ofrece asesoría de apuestas ni garantiza resultados deportivos.</p>
+      <p class="small">Última revisión editorial: 2026-06-19. Mantener métricas sincronizadas con <code>model_card.md</code>, <code>methodology.md</code> y los resultados reales exportados al frontend.</p>
     </div>
-  </div>
+  </footer>
 
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Setup local: paso a paso</div>
-  <div class="steps-list">
-    <div class="step"><div class="step-num">1</div><div>
-      <div class="step-title">Clonar el repositorio</div>
-      <div class="step-desc">El dataset histórico se descarga automáticamente de Kaggle vía kagglehub — los CSV no están versionados en el repo para mantenerlo liviano.</div>
-      <div class="code-block">git clone https://github.com/mcoy2025ia/swarm-dataops
-cd mundial-predictor-2026</div>
-    </div></div>
+  <script>
+    const buttons = document.querySelectorAll('.tab-button');
+    const panels = document.querySelectorAll('.tab-panel');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.tab;
+        buttons.forEach((item) => item.setAttribute('aria-selected', String(item === button)));
+        panels.forEach((panel) => panel.classList.toggle('active', panel.id === target));
+      });
+    });
 
-    <div class="step"><div class="step-num">2</div><div>
-      <div class="step-title">Crear entorno Python 3.11 e instalar dependencias</div>
-      <div class="step-desc">Python 3.11 requerido. El entorno virtual evita conflictos con otras instalaciones del sistema.</div>
-      <div class="code-block">python -m venv .venv
-.venv\Scripts\activate         <span class="code-comment"># Windows PowerShell</span>
-<span class="code-comment"># source .venv/bin/activate   # Linux / macOS</span>
-pip install -r requirements.txt</div>
-    </div></div>
+    const costViews = {
+      phase: [
+        { label: 'Agent Debate System', value: 0.10, display: 'USD 0.08-0.10', note: '9 llamadas a DeepSeek Reasoner: 3 agentes x 3 rondas' },
+        { label: 'Narrator AI (bogotano)', value: 0.016, display: 'USD 0.016', note: '1 llamada DeepSeek; un dialecto en fase de grupos' },
+        { label: 'Predicciones + agentes LLM', value: 0.02, display: 'USD 0.01-0.02', note: 'hasta 2 especialistas por partido, según presupuesto y fase' }
+      ],
+      current: [
+        { label: 'Gasto operativo a hoy', value: 0.51, display: 'USD 0.51', note: 'incluye debates, narrativas y enriquecimientos ya ejecutados' },
+        { label: 'Ledger local revisado', value: 0.332464, display: 'USD 0.332464', note: 'subtotal registrado en logs/llm_costs.jsonl al momento de revisión' }
+      ],
+      forecast: [
+        { label: 'Ya gastado', value: 0.51, display: 'USD 0.51', note: 'corte operativo actual' },
+        { label: 'Restante bajo', value: 8.36, display: 'USD 8.36', note: '76 partidos x USD 0.11' },
+        { label: 'Restante alto', value: 10.64, display: 'USD 10.64', note: '76 partidos x USD 0.14' },
+        { label: 'Total final bajo', value: 8.87, display: 'USD 8.87', note: 'ya gastado + escenario bajo' },
+        { label: 'Total final alto', value: 11.15, display: 'USD 11.15', note: 'ya gastado + escenario alto' }
+      ],
+      model: [
+        { label: 'Grupos restantes — Flash/Chat', value: 1.54, display: 'USD 1.54', note: '44 partidos · Narrator AI + agentes ligeros' },
+        { label: 'Grupos restantes — Reasoner', value: 3.96, display: 'USD 3.96', note: '44 partidos · Agent Debate, 9 llamadas c/u' },
+        { label: 'Eliminatorias — Flash/Chat', value: 1.12, display: 'USD 1.12', note: '32 partidos · Narrator AI + agentes ligeros' },
+        { label: 'Eliminatorias — Reasoner', value: 2.88, display: 'USD 2.88', note: '32 partidos · Agent Debate, 9 llamadas c/u' }
+      ]
+    };
 
-    <div class="step"><div class="step-num">3</div><div>
-      <div class="step-title">Configurar variables de entorno</div>
-      <div class="step-desc">Crear dos archivos: <code>.env</code> en la raíz (para scripts Python) y <code>frontend/.env.local</code> (para Next.js). Ambos están en .gitignore — nunca commitear.</div>
-      <div class="code-block"><span class="code-comment"># .env (raíz — para scripts Python)</span>
-DEEPSEEK_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
+    const agentStats = [
+      { label: 'Group Analyst', winPct: 100, exact: '1/4 exactos', note: 'la presión por puntos fue la señal más fuerte en J2' },
+      { label: 'Consensus', winPct: 75, exact: '0/4 exactos', note: 'mejoró estabilidad frente a agentes individuales' },
+      { label: 'Tactical Scout', winPct: 50, exact: '0/4 exactos', note: 'necesita ponderar más contexto reciente' },
+      { label: 'Sentiment Reader', winPct: 50, exact: '0/4 exactos', note: 'útil para ánimo, todavía ruidoso como predictor' }
+    ];
 
-<span class="code-comment"># frontend/.env.local (para Next.js API Routes)</span>
-FOOTBALL_DATA_TOKEN=...
-DEEPSEEK_API_KEY=sk-...
-ANTHROPIC_API_KEY=sk-ant-...
-DASHSCOPE_API_KEY=...          <span class="code-comment"># opcional, para RAG</span></div>
-    </div></div>
+    const learningPhases = [
+      {
+        key: 'j1',
+        title: 'J1 · Línea base',
+        subtitle: 'primer resultado real y momentum inicial',
+        bullets: [
+          'El sistema identifica marcador anterior, rival y calidad del resultado.',
+          'Se evita inflar a un equipo solo por nombre histórico.',
+          'La mejora esperada es calibrar qué resultados fueron realmente fuertes o preocupantes.'
+        ]
+      },
+      {
+        key: 'j2',
+        title: 'J2 · Presión de puntos',
+        subtitle: 'partidos ganables, urgencia y margen de error',
+        bullets: [
+          'Muestra evaluada: 4 partidos con debate y resultado final.',
+          'Group Analyst va 4/4 en 1X2; Consensus va 3/4.',
+          'La lectura que más aporta hoy es puntos + diferencia de gol + presión por clasificación.'
+        ]
+      },
+      {
+        key: 'j3',
+        title: 'J3 · Clasificación y mejores terceros',
+        subtitle: 'simultaneidad por grupo y diferencia de gol',
+        bullets: [
+          'No debe asumir información de partidos simultáneos si no existe input en vivo.',
+          'El agente de grupo debe subir peso: clasificación directa, segundo puesto y mejores terceros.',
+          'La métrica clave será si el debate mejora escenarios de supervivencia, no solo 1X2.'
+        ]
+      },
+      {
+        key: 'ko',
+        title: 'Eliminatorias · Alta varianza',
+        subtitle: 'prórroga, penales, bajas y gestión emocional',
+        bullets: [
+          'El core ML sigue entregando probabilidades base.',
+          'Los agentes deben tratar contexto táctico, lesiones y fatiga como enriquecimiento, no como certeza.',
+          'La evaluación debe separar ganador en 90 minutos, clasificado y marcador exacto.'
+        ]
+      }
+    ];
 
-    <div class="step"><div class="step-num">4</div><div>
-      <div class="step-title">Ejecutar el pipeline completo desde cero</div>
-      <div class="step-desc">Descarga datos de Kaggle, calcula ELO sobre 49,765 partidos, entrena el Ensemble con split temporal, exporta los JSONs para el frontend. Total: ~90 segundos.</div>
-      <div class="code-block">python scripts/run_pipeline.py         <span class="code-comment"># raw → ELO → features → modelos → métricas</span>
-python scripts/export_frontend_data.py  <span class="code-comment"># genera JSONs en frontend/public/data/</span></div>
-    </div></div>
+    function usd(value) {
+      return `USD ${value.toFixed(6)}`;
+    }
 
-    <div class="step"><div class="step-num">5</div><div>
-      <div class="step-title">Verificar que los 122+ tests pasan</div>
-      <div class="step-desc">La suite completa debe pasar antes de continuar. Tests fallidos indican regresiones en el pipeline, features, modelo o contratos de datos.</div>
-      <div class="code-block">pytest                                          <span class="code-comment"># todos los tests</span>
-pytest tests/test_model.py -v               <span class="code-comment"># solo modelo</span>
-pytest tests/test_agents.py tests/test_cost_guard.py -v  <span class="code-comment"># agentes + budget</span>
-pytest tests/test_integrity.py -v          <span class="code-comment"># contratos de datos + encoding</span></div>
-    </div></div>
+    function renderBars(targetId, rows, valueFormatter, valueKey = 'value') {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      const max = Math.max(...rows.map((row) => row[valueKey]), 1);
+      target.innerHTML = rows.map((row) => {
+        const width = Math.max(4, Math.round((row[valueKey] / max) * 100));
+        return `<div class="bar-row">
+          <div><div class="bar-label">${row.label}</div><div class="muted small">${row.note || ''}</div></div>
+          <div class="bar-track" aria-hidden="true"><span class="bar-fill" style="--w:${width}%"></span></div>
+          <div class="bar-value">${valueFormatter(row)}</div>
+        </div>`;
+      }).join('');
+    }
 
-    <div class="step"><div class="step-num">6</div><div>
-      <div class="step-title">Instalar dependencias del frontend y levantar en local</div>
-      <div class="step-desc">Next.js 15 con hot reload. El dashboard completo estará disponible en http://localhost:3000 con todos los módulos funcionales usando los JSONs pre-generados.</div>
-      <div class="code-block">cd frontend
-npm install
-npm run dev              <span class="code-comment"># http://localhost:3000</span>
+    function renderCost(view) {
+      renderBars('costChart', costViews[view], (row) => row.display || usd(row.value));
+      document.querySelectorAll('[data-cost-view]').forEach((button) => {
+        button.classList.toggle('active', button.dataset.costView === view);
+      });
+    }
 
-<span class="code-comment"># Alternativa: Streamlit para inspeccionar el modelo directamente</span>
-streamlit run src/app.py  <span class="code-comment"># http://localhost:8501</span></div>
-    </div></div>
+    function renderAgents() {
+      renderBars('agentChart', agentStats, (row) => `${row.winPct}% 1X2<br><span class="muted small">${row.exact}</span>`, 'winPct');
+    }
 
-    <div class="step"><div class="step-num">7</div><div>
-      <div class="step-title">Deploy a Vercel (producción)</div>
-      <div class="step-desc">Configurar las env vars en el dashboard de Vercel antes del primer deploy. El CLI toma las variables de Vercel automáticamente en deploys sucesivos. El primer deploy configura el proyecto.</div>
-      <div class="code-block">cd frontend
-npx vercel              <span class="code-comment"># primer deploy: configura proyecto + dominio</span>
-npx vercel --prod       <span class="code-comment"># deploys sucesivos a producción</span></div>
-    </div></div>
+    function renderPhases(activeKey = 'j2') {
+      const list = document.getElementById('phaseList');
+      const insight = document.getElementById('phaseInsight');
+      if (!list || !insight) return;
+      list.innerHTML = learningPhases.map((phase) => `<button type="button" class="phase-item ${phase.key === activeKey ? 'active' : ''}" data-phase="${phase.key}">
+        <b>${phase.title}</b><span>${phase.subtitle}</span>
+      </button>`).join('');
+      const active = learningPhases.find((phase) => phase.key === activeKey) || learningPhases[0];
+      insight.innerHTML = `<h3>${active.title}</h3><p class="muted">${active.subtitle}</p><ul>${active.bullets.map((item) => `<li>${item}</li>`).join('')}</ul>`;
+      list.querySelectorAll('[data-phase]').forEach((button) => {
+        button.addEventListener('click', () => renderPhases(button.dataset.phase));
+      });
+    }
 
-    <div class="step"><div class="step-num">8</div><div>
-      <div class="step-title">Ciclo diario durante el torneo</div>
-      <div class="step-desc">Ejecutar cada mañana antes de los partidos. En MD2, correr de nuevo por la tarde después de los primeros 2 resultados. Ver pestaña MLOps para el protocolo completo de MD2 y MD3.</div>
-      <div class="code-block">python scripts/live_update.py            <span class="code-comment"># fetch → ELO → retrain → export</span>
-python scripts/predict_live.py --export  <span class="code-comment"># predicciones + agentes multi-especialista</span>
-python scripts/precompute_narrations.py  <span class="code-comment"># narraciones del día (DeepSeek)</span>
-cd frontend && npx vercel --prod         <span class="code-comment"># deploy</span></div>
-    </div></div>
-  </div>
-
-  <div class="divider"></div>
-  <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Para evaluadores: por dónde empezar</div>
-  <div class="card">
-    <div class="card-body" style="padding:.25rem 0">
-      <table class="tbl">
-        <thead><tr><th>Perfil</th><th>Primer documento</th><th>Siguiente</th></tr></thead>
-        <tbody>
-          <tr><td>AI Architect</td><td>docs/system_overview.md (21 secciones, 600 líneas)</td><td>contracts/core_model_contracts.md</td></tr>
-          <tr><td>ML Engineer</td><td>methodology.md (validación walk-forward)</td><td>tests/ (122+ tests, todos pasando)</td></tr>
-          <tr><td>Developer</td><td>CLAUDE.md (setup + comandos completos)</td><td>src/agents/ (sistema multi-agente)</td></tr>
-          <tr><td>Data Leader / CDAO</td><td>README.md (¿Cómo funciona?)</td><td>model_card.md (métricas + decisiones)</td></tr>
-          <tr><td>Evaluador rápido</td><td>QUICK_START.md (2 min read)</td><td>Esta documentación</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-inner">
-    <strong style="color:var(--text2)">Manuel Coy</strong> &nbsp;·&nbsp; MCOY AI + Data Strategy &nbsp;·&nbsp;
-    <a href="https://github.com/mcoy2025ia/swarm-dataops">github.com/mcoy2025ia</a> &nbsp;·&nbsp;
-    Portfolio project — no afiliado a la FIFA &nbsp;·&nbsp;
-    <span>Actualizado: Junio 2026</span>
-  </div>
-</footer>
-
-<!-- SCRIPTS -->
-<script>
-// Tab switching
-function switchTab(i) {
-  document.querySelectorAll('.tab-btn').forEach((b,j) => b.classList.toggle('active', i===j));
-  document.querySelectorAll('.panel').forEach((p,j) => p.classList.toggle('active', i===j));
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-// Inner ops tabs
-function switchInner(i) {
-  document.querySelectorAll('.inner-tab-btn').forEach((b,j) => b.classList.toggle('active', i===j));
-  document.querySelectorAll('.inner-tab-panel').forEach((p,j) => p.classList.toggle('active', i===j));
-}
-</script>
+    document.querySelectorAll('[data-cost-view]').forEach((button) => {
+      button.addEventListener('click', () => renderCost(button.dataset.costView));
+    });
+    renderCost('phase');
+    renderAgents();
+    renderPhases('j2');
+  </script>
 </body>
 </html>
