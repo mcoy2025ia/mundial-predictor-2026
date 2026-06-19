@@ -878,14 +878,11 @@ def main() -> None:
         if group_letter and jornada_date:
             group_batches.setdefault((group_letter, jornada_date), []).append(m)
 
-    refresh_start = today.isoformat()
-    refresh_end = cutoff.isoformat()
+    # Refresh only the exact group/date previews that will be regenerated.
+    # Do not delete other future previews for the same group; UTC kickoff dates
+    # can differ from the Bogota jornada date used in existing keys.
     for group_letter, jornada_date in group_batches:
         group_narratives.pop(f"{group_letter}|{jornada_date}|bogotano", None)
-        for existing_key in list(group_narratives):
-            parts = existing_key.split("|")
-            if len(parts) == 3 and parts[0] == group_letter and refresh_start <= parts[1] <= refresh_end:
-                group_narratives.pop(existing_key, None)
 
     generated = 0
     skipped = 0
