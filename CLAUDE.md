@@ -21,15 +21,58 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Documentation Guide
 
-This repository includes several supporting documents. **Consult them when**:
+This repository includes supporting documents organized by purpose. **Consult them when**:
 
-- **`proyecto.md`** — Starting work or needing project context. Defines what the project is, its deliverables (E1–E4), and their acceptance criteria. Essential for understanding priorities during WC 2026 window (Jun 11 – Jul 19, 2026).
-- **`model_card.md`** — Debugging model performance or presenting metrics. Contains walk-forward validation results, ensemble weights rationale, and feature ablation outcomes.
-- **`guia.md`** — Planning implementation or understanding architectural decisions (D1–D6). Maps the vision against existing code, lists design conflicts + resolutions, and defines the technical roadmap (Phases 0–6).
-- **`contracts/`** — Documenting schemas or validating data contracts. `data_contracts.md` specifies the format of `results.csv`, features, and exported JSONs; formal guarantees prevent silent failures.
-- **`agent/*.md`** — Designing or modifying a specialist agent. Each file (e.g., `intmatch_analytics_pro.md`) documents a single agent's role, input context, output (delta_P adjustment), and cost profile.
-- **`methodology.md`** — Model methodology, limitations, and responsible-use statement. Companion to `model_card.md`.
-- **`README.md`** — Quick-start for new developers; external marketing. Complementary to CLAUDE.md.
+### Operational & Architecture (docs/)
+- **`docs/runbook.md`** — **Daily WC 2026 operations.** Complete cycle, J2/J3 double-run protocols, verification checklist, emergency fallback. Start here if you're deploying after a matchday.
+- **`docs/architecture.md`** — **System thesis:** 4-layer design (Statistical Benchmark → Tournament Context → Cached Narratives → Agent Debate & Evaluation). Clarifies which layer produces which claim (ML vs agents vs simulator vs narrator).
+- **`docs/finops.md`** — **AI cost strategy & budget tracking.** Current spend snapshot, cost-per-match breakdown (Agent Debate ~0.08–0.10 USD, Narrator ~0.016 USD, Specialists ~0.01–0.02 USD), projections through knockout, model use boundaries.
+- **`docs/ml-validation.md`** — Model validation approach and performance benchmarks.
+
+### Project & Model Design
+- **`proyecto.md`** — Project definition, deliverables (E1–E5), acceptance criteria. Essential for WC 2026 window priorities (Jun 11 – Jul 19, 2026).
+- **`model_card.md`** — Model performance, walk-forward validation results, ensemble weights (22% ELO + 58% Poisson + 20% XGB), feature ablation.
+- **`guia.md`** — Technical roadmap (Phases 0–6) and design decisions (D1–D6).
+- **`methodology.md`** — Model limitations and responsible-use statement.
+
+### Implementation Reference
+- **`contracts/`** — Data schemas and contracts (prevent silent failures). `data_contracts.md` specifies `results.csv`, features, and exported JSONs format.
+- **`agent/*.md`** — Each specialist agent (e.g., `intmatch_analytics_pro.md`) documents role, input context, output (delta_P adjustment), and cost profile.
+- **`README.md`** — Quick-start for new developers; external marketing.
+
+---
+
+## During WC 2026 Operations (Jun 11 – Jul 19, 2026)
+
+**See `docs/runbook.md` for daily protocols.** The tournament has three phases with distinct workflows:
+
+### Matchday Cycles (J1, J2, J3)
+Run **after each group-stage matchday** to sync predictions and narratives with real results:
+
+```bash
+python scripts/live_update.py                # Fetch results, retrain model
+python scripts/predict_live.py --export      # Update probabilities with live ELO cutoff
+python scripts/precompute_narrations.py      # Regenerate match + group narratives
+cd frontend && npx vercel --prod             # Deploy
+```
+
+### J2 Double-Run Protocol
+Matchday 2 (Jun 18–23) has afternoon and evening blocks in the same day. **Run twice:**
+1. **Before afternoon matches:** Full cycle with morning predictions
+2. **After afternoon results:** Re-run `predict_live.py --export` + `precompute_narrations.py` so evening matches see updated pressure and qualification paths
+
+### J3 Simultaneous Matches
+Matchday 3 (Jun 24) has group matches kicking off simultaneously. Narratives must emphasize:
+- Direct qualification scenarios (not assumed sequential results)
+- Goal difference and best-third qualification pressure
+- Scenarios and probabilities, not deterministic claims
+
+### Cost & Agent Debate
+- **Group stage:** Narrator in Bogotá/neutral Spanish only (budget stability)
+- **Knockout stage:** All 5 dialects auto-activated
+- **Agent Debate:** Reserve for high-context matches; costs 0.08–0.10 USD per match (5–6× more than narration)
+
+See `docs/finops.md` for current spend snapshot and projections.
 
 ---
 
@@ -205,6 +248,17 @@ npm run lint
 
 ## Architecture
 
+**See `docs/architecture.md` for the complete thesis.** The system has 4 distinct layers, each producing different claims:
+
+| Layer | Purpose | Produces | Source |
+|-------|---------|----------|--------|
+| **Layer 1: Statistical Benchmark** | ML predictions without LLM calls | `live_predictions.json` (1X2 probabilities) | XGBoost + ELO + Poisson ensemble |
+| **Layer 2: Tournament Context** | Current standings, pressure, qualification paths | `group_standings.json`, `group_matches.json` with scores | Real match results + fixture logic |
+| **Layer 3: Cached Narratives** | Explanations and storytelling (pre-computed) | `narrations.json`, `group_narratives.json` | DeepSeek (1 call/match, cached) |
+| **Layer 4: Agent Debate** | Logic-based predictions with reasoning | `agent_debate_results.json` (4 predictions: 3 agents + consensus) | DeepSeek Reasoner (9 calls/match, eval after) |
+
+**Boundary principle:** Frontend must make clear which layer produced each claim. Don't mix agent opinions with model probabilities; don't invent narratives when LLM budget fails.
+
 ### Data Pipeline
 
 ```
@@ -315,6 +369,21 @@ The "Proyecciones" tab has two views:
 5. Monte Carlo runs on client-side with current standings
 6. Chat questions → `/api/chat` → topic filter → cache check → tournament context injection → RAG → DeepSeek streaming
 7. Predictor narration: checks `narrations[home|away|dialect]` first; only calls `/api/narrator` if missing
+
+### CostGuard & LLM Budget
+
+**See `docs/finops.md` for current spend snapshot and cost projections.**
+
+Budget controls are enforced at 3 levels:
+
+1. **Global budget** — `configs/budget.yaml` declares daily ($2), monthly ($50), and per-run (5 calls) limits plus per-model token costs. `src/cost_guard.py:CostGuard.check_and_record()` raises `BudgetExceeded` before any call that would breach a limit.
+2. **Component-level strategy** — Each feature (narrations, chat, agent debate) has explicit cost trade-offs:
+   - **Narrations:** Pre-computed once daily (DeepSeek, 1 call/match × dialects). Zero LLM cost per user.
+   - **Chat:** Topic filter → cache → rate limit (20 req/hour/IP) before calling LLM. Cached responses cost $0.
+   - **Agent Debate:** Reserve for high-value matches only (~0.08–0.10 USD per match). Forward-only (no retroactive backfill of already-played matches).
+3. **Observability** — All LLM calls logged to `logs/llm_costs.jsonl`. Pipeline runs appended to `logs/pipeline_runs.jsonl` with duration, status, metrics, and artifacts for post-match evaluation.
+
+If budget is exceeded, deterministic predictions fall back to EnsembleModel (no LLM).
 
 ### AI Chat API (`/api/chat`)
 
