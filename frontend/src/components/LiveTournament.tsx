@@ -8,6 +8,7 @@ import { computeGroupStandings } from "@/lib/live";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 import { useLang } from "@/lib/i18n";
 import GroupNarrativeCard from "./GroupNarrativeCard";
+import AgentDebatePanel from "./AgentDebatePanel";
 
 interface Props {
   teams: Record<string, TeamInfo>;
@@ -262,6 +263,11 @@ export default function LiveTournament({
                           <p className="text-xs tabular-nums" style={{ color: "var(--text-muted)" }}>
                             {T.lt_forecast}: <span className="font-bold" style={{ color: "var(--text)" }}>{pickLabel}</span> · {fmtPct(v.prob)}
                           </p>
+
+                          {/* Agent Debate for this match */}
+                          <div className="mt-3 pt-3 border-t border-gray-300">
+                            <AgentDebatePanel homeTeam={m.team1} awayTeam={m.team2} variant="full" />
+                          </div>
                         </div>
                       );
                     })}

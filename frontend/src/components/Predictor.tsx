@@ -12,6 +12,7 @@ import ProbBar from "@/components/ui/ProbBar";
 import { staggerContainer, fadeUp, popIn } from "@/lib/animations";
 import { fixturesOfTheDay } from "@/lib/live";
 import { useLang, LangContext, type Lang } from "@/lib/i18n";
+import AgentDebatePanel from "@/components/AgentDebatePanel";
 
 /* ── WC 2026 Stadiums ── */
 type Stadium = { name: string; city: string; capacity: number; country: string; flag: string };
@@ -738,6 +739,9 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
           />
         )}
       </AnimatePresence>
+
+      {/* ── Agent Debate Panel ── */}
+      {predicted && <AgentDebatePanel homeTeam={home} awayTeam={away} variant="compact" />}
 
       {predicted && (
         <motion.p
