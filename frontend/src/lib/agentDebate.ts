@@ -23,7 +23,7 @@ export interface AgentDebateMatch {
   consensus: string;
   /** Compat hacia atrás: igual a predictions[0]. */
   top_prediction?: AgentTopPrediction | null;
-  /** Top-2 predicciones estructuradas del consenso (🥇 y 🥈). */
+  /** Todas las predicciones: 3 agentes individuales + 1 consenso. */
   predictions?: AgentTopPrediction[];
 }
 
@@ -127,12 +127,10 @@ export interface AgentMatchResult {
   groupMd: number;
   team1: string;
   team2: string;
-  /** Acertó quién gana (1X2), comparado contra la predicción favorita (🥇). */
-  hit: boolean;
-  /** Acertó el marcador exacto con la 🥇 o la 🥈. null si no hay predictions[] parseadas. */
-  scoreHit: boolean | null;
-  /** Nombre del agente que propuso la predicción #1 (si disponible). */
-  agentName?: string;
+  /** Acertó quién gana (1X2) para cada predicción (por agente + consenso). */
+  hits: Record<string, boolean>;
+  /** Acertó el marcador exacto para cada predicción. */
+  scoreHits: Record<string, boolean | null>;
 }
 
 export interface AgentStats {
@@ -159,19 +157,28 @@ export function computeAgentResults(
       if (!score) continue; // partido no jugado aún
 
       const debateMatch = findAgentMatch(agentResults, m.team1, m.team2);
-      if (!debateMatch) continue; // sin debate de agentes para este partido
+      if (!debateMatch || !debateMatch.predictions?.length) continue; // sin predicciones parseadas
 
-      const verdict = agentVerdict(debateMatch, m, score);
-      if (!verdict) continue; // debate sin top_prediction parseable
+      const hits: Record<string, boolean> = {};
+      const scoreHits: Record<string, boolean | null> = {};
+
+      // Evaluar cada predicción (4: 3 agentes + consenso)
+      for (const pred of debateMatch.predictions) {
+        const agentName = pred.agent ?? "Unknown";
+        const { g1, g2, winner } = orientPrediction(debateMatch, m, pred);
+        const actual = score.s1 > score.s2 ? "t1" : score.s1 < score.s2 ? "t2" : "draw";
+
+        hits[agentName] = winner === actual;
+        scoreHits[agentName] = g1 === score.s1 && g2 === score.s2;
+      }
 
       out.push({
         group,
         groupMd: roundToJor(m.round ?? "Matchday 1"),
         team1: m.team1,
         team2: m.team2,
-        hit: verdict.hit,
-        scoreHit: agentScoreHit(debateMatch, m, score),
-        agentName: debateMatch.predictions?.[0]?.agent, // Capturar nombre del agente
+        hits,
+        scoreHits,
       });
     }
   }
@@ -184,12 +191,13 @@ export function computeAgentStatsByAgent(
 ): Record<string, AgentStats> {
   const stats: Record<string, AgentStats> = {};
   for (const r of agentResults) {
-    const agent = r.agentName ?? "Unknown";
-    if (!stats[agent]) {
-      stats[agent] = { hits: 0, played: 0 };
+    for (const [agent, hit] of Object.entries(r.hits)) {
+      if (!stats[agent]) {
+        stats[agent] = { hits: 0, played: 0 };
+      }
+      stats[agent].played++;
+      if (hit) stats[agent].hits++;
     }
-    stats[agent].played++;
-    if (r.hit) stats[agent].hits++;
   }
   return stats;
 }

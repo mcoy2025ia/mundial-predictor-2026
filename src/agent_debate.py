@@ -572,33 +572,31 @@ Rebate: {rebate3[:200]}
 
 ---
 
-AHORA CONSENSO FINAL CON IMPACTO EN CLASIFICACION:
-
-Los 3 expertos llegan a acuerdo sobre los TOP 2 MARCADORES MÁS PROBABLES Y SU IMPACTO EN CLASIFICACION.
+AHORA CADA EXPERTO PROPONE SU PREDICCIÓN FINAL Y LLEGAN A CONSENSO:
 
 RESPONDE EN ESTE FORMATO:
 
-🥇 PREDICCIÓN #1 (más probable): [MARCADOR] ([PROBABILIDAD]%)
-   Propuesto por: [Group Analyst | Tactical Scout | Sentiment Reader]
-   Razón consensuada: [Explicación unificada]
-   Impacto clasificación: [¿Quién avanza? ¿Quién queda en riesgo? ¿Eliminación directa?]
+🔵 **Group Analyst** (clasificación + presión): [MARCADOR] ([PROBABILIDAD]%)
+   Análisis: [1 línea]
 
-🥈 PREDICCIÓN #2 (caso alternativo): [MARCADOR] ([PROBABILIDAD]%)
-   Propuesto por: [Group Analyst | Tactical Scout | Sentiment Reader]
-   Razón consensuada: [Explicación unificada]
-   Impacto clasificación: [Cambios en la tabla]
+🟠 **Tactical Scout** (tácticas): [MARCADOR] ([PROBABILIDAD]%)
+   Análisis: [1 línea]
+
+🟡 **Sentiment Reader** (psicología MD1): [MARCADOR] ([PROBABILIDAD]%)
+   Análisis: [1 línea]
+
+🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones
 
 ANÁLISIS FINAL (2-3 líneas):
 - ¿En qué convergieron los 3 expertos? (presión diferencial, MD1 momentum, etc)
 - Confianza general en la predicción (0-10)
 
-IMPORTANTE: Termina tu respuesta con esta línea EXACTA (sin texto adicional antes ni después,
-incluyendo el nombre del agente que propuso cada predicción):
-RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>, "agent": "<agent_name>"}}, {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>, "agent": "<agent_name>"}}]}}
+IMPORTANTE: Termina tu respuesta con esta línea EXACTA (sin texto adicional antes ni después.
+Las 4 predicciones son: 1 de cada agente individual + 1 de consenso):
+RESULTADO_JSON: {{"group_analyst": {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}, "tactical_scout": {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}, "sentiment_reader": {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}, "consensus": {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}}}
 """
-        # max_tokens 3500: razonamiento del reasoner + 2 predicciones + análisis + bloque JSON.
-        # (Reducido de 3 a 2 predicciones para evitar desperdicio de tokens)
-        consensus = self._call_deepseek(consensus_prompt, use_reasoner=True, max_tokens=3500)
+        # max_tokens 4500: razonamiento del reasoner + 4 predicciones individuales + análisis + bloque JSON.
+        consensus = self._call_deepseek(consensus_prompt, use_reasoner=True, max_tokens=4500)
         return consensus
 
     @staticmethod
@@ -630,11 +628,18 @@ RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "p
 
     @classmethod
     def parse_predictions(cls, consensus_text: str) -> list[dict]:
-        """Extrae las predicciones #1 y #2 estructuradas del bloque RESULTADO_JSON.
+        """Extrae las 4 predicciones (3 agentes + consenso) del bloque RESULTADO_JSON.
 
-        Soporta también el formato viejo de una sola predicción
-        ({"home_goals": ..., "away_goals": ...}) para no romper resultados
-        ya guardados antes de este cambio.
+        Formato nuevo:
+        {
+          "group_analyst": {...},
+          "tactical_scout": {...},
+          "sentiment_reader": {...},
+          "consensus": {...}
+        }
+
+        Retorna lista: [agent1, agent2, agent3, consensus]
+        con campos agent="Group Analyst"|"Tactical Scout"|"Sentiment Reader"|"Consensus"
         """
         import re
 
@@ -643,15 +648,33 @@ RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "p
             return []
         try:
             data = json.loads(match.group(1))
+
+            # Formato nuevo: 4 predicciones estructuradas
+            if all(k in data for k in ["group_analyst", "tactical_scout", "sentiment_reader", "consensus"]):
+                predictions = []
+                agent_map = {
+                    "group_analyst": "Group Analyst",
+                    "tactical_scout": "Tactical Scout",
+                    "sentiment_reader": "Sentiment Reader",
+                    "consensus": "Consensus"
+                }
+                for key in ["group_analyst", "tactical_scout", "sentiment_reader", "consensus"]:
+                    p = data[key].copy()
+                    p["agent"] = agent_map[key]
+                    predictions.append(cls._prediction_with_winner(p))
+                return predictions
+
+            # Formato viejo: array de predicciones (compatibilidad hacia atrás)
             if "predictions" in data:
                 predictions = data["predictions"]
                 if not isinstance(predictions, list):
                     return []
                 return [cls._prediction_with_winner(p) for p in predictions[:2]]
-            # formato viejo: una sola predicción suelta
+
+            # Formato viejo: una sola predicción suelta
             return [cls._prediction_with_winner(data)]
-        except (ValueError, KeyError, TypeError, json.JSONDecodeError):
-            logger.warning("No se pudo parsear RESULTADO_JSON del consenso")
+        except (ValueError, KeyError, TypeError, json.JSONDecodeError) as e:
+            logger.warning("No se pudo parsear RESULTADO_JSON del consenso: %s", e)
             return []
 
     def predict_match(self, home_team: str, away_team: str) -> dict:
