@@ -13,8 +13,8 @@ export interface AgentTopPrediction {
 
 export interface AgentDebateMatch {
   match: string;
-  home: string;
-  away: string;
+  home?: string;
+  away?: string;
   context?: {
     home_team?: { name: string; points: number; goal_diff: number; status: string; md1_result?: string };
     away_team?: { name: string; points: number; goal_diff: number; status: string; md1_result?: string };
@@ -37,6 +37,17 @@ export function normalizeTeamName(name: string): string {
   return TEAM_NAME_MAPPING[name] ?? name;
 }
 
+function debateTeams(r: AgentDebateMatch): { home: string; away: string } | null {
+  const home = r.home ?? r.context?.home_team?.name;
+  const away = r.away ?? r.context?.away_team?.name;
+  if (home && away) return { home, away };
+  if (r.match?.includes(" vs ")) {
+    const [matchHome, matchAway] = r.match.split(" vs ", 2).map((part) => part.trim());
+    if (matchHome && matchAway) return { home: matchHome, away: matchAway };
+  }
+  return null;
+}
+
 function pairKey(t1: string, t2: string): string {
   return `${normalizeTeamName(t1)}|${normalizeTeamName(t2)}`;
 }
@@ -51,7 +62,9 @@ export function findAgentMatch(
   const key = pairKey(team1, team2);
   const keyRev = pairKey(team2, team1);
   return results.find((r) => {
-    const rk = pairKey(r.home, r.away);
+    const teams = debateTeams(r);
+    if (!teams) return false;
+    const rk = pairKey(teams.home, teams.away);
     return rk === key || rk === keyRev;
   });
 }
@@ -63,7 +76,9 @@ function orientPrediction(
   m: GroupMatch,
   pred: AgentTopPrediction
 ): { g1: number; g2: number; winner: "t1" | "draw" | "t2" } {
-  const debateIsSameOrder = normalizeTeamName(debateMatch.home) === normalizeTeamName(m.team1);
+  const teams = debateTeams(debateMatch);
+  const debateHome = teams?.home ?? m.team1;
+  const debateIsSameOrder = normalizeTeamName(debateHome) === normalizeTeamName(m.team1);
   const g1 = debateIsSameOrder ? pred.home_goals : pred.away_goals;
   const g2 = debateIsSameOrder ? pred.away_goals : pred.home_goals;
   const winner: "t1" | "draw" | "t2" = g1 > g2 ? "t1" : g1 < g2 ? "t2" : "draw";

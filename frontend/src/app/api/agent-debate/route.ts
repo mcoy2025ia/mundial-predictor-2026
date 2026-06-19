@@ -48,6 +48,8 @@ export async function GET(request: Request) {
         consensus: result.consensus,
         round1: result.round_1,
         round2: result.round_2,
+        top_prediction: result.top_prediction ?? null,
+        predictions: Array.isArray(result.predictions) ? result.predictions : undefined,
       };
     });
 

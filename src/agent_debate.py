@@ -694,6 +694,8 @@ RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "p
 
         return {
             "match": f"{home_team} vs {away_team}",
+            "home": home_team,
+            "away": away_team,
             "context": context,
             "round_1": {
                 "group_analyst": agent1_pos,
