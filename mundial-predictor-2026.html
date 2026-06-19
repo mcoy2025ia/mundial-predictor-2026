@@ -228,7 +228,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:
       <div class="header-badges">
         <span class="badge b-green">✓ Production-Ready</span>
         <span class="badge b-blue">RPS 0.1958 · Qatar 2022</span>
-        <span class="badge b-blue">122+ Tests Passing</span>
+        <span class="badge b-blue">141 passed, 1 skipped</span>
         <span class="badge b-amber">Torneo en vivo · Jun–Jul 2026</span>
         <span class="badge b-gray">Python 3.11</span>
         <span class="badge b-gray">Next.js 15</span>
@@ -331,6 +331,19 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:
       <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Preguntas sobre el torneo en lenguaje natural</strong>: partidos del día, tabla de grupos, predicciones específicas, historial de resultados. El sistema inyecta contexto real (standings actualizados, resultados, probabilidades del Ensemble) antes de cada llamada LLM.</div></div>
       <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>RAG con embeddings DashScope</strong> (Qwen3 text-embedding-v3). Índice pre-construido en <code>rag_index.json</code>. Cache de respuestas con clave SHA-256 y TTL 2 horas, ~70-80% hit rate en instancias warm de Vercel.</div></div>
       <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Filtro de temas y rate limit</strong> de 20 req/hora/IP sin Redis (module-level Map). Temas fuera del scope del torneo son rechazados antes de consumir tokens. Fallback Anthropic Claude si DeepSeek no responde.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🤖</span>
+      <div><div class="card-title">Agent Debate System</div><div class="card-sub">3 agentes expertos · Razonamiento lógico · 4 predicciones por partido</div></div>
+    </div>
+    <div class="card-body">
+      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>3 agentes debaten en 3 rondas</strong> usando DeepSeek Reasoner (extended thinking): Group Analyst (presión de clasificación + puntos + GD), Tactical Scout (estilos de juego + táctica), Sentiment Reader (momentum psicológico de MD1/MD2). No usan el modelo ML — razonan solo desde lógica de torneo.</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>4 predicciones por partido</strong>: 3 individuales (una por agente) + 1 consenso. Cada predicción incluye marcador esperado y probabilidad. Permite evaluar cuál tipo de razonamiento (clasificación, tácticas, sentimiento) es más predictivo históricamente.</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Evaluación granular</strong>: fronted muestra precision individual por agente (1X2 y marcador exacto). Identifica qué razonador acierta más en contextos específicos. Aparece en el Predictor y en "En Vivo → Próximos".</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Forward-only</strong>: debates se ejecutan manualmente para partidos puntuales antes de que se jueguen. No hay backfill retroactivo de partidos ya jugados. Acumulativo: nueva data se agrega sin pisar debates previos.</div></div>
     </div>
   </div>
 </div>
@@ -814,7 +827,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:
 <div class="panel" id="panel-3">
   <div class="section-eyebrow">Rigor metodológico</div>
   <div class="section-title">Integridad del modelo & Validación</div>
-  <div class="section-body">Lo que diferencia este proyecto de un notebook de Kaggle: temporal split, anti-leakage por partido, walk-forward validation, calibración isotónica, contratos de datos formales y 122+ tests automatizados.</div>
+  <div class="section-body">Lo que diferencia este proyecto de un notebook de Kaggle: temporal split, anti-leakage por partido, walk-forward validation, calibración isotónica, contratos de datos formales y 141 tests automatizados (1 skipped).</div>
 
   <div class="grid-4">
     <div class="metric"><div class="metric-label">RPS Walk-forward</div><div class="metric-val green">0.1958</div><div class="metric-ctx">Qatar 2022 · never-seen</div></div>
@@ -942,12 +955,18 @@ python scripts/predict_live.py --export  <span class="code-comment"># prediccion
 python scripts/precompute_narrations.py  <span class="code-comment"># narraciones × dialectos (DeepSeek)</span>
 cd frontend && npx vercel --prod         <span class="code-comment"># deploy a producción</span>
 
+<span class="code-comment"># Agent Debate (opcional, forward-only por partido)</span>
+python scripts/run_agent_debate.py "Mexico" "South Korea" "Argentina" "Brazil"
+python scripts/export_frontend_data.py   <span class="code-comment"># exporta debate results</span>
+cd frontend && npx vercel --prod         <span class="code-comment"># deploy</span>
+
 <span class="code-comment"># Variantes útiles</span>
 python scripts/predict_live.py --no-agents             <span class="code-comment"># Ensemble $0, sin LLM</span>
 python scripts/predict_live.py --add-result MEX POL 0 0 2026-06-14
 python scripts/precompute_narrations.py --groups-only --days 1
 python scripts/live_update.py --dry-run                <span class="code-comment"># preview sin escribir</span>
-python scripts/live_update.py --force                  <span class="code-comment"># fuerza retrain sin nuevos resultados</span></div>
+python scripts/live_update.py --force                  <span class="code-comment"># fuerza retrain sin nuevos resultados</span>
+python scripts/run_agent_debate.py --force "Mexico" "South Korea"  <span class="code-comment"># re-run debate</span></div>
 
   <div class="divider"></div>
   <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:.75rem">Performance del pipeline</div>
@@ -982,6 +1001,7 @@ python scripts/live_update.py --force                  <span class="code-comment
     <div class="agent-card"><div class="agent-name">Travel-Logistics-Quant</div><div class="agent-cost-val">~$0.004</div><div class="agent-type">LLM · Claude Haiku + det.</div></div>
     <div class="agent-card"><div class="agent-name">FinOps-Market-Calibration</div><div class="agent-cost-val free">$0.000</div><div class="agent-type">Determinístico · siempre corre</div></div>
     <div class="agent-card"><div class="agent-name">FIFA-Regs-Strategist</div><div class="agent-cost-val free">$0.000</div><div class="agent-type">Determinístico · bracket math</div></div>
+    <div class="agent-card"><div class="agent-name">Agent Debate System</div><div class="agent-cost-val amber">~$0.08–$0.10</div><div class="agent-type">DeepSeek Reasoner · por partido (9 llamadas: 3 agentes × 3 rondas)</div></div>
   </div>
 
   <div class="divider"></div>
@@ -1295,6 +1315,31 @@ python scripts/live_update.py --force                  <span class="code-comment
     </div>
   </div>
 
+  <!-- AGENT DEBATE -->
+  <div class="rule-category">
+    <div class="rule-category-title">Agent Debate System</div>
+    <div class="rule critical">
+      <div class="rule-id">RN-DEB-01 · CRÍTICA</div>
+      <div class="rule-title">4 predicciones por partido: 3 agentes individuales + 1 consenso</div>
+      <div class="rule-desc">El JSON output debe siempre contener: group_analyst, tactical_scout, sentiment_reader, consensus. Cada predicción incluye home_goals, away_goals, probability. El consenso es el blend de los 3 individuales, no un cuarto agente independiente. Todas las 4 predicciones deben evaluarse contra el resultado real.</div>
+    </div>
+    <div class="rule critical">
+      <div class="rule-id">RN-DEB-02 · CRÍTICA</div>
+      <div class="rule-title">Forward-only: sin backfill retroactivo</div>
+      <div class="rule-desc">Los debates se ejecutan manualmente para partidos puntuales ANTES de que se jueguen. No existe corrida automática ni backfill retroactivo de partidos ya jugados. El script run_agent_debate.py es idempotente: acumula nuevos resultados sin pisar debates previos a menos que se use --force.</div>
+    </div>
+    <div class="rule warn">
+      <div class="rule-id">RN-DEB-03 · ALTA</div>
+      <div class="rule-title">max_tokens=4500 para consenso con deepseek-reasoner</div>
+      <div class="rule-desc">El deepseek-reasoner cuenta los thinking tokens contra el límite de max_tokens. Con 4 predicciones (3 individuales + 1 consenso) y razonamiento extendido, se requieren mínimo 4500 tokens. Si se agota antes de terminar, el response viene vacío con HTTP 200 — el script debe detectar esto y retry o reportar.</div>
+    </div>
+    <div class="rule">
+      <div class="rule-id">RN-DEB-04 · MEDIA</div>
+      <div class="rule-title">Agent attribution obligatoria en output</div>
+      <div class="rule-desc">Cada predicción en el JSON debe incluir un campo <code>agent</code> (Group Analyst, Tactical Scout, Sentiment Reader, Consensus) para permitir evaluación granular de precisión por tipo de razonador. Sin atribución, no se puede medir cuál agente es más predictivo.</div>
+    </div>
+  </div>
+
   <!-- FINOPS -->
   <div class="rule-category">
     <div class="rule-category-title">FinOps & Costos</div>
@@ -1395,8 +1440,8 @@ python scripts/live_update.py --force                  <span class="code-comment
     </div>
     <div class="rule">
       <div class="rule-id">RN-OPS-04 · MEDIA</div>
-      <div class="rule-title">122+ tests deben pasar antes de cualquier deploy a producción</div>
-      <div class="rule-desc">Nunca hacer deploy si algún test del suite falla. La suite cubre pipeline, features, modelo, agentes, cost guard, integridad y simulador. Tests que fallan indican regresiones potenciales que pueden romper predicciones en vivo. Ejecutar con <code>pytest -v</code> antes de cada deploy manual.</div>
+      <div class="rule-title">141 tests deben pasar antes de cualquier deploy a producción</div>
+      <div class="rule-desc">Nunca hacer deploy si algún test del suite falla. La suite cubre pipeline, features, modelo, agentes, cost guard, integridad, simulador y agent debate. Tests que fallan indican regresiones potenciales que pueden romper predicciones en vivo. Ejecutar con <code>pytest -v</code> antes de cada deploy manual.</div>
     </div>
   </div>
 </div>
