@@ -1,13 +1,13 @@
 {
   "Mexico": {
-    "elo": 2062.7,
-    "rank": 17,
+    "elo": 2081.4,
+    "rank": 15,
     "flag": "🇲🇽",
     "group": "A",
     "confederation": "CONCACAF",
     "goals_scored": 2.2,
-    "goals_conceded": 0.4,
-    "wc_matches": 61,
+    "goals_conceded": 0.2,
+    "wc_matches": 62,
     "pen_wins": 7,
     "pen_total": 14
   },
@@ -24,14 +24,14 @@
     "pen_total": 28
   },
   "South Korea": {
-    "elo": 2025.1,
-    "rank": 23,
+    "elo": 2006.4,
+    "rank": 25,
     "flag": "🇰🇷",
     "group": "A",
     "confederation": "AFC",
     "goals_scored": 1.6,
-    "goals_conceded": 1.2,
-    "wc_matches": 39,
+    "goals_conceded": 0.6,
+    "wc_matches": 40,
     "pen_wins": 15,
     "pen_total": 25
   },
@@ -49,7 +49,7 @@
   },
   "Canada": {
     "elo": 2008.1,
-    "rank": 25,
+    "rank": 24,
     "flag": "🇨🇦",
     "group": "B",
     "confederation": "CONCACAF",
@@ -409,7 +409,7 @@
   },
   "Norway": {
     "elo": 2067.3,
-    "rank": 16,
+    "rank": 17,
     "flag": "🇳🇴",
     "group": "I",
     "confederation": "UEFA",
@@ -457,7 +457,7 @@
   },
   "Austria": {
     "elo": 2010.1,
-    "rank": 24,
+    "rank": 23,
     "flag": "🇦🇹",
     "group": "J",
     "confederation": "UEFA",
@@ -541,7 +541,7 @@
   },
   "Croatia": {
     "elo": 2067.5,
-    "rank": 15,
+    "rank": 16,
     "flag": "🇭🇷",
     "group": "L",
     "confederation": "UEFA",

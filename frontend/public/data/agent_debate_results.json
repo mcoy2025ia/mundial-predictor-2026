@@ -152,5 +152,313 @@
       "predicted_winner": "draw",
       "agent": "Group Analyst"
     }
+  },
+  {
+    "match": "Czech Republic vs South Africa",
+    "home": "Czech Republic",
+    "away": "South Africa",
+    "context": {
+      "home_team": {
+        "name": "Czech Republic",
+        "points": 1,
+        "goal_diff": -1,
+        "played": 2,
+        "position": "?",
+        "group": "A",
+        "md1_result": "LOSS vs South Korea (2-1)",
+        "md1_opponent": "South Korea",
+        "status": "In danger (1 pt, must win soon)"
+      },
+      "away_team": {
+        "name": "South Africa",
+        "points": 1,
+        "goal_diff": -2,
+        "played": 2,
+        "position": "?",
+        "group": "A",
+        "md1_result": "LOSS vs Mexico (2-0)",
+        "md1_opponent": "Mexico",
+        "status": "In danger (1 pt, must win soon)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "## Análisis Táctico: República Checa vs. Sudáfrica (Presión Clasificatoria)\n\n### Contexto Clasificatorio Crítico\n- **Ambos equipos con 0 puntos** (tras derrota en MD1). Una nueva derrota los deja prácticamente eliminados. El empate tampoco es suficiente, pues necesitan sumar de a tres para mantener opciones reales.\n- **Presión máxima**: Ganar o morir. Esto modifica profundamente las tácticas, llevando a riesgos calculados, desesperación controlada y cambios de guión según el marcador.\n\n---\n\n### 1. Estilos de juego base + modificación por presión\n\n#### República Checa (Local) – Estilo base: posesión, toque técnico, ataque organizado.\n- **Presión modifica**: Al ser local y necesitar ganar, **no puede permitirse un repliegue defensivo**. Su tendencia natural es ofensiva, pero la presión podría llevarlos a:\n  - **Salida inicial agresiva**: Presión alta desde el minuto 1 para marcar rápido y controlar el partido.\n  - **Riesgo defensivo**: Los laterales subirán constantemente, dejando espacios atrás. El mediocampo se",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO DE MOMENTUM REAL (MD1 → MD2)**  \n\n### 1. Momentum emocional REAL\n\n**Czech Republic**  \n- Derrota **2-1 vs Corea del Sur** como local.  \n  - **Impacto emocional**: Derrota ajustada, con sabor a oportunidad perdida. No es un colapso, pero genera **frustración y urgencia**. Al haber perdido en casa, la presión aumenta: el orgullo nacional y la exigencia de la afición pesan.  \n  - **Estado mental ahora**: **Herido, pero no roto**. Sienten que estuvieron cerca, lo que alimenta la creencia de que pueden competir. Sin embargo, la necesidad de ganar inmediatamente genera **ansiedad por rendimiento** (miedo a repetir errores).  \n\n**South Africa**  \n- Derrota **2-0 vs México** como visitante.  \n  - **Impacto emocional**: Derrota sin opciones claras. No hubo reacción ni sensación de merecimiento. Esto tiende a generar **frustración resignada o inseguridad**. Un 2-0 es una brecha psicológica más amplia que un 2-1.  \n  - **Estado mental ahora**: **Golpeado, con dudas**. La falta de gol en MD1 (0 goles) y la superioridad del rival pueden hacer que sientan que su plan no funciona. La motivación de redención existe, pero teñida de **miedo a volver a ser superados**.  \n\n### 2. Confianza basada en MD1\n\n- **Czech Republic**: Llega con **confianza relativa** por la cercanía del resultado. Saben que pudieron haber arañado puntos. La derrota ajustada no destruye la autoestima técnica. **Ansiedad moderada** (presión por ganar, pero con base competitiva).  \n- **South Africa**: Llega con **confianza baja**. Haber recibido 2 goles sin responder genera incertidumbre ofensiva y defensiva. **Ansiedad alta** (dudas sobre si pueden hacer daño). La diferencia no es solo el marcador, sino la **falta de evidencia de competitividad** en MD1.  \n\n### 3. Presión psicológica diferencial\n\nAmbos están en **idéntica situación objetiva** (1 punto, deben ganar). Pero subjetivamente:  \n\n- **Czech Republic**: Siente una presión **más familiar y controlable** (derrota ajustada → saben qué ajustar). La necesidad de ganar puede canalizarse como **determinación** si el técnico logra estabilizar emociones.  \n- **South Africa**: Siente una presión **más paralizante** (derrota clara → no saben si el plan base funciona). La desesperación puede llevar a **bloqueos ofensivos** o a **ataques caóticos**. Jugarán más \"tensos\" que \"sueltos\".  \n\n**Conclusión**: South Africa juega con más nervios (menos margen de error mental). Czech Republic puede jugar con una mezcla de rabia y concentración.  \n\n### 4. Colapso mental\n\n- **Czech Republic**: **Riesgo moderado de colapso**. Si encajan un gol temprano, la frustración por la derrota anterior puede generar **desorden táctico** o pérdida de paciencia. Pero tienen más herramientas para reaccionar (experiencia europea, estructura).  \n- **South Africa**: **Alto riesgo de colapso**. Si reciben gol primero, la sombra del 2-0 previo puede generar **sentimiento de impotencia** (\"ya perdimos dos veces seguidas\"). Además, al no haber anotado en MD1, la presión por marcar puede volverlos predecibles.  \n\n### 5. Efecto \"necesidad\"\n\n- **La desesperación genera goles... pero también errores**.  \n  - **Czech Republic**: Su necesidad es más **racional** (saben que un empate no sirve). Atacarán con estructura, pero pueden dejar espacios.  \n  - **South Africa**: Su necesidad es **más emocional** (urgencia por redimirse). Esto puede llevar a atacar con más jugadores, exponiéndose a contragolpes. Es probable que **se bloqueen si no llegan temprano al arco**.  \n\n**Predicción psicológica**: Czech Republic manejará mejor la presión porque viene de un partido donde sintieron que merecieron más. South Africa, por el contrario, arrastra la sensación de inferioridad.  \n\n---\n\n### 🔝 Top 3 Marcadores Considerando Moral + Presión\n\n1. **Czech Republic 2-1 South Africa**  \n   *Partido parejo, pero los checos usan su frustración construct"
+    },
+    "round_2": {
+      "rebate_1": "No estoy en desacuerdo total con los expertos, pero matizo su enfoque. La presión es máxima, pero ambos perdieron solo un partido; la eliminación no es inminente. El análisis táctico es válido en cuanto a la urgencia, pero subestima la calidad individual checa. El psicológico acierta: la derrota ajustada de Chequia como local genera frustración, pero también convicción de que pueden competir.\n\nNo me convencen del todo. Puntos válidos: el contexto de \"ganar o morir\" y el impacto de la derrota local. Sin embargo, creo que sobrevaloran la desesperación como factor determinante frente a la jerarquía técnica.\n\nAjusto mi predicción inicial (2-1 Chequia) a un **1-1 o 2-1**, pero mantengo un ligero favoritismo checo. Defiendo mi posición: Chequia tiene mejor plantilla, mayor experiencia en eliminatorias y el factor local pesa. La presión no anula la calidad; si gestionan la urgencia, deben imponerse.",
+      "rebate_2": "**Respuesta breve:**\n\nNo estoy completamente en desacuerdo, pero discrepo en el peso que le doy al factor emocional frente al táctico. El análisis de Sentiment es válido al señalar la frustración checa por la derrota ajustada, lo que puede generar urgencia y mayor riesgo. Sin embargo, ese mismo riesgo puede llevarlos a cometer errores tácticos bajo presión.\n\nMe convencen parcialmente: el punto sobre el orgullo local tras perder en casa es realista. Pero creo que la preparación táctica y la disciplina colectiva (que mencioné en mi análisis) son más determinantes que el \"momentum emocional\" en un partido de eliminación directa.\n\nNo ajusto mi predicción de marcador. Sostengo que ambos equipos, con 0 puntos, jugarán con desesperación controlada, pero la calidad técnica checa (jugadores de ligas europeas) les da ventaja. Un 2-1 o 1-0 para República Checa sigue siendo el resultado más probable.\n\nDefiendo mi posición: el contexto clasificatorio (ganar o morir) exige tácticas basadas en análisis objetivos, no solo en percepciones anímicas. La presión afecta, pero el plan de juego y la capacidad de ejecución deciden.",
+      "rebate_3": "**Respuesta breve (295 palabras):**  \n\nNo estoy en desacuerdo total con ellos, pero matizo. El análisis táctico del Expert 2 es válido: la presión clasificatoria es extrema para ambos, lo que puede generar desesperación y errores. Sin embargo, su enfoque obvia el **momentum emocional real**. La derrota ajustada de República Checa vs. Corea del Sur (2-1 como local) deja una sensación de \"casi\" que genera **frustración constructiva** y urgencia, no colapso. En cambio, Sudáfrica perdió 2-0 contra un rival similar (sin detalles, pero asumo derrota clara); ese impacto suele ser más demoledor.  \n\nEl Expert 1 (Group Analyst) no aportó datos, pero la dinámica grupal checa probablemente sea más cohesionada tras un partido disputado.  \n\n**Puntos válidos del Expert 2:**  \n- Ambos con 0 puntos → partido de \"vida o muerte\".  \n- Riesgos calculados y cambios tácticos según el marcador.  \n\n**¿Me convencen?** Parcialmente. La presión es real, pero no anula la ventaja psicológica checa. Un equipo que sintió que mereció más en casa suele reaccionar con mayor intensidad que uno que fue superado.  \n\n**¿Ajusto mi predicción?** No significativamente. Mantengo que República Checa tiene **ligera ventaja** por momentum y calidad individual (como local, aunque aquí sería neutral). Sugiero un marcador ajustado: **2-1 Chequia** (antes pensaba 2-0; bajo la presión, el rival puede descontar).  \n\n**Defiendo mi posición:**  \nEl factor psicológico es clave en partidos de eliminación. La derrota \"digna\" de Chequia alimenta rebeldía; la de Sudáfrica genera dudas. Además, jugar con la urgencia del \"ganar o morir\" beneficia al equipo con mejor control emocional – y eso lo tiene Chequia tras un primer partido competitivo."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 1-1 (30%)\n   Análisis: Ambos equipos aún con opciones, el empate mantiene viva la clasificación, aunque no es ideal.\n\n🟠 **Tactical Scout** (tácticas): 2-1 (35%)\n   Análisis: La presión de ganar o morir lleva a un juego ofensivo, con la República Checa aprovechando su localía.\n\n🟡 **Sentiment Reader** (psicología MD1): 2-1 (40%)\n   Análisis: La frustración checa por la derrota inicial se transforma en motivación extra, superando a Sudáfrica.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad: 1. Sentiment Reader (2-1, 40%), 2. Tactical Scout (2-1, 35%), 3. Group Analyst (1-1, 30%)\n\nANÁLISIS FINAL (2-3 líneas):\n- Los tres expertos convergen en la extrema presión clasificatoria y en que ambos equipos deben ganar, pero difieren en el impacto emocional de la derrota checa en casa. Se inclinan hacia un triunfo local por la fuerza del factor psicológico y táctico.\n- Confianza general en la predicción: 7/10, dado el equilibrio y la incertidumbre de un partido decisivo.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.30}, \"tactical_scout\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.35}, \"sentiment_reader\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.40}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.45}}",
+    "predictions": [
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.3,
+        "predicted_winner": "draw",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.35,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.4,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.45,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 1,
+      "away_goals": 1,
+      "probability": 0.3,
+      "predicted_winner": "draw",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Mexico vs South Korea",
+    "home": "Mexico",
+    "away": "South Korea",
+    "context": {
+      "home_team": {
+        "name": "Mexico",
+        "points": 6,
+        "goal_diff": 3,
+        "played": 2,
+        "position": "?",
+        "group": "A",
+        "md1_result": "WIN vs South Africa (2-0)",
+        "md1_opponent": "South Africa",
+        "status": "Advancing (likely)"
+      },
+      "away_team": {
+        "name": "South Korea",
+        "points": 3,
+        "goal_diff": 0,
+        "played": 2,
+        "position": "?",
+        "group": "A",
+        "md1_result": "WIN vs Czech Republic (2-1)",
+        "md1_opponent": "Czech Republic",
+        "status": "Advancing (likely)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "## Análisis Táctico: México vs Corea del Sur (Presión Clasificatoria)\n\n### Contexto clasificatorio\n- **México (local):** 3 pts, +2 goles diferencia (GD). Líder parcial del grupo. Una derrota no lo elimina (aún tendría 3 pts, pero depende del otro resultado), pero un empate o victoria prácticamente asegura el primer puesto.\n- **Corea del Sur (visitante):** 3 pts, +1 GD. Segundo lugar. Una derrota lo deja en riesgo de quedar fuera si el otro partido (Rep. Checa vs Sudáfrica) no le favorece. Una victoria le da el primer puesto con alta probabilidad.\n\n**Presión asimétrica:** México puede *permitirse* perder (riesgo moderado), Corea del Sur *necesita* ganar (presión alta). Esto modifica radicalmente las tácticas base.\n\n---\n\n### 1. Estilos de juego base vs modificados por presión\n\n#### México (estilo tradicional: posesión, transiciones rápidas, juego por bandas)\n- **Base:** Ofensivo con laterales profundos, delantero móvil (tipo Chucky Lozano o Santiago Giménez). Presión alta tras pérdida.\n- **Con presión clasificatoria (puede perder):** Se vuelve **conservador-ofensivo**. No necesita arriesgar. Jugará con mayor control de balón, sacrificando velocidad para evitar pérdidas que generen contragolpes. Los laterales se contienen, el mediocentro defensivo se queda anclado. Buscará el primer gol para luego cerrar líneas (gestión del marcador).\n- **Si Corea marca primero:** México no se desespera. Mantendrá el plan de posesión paciente, esperando espacios en el segundo tiempo. Solo si el otro partido amenaza su clasificación (ejemplo: Rep. Checa ganando 3-0), se volvería ofensivo.\n\n#### Corea del Sur (estilo: contraataque rápido, presión alta intermitente, juego aéreo y segundas jugadas)\n- **Base:** Orden defensivo, salida rápida con Son Heung-min y Hwang Hee-chan. Busca errores rivales.\n- **Con presión clasificatoria (debe ganar):** Se vuelve **ofensivo-desordenado**. El \"debe ganar\" acelera la toma de decisiones. Inicia con presión alta desde el minuto 1, pero con riesgo de dejar espacios. Es probable que intente un gol tempranero para tranquilizarse. Si no llega, la ansiedad puede llevarlos a bombardear centros laterales (fortaleza aérea) incluso sin claridad.\n- **Si marca primero:** Se repliega y busca el contragolpe (su táctica favorita), pero con el marcador a favor, la presión se invierte: México necesitará empatar, y Corea tendrá espacios letales.\n\n**Conclusión parcial:** México jugará un 4-3-3 controlado, Corea un 4-2-3-1 ofensivo pero caótico. La paciencia mexicana choca contra la urgencia coreana.\n\n---\n\n### 2. Fortalezas/debilidades basadas en MD1\n\n#### México (vs Sudáfrica 2-0)\n- **Fortalezas:** Eficacia en área rival (2 goles en pocas ocasiones), solidez defensiva (Sudáfrica no generó peligro claro), dominio aéreo (gol de cabeza).\n- **Debilidades:** Lentitud en salida de balón cuando presionan (Sudáfrica no presionó bien), dependencia de jugadas individuales para crear.\n\n#### Corea del Sur (vs Rep. Checa 2-1)\n- **Fortalezas:** Velocidad en transición (gol en contraataque), capacidad de remontada (iban perdiendo 0-1), juego aéreo en área rival (gol de centro lateral).\n- **Debilidades:** Defensa frágil en balones parados (gol checo de córner), pérdida de balón en campo propio bajo presión, tendencia a bajar la intensidad tras el empate.\n\n**Clave táctica:** México explotará balones parados y centros laterales (donde Corea es débil). Corea buscará errores en salida mexicana y espacios a la espalda de los laterales si México se proyecta.\n\n---\n\n### 3. ¿Cómo cambia el juego si Corea marca primero?\n\n- **Escenario Corea 1-0 (minuto 20):** Corea se repliega automáticamente (5 defensas, líneas juntas). México **no se desespera** (recuerda: puede perder). Aumenta posesión pero sin profundidad. Buscará centros al área (a la débil defensa coreana) o errores individuales. Corea tendrá contragolpes letales (Son, Hwang). El partido se vuelve de \"gestión\" para ambos: Corea defendiendo el resultado, México sin urgencia real. El marcador podría quedarse 1-0 o ampliarse en contragolpe.\n- **Si Corea marca primero en el minuto 70:** México reacciona ofensivamente (cambios ofensivos, laterales a campo contrario). Corea se encierra. El último cuarto de hora sería de asedio mexicano, con Corea buscando el segundo en transición.\n\n**Predicción:** Un gol temprano coreano favorece su estilo. Un gol tardío genera pánico coreano pero poco tiempo para reacción mexicana.\n\n---\n\n### 4. Ventaja de campo (localía)\n\n- **Psicológica:** México juega ante su afición, factor que normalmente presiona al rival. Pero **dado que México puede perder**, la afición podría volverse impaciente si el equipo no ataca. Esto podría forzar a México a ser más ofensivo de lo planeado, *contraproducente* para su estrategia conservadora.\n- **Táctica:** El estadio, el clima, el césped no modifican significativamente el planteamiento. Sí puede influir en la toma de decisiones arbitrales (penaltis dudosos, faltas), pero no es un factor táctico puro.\n\n**Conclusión:** La localía es un arma de doble filo para México: la afición ex",
+      "sentiment_reader": "# ANÁLISIS PSICOLÓGICO PROFUNDO: MÉXICO vs COREA DEL SUR (basado en MD1 REAL)\n\n## 1. MOMENTUM EMOCIONAL REAL POST-MD1\n\n### México (2-0 vs Sudáfrica)\n- **Estado mental:** **Confianza controlada, no euforia**\n- Una victoria 2-0 sin sobresaltos genera: seguridad defensiva + eficacia ofensiva medida\n- NO es una goleada que infla el ego, pero SÍ es un resultado que valida el plan de juego\n- Sensación interna: \"Hicimos lo que debíamos, sin sufrir\"\n- Riesgo psicológico: **subestimar al rival** (Corea viene de una victoria más trabajada, lo que puede llevar a México a pensar que será más fácil de lo que realmente es)\n\n### Corea del Sur (2-1 vs República Checa)\n- **Estado mental:** **Alivio + urgencia controlada**\n- Ganar 2-1 con gol de diferencia estrecha genera: satisfacción por la victoria, pero también conciencia de que estuvieron cerca de empatar o perder\n- No es euforia, es **alivio competitivo**\n- Sensación interna: \"Ganamos, pero debemos mejorar\"\n- Esta victoria ajustada activa: **hambre de demostrar** que el primer partido no fue suerte\n\n## 2. CONFIANZA DIFERENCIAL POST-MD1\n\n| Variable | México | Corea del Sur |\n|----------|--------|---------------|\n| **Confianza** | Alta, estable (victoria limpia) | Media-alta, pero nerviosa (victoria sufrida) |\n| **Ansiedad** | Baja (control del partido) | Moderada (necesidad de confirmar) |\n| **Percepción del rival** | \"Corea es fuerte, pero manejable\" | \"México es el favorito, tenemos que demostrar\" |\n\n**Diferencia clave:** Una victoria 2-0 genera **sensación de control**; una victoria 2-1 genera **sensación de supervivencia**. México juega con la calma de quien ya tiene 3 puntos asegurados; Corea juega con la urgencia de quien necesita demostrar que no fue casualidad.\n\n## 3. PRESIÓN PSICOLÓGICA DIFERENCIAL\n\n### México (\"Advancing likely\")\n- Presión real: **MODERADA-BAJA**\n- Sabe que incluso un empate los deja en buena posición (3 puntos, +2 de diferencia)\n- Juegan con margen: pueden permitirse un resultado ajustado sin colapsar\n- **No hay desesperación**, hay planificación\n\n### Corea del Sur (\"Advancing likely\")\n- Presión real: **ALTA**\n- Aunque ganaron, el 2-1 no les da colchón de diferencia de goles (+1 actual)\n- Saben que una derrota los deja con 3 puntos y -1 o peor diferencia, y el próximo partido sería contra República Checa (que también necesita sumar)\n- **Sienten la necesidad de sumar hoy**, no pueden esperar a la última fecha\n\n**Conclusión psicológica: Corea juega con más presión. México juega más suelto.**\n\n## 4. RIESGO DE COLAPSO MENTAL\n\n### México - ¿Riesgo de colapsar con 0 pts en MD2?\n- **Riesgo BAJO** (15-20% de probabilidad psicológica)\n- Su estructura mental post-MD1 es sólida: victoria controlada, sin lesiones graves, sin polémicas\n- El único riesgo: si Corea les mete un gol temprano, puede generar dudas momentáneas, pero no colapso total\n\n### Corea del Sur - ¿Llegó desesperado desde MD1?\n- **Desesperación: MODERADA, no extrema**\n- La victoria 2-1 les quitó la desesperación absoluta, pero les dejó **inquietud**\n- Llegan con la sensación de: \"No podemos fallar hoy, porque el último partido será una final contra Chequia\"\n- Esto genera **tensión productiva** (no bloqueo) en equipos disciplinados como Corea\n\n## 5. EFECTO \"NECESIDAD\" - ¿GOLES O ERRORES?\n\n### La desesperación de Corea genera:\n- **Fase ofensiva:** Mayor agresividad en ataque → puede producir goles\n- **Fase defensiva:** Mayor riesgo de errores por ansiedad al presionar alto\n- **Riesgo:** Contraataques letales de México si Corea se descuida\n\n### La tranquilidad de México genera:\n- **Paciencia ofensiva:** Capacidad de esperar el error coreano\n- **Solidez defensiva:** No necesitan arriesgar, pueden jugar en transición\n- **Peligro:** Si se confían demasiado, Corea puede sorprender con intensidad inicial\n\n**Probabilidad de goles altos (O2.5): ALTA**  \nCorea va a presionar desde el inicio. México va a esperar y contraatacar. Esto produce partido abierto.\n\n---\n\n## TOP 3 MARCADORES (MORAL + PRESIÓN)\n\n### 1. **México 2-1 Corea del Sur** (40% de probabilidad psicológica)\n- México controla el primer tiempo, Corea empata, México define en segundo tiempo con contraataque\n- Refleja: confianza mexicana + urgencia coreana que genera espacios\n\n### 2. **México 1-0 Corea del Sur** (25%)\n- Partido cerrado, tenso. Corea ataca pero no define. México golpea en una transición.\n- Refleja: solidez defensiva mexicana + frustración ofensiva coreana\n\n### 3. **Corea del Sur 2-1 México** (20%)\n- Corea sale con alta intensidad, sorprende a México que no esperaba tanta presión inicial\n- México reacciona tarde, Corea aguanta el resultado\n- Refleja: subestimación mexicana + hambre coreana\n\n### Empate (1-1 o 0-0): 15%\n- Ambos se neutralizan, especialmente si Corea se bloquea por la presión\n\n---\n\n## CÓMO INFLUYE MD1 EN ESTE PARTIDO\n\n| Factor | Efecto |\n|--------|--------|\n| **Victoria 2-0 de México** | Permite a México jugar sin urgencia, pero con riesgo de relajación |\n| **Victoria 2-1 de Corea** | Activa modo \"demostrar\" en Corea, pero con dudas defensivas |\n| **Diferencia de gol** | Corea sabe que necesita sumar puntos ya; México sabe que puede permitirse un empate |\n| **Frescura emocional** | Ambos llegan con moral positiva (ganaron), pero con carga distinta: México tranquilo, Corea inquieto |\n\n**Conclusión final"
+    },
+    "round_2": {
+      "rebate_1": "No se muestra tu posición inicial, pero asumo que defendías una ventaja de México. Los argumentos de los expertos son válidos: el análisis táctico señala la presión clasificatoria de Corea, y el psicológico destaca el riesgo de exceso de confianza mexicano. Sin embargo, considero que subestiman la capacidad de Corea para adaptarse y su histórico de remontadas. No me convencen del todo: el factor local de México es fuerte, pero Corea tiene calidad técnica y velocidad para explotar cualquier relajación. Ajusto mi predicción de 2-0 a 2-1 o 1-1, porque veo probable un gol coreano. Defiendo mi posición: México es favorito, pero debe evitar la complacencia; la solidez defensiva de la primera fecha no garantiza inmunidad ante un rival con hambre clasificatoria.",
+      "rebate_2": "**No estoy en desacuerdo con el análisis psicológico, pero lo complemento, no lo sustituye.**  \n- La confianza controlada de México es real, pero subestimar a Corea es un riesgo menor aquí: el contexto clasificatorio (ganar asegura el primer puesto) genera enfoque.  \n- El punto válido de Expert 3 es que la euforia no domina, lo que reduce errores tácticos. Sin embargo, mi predicción de marcador (2-1 México) se mantiene: la defensa mexicana es sólida, pero Corea tiene calidad para anotar.  \n- **Defiendo mi posición táctica**: Corea presionará más (necesita puntos), lo que expondrá su defensa. México, con la calma del resultado previo, puede explotar contragolpes. No ajusto.",
+      "rebate_3": "**¿Estoy en desacuerdo con ellos?** No totalmente. Ambos expertos aportan datos tácticos y clasificatorios válidos que complementan mi enfoque psicológico.\n\n**¿Me convencen?** Parcialmente. El punto del *Group Analyst* sobre el contexto de grupo es correcto: Corea necesita más el resultado. El *Tactical* acierta al señalar que México tiene colchón de puntos, lo que reduce la presión inmediata. Sin embargo, mi análisis psicológico sigue siendo relevante: la confianza controlada de México no es lo mismo que la ansiedad de Corea, que podría traducirse en errores bajo presión.\n\n**¿Ajusto mi predicción de marcador?** No. Mantengo mi pronóstico inicial: **México 2-1 Corea del Sur**. La ventaja anímica y el factor local (en un debate, asumimos \"localía\") pesan más que la mera necesidad numérica del rival. Corea apretará, pero México tiene la templanza para gestionar el partido.\n\n**Defiendo mi posición:** La psicología deportiva no es un adorno; es el motor de la ejecución táctica. México viene de un partido \"sin sobresaltos\" que refuerza su cohesión. Corea viene de una victoria agónica (vs. Rep. Checa) que genera tensión residual. La fatiga mental y el margen de error son clave: México puede permitirse un error; Corea no. Eso inclina la balanza."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 2-1 (55%)\n   Análisis: La presión clasificatoria de Corea es real, pero México tiene ventaja local y mayor solidez defensiva.\n\n🟠 **Tactical Scout** (tácticas): 2-1 (50%)\n   Análisis: México controlará el medio campo, Corea presionará pero la eficacia ofensiva mexicana marcará la diferencia.\n\n🟡 **Sentiment Reader** (psicología MD1): 1-1 (45%)\n   Análisis: La confianza controlada de México evita riesgos, Corea buscará el empate y la presión no desestabiliza.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad: 1. México 2-1 (60%), 2. Empate 1-1 (30%), 3. Corea 1-0 (10%)\n\nANÁLISIS FINAL (2-3 líneas):\n- Los tres expertos convergen en que la presión clasificatoria es mayor para Corea, mientras México juega con confianza controlada y solidez defensiva tras MD1.\n- La ligera ventaja local y el mejor arranque ofensivo inclinan la balanza hacia México, aunque el margen es estrecho.\n- Confianza general en la predicción: 7/10\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.55}, \"tactical_scout\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.50}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.45}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.60}}",
+    "predictions": [
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.55,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.5,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.45,
+        "predicted_winner": "draw",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.6,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 2,
+      "away_goals": 1,
+      "probability": 0.55,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Switzerland vs Bosnia and Herzegovina",
+    "home": "Switzerland",
+    "away": "Bosnia and Herzegovina",
+    "context": {
+      "home_team": {
+        "name": "Switzerland",
+        "points": 1,
+        "goal_diff": 0,
+        "played": 1,
+        "position": "?",
+        "group": "B",
+        "md1_result": "DRAW vs Qatar (1-1)",
+        "md1_opponent": "Qatar",
+        "status": "In danger (1 pt, must win soon)"
+      },
+      "away_team": {
+        "name": "Bosnia and Herzegovina",
+        "points": 0,
+        "goal_diff": 0,
+        "played": 0,
+        "position": "?",
+        "group": "?",
+        "md1_result": "DRAW vs Canada (1-1)",
+        "md1_opponent": "Canada",
+        "status": "Unknown"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "## Análisis Táctico + Presión Clasificatoria: Suiza vs Bosnia y Herzegovina\n\n### Razonamiento táctico paso a paso\n\n**1. Contexto clasificatorio y su efecto en la mentalidad**\n\n- **Suiza (local, 1 punto):** Está en zona de peligro real. Un empate los dejaría con 2 puntos en 2 jornadas, lo que en un grupo de 4 (si es eliminatoria mundialista o Eurocopa) es insuficiente. **La presión los vuelve ofensivos pero no suicidas.** No pueden permitirse perder, pero ganar es casi obligatorio. Esto genera un dilema: atacar con intensidad pero sin descubrirse en exceso. Espero un 4-3-3 o 3-4-3 con laterales muy adelantados y un mediocampo que presione alto, pero con un doble pivote defensivo (Xhaka + Freuler) para evitar contragolpes letales.\n\n- **Bosnia (visitante, 1 punto):** Su situación es similar pero con un matiz: al ser visitante, un empate no es un mal resultado si luego ganan en casa. Sin embargo, si Suiza se lanza, Bosnia puede sentirse tentado a **jugársela desde el minuto 1**, especialmente si su técnico (desconocido en este contexto) quiere sorprender. La presión clasificatoria **puede volverlos desordenados** si intentan un pressing alto sin preparación táctica. Lo más probable es que busquen un equilibrio: salir a controlar el mediocampo y esperar errores suizos.\n\n**2. Estilos de juego base y cómo los modifica la presión**\n\n- **Suiza:** Tradicionalmente un equipo sólido, de transiciones rápidas y juego directo a las bandas (Shaqiri, Vargas). Pero **con la necesidad de ganar, se volverán más verticales.** Espero que busquen centros al área desde el inicio, incluso con laterales como Rodríguez o Widmer convertidos en extremos. El riesgo: si Bosnia defiende en bloque bajo, Suiza puede atascarse y exponerse a contragolpes.\n\n- **Bosnia:** Depende mucho de la inspiración individual (Dzeko, Pjanic si juega). Suelen ser un equipo que prefiere **replegarse y salir en velocidad**, pero con la urgencia de sumar puntos, podrían intentar un fútbol más directo. Sin embargo, no tienen la capacidad de posesión de Suiza, por lo que una apuesta ofensiva temprana podría dejarlos fracturados. **Mi hipótesis: Bosnia jugará con un 5-3-2 o 4-4-2, esperando a Suiza y buscando errores en salida.**\n\n**3. ¿Qué pasa si Bosnia marca primero?**\n\n- **Efecto inmediato:** Bosnia se repliega aún más, transformándose en un equipo ultradefensivo (línea de 5 + 4 en mediocampo). Suiza, al verse abajo, **elimina cualquier especulación.** El técnico suizo (Murat Yakin) hará cambios ofensivos: ingresará un delantero extra (Seferovic o Zeqiri), pasará a 3-4-3 o incluso 4-2-4. La presión clasificatoria los llevará a **arriesgar posesión por verticalidad**, dejando espacios atrás. Bosnia tendrá oportunidades claras de contraataque (Dzeko en carrera).\n\n- **Suiza al borde del abismo:** Si el marcador sigue 0-1 al minuto 70, veremos a Suiza jugar con defensa de 2 hombres (los centrales) y laterales como extremos. Un empate no les sirve, así que asumirán riesgos máximos. **Bosnia, con ventaja, se sentirá cómoda en su área** y buscará matar al contragolpe. El partido se vuelve de ida y vuelta, con más ocasiones para Bosnia.\n\n**4. Ventaja de campo**\n\n- **Psicológica:** La afición suiza presiona a su equipo para ganar, pero también puede generar ansiedad. En partidos de alta tensión, el local suele cometer más errores no forzados (malos pases, decisiones apresuradas). La ventaja real es el **conocimiento del terreno** y el arbitraje (posible favor local), pero no tanto para cambiar la táctica. \n- **Táctica:** En casa, Suiza puede permitirse un pressing más alto durante 60 minutos porque el público empuja. Sin embargo, el desgaste físico es mayor. Bosnia, como visitante, puede **dosificar esfuerzos** y esperar el error. En este contexto, la ventaja de campo **no modifica la táctica inicial**, pero sí puede **aumentar la intensidad de Suiza en los primeros 20 minutos**.\n\n**5. Histórico vs este rival**\n\n- No hay enfrentamientos recientes en torneos oficiales de alto nivel (últimos 10 años). Esto elimina referencias directas. Sin embargo, ambos equipos tienen estilos contrastantes: Suiza más estructurada, Bosnia más dependiente de talento individual. En ausencia de historia, **el factor presión es el único predictor**.\n\n---\n\n### Top 3 marcadores basados en TÁCTICAS + PRESIÓN\n\n1. **Suiza 2-1 Bosnia** (más probable)\n   - Suiza marca temprano (minuto 25) gracias a pressing alto. Bosnia empata en transición (Dzeko). En el segundo tiempo, Suiza aprovecha un error defensivo bosnio (falta de concentración por el desgaste) y gana 2-1. La presión clasificatoria fuerza a Suiza a ser efectiva, pero no arriesga en exceso.\n\n2. **Suiza 1-1 Bosnia** (segundo escenario)\n   - Partido trabado. Suiza domina pero sin claridad. Bosnia se defiende con orden (bloque bajo) y golpea en una contra. Suiza empata de penalti o balón parado. La necesidad de ganar de Suiza choca contra la solidez defensiva bosnia. No se atreven a morir en ataque por miedo a perder.\n\n3. **Bosnia 2-1 Suiza** (sorpresa táctica)\n   - Bosnia sale a presionar alto desde el minuto 1",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO DEPORTIVO BASADO EN MD1 REAL**\n\n**1. Momentum emocional REAL (estado post-MD1 inmediato)**\n\n- **Switzerland** (DRAW 1-1 vs Qatar en casa):  \n  *Estado mental:* **Tensión alta + frustración latente**. No es \"destruido\" porque no perdió, pero empatar en casa contra Qatar (rival inferior en ranking) genera una mezcla de alivio (evitó la derrota) y **autocrítica** (debió ganar). El jugador suizo siente que \"regaló\" dos puntos. No hay euforia, hay **urgencia**. Es un equipo que sabe que está obligado a ganar y que su margen de error se redujo a cero.\n\n- **Bosnia and Herzegovina** (DRAW 1-1 vs Canadá como visitante):  \n  *Estado mental:* **Confianza moderada + motivación intacta**. Empatar fuera de casa contra Canadá es un resultado aceptable, no brillante pero sí competitivo. El equipo bosnio no está \"destruido\" ni \"eufórico\". Siente que **puede competir** y que un punto en la primera fecha es base para algo mejor. Hay más optimismo que ansiedad, porque no arrastran una derrota.\n\n**2. Confianza basada en MD1**\n\n- **¿Quién llega con confianza?**  \n  *Bosnia* llega **ligeramente más confiado** por empatar fuera ante un rival de peso similar. No sufrió un golpe de autoestima.  \n  *Suiza* llega **con dudas**. Un empate casero contra Qatar no alimenta la confianza, sino que la erosiona.\n\n- **¿Quién llega ansioso?**  \n  *Suiza* es quien está más ansioso. Sabe que **necesita ganar** (1 punto, \"must win soon\") y arrastra la presión de no haber cumplido en casa. El \"debió ser victoria\" pesa.  \n  *Bosnia* está más relajado: \"Ya sumamos, ahora podemos ir a buscar más\".\n\n- **Diferencia clave:** Una victoria 1-0 genera una psicología de \"sufrimiento controlado\". Un empate 1-1 en casa contra Qatar genera \"fracaso relativo\". Suiza llega **herido en su orgullo local**.\n\n**3. Presión psicológica DIFERENCIAL**\n\n- **Suiza** (In danger, 1 pt):  \n  Juega con **nervios de urgencia**. Sabe que una derrota los deja al borde de la eliminación. La presión es alta y puede traducirse en:  \n  - Salida intensa pero errática (ansiedad por resolver rápido).  \n  - Riesgo de tomar decisiones precipitadas en ataque.  \n  - Vulnerabilidad defensiva si el plan no funciona.\n\n- **Bosnia** (Unknown, pero punto sumado):  \n  Juega **con menos presión**. No está desesperado. Puede permitirse un planteamiento más paciente, esperar errores suizos y explotar transiciones. Juega \"suelto\" psicológicamente.\n\n4. **Colapso mental**\n\n- **¿Suiza tiene riesgo de colapso?**  \n  **Sí, alto riesgo.** Si Bosnia marca primero, la ansiedad suiza puede escalar a frustración y pérdida de estructura. Un 0-0 prolongado también les genera desesperación. El colapso no sería por goleada, sino por **parálisis decisional** y errores individuales.\n\n- **¿Bosnia llegó desesperado desde MD1?**  \n  **No.** Un empate no genera desesperación. Llega en modo \"oportunidad\", no \"emergencia\". Su motivación es positiva (sumar), no reactiva (no perder).\n\n5. **Efecto \"necesidad\"**\n\n- **¿Genera goles o errores?**  \n  En Suiza, la desesperación puede generar **goles por volumen ofensivo**, pero también **errores en salida y contraataques encajados** (Bosnia puede explotarlo). La necesidad pura tiende a ser contraproducente si no está acompañada de paciencia.\n\n- **Bosnia necesita ganar → ¿ataca o se bloquea?**  \n  Bosnia *no necesita ganar* en términos absolutos (aunque quiere). Su \"necesidad\" es menor que la de Suiza. Por eso, atacará de forma más inteligente: esperará, presionará en momentos clave y buscará **transiciones rápidas** cuando Suiza se descubra. No se bloquea, porque no siente el peso de una derrota inminente.\n\n**RESPUESTA FINAL**\n\n**Análisis psicológico basado en MD1:**\n- Suiza es el equipo **mentalmente más frágil** en este partido. Llega con ansiedad, presión de resultado y una pequeña herida de orgullo. Su ventaja \"local\" se diluye en nervios.\n- Bosnia es el equipo **más equilibrado emocionalmente**. Sin euforia pero con confianza base. Su empate en MD1 les da licencia para jugar sin miedo.\n\n**Top 3 marcadores considerando MORAL + PRESIÓN:**\n\n1. **1-1** (empate con goles) – Suiza se adelanta, Bosnia empata y el nervio suizo evita que vuelvan a ganar. Refleja presión vs. paciencia"
+    },
+    "round_2": {
+      "rebate_1": "No estoy en desacuerdo total, pero sí matizo. Ambos expertos aciertan en la presión clasificatoria y el estado emocional: Suiza viene de un empate frustrante y necesita ganar. Sin embargo, subestiman la calidad individual suiza y la debilidad defensiva de Bosnia. La urgencia puede generar errores, pero también determinación.\n\nMe convencen en que el partido será tenso y no un paseo. El punto de \"autocrítica\" es válido: Suiza sabe que falló contra Qatar y eso puede hacerlos más concentrados, no menos efectivos.\n\nAjusto mi predicción de marcador: de un 2-0 inicial a un 2-1 más ajustado, con Bosnia aprovechando algún contragolpe. Pero mantengo la victoria suiza. Defiendo mi posición porque el factor local, la necesidad de 3 puntos y el mayor talento en zonas de definición (Shaqiri, Vargas) marcarán la diferencia ante una Bosnia sin su mejor versión (Dzeko envejece, falta fluidez). La presión existe, pero Suiza sabe gestionar estos escenarios en clasificatorios.",
+      "rebate_2": "**Desacuerdo parcial:** No rechazo el análisis emocional de Expert 3, pero lo matizo. La frustración de Suiza tras el empate con Qatar es real, pero eso no invalida mi lectura táctica: la presión clasificatoria genera una ofensividad controlada, no un caos. El \"urgencia\" que menciona es coherente con mi \"obligación ofensiva\".\n\n**Puntos válidos:** La autocrítica y la tensión alta son factores que pueden aumentar la intensidad, pero también el riesgo de impaciencia. Sin embargo, el contexto de localía y la necesidad de no perder (grupo de 4) siguen siendo el marco táctico principal.\n\n**Ajuste de predicción:** No cambio mi marcador base (victoria suiza ajustada, ej. 1-0 o 2-1). El componente psicológico refuerza que Suiza buscará el gol temprano, pero no modifica mi convicción de que no se lanzará al suicidio.\n\n**Defensa:** La presión clasificatoria es el motor táctico dominante; la emoción es un subproducto. Mi análisis prioriza la estructura de juego y la gestión del riesgo, que se mantienen sólidas frente a la incertidumbre emocional.",
+      "rebate_3": "No estoy completamente en desacuerdo, pero sí matizo. Los argumentos tácticos y de grupo son válidos: Suiza tiene urgencia real por los puntos, y la presión clasificatoria es alta. Sin embargo, el experto táctico asume que esa presión los vuelve \"ofensivos pero no suicidas\", lo que coincide con mi análisis de \"tensión alta + urgencia\". El problema es que ambos expertos tienden asobrestimar la angustia suiza como un factor de descontrol. Mi posición psicológica basada en el MD1 real sugiere que, aunque frustrados, los jugadores suizos saben que **empatar con Qatar fue un accidente, no una crisis de identidad**. Eso genera **determinación ordenada**, no pánico. La derrota habría sido demoledora; el empate deja espacio para corregir errores con calma táctica.\n\nNo me convencen del todo porque omiten el factor Bosnia: un equipo débil en ranking, con moral baja tras su propio resultado. La \"presión\" suiza no será caótica, sino metódica. Por tanto, **no ajusto mi predicción de marcador**: sigo viendo un 2-0 o 2-1 para Suiza, con control del juego. Defiendo mi postura porque la psicología deportiva muestra que la frustración moderada (no derrota catastrófica) genera **agresividad focalizada**, no ansiedad paralizante. Los suizos tienen el talento y la localía para traducir esa urgencia en goles, sin exponerse a contraataques bosnios de riesgo."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 2-1 (65%)\n   Análisis: La urgencia clasificatoria y el factor casa pesan, pero Bosnia puede complicar con transiciones.\n\n🟠 **Tactical Scout** (tácticas): 2-0 (60%)\n   Análisis: Suiza se lanzará al ataque desde el inicio y su estructura defensiva debería contener el contraataque bosnio.\n\n🟡 **Sentiment Reader** (psicología MD1): 2-1 (70%)\n   Análisis: La frustración tras el empate contra Qatar se transformará en intensidad focalizada, aunque el nerviosismo puede generar errores defensivos.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad: 1. Victoria suiza por 2-1 (65%), 2. Victoria suiza por 2-0 (25%), 3. Empate (10%).\n\nANÁLISIS FINAL (2-3 líneas):\n- Los 3 expertos convergen en que Suiza, presionada por la tabla y con el factor local, impondrá su calidad técnica y urgencia, aunque bosnia puede aprovechar desconcentraciones.\n- Confianza general en la predicción: 7/10 – la variable emocional suiza es favorable, pero la falta de datos concretos de Bosnia introduce incertidumbre.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.65}, \"tactical_scout\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.6}, \"sentiment_reader\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.7}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.65}}",
+    "predictions": [
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.65,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.6,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.7,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.65,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 2,
+      "away_goals": 1,
+      "probability": 0.65,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Canada vs Qatar",
+    "home": "Canada",
+    "away": "Qatar",
+    "context": {
+      "home_team": {
+        "name": "Canada",
+        "points": 3,
+        "goal_diff": 6,
+        "played": 1,
+        "position": "?",
+        "group": "B",
+        "md1_result": "DRAW vs Bosnia and Herzegovina (1-1)",
+        "md1_opponent": "Bosnia and Herzegovina",
+        "status": "Need to WIN to secure 1st (pressure)"
+      },
+      "away_team": {
+        "name": "Qatar",
+        "points": 1,
+        "goal_diff": -6,
+        "played": 2,
+        "position": "?",
+        "group": "B",
+        "md1_result": "DRAW vs Switzerland (1-1)",
+        "md1_opponent": "Switzerland",
+        "status": "In danger (1 pt, must win soon)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "# ANÁLISIS TÁCTICO: CANADÁ vs QATAR\n\n## 1. ESTILOS DE JUEGO BAJO PRESIÓN CLASIFICATORIA\n\n### CANADÁ (Local - Necesita ganar para ser 1°)\n**Estilo base:** Equipo físico, transiciones rápidas, juego directo. En MD1 mostró solidez defensiva pero poca creatividad en ataque posicional (1-1 vs Bosnia).\n\n**Cómo MODIFICA la presión:**\n- Canadá **SÍ puede permitirse un empate** (quedaría con 2 pts, pero perdería el liderato si Qatar gana). Sin embargo, la presión de ser locales y \"necesitar ganar\" los empujará a un **planteamiento ofensivo controlado**.\n- **NO se replegarán** porque un empate les deja en una posición incómoda (depender de otros resultados). Buscarán dominar desde el inicio.\n- **Probable formación:** 4-3-3 con laterales ofensivos (Davies, Laryea) y juego directo a Jonathan David. Riesgo calculado, no suicida.\n\n### QATAR (Visitante - Debe ganar, 1 punto, peligro de eliminación)\n**Estilo base:** Toque, posesión corta, transiciones lentas. Contra Suiza (1-1) mostró orden defensivo pero escasa profundidad.\n\n**Cómo MODIFICA la presión:**\n- **DEBE ganar.** Esto los lleva a una **estrategia más agresiva de lo normal**, pero con cuidado de no desordenarse. Qatar no es un equipo que presione alto 90 minutos.\n- **Atacarán desde el minuto 1**, pero con un ataque posicional paciente, no a la desesperada. Buscarán llegar por las bandas (Afif, Al-Haydos) y centros.\n- **Riesgo:** Si no marcan pronto, la desesperación crecerá y dejarán espacios atrás. Su defensa (buena en estático) puede sufrir en transiciones.\n\n---\n\n## 2. FORTALEZAS Y DEBILIDADES BASADAS EN MD1\n\n| Equipo | Fortalezas | Debilidades |\n|--------|------------|-------------|\n| **Canadá** | • Físico y velocidad en transición<br>• Juego aéreo (David, Cornelius)<br>• Laterales ofensivos (Davies) | • Creación de juego en estático<br>• Vulnerable a centros laterales<br>• Falta de paciencia |\n| **Qatar** | • Orden defensivo en bloque medio<br>• Transiciones rápidas (Afif)<br>• Experiencia en torneos | • Baja intensidad sin balón<br>• Dependencia de jugadas individuales<br>• Fragilidad ante presión alta |\n\n---\n\n## 3. ¿CÓMO CAMBIA EL JUEGO SI QATAR MARCA PRIMERO?\n\n**Escenario más probable si Qatar marca temprano (antes del 30'):**\n- **Canadá** se volverá **extremadamente ofensivo**, subiendo líneas y sobrecargando el ataque. Davies jugará casi como extremo. Riesgo de contraataques.\n- **Qatar** se replegará en bloque bajo (5-4-1) y buscará contragolpes letales. Su mejor oportunidad para sentenciar.\n- **Resultado probable:** partido abierto con chances para ambos. Canadá podría empatar pero quedaría expuesto.\n\n**Si Qatar marca en el 2° tiempo (70'+):**\n- **Canadá** quemará naves: centrales al ataque, centros desesperados. Qatar tendrá espacios inmensos para sentenciar.\n- **Qatar** se encerrará completamente. Su defensa ordenada puede aguantar si no cometen errores.\n\n**Si Canadá marca primero:**\n- **Canadá** no se relajará (necesita ganar para ser primero), pero bajará la intensidad. Qatar tendrá que atacar desordenadamente.\n- **Qatar** se frustrará y cometerá errores defensivos. Canadá puede ampliar ventaja al contragolpe.\n\n---\n\n## 4. VENTAJA DE CAMPO\n\n**¿Afecta tácticamente o solo psicológicamente?**\n- **Psicológica:** El público canadiense genera presión extra sobre rival y árbitro. Qatar, con experiencia (Mundial 2022), lo manejará mejor que otros equipos.\n- **Táctica:** Sí afecta. Canadá usará el factor local para **intensificar la presión alta inicial** (10-15 minutos de asfixia). Qatar intentará calmar el juego con posesión corta.\n- **No es una ventaja táctica decisiva**, pero sí da a Canadá un margen extra para arriesgar (saben que el público los respaldará).\n\n---\n\n## 5. HISTÓRICO VS ESTE RIVAL\n\n**No hay enfrentamientos directos registrados** entre ambas selecciones en torneos oficiales. Es un duelo inédito. Sin embargo, el estilo de juego de Qatar (asiático, técnico) vs Canadá (norteamericano, físico) sugiere un choque de estilos donde el ritmo del partido será clave.\n\n---\n\n## PRONÓSTICO TÁCTICO FINAL\n\n### Razonamiento paso a paso:\n1. **Primeros 20 minutos:** Canadá saldrá intenso, presionando alto. Qatar aguantará ordenado, buscando un error.\n2. **Después del 20':** Si Canadá no marca, disminuirá la presión. Qatar empezará a tener más balón.\n3. **Mediocampo:** Canadá ganará en duelos aéreos y segundas jugadas. Qatar sufrirá en transiciones defensivas.\n4. **Segundo tiempo:** Si el marcador está 0-0, Qatar se volverá más ofensivo (necesita ganar) y dejará espacios. Canadá los aprovechará.\n5. **Escenario más probable:** Canadá marca primero (por físico y presión local). Qatar iguala temporalmente, pero Canadá gana al final.\n\n### Top 3 marcadores probables\n\n| Marcador | Justificación |\n|----------|---------------|\n| **2-1 Canadá** | Canadá domina físico, marca temprano, Qatar reacciona pero no alcanza |\n| **1-1** | Qatar se defiende bien, Canadá impaciente. Empate que deja a ambos insatisfechos |\n| **1-2 Qatar** | Si Qatar marca primero y Canadá se desespera, contragolpe letal |\n\n**Mi pronóstico principal:** **2-1 Canadá**, con goles de Jonathan David (48') y Tajon Buchanan (72'), y descuento de Akram Afif (63').\n\n---\n\n",
+      "sentiment_reader": "**Análisis Psicológico Basado en MD1 REAL**\n\n---\n\n### 1. Momentum emocional REAL\n\n**Canadá (empate 1-1 vs Bosnia, local):**  \nUn empate en casa ante un rival **no favorito** (Bosnia) deja un sabor amargo. Psicológicamente, el equipo experimenta **frustración controlada**. No fue una derrota, pero tampoco cumplió el objetivo de ganar para asegurar el primer lugar. El estado mental actual es de **presión elevada + necesidad de reivindicación** (“debimos ganar, ahora no podemos fallar”). Hay un riesgo de **ansiedad por rendimiento** si el partido fue igualado (p.ej., remontada bosnia o gol tardío). Si el empate fue dominante pero sin efectividad, la confianza en la creación ofensiva se resiente.\n\n**Qatar (empate 1-1 vs Suiza, visitante):**  \nEmpatar fuera de casa contra **Suiza** (rival superior en teoría) es un **logro psicológico importante**. El equipo siente **orgullo y motivación positiva**. No hay devastación, sino **creencia en la propia capacidad**. El “estamos vivos” domina: un punto contra un favorito genera confianza en el sistema defensivo y en la capacidad de competir. La presión de “must win” es real, pero **llegan con el envión anímico de haber resistido**.\n\n---\n\n### 2. Confianza basada en MD1\n\n- **Canadá:** Confianza **moderada-baja**. Un empate local no alimenta la autoestima. La necesidad de ganar puede generar **sobreanálisis** (“¿qué hicimos mal?”) y **tensión en la toma de decisiones**. No hay euforia, sino **exigencia**.  \n- **Qatar:** Confianza **alta**. Un resultado positivo contra un grande (aunque sea empate) eleva la moral. Jugadores sienten que **pueden competir con cualquiera** y que el esfuerzo tiene recompensa. La ansiedad es baja; la motivación es **“redimirnos y avanzar”**.\n\n**Diferencia clave:** Una victoria 1-0 da seguridad; un empate 1-1 deja dudas. Aquí Qatar tiene más confianza relativa.\n\n---\n\n### 3. Presión psicológica diferencial\n\n- **Canadá (Need to WIN for 1st):** Presión **máxima**. Jugar en casa y ser favorito incrementa la responsabilidad. El riesgo de **“parálisis por análisis”** es alto: cada error se magnifica. El entorno (afición) exige el triunfo.  \n- **Qatar (In danger, must win soon):** Presión **media-alta** pero **compartida** con la confianza del empate. El “no tenemos nada que perder” aplica parcialmente, porque sí necesitan ganar, pero vienen de un resultado que los **legitima**. Juegan más **sueltos**, especialmente si sienten que Canadá está tenso.\n\n**¿Quién juega con más nervios?** Claramente **Canadá**. Qatar puede aprovechar su **estado mental de “underdog motivado”**.\n\n---\n\n### 4. Colapso mental\n\n- **Canadá:** Riesgo **moderado-alto** de colapso si no anotan pronto. La presión de “ganar o quedar fuera del primer"
+    },
+    "round_2": {
+      "rebate_1": "No puedo ver tu posición inicial completa, pero asumo que defendías una victoria clara de Canadá.  \n\n**¿Estoy en desacuerdo con los expertos?**  \nSí, en parte. Expert 2 sobreestima la presión de Canadá (sí necesita ganar, pero Qatar tiene menos recursos tácticos). Expert 3 acierta en la frustración del empate ante Bosnia, pero Canadá en casa reacciona con intensidad, no con parálisis.  \n\n**¿Me convencen?**  \nNo del todo. Son válidos los puntos sobre la necesidad de creatividad ofensiva de Canadá (MD1 mostró carencias) y el riesgo emocional. Sin embargo, subestiman la fragilidad defensiva de Qatar (rival débil fuera de casa).  \n\n**¿Ajusto mi predicción?**  \nNo. Mantengo Canadá 2-0. La ventaja física y localía pesan más que la ansiedad inicial. Qatar no tendrá ocasiones claras.  \n\n**Defiendo mi posición:**  \nCanadá corrige errores tras el empate, presiona alto desde el inicio y anota temprano. Qatar no resiste el ritmo ni el juego aéreo. Un marcador ajustado (1-0) es posible, pero confío en la solidez defensiva local.",
+      "rebate_2": "Tu análisis táctico es sólido, pero no comparto del todo la visión psicológica de Expert 3. Sí, Canadá viene de un empate frustrante, pero eso puede generar **sobreesfuerzo** o **bloqueo**, no necesariamente reivindicación. Qatar, al ganar, tiene momentum positivo y menos presión. Eso es válido.\n\nSin embargo, tu enfoque en las transiciones rápidas y la necesidad de Canadá de imponer físico en casa sigue siendo clave. No me convence que la frustración canadiense sea determinante; equipos con buen cuerpo técnico (como Canadá) canalizan esa energía. El punto débil de Qatar es defensivo contra juego directo.\n\nAjusto mi predicción: mantenía un 2-1 para Canadá, pero ahora veo más probable un **1-1** o **2-1 ajustado** si Qatar se cierra bien. Defiendo mi posición: Canadá tiene ventaja física y localía, pero Qatar es peligroso al contragolpe. El factor mental puede equilibrar el partido, no decantarlo.",
+      "rebate_3": "Mi posición inicial señalaba que Canadá carga con frustración controlada tras el empate ante Bosnia, aumentando su presión y deseo de reivindicación. Los expertos (especialmente el táctico) sostienen que Canadá *puede permitirse un empate* sin perder el liderato, lo que sugiere que la presión es menor de lo que planteo.\n\n**No estoy completamente en desacuerdo**, pero no me convencen del todo. \n- Es cierto que matemáticamente un empate les dejaría con 2 puntos y aún dependerían de sí mismos en la última fecha, pero la **percepción del equipo local** es distinta: jugar en casa y esperar ganar para ser primero crea una urgencia psicológica real. La frustración del MD1 potencia esa urgencia, no la calma.\n- El punto táctico válido es que Canadá tiene plan B (jugar a no perder), pero mi enfoque es emocional: la necesidad de demostrar superioridad tras el empate. \n\n**Ajusto mi predicción de marcador?** No necesariamente. Sigo viendo un partido tenso, de pocos goles, con Canadá imponiendo físico pero sin fluidez. Podría terminar 1-0 o 2-1 para Canadá, pero con sufrimiento. Un empate (0-0 o 1-1) es posible si Qatar se cierra bien.\n\nDefiendo que la psicología del \"debimos ganar y no lo hicimos\" es más peligrosa que la simple aritmética de puntos: el equipo se siente en deuda, lo que puede generar ansiedad en lugar de confianza. Por eso, mi análisis inicial sigue siendo relevante."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): Canadá 2-1 (50%)\n   Análisis: La presión de ganar es real, pero Qatar necesita puntos y puede complicar; victoria ajustada de Canadá.\n\n🟠 **Tactical Scout** (tácticas): Canadá 1-1 (40%)\n   Análisis: El bloqueo por sobreesfuerzo y la solidez defensiva de Qatar propician un empate táctico.\n\n🟡 **Sentiment Reader** (psicología MD1): Canadá 2-0 (60%)\n   Análisis: La frustración controlada de Canadá genera una reivindicación ofensiva que supera a un Qatar desesperado.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones:\n1. Canadá 2-0 (más probable)\n2. Canadá 2-1\n3. Empate 1-1\n\nANÁLISIS FINAL (2-3 líneas):\n- Los expertos convergen en que Canadá parte como favorito, pero discrepan en el margen por la presión clasificatoria y el momentum de MD1. El factor psicológico (frustración vs desesperación) define la confianza ofensiva de Canadá.\n- Confianza general en la predicción: 7/10\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.50}, \"tactical_scout\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.40}, \"sentiment_reader\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.60}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.55}}",
+    "predictions": [
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.5,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.4,
+        "predicted_winner": "draw",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.6,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.55,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 2,
+      "away_goals": 1,
+      "probability": 0.5,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
   }
 ]
