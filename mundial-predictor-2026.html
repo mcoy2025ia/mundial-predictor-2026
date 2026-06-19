@@ -277,12 +277,12 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:
   <div class="card">
     <div class="card-header">
       <span class="card-icon">🎯</span>
-      <div><div class="card-title">Predictor de partido</div><div class="card-sub">48 selecciones · Cualquier cruce · Narrator AI multi-dialecto</div></div>
+      <div><div class="card-title">Predictor de partido</div><div class="card-sub">48 selecciones · Cualquier cruce · Narrator AI bogotano</div></div>
     </div>
     <div class="card-body">
       <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Probabilidades victoria/empate/derrota</strong> del Ensemble para cualquier cruce entre las 48 selecciones del torneo. ELO actualizado diariamente con resultados reales. Probabilidades calibradas isotónicamente para que un 60% corresponda a 60% de frecuencia real.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Narrator AI</strong>: narración futbolera regional con contexto real del partido (tabla del grupo, localía, probabilidades, presión de clasificación). Pre-computada una vez al día — cero costo LLM por usuario para contenido cacheado. Fase de grupos: español bogotano/neutro. Fase eliminatoria: 5 dialectos activados automáticamente.</div></div>
-      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Selector de dialecto</strong>: bogotano, paisa, boyaco, costeño, inglés. Las narraciones se sirven desde <code>narrations.json</code> estático; el LLM actúa solo como fallback si la clave no existe en cache.</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Narrator AI</strong>: narración futbolera en español bogotano con contexto real del partido (tabla del grupo, localía, probabilidades, presión de clasificación). Pre-computada una vez al día — cero costo LLM por usuario para contenido cacheado desde <code>narrations.json</code> estático.</div></div>
+      <div class="feat"><div class="feat-dot"></div><div class="feat-text"><strong>Fallback LLM automático</strong>: si una narración no existe en cache (partidos knockout no pre-computados), el sistema genera sobre la marcha sin degradar la experiencia del usuario. Hit rate objetivo: ≥95% desde JSON estático.</div></div>
     </div>
   </div>
 
@@ -1093,9 +1093,8 @@ python scripts/run_agent_debate.py --force "Mexico" "South Korea"  <span class="
   <div style="background:var(--blue-faint);border:1px solid rgba(21,101,245,0.25);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;font-size:13px;color:var(--text2);line-height:1.7">
     El torneo tiene 3 jornadas de fase de grupos (J1/J2/J3) con complejidad y modelo LLM escalonados.
     J1 usó DeepSeek Flash (el más económico). J2 y J3 escalan a modelos más potentes para capturar
-    presión de clasificación real, dependencias de grupos y escenarios simultáneos. A esto se suman
-    las narraciones en 5 dialectos para la fase eliminatoria.
-    <strong style="color:var(--text)">Estimación conservadora total: $4–$6 USD para el torneo completo.</strong>
+    presión de clasificación real, dependencias de grupos y escenarios simultáneos. Las narraciones se generan en español bogotano (un solo dialecto) en todas las fases.
+    <strong style="color:var(--text)">Estimación total con Agent Debate System: ~$13.15–$15.15 USD para el torneo completo (bogotano solamente).</strong>
   </div>
 
   <!-- Cost breakdown table by component -->
@@ -1223,11 +1222,11 @@ python scripts/run_agent_debate.py --force "Mexico" "South Korea"  <span class="
         </div>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">Fase eliminatoria (~80 partidos pendientes)</div>
+        <div style="font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem">Fase eliminatoria (bogotano, ~30 partidos)</div>
         <div style="font-size:13px;color:var(--text2);line-height:1.7">
-          5 dialectos × 80 partidos · DeepSeek V3<br>
-          <strong style="color:var(--text)">Estimación: $2.00–$3.00 (escenario conservador)</strong><br>
-          <span style="font-size:11px;color:var(--text3)">$0.025–$0.037/partido × 5 dialectos × 80 partidos</span>
+          1 dialecto × 30 partidos · DeepSeek V3<br>
+          <strong style="color:var(--text)">Estimación: ~$0.47 (narrations bogotano)</strong><br>
+          <span style="font-size:11px;color:var(--text3)">~$0.016/partido × 1 dialecto (bogotano solamente)</span>
         </div>
       </div>
     </div>
@@ -1370,8 +1369,8 @@ python scripts/run_agent_debate.py --force "Mexico" "South Korea"  <span class="
     </div>
     <div class="rule">
       <div class="rule-id">RN-FIN-04 · MEDIA</div>
-      <div class="rule-title">5 dialectos solo en fase eliminatoria</div>
-      <div class="rule-desc">Durante la fase de grupos, solo se generan narraciones en español bogotano/neutro. Los 5 dialectos (bogotano, paisa, boyaco, costeño, inglés) se activan automáticamente al entrar en fase eliminatoria. Esto reduce el costo de narración en ~80% durante los primeros 18 días del torneo.</div>
+      <div class="rule-title">Narrador solo en español bogotano</div>
+      <div class="rule-desc">Todas las narraciones (grupos, knockout, final) se generan exclusivamente en español bogotano. No hay selector de dialecto ni múltiples variantes regionales. Esto simplifica el costo y el mantenimiento: $0.016/partido independientemente de la fase.</div>
     </div>
   </div>
 
