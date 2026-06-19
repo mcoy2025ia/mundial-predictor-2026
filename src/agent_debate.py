@@ -574,35 +574,30 @@ Rebate: {rebate3[:200]}
 
 AHORA CONSENSO FINAL CON IMPACTO EN CLASIFICACION:
 
-Los 3 expertos llegan a acuerdo sobre los TOP 3 MARCADORES Y SU IMPACTO EN CLASIFICACION.
+Los 3 expertos llegan a acuerdo sobre los TOP 2 MARCADORES MÁS PROBABLES Y SU IMPACTO EN CLASIFICACION.
 
 RESPONDE EN ESTE FORMATO:
 
-🥇 PREDICCIÓN #1: [MARCADOR] ([PROBABILIDAD]%)
+🥇 PREDICCIÓN #1 (más probable): [MARCADOR] ([PROBABILIDAD]%)
+   Propuesto por: [Group Analyst | Tactical Scout | Sentiment Reader]
    Razón consensuada: [Explicación unificada]
    Impacto clasificación: [¿Quién avanza? ¿Quién queda en riesgo? ¿Eliminación directa?]
 
-🥈 PREDICCIÓN #2: [MARCADOR] ([PROBABILIDAD]%)
+🥈 PREDICCIÓN #2 (caso alternativo): [MARCADOR] ([PROBABILIDAD]%)
+   Propuesto por: [Group Analyst | Tactical Scout | Sentiment Reader]
    Razón consensuada: [Explicación unificada]
    Impacto clasificación: [Cambios en la tabla]
 
-🥉 PREDICCIÓN #3: [MARCADOR] ([PROBABILIDAD]%)
-   Razón consensuada: [Explicación unificada]
-   Impacto clasificación: [Escenario]
-
-ANÁLISIS FINAL (3-4 líneas):
+ANÁLISIS FINAL (2-3 líneas):
 - ¿En qué convergieron los 3 expertos? (presión diferencial, MD1 momentum, etc)
-- ¿Dónde divergieron?
 - Confianza general en la predicción (0-10)
-- Confianza específica en el impacto clasificatorio
 
 IMPORTANTE: Termina tu respuesta con esta línea EXACTA (sin texto adicional antes ni después,
-usando los goles de tu PREDICCIÓN #1 y PREDICCIÓN #2, donde "home" = {home_team} y "away" = {away_team}):
-RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}, {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}]}}
+incluyendo el nombre del agente que propuso cada predicción):
+RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>, "agent": "<agent_name>"}}, {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>, "agent": "<agent_name>"}}]}}
 """
-        # max_tokens alto: el razonamiento del reasoner + las 3 predicciones + el
-        # bloque JSON final pueden agotar el límite por defecto (2000) antes de
-        # emitir la línea RESULTADO_JSON, dejando top_prediction sin parsear.
+        # max_tokens 3500: razonamiento del reasoner + 2 predicciones + análisis + bloque JSON.
+        # (Reducido de 3 a 2 predicciones para evitar desperdicio de tokens)
         consensus = self._call_deepseek(consensus_prompt, use_reasoner=True, max_tokens=3500)
         return consensus
 
@@ -616,12 +611,16 @@ RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "p
             winner = "away"
         else:
             winner = "draw"
-        return {
+        result = {
             "home_goals": home_goals,
             "away_goals": away_goals,
             "probability": float(data.get("probability", 0)),
             "predicted_winner": winner,
         }
+        # Incluir nombre del agente si existe (para trazabilidad)
+        if "agent" in data:
+            result["agent"] = data["agent"]
+        return result
 
     @classmethod
     def parse_top_prediction(cls, consensus_text: str) -> Optional[dict]:

@@ -11,8 +11,8 @@ python scripts/live_update.py
 # 2. Recalcula predicciones con agentes
 python scripts/predict_live.py --export
 
-# 3. Genera narraciones para los partidos de HOY
-python scripts/precompute_narrations.py
+# 3. Genera narraciones para los partidos de HOY solamente
+python scripts/precompute_narrations.py        # Default: --days 0
 
 # 3.5 Opcional: Agent Debate (predicción sin ML) para partidos puntuales que quieras
 #     analizar con los 3 agentes — no hay corrida masiva automática, se elige partido
@@ -26,27 +26,27 @@ cd frontend && npx vercel --prod
 
 ---
 
-## Ciclo ampliado — días con doble horario (MD2)
+## Ciclo ampliado — días con doble horario (MD2 / J2)
 
 En los días de MD2, cada día tiene **4 partidos de 2 grupos distintos**, divididos en dos bloques horarios (tarde y noche). Los resultados del bloque de la tarde cambian la presión clasificatoria para los partidos de la noche del mismo día.
 
-**Protocolo: correr dos veces.**
+**Protocolo: correr dos veces (solo HOY, sin futuros).**
 
 ```bash
 # --- MAÑANA (antes del primer partido del día) ---
 python scripts/live_update.py
 python scripts/predict_live.py --export
-python scripts/precompute_narrations.py        # cubre los 4 partidos del día
+python scripts/precompute_narrations.py        # Solo HOY (default: --days 0)
 cd frontend && npx vercel --prod
 
 # --- TARDE (después de los 2 primeros partidos, antes de los 2 nocturnos) ---
 python scripts/live_update.py                  # registra resultados de tarde
 python scripts/predict_live.py --export        # recalcula ELO y presión
-python scripts/precompute_narrations.py        # regenera solo los 2 partidos nocturnos
-cd frontend && npx vercel --prod               # ~30s, actualiza la narrativa
+python scripts/precompute_narrations.py        # Regenera HOY con presión actualizada
+cd frontend && npx vercel --prod               # ~30s, actualiza narrativa
 ```
 
-**Por qué importa:** si México pierde el partido de las 3 PM, el partido de las 8 PM se convierte en eliminatoria de facto. La narración generada en la mañana no lo sabe; la de la tarde sí.
+**Por qué importa:** si México pierde el partido de las 3 PM, el partido de las 8 PM se convierte en eliminatoria de facto. La narración de la mañana no lo sabe; la de la tarde sí. Ambas generan **solo para hoy**, sin consumir tokens en días futuros.
 
 ### Calendario MD2 (doble corrida)
 
@@ -66,12 +66,14 @@ cd frontend && npx vercel --prod               # ~30s, actualiza la narrativa
 En la tercera jornada de cada grupo, **los dos partidos del grupo se juegan a la misma hora** (regla FIFA anti-amaño). No hay resultados de un partido que afecten al otro. Una sola corrida matutina es suficiente.
 
 ```bash
-# Solo una corrida, en la mañana antes del primer pitazo
+# Solo una corrida, en la mañana antes del primer pitazo (HOY solamente)
 python scripts/live_update.py
 python scripts/predict_live.py --export
-python scripts/precompute_narrations.py
+python scripts/precompute_narrations.py        # Default: --days 0 (solo HOY)
 cd frontend && npx vercel --prod
 ```
+
+**Nota:** El default es ahora `--days 0` (solo hoy). No uses `--days 6` o valores altos — consume tokens innecesarios en días sin partidos del torneo.
 
 La narración de MD3 ya incluye el análisis de clasificación completo (tabla actual + escenarios posibles) gracias a que `group_standings` está en el payload y el modelo conoce los 6 posibles resultados que determinan quién avanza.
 

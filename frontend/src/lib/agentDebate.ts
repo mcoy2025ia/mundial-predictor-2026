@@ -9,6 +9,7 @@ export interface AgentTopPrediction {
   away_goals: number;
   probability: number;
   predicted_winner: "home" | "draw" | "away";
+  agent?: string; // Nombre del agente que propuso esta predicción
 }
 
 export interface AgentDebateMatch {
@@ -130,6 +131,13 @@ export interface AgentMatchResult {
   hit: boolean;
   /** Acertó el marcador exacto con la 🥇 o la 🥈. null si no hay predictions[] parseadas. */
   scoreHit: boolean | null;
+  /** Nombre del agente que propuso la predicción #1 (si disponible). */
+  agentName?: string;
+}
+
+export interface AgentStats {
+  hits: number;
+  played: number;
 }
 
 function roundToJor(round: string): number {
@@ -163,8 +171,25 @@ export function computeAgentResults(
         team2: m.team2,
         hit: verdict.hit,
         scoreHit: agentScoreHit(debateMatch, m, score),
+        agentName: debateMatch.predictions?.[0]?.agent, // Capturar nombre del agente
       });
     }
   }
   return out;
+}
+
+/** Agrupa resultados por nombre de agente para evaluar desempeño individual. */
+export function computeAgentStatsByAgent(
+  agentResults: AgentMatchResult[]
+): Record<string, AgentStats> {
+  const stats: Record<string, AgentStats> = {};
+  for (const r of agentResults) {
+    const agent = r.agentName ?? "Unknown";
+    if (!stats[agent]) {
+      stats[agent] = { hits: 0, played: 0 };
+    }
+    stats[agent].played++;
+    if (r.hit) stats[agent].hits++;
+  }
+  return stats;
 }

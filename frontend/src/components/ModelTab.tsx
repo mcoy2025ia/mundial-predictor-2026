@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { GroupMatch, TeamInfo } from "@/types";
 import type { ScoreMap } from "@/lib/live";
 import { orientScore, modelVerdict } from "@/lib/live";
-import { computeAgentResults, type AgentDebateMatch, type AgentMatchResult } from "@/lib/agentDebate";
+import { computeAgentResults, computeAgentStatsByAgent, type AgentDebateMatch, type AgentMatchResult } from "@/lib/agentDebate";
 
 interface Props {
   groupMatches: Record<string, GroupMatch[]>;
@@ -360,6 +360,10 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
   const agentScoreHits = agentScoreResults.filter((r) => r.hit).length;
   const agentScorePct = agentScorePlayed > 0 ? Math.round((agentScoreHits / agentScorePlayed) * 100) : null;
 
+  // ── Desempeño por agente individual ─────────────────────────────────────
+  const agentStatsByAgent = useMemo(() => computeAgentStatsByAgent(agentResults), [agentResults]);
+  const agentNames = useMemo(() => Object.keys(agentStatsByAgent).sort(), [agentStatsByAgent]);
+
   if (played === 0) {
     return (
       <div className="max-w-3xl mx-auto text-center py-16">
@@ -449,6 +453,52 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
           />
         </div>
       </div>
+
+      {/* Desempeño por agente individual */}
+      {agentNames.length > 0 && (
+        <div className="rounded-xl p-5 space-y-3" style={{ ...cardBg, borderColor: "rgba(101,165,206,0.15)" }}>
+          <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+            🤖 Precisión por agente (1X2)
+          </h3>
+          <p className="text-[0.6rem]" style={{ color: "var(--color-ink-muted)" }}>
+            Evaluación individual de cada experto del debate: cuántas veces acertó la predicción #1 propuesta
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {agentNames.map((agentName) => {
+              const stats = agentStatsByAgent[agentName];
+              const pct = stats.played > 0 ? Math.round((stats.hits / stats.played) * 100) : null;
+              const color = pct !== null && pct >= 50 ? "var(--color-wc-gold)" : "var(--color-ink-muted)";
+              return (
+                <div
+                  key={agentName}
+                  className="rounded-lg p-4"
+                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+                >
+                  <div className="text-xs font-bold mb-3" style={{ color: "var(--color-ink)" }}>
+                    {agentName}
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-baseline gap-2">
+                      <div className="font-mono font-black text-lg" style={{ color }}>
+                        {pct !== null ? `${pct}%` : "—"}
+                      </div>
+                      <div className="text-[0.6rem]" style={{ color: "var(--color-ink-muted)" }}>
+                        {stats.hits}/{stats.played}
+                      </div>
+                    </div>
+                    <div className="flex-1 rounded-full overflow-hidden" style={{ height: 4, background: "rgba(255,255,255,0.06)" }}>
+                      <div
+                        className="h-full rounded-full transition-all duration-700"
+                        style={{ width: pct !== null ? `${pct}%` : "0%", background: color }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Sorpresas */}
       {surprises.length > 0 && (

@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Narrator AI** — pre-computed match narrations and group previews (DeepSeek, run once/twice per day depending on matchday) stored in `narrations.json` and `group_narratives.json`; zero LLM calls per user for cached content, Bogotá/neutral Spanish during group-stage stabilization, group standings context from MD2 onward
 - AI chat assistant (DeepSeek + RAG with DashScope embeddings) with topic filter, response cache, rate limiting, and live tournament context injection
 - Multi-agent system (Orchestrator + 6 specialists) that enrich predictions with contextual analysis when API budget allows
-- 112+ pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
+- 141 passed, 1 skipped pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
 
 ---
 
@@ -95,11 +95,11 @@ python scripts/update_wc_results.py --dry-run
 # Knockout: all 5 dialects auto (~$0.015/run).
 python scripts/precompute_narrations.py
 
-# Extend window to tomorrow's matches too (default covers today only)
+# Extend window to include tomorrow's matches (default is today only)
 python scripts/precompute_narrations.py --days 1
 
-# Recompute only group narrative previews → frontend/public/data/group_narratives.json
-python scripts/precompute_narrations.py --groups-only --days 1
+# Recompute only group narrative previews → frontend/public/data/group_narratives.json (today only)
+python scripts/precompute_narrations.py --groups-only
 ```
 
 Script always force-regenerates today's matches and group previews so standings, pressure, and context stay fresh. It only generates missing match keys for future days unless the key belongs to today's window.
@@ -213,7 +213,7 @@ data/processed/features.parquet
     ↓ [temporal_split: train < 2018 | calib = 2018 | test = WC 2022]
     ↓ [train XGBoost + CalibratedClassifierCV]   → models/xgb_calibrated.pkl
     ↓ [fit PoissonModel on tournament data]       → models/poisson_model.pkl
-    ↓ [EnsembleModel: ELO 35% + Poisson 35% + XGB 30%]
+    ↓ [EnsembleModel: ELO 22% + Poisson 58% + XGB 20%]
 models/{xgb_calibrated, xgb_v1, poisson_model, ensemble}.pkl
 ```
 
@@ -261,7 +261,7 @@ Exit codes from `update_wc_results.py`: `0` = no new matches, `2` = matches upda
 - **Train/test split:** 3-way temporal: train < 2018 | calib = 2018 | test = WC 2022 (64 games)
 - **Training data:** All 49k+ internationals (use_all_matches=True); WC games weighted 1.0, friendlies 0.20
 - **Base model:** XGBoost multi-class softmax + CalibratedClassifierCV (TimeSeriesSplit n=3, sigmoid)
-- **Ensemble:** `EnsembleModel` (default weights: ELO 35% + Poisson 35% + XGB 30%) — weights were set after gate A2 found XGB does not consistently beat ELO-only on walk-forward RPS
+- **Ensemble:** `EnsembleModel` (default weights: ELO 22% + Poisson 58% + XGB 20%, per walk-forward validation 2026-06-17) — Poisson provides robust goal-distribution signal independent of ELO; XGB captures non-linear patterns but does not consistently improve global RPS
 - **Baseline:** Logistic Regression + ELO-only for comparison
 - **Metrics:** Accuracy, log-loss, Brier score, **RPS** (Ranked Probability Score — primary metric)
 - **Walk-forward validation:** `scripts/walk_forward_validation.py` — folds 2006→2022, XGB vs ELO baseline

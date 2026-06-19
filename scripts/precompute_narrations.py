@@ -788,8 +788,8 @@ def main() -> None:
         sys.exit(0)
 
     # Ventana de generación: solo hoy y mañana (contexto válido)
-    # Argumento opcional --days N para ampliar la ventana (default 2)
-    days_ahead = 2
+    # Argumento opcional --days N para ampliar la ventana (default 0 = solo hoy)
+    days_ahead = 0
     groups_only = "--groups-only" in sys.argv[1:]
     for i, arg in enumerate(sys.argv[1:]):
         if arg == "--days" and i + 1 < len(sys.argv) - 1:

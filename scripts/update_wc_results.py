@@ -86,7 +86,7 @@ def _load_token(override: str | None) -> str:
 
 def _fetch_finished(token: str) -> list[dict]:
     url = "https://api.football-data.org/v4/competitions/WC/matches"
-    resp = requests.get(url, headers={"X-Auth-Token": token}, timeout=30)
+    resp = requests.get(url, headers={"X-Auth-Token": token}, timeout=60)
     resp.raise_for_status()
     data = resp.json()
     return [m for m in data.get("matches", []) if m.get("status") == "FINISHED"]

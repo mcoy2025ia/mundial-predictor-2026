@@ -5,7 +5,7 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-EB5E28)
 ![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=nextdotjs&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-122%20passed-2ea44f)
+![Tests](https://img.shields.io/badge/tests-141%20passed%2C%201%20skipped-2ea44f)
 
 > 🇨🇦🇺🇸🇲🇽 El torneo está **en juego** (11 jun – 19 jul 2026). La web integra los resultados oficiales al final de cada partido: el modelo recalcula los ELO y actualiza todas las probabilidades con los datos reales de la copa.
 
