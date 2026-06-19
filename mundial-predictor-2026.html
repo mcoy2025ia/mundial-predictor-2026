@@ -8,17 +8,20 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg: #0c1117;
-      --panel: #121a22;
-      --panel-2: #17222d;
-      --ink: #f1faf6;
-      --muted: #9fb8b5;
-      --line: rgba(159, 176, 189, 0.2);
-      --accent: #00c389;
-      --accent-2: #00a8e8;
-      --warn: #ffc94d;
-      --risk: #ef3340;
-      --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+      --bg: #060610;
+      --panel: #0a0a1a;
+      --panel-2: #0f0f22;
+      --ink: #f2f2f8;
+      --muted: #9595b8;
+      --line: rgba(149, 149, 184, 0.2);
+      --accent: #00c853;
+      --accent-2: #0a84ff;
+      --warn: #f0be4a;
+      --risk: #e5002d;
+      --host-ca: #ff0000;
+      --host-mx: #006847;
+      --host-us: #002868;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
       --radius: 8px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -33,17 +36,26 @@
       font-size: 16px;
     }
 
+    .host-stripe {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      z-index: 20;
+      background: linear-gradient(90deg, var(--host-ca) 0 33.3%, var(--host-mx) 33.3% 66.6%, var(--host-us) 66.6% 100%);
+    }
+
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
       background:
-        linear-gradient(120deg, rgba(0, 195, 137, 0.16), transparent 30%),
-        linear-gradient(220deg, rgba(0, 168, 232, 0.13), transparent 34%),
-        linear-gradient(310deg, rgba(255, 201, 77, 0.07), transparent 30%),
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.07), transparent 38%);
-      opacity: 0.9;
+        linear-gradient(120deg, rgba(0, 200, 83, 0.20), transparent 32%),
+        linear-gradient(220deg, rgba(10, 132, 255, 0.16), transparent 36%),
+        linear-gradient(310deg, rgba(240, 190, 74, 0.10), transparent 32%),
+        linear-gradient(40deg, rgba(229, 0, 45, 0.07), transparent 26%),
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.05), transparent 38%);
+      opacity: 0.95;
       z-index: -1;
     }
 
@@ -63,10 +75,10 @@
 
     .topbar {
       position: sticky;
-      top: 0;
+      top: 4px;
       z-index: 10;
       border-bottom: 1px solid var(--line);
-      background: rgba(12, 17, 23, 0.86);
+      background: rgba(6, 6, 16, 0.86);
       backdrop-filter: blur(14px);
       transition: box-shadow .3s ease;
     }
@@ -94,7 +106,7 @@
       border-radius: 8px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #00c389, #00a8e8 55%, #ffc94d);
+      background: linear-gradient(135deg, #00c853, #0a84ff 55%, #f0be4a);
       color: #031015;
       font-weight: 900;
       transition: transform .4s cubic-bezier(.22,1,.36,1);
@@ -138,7 +150,7 @@
       display: inline-flex;
       gap: 8px;
       align-items: center;
-      color: #b3f5d1;
+      color: #f0be4a;
       font-weight: 700;
       font-size: 0.88rem;
       text-transform: uppercase;
@@ -150,7 +162,7 @@
     h1 {
       font-size: clamp(2.6rem, 6vw, 5.6rem);
       max-width: 920px;
-      background: linear-gradient(100deg, #f1faf6 18%, #6df0c4 46%, #5fd4ff 68%, #f1faf6 90%);
+      background: linear-gradient(100deg, #f2f2f8 12%, #00e676 35%, #f0be4a 58%, #f2f2f8 88%);
       background-size: 220% 100%;
       -webkit-background-clip: text;
       background-clip: text;
@@ -174,10 +186,10 @@
     .thesis {
       margin-top: 28px;
       padding: 22px;
-      border: 1px solid rgba(0, 195, 137, 0.34);
+      border: 1px solid rgba(0, 200, 83, 0.34);
       border-left: 5px solid var(--accent);
       border-radius: var(--radius);
-      background: rgba(18, 26, 34, 0.78);
+      background: rgba(15, 15, 34, 0.78);
       box-shadow: var(--shadow);
       font-size: 1.06rem;
       color: #e9f7ee;
@@ -185,7 +197,7 @@
 
     .hero-card {
       border: 1px solid var(--line);
-      background: rgba(18, 26, 34, 0.86);
+      background: rgba(15, 15, 34, 0.86);
       border-radius: var(--radius);
       padding: 22px;
       box-shadow: var(--shadow);
@@ -201,8 +213,8 @@
     }
     .metric:hover {
       transform: translateY(-3px);
-      border-color: rgba(0, 195, 137, 0.45);
-      background: rgba(0, 195, 137, 0.07);
+      border-color: rgba(0, 200, 83, 0.45);
+      background: rgba(0, 200, 83, 0.07);
     }
     .metric strong { display: block; font-size: 1.3rem; color: var(--ink); }
     .metric span { color: var(--muted); font-size: 0.92rem; }
@@ -220,8 +232,8 @@
     }
     .badge:hover {
       transform: translateY(-2px);
-      border-color: rgba(0, 168, 232, 0.5);
-      background: rgba(0, 168, 232, 0.12);
+      border-color: rgba(10, 132, 255, 0.5);
+      background: rgba(10, 132, 255, 0.12);
     }
 
     section { padding: 44px 0; border-top: 1px solid var(--line); }
@@ -235,7 +247,7 @@
     .card {
       display: block;
       border: 1px solid var(--line);
-      background: rgba(18, 26, 34, 0.76);
+      background: rgba(15, 15, 34, 0.76);
       border-radius: var(--radius);
       padding: 20px;
       min-height: 100%;
@@ -245,10 +257,10 @@
     }
     .card:hover {
       transform: translateY(-5px);
-      border-color: rgba(0, 195, 137, 0.45);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(0, 195, 137, 0.12);
+      border-color: rgba(0, 200, 83, 0.45);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(0, 200, 83, 0.12);
     }
-    a.card:hover { border-color: rgba(0, 168, 232, 0.55); text-decoration: none; }
+    a.card:hover { border-color: rgba(10, 132, 255, 0.55); text-decoration: none; }
     .card p, .card li { color: var(--muted); }
     .card p:last-child { margin-bottom: 0; }
 
@@ -278,10 +290,10 @@
       overflow: hidden;
       border-radius: var(--radius);
       border: 1px solid var(--line);
-      background: rgba(18, 26, 34, 0.78);
+      background: rgba(15, 15, 34, 0.78);
     }
     th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
-    th { color: #d8fbe9; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; background: rgba(0, 195, 137, 0.08); }
+    th { color: #d8fbe9; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; background: rgba(0, 200, 83, 0.08); }
     td { color: var(--muted); }
     tr:last-child td { border-bottom: 0; }
 
@@ -294,10 +306,10 @@
       font-size: 0.82rem;
       font-weight: 750;
     }
-    .done { color: #b3f5d1; background: rgba(0, 195, 137, 0.14); }
-    .validating { color: #bfe9fb; background: rgba(0, 168, 232, 0.14); }
-    .experimental { color: #ffe9a8; background: rgba(255, 201, 77, 0.14); }
-    .pending { color: #ffd0d4; background: rgba(239, 51, 64, 0.14); }
+    .done { color: #b3f5d1; background: rgba(0, 200, 83, 0.14); }
+    .validating { color: #bfe9fb; background: rgba(10, 132, 255, 0.14); }
+    .experimental { color: #ffe9a8; background: rgba(240, 190, 74, 0.14); }
+    .pending { color: #ffd0d4; background: rgba(229, 0, 45, 0.14); }
 
     code, pre {
       font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -315,8 +327,8 @@
     }
 
     .notice {
-      border: 1px solid rgba(255, 201, 77, 0.3);
-      background: rgba(255, 201, 77, 0.08);
+      border: 1px solid rgba(240, 190, 74, 0.3);
+      background: rgba(240, 190, 74, 0.08);
       border-radius: var(--radius);
       padding: 18px;
       color: #f8e9a5;
@@ -334,7 +346,7 @@
       font-weight: 700;
       transition: transform .25s cubic-bezier(.22,1,.36,1), color .25s ease, background-color .25s ease, border-color .25s ease;
     }
-    .tab-button:hover { transform: translateY(-2px); border-color: rgba(0, 195, 137, 0.45); }
+    .tab-button:hover { transform: translateY(-2px); border-color: rgba(0, 200, 83, 0.45); }
     .tab-button[aria-selected="true"] { color: #06130d; background: var(--accent); border-color: var(--accent); }
     .tab-panel { display: none; }
     .tab-panel.active {
@@ -349,11 +361,11 @@
     .viz-shell {
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(18, 26, 34, 0.76);
+      background: rgba(15, 15, 34, 0.76);
       padding: 20px;
       transition: border-color .35s ease, box-shadow .35s ease;
     }
-    .viz-shell:hover { border-color: rgba(0, 168, 232, 0.3); box-shadow: 0 16px 36px rgba(0,0,0,0.28); }
+    .viz-shell:hover { border-color: rgba(10, 132, 255, 0.3); box-shadow: 0 16px 36px rgba(0,0,0,0.28); }
     .viz-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
     .viz-button {
       border: 1px solid var(--line);
@@ -366,7 +378,7 @@
       font-weight: 750;
       transition: transform .25s cubic-bezier(.22,1,.36,1), color .25s ease, background-color .25s ease, border-color .25s ease;
     }
-    .viz-button:hover { transform: translateY(-2px); border-color: rgba(0, 168, 232, 0.45); }
+    .viz-button:hover { transform: translateY(-2px); border-color: rgba(10, 132, 255, 0.45); }
     .viz-button.active { color: #06130d; background: var(--accent-2); border-color: var(--accent-2); }
     .bar-list { display: grid; gap: 12px; }
     .bar-row {
@@ -402,14 +414,14 @@
       cursor: pointer;
       transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease, background-color .25s ease;
     }
-    .phase-item:hover { transform: translateX(3px); border-color: rgba(0, 168, 232, 0.4); }
-    .phase-item.active { border-color: rgba(0, 168, 232, 0.7); background: rgba(0, 168, 232, 0.12); }
+    .phase-item:hover { transform: translateX(3px); border-color: rgba(10, 132, 255, 0.4); }
+    .phase-item.active { border-color: rgba(10, 132, 255, 0.7); background: rgba(10, 132, 255, 0.12); }
     .phase-item b { display: block; color: var(--ink); }
     .phase-item span { display: block; color: var(--muted); font-size: 0.9rem; margin-top: 3px; }
     .insight-box {
-      border: 1px solid rgba(0, 168, 232, 0.28);
+      border: 1px solid rgba(10, 132, 255, 0.28);
       border-radius: var(--radius);
-      background: rgba(0, 168, 232, 0.08);
+      background: rgba(10, 132, 255, 0.08);
       padding: 18px;
       min-height: 210px;
       transition: opacity .35s ease;
@@ -434,6 +446,7 @@
   </style>
 </head>
 <body>
+  <div class="host-stripe" aria-hidden="true"></div>
   <header class="topbar">
     <div class="shell topbar-inner">
       <a class="brand" href="#inicio" aria-label="Ir al inicio">
@@ -561,31 +574,31 @@
             </marker>
           </defs>
           <g font-family="Inter, sans-serif">
-            <rect x="10" y="28" width="170" height="64" rx="10" fill="rgba(0,195,137,0.12)" stroke="#00c389"/>
+            <rect x="10" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
             <text x="95" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">1. Datos</text>
             <text x="95" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Histórico + fixture + live</text>
 
             <line x1="180" y1="60" x2="218" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
-            <rect x="220" y="28" width="170" height="64" rx="10" fill="rgba(0,195,137,0.12)" stroke="#00c389"/>
+            <rect x="220" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
             <text x="305" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">2. Features</text>
             <text x="305" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">ELO, forma, H2H, localía</text>
 
             <line x1="390" y1="60" x2="428" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
-            <rect x="430" y="28" width="170" height="64" rx="10" fill="rgba(0,195,137,0.12)" stroke="#00c389"/>
+            <rect x="430" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
             <text x="515" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">3. Ensemble</text>
             <text x="515" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">ELO 22% · Poisson 58% · XGB 20%</text>
 
             <line x1="600" y1="60" x2="638" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
-            <rect x="640" y="28" width="170" height="64" rx="10" fill="rgba(0,168,232,0.12)" stroke="#00a8e8"/>
+            <rect x="640" y="28" width="170" height="64" rx="10" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
             <text x="725" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">4. Simulación</text>
             <text x="725" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Grupos, terceros, bracket</text>
 
             <line x1="810" y1="60" x2="848" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
 
-            <rect x="850" y="28" width="140" height="64" rx="10" fill="rgba(255,201,77,0.12)" stroke="#ffc94d"/>
+            <rect x="850" y="28" width="140" height="64" rx="10" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
             <text x="920" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">5. Narrativa</text>
             <text x="920" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Chat + Narrator AI</text>
           </g>
@@ -647,43 +660,43 @@
             <line x1="180" y1="50" x2="180" y2="68" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
 
             <!-- Step 2: Topic filter -->
-            <rect x="20" y="70" width="320" height="46" rx="9" fill="rgba(0,168,232,0.1)" stroke="#00a8e8"/>
+            <rect x="20" y="70" width="320" height="46" rx="9" fill="rgba(10,132,255,0.1)" stroke="#0a84ff"/>
             <text x="180" y="91" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">1. Filtro de tema (regex fútbol)</text>
             <text x="180" y="107" text-anchor="middle" fill="#9fb8b5" font-size="10">español/inglés/portugués</text>
-            <line x1="340" y1="93" x2="556" y2="93" stroke="#00c389" stroke-width="1.4" marker-end="url(#arrow3)"/>
-            <rect x="560" y="70" width="180" height="46" rx="9" fill="rgba(0,195,137,0.12)" stroke="#00c389"/>
+            <line x1="340" y1="93" x2="556" y2="93" stroke="#00c853" stroke-width="1.4" marker-end="url(#arrow3)"/>
+            <rect x="560" y="70" width="180" height="46" rx="9" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
             <text x="650" y="89" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">Fuera de tema</text>
             <text x="650" y="105" text-anchor="middle" fill="#b3f5d1" font-size="11" font-weight="700">→ respuesta fija, USD 0</text>
             <line x1="180" y1="116" x2="180" y2="138" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
 
             <!-- Step 3: Cache -->
-            <rect x="20" y="140" width="320" height="46" rx="9" fill="rgba(0,168,232,0.1)" stroke="#00a8e8"/>
+            <rect x="20" y="140" width="320" height="46" rx="9" fill="rgba(10,132,255,0.1)" stroke="#0a84ff"/>
             <text x="180" y="161" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">2. Cache SHA-256 (TTL 2h)</text>
             <text x="180" y="177" text-anchor="middle" fill="#9fb8b5" font-size="10">hasta 400 entradas, ~70-80% hit rate</text>
-            <line x1="340" y1="163" x2="556" y2="163" stroke="#00c389" stroke-width="1.4" marker-end="url(#arrow3)"/>
-            <rect x="560" y="140" width="180" height="46" rx="9" fill="rgba(0,195,137,0.12)" stroke="#00c389"/>
+            <line x1="340" y1="163" x2="556" y2="163" stroke="#00c853" stroke-width="1.4" marker-end="url(#arrow3)"/>
+            <rect x="560" y="140" width="180" height="46" rx="9" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
             <text x="650" y="159" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">Pregunta repetida</text>
             <text x="650" y="175" text-anchor="middle" fill="#b3f5d1" font-size="11" font-weight="700">→ respuesta cache, USD 0</text>
             <line x1="180" y1="186" x2="180" y2="208" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
 
             <!-- Step 4: Rate limit -->
-            <rect x="20" y="210" width="320" height="46" rx="9" fill="rgba(0,168,232,0.1)" stroke="#00a8e8"/>
+            <rect x="20" y="210" width="320" height="46" rx="9" fill="rgba(10,132,255,0.1)" stroke="#0a84ff"/>
             <text x="180" y="231" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">3. Rate limit 20 req/hora/IP</text>
             <text x="180" y="247" text-anchor="middle" fill="#9fb8b5" font-size="10">module-level Map, sin Redis</text>
-            <line x1="340" y1="233" x2="556" y2="233" stroke="#ef3340" stroke-width="1.4" marker-end="url(#arrow3)"/>
-            <rect x="560" y="210" width="180" height="46" rx="9" fill="rgba(239,51,64,0.12)" stroke="#ef3340"/>
+            <line x1="340" y1="233" x2="556" y2="233" stroke="#e5002d" stroke-width="1.4" marker-end="url(#arrow3)"/>
+            <rect x="560" y="210" width="180" height="46" rx="9" fill="rgba(229,0,45,0.12)" stroke="#e5002d"/>
             <text x="650" y="229" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">Límite excedido</text>
             <text x="650" y="245" text-anchor="middle" fill="#ffd0d4" font-size="11" font-weight="700">→ HTTP 429</text>
             <line x1="180" y1="256" x2="180" y2="278" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
 
             <!-- Step 5: RAG -->
-            <rect x="20" y="280" width="320" height="46" rx="9" stroke-dasharray="5,4" fill="rgba(0,168,232,0.06)" stroke="#00a8e8"/>
+            <rect x="20" y="280" width="320" height="46" rx="9" stroke-dasharray="5,4" fill="rgba(10,132,255,0.06)" stroke="#0a84ff"/>
             <text x="180" y="301" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">4. RAG (opcional): Qwen3 embeddings</text>
             <text x="180" y="317" text-anchor="middle" fill="#9fb8b5" font-size="10">top-5 chunks inyectados al prompt</text>
             <line x1="180" y1="326" x2="180" y2="348" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
 
             <!-- Step 6: DeepSeek call (real cost) -->
-            <rect x="20" y="350" width="320" height="46" rx="9" fill="rgba(255,201,77,0.12)" stroke="#ffc94d"/>
+            <rect x="20" y="350" width="320" height="46" rx="9" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
             <text x="180" y="371" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">5. Llamada a DeepSeek</text>
             <text x="180" y="387" text-anchor="middle" fill="#9fb8b5" font-size="10">único paso con costo real — se guarda en cache</text>
 
@@ -719,24 +732,24 @@
           <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:6px auto 0" role="img" aria-label="Costo por modelo y fase">
             <g font-family="Inter, sans-serif">
               <text x="0" y="16" fill="#9fb8b5" font-size="11.5">Grupos · Flash/Chat</text>
-              <rect x="0" y="22" width="148" height="18" rx="4" fill="#00a8e8"/>
+              <rect x="0" y="22" width="148" height="18" rx="4" fill="#0a84ff"/>
               <text x="156" y="36" fill="#d8fbe9" font-size="12" font-weight="700">USD 1.54</text>
 
               <text x="0" y="58" fill="#9fb8b5" font-size="11.5">Grupos · Reasoner (Agent Debate)</text>
-              <rect x="0" y="64" width="380" height="18" rx="4" fill="#ffc94d"/>
+              <rect x="0" y="64" width="380" height="18" rx="4" fill="#f0be4a"/>
               <text x="388" y="78" fill="#d8fbe9" font-size="12" font-weight="700">USD 3.96</text>
 
               <text x="0" y="100" fill="#9fb8b5" font-size="11.5">Eliminatorias · Flash/Chat</text>
-              <rect x="0" y="106" width="108" height="18" rx="4" fill="#00a8e8"/>
+              <rect x="0" y="106" width="108" height="18" rx="4" fill="#0a84ff"/>
               <text x="116" y="120" fill="#d8fbe9" font-size="12" font-weight="700">USD 1.12</text>
 
               <text x="0" y="142" fill="#9fb8b5" font-size="11.5">Eliminatorias · Reasoner (Agent Debate)</text>
-              <rect x="0" y="148" width="276" height="18" rx="4" fill="#ffc94d"/>
+              <rect x="0" y="148" width="276" height="18" rx="4" fill="#f0be4a"/>
               <text x="284" y="162" fill="#d8fbe9" font-size="12" font-weight="700">USD 2.88</text>
 
-              <rect x="0" y="182" width="12" height="12" rx="3" fill="#00a8e8"/>
+              <rect x="0" y="182" width="12" height="12" rx="3" fill="#0a84ff"/>
               <text x="18" y="192" fill="#9fb8b5" font-size="10.5">Flash/Chat (Narrator + agentes)</text>
-              <rect x="220" y="182" width="12" height="12" rx="3" fill="#ffc94d"/>
+              <rect x="220" y="182" width="12" height="12" rx="3" fill="#f0be4a"/>
               <text x="238" y="192" fill="#9fb8b5" font-size="10.5">Reasoner (Agent Debate)</text>
             </g>
           </svg>
@@ -752,26 +765,26 @@
             </marker>
           </defs>
           <g font-family="Inter, sans-serif">
-            <rect x="20" y="10" width="210" height="50" rx="9" fill="rgba(0,168,232,0.12)" stroke="#00a8e8"/>
+            <rect x="20" y="10" width="210" height="50" rx="9" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
             <text x="125" y="40" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Group Analyst</text>
 
-            <rect x="265" y="10" width="210" height="50" rx="9" fill="rgba(0,168,232,0.12)" stroke="#00a8e8"/>
+            <rect x="265" y="10" width="210" height="50" rx="9" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
             <text x="370" y="40" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Tactical Scout</text>
 
-            <rect x="510" y="10" width="210" height="50" rx="9" fill="rgba(0,168,232,0.12)" stroke="#00a8e8"/>
+            <rect x="510" y="10" width="210" height="50" rx="9" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
             <text x="615" y="40" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Sentiment Reader</text>
 
             <line x1="125" y1="60" x2="365" y2="108" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
             <line x1="370" y1="60" x2="370" y2="108" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
             <line x1="615" y1="60" x2="375" y2="108" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
 
-            <rect x="220" y="112" width="300" height="50" rx="9" fill="rgba(0,195,137,0.12)" stroke="#00c389"/>
+            <rect x="220" y="112" width="300" height="50" rx="9" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
             <text x="370" y="133" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">3 rondas de debate</text>
             <text x="370" y="150" text-anchor="middle" fill="#9fb8b5" font-size="10.5">clasificación, táctica, momentum — sin ML</text>
 
             <line x1="370" y1="162" x2="370" y2="200" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
 
-            <rect x="260" y="204" width="220" height="44" rx="9" fill="rgba(255,201,77,0.12)" stroke="#ffc94d"/>
+            <rect x="260" y="204" width="220" height="44" rx="9" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
             <text x="370" y="231" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Consensus</text>
 
             <line x1="370" y1="248" x2="370" y2="262" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
