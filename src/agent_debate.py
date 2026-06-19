@@ -597,8 +597,8 @@ ANÁLISIS FINAL (3-4 líneas):
 - Confianza específica en el impacto clasificatorio
 
 IMPORTANTE: Termina tu respuesta con esta línea EXACTA (sin texto adicional antes ni después,
-usando los goles de tu PREDICCIÓN #1, donde "home" = {home_team} y "away" = {away_team}):
-RESULTADO_JSON: {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}
+usando los goles de tu PREDICCIÓN #1 y PREDICCIÓN #2, donde "home" = {home_team} y "away" = {away_team}):
+RESULTADO_JSON: {{"predictions": [{{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}, {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}]}}
 """
         # max_tokens alto: el razonamiento del reasoner + las 3 predicciones + el
         # bloque JSON final pueden agotar el límite por defecto (2000) antes de
@@ -607,32 +607,53 @@ RESULTADO_JSON: {{"home_goals": <int>, "away_goals": <int>, "probability": <floa
         return consensus
 
     @staticmethod
-    def parse_top_prediction(consensus_text: str) -> Optional[dict]:
-        """Extrae el marcador #1 estructurado del bloque RESULTADO_JSON del consenso."""
+    def _prediction_with_winner(data: dict) -> dict:
+        home_goals = int(data["home_goals"])
+        away_goals = int(data["away_goals"])
+        if home_goals > away_goals:
+            winner = "home"
+        elif home_goals < away_goals:
+            winner = "away"
+        else:
+            winner = "draw"
+        return {
+            "home_goals": home_goals,
+            "away_goals": away_goals,
+            "probability": float(data.get("probability", 0)),
+            "predicted_winner": winner,
+        }
+
+    @classmethod
+    def parse_top_prediction(cls, consensus_text: str) -> Optional[dict]:
+        """Extrae la predicción #1 estructurada (compat hacia atrás)."""
+        predictions = cls.parse_predictions(consensus_text)
+        return predictions[0] if predictions else None
+
+    @classmethod
+    def parse_predictions(cls, consensus_text: str) -> list[dict]:
+        """Extrae las predicciones #1 y #2 estructuradas del bloque RESULTADO_JSON.
+
+        Soporta también el formato viejo de una sola predicción
+        ({"home_goals": ..., "away_goals": ...}) para no romper resultados
+        ya guardados antes de este cambio.
+        """
         import re
 
-        match = re.search(r"RESULTADO_JSON:\s*(\{.*?\})", consensus_text, re.DOTALL)
+        match = re.search(r"RESULTADO_JSON:\s*(\{.*?\})\s*$", consensus_text.strip(), re.DOTALL)
         if not match:
-            return None
+            return []
         try:
             data = json.loads(match.group(1))
-            home_goals = int(data["home_goals"])
-            away_goals = int(data["away_goals"])
-            if home_goals > away_goals:
-                winner = "home"
-            elif home_goals < away_goals:
-                winner = "away"
-            else:
-                winner = "draw"
-            return {
-                "home_goals": home_goals,
-                "away_goals": away_goals,
-                "probability": float(data.get("probability", 0)),
-                "predicted_winner": winner,
-            }
-        except (ValueError, KeyError, json.JSONDecodeError):
+            if "predictions" in data:
+                predictions = data["predictions"]
+                if not isinstance(predictions, list):
+                    return []
+                return [cls._prediction_with_winner(p) for p in predictions[:2]]
+            # formato viejo: una sola predicción suelta
+            return [cls._prediction_with_winner(data)]
+        except (ValueError, KeyError, TypeError, json.JSONDecodeError):
             logger.warning("No se pudo parsear RESULTADO_JSON del consenso")
-            return None
+            return []
 
     def predict_match(self, home_team: str, away_team: str) -> dict:
         """Ejecuta el debate completo para un partido CON CONTEXTO REAL."""
@@ -669,7 +690,7 @@ RESULTADO_JSON: {{"home_goals": <int>, "away_goals": <int>, "probability": <floa
             context,
         )
 
-        top_prediction = self.parse_top_prediction(consensus)
+        predictions = self.parse_predictions(consensus)
 
         return {
             "match": f"{home_team} vs {away_team}",
@@ -681,7 +702,10 @@ RESULTADO_JSON: {{"home_goals": <int>, "away_goals": <int>, "probability": <floa
             },
             "round_2": {"rebate_1": rebate1, "rebate_2": rebate2, "rebate_3": rebate3},
             "consensus": consensus,
-            "top_prediction": top_prediction,
+            # "predictions": top-2 estructuradas (home_goals/away_goals/probability/predicted_winner)
+            # "top_prediction": compat hacia atrás, igual a predictions[0]
+            "predictions": predictions,
+            "top_prediction": predictions[0] if predictions else None,
         }
 
     def close(self):

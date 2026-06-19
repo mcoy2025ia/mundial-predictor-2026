@@ -347,6 +347,19 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
   const agentByMd = useMemo(() => buildByMd(agentResults), [agentResults]);
   const agentByGroup = useMemo(() => buildByGroup(agentResults), [agentResults]);
 
+  // ── Agent Debate: marcador exacto (🥇 o 🥈), métrica separada del 1X2 ───────
+  const agentScoreResults = useMemo(
+    () => agentResults
+      .filter((r) => typeof r.scoreHit === "boolean")
+      .map((r) => ({ group: r.group, groupMd: r.groupMd, hit: r.scoreHit as boolean })),
+    [agentResults]
+  );
+  const agentScoreByMd = useMemo(() => buildByMd(agentScoreResults), [agentScoreResults]);
+  const agentScoreByGroup = useMemo(() => buildByGroup(agentScoreResults), [agentScoreResults]);
+  const agentScorePlayed = agentScoreResults.length;
+  const agentScoreHits = agentScoreResults.filter((r) => r.hit).length;
+  const agentScorePct = agentScorePlayed > 0 ? Math.round((agentScoreHits / agentScorePlayed) * 100) : null;
+
   if (played === 0) {
     return (
       <div className="max-w-3xl mx-auto text-center py-16">
@@ -409,6 +422,32 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
           groups={groups}
           byGroup={agentByGroup}
         />
+      </div>
+
+      {/* Marcador exacto (Agentes): métrica separada de 1X2 — ¿acertaron el resultado
+          (quién gana) o también el marcador completo? Cuenta como acierto si el real
+          coincide con la 🥇 o la 🥈 propuesta por el consenso. */}
+      <div className="rounded-xl p-5 space-y-3" style={{ ...cardBg, borderColor: "rgba(212,168,67,0.15)" }}>
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+            🎯 Marcador exacto (Agentes)
+          </h3>
+          <span className="font-mono text-xs font-black" style={{ color: agentScorePct !== null && agentScorePct >= 30 ? "var(--color-wc-gold)" : "var(--color-ink-muted)" }}>
+            {agentScorePct !== null ? `${agentScorePct}%` : "—"} {agentScorePlayed > 0 && `(${agentScoreHits}/${agentScorePlayed})`}
+          </span>
+        </div>
+        <p className="text-[0.6rem]" style={{ color: "var(--color-ink-muted)" }}>
+          Acierto si el resultado real coincide con el marcador 🥇 o 🥈 propuesto por los agentes (no solo quién gana)
+        </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <MatchdayAccuracy title="Por jornada" byMd={agentScoreByMd} />
+          <GroupAccuracyTable
+            title="Por grupo · J1 → J2 → J3 → FG"
+            subtitle="Mismo criterio: marcador exacto, no solo 1X2"
+            groups={groups}
+            byGroup={agentScoreByGroup}
+          />
+        </div>
       </div>
 
       {/* Sorpresas */}
