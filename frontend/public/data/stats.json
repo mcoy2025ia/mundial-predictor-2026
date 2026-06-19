@@ -1,7 +1,7 @@
 {
-  "total_matches": 987,
-  "total_goals": 2791,
-  "avg_goals_all": 2.828,
+  "total_matches": 990,
+  "total_goals": 2802,
+  "avg_goals_all": 2.83,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 71,
-      "matches": 23,
-      "avg": 3.087
+      "total": 82,
+      "matches": 26,
+      "avg": 3.154
     }
   ],
   "best_avg_edition": {
@@ -451,14 +451,14 @@
     }
   ],
   "colombia": {
-    "total_matches": 22,
-    "wins": 9,
+    "total_matches": 23,
+    "wins": 10,
     "draws": 3,
     "losses": 10,
-    "goals_for": 32,
-    "goals_against": 30,
-    "win_pct": 40.9,
-    "elo_current": 2196.5,
+    "goals_for": 35,
+    "goals_against": 31,
+    "win_pct": 43.5,
+    "elo_current": 2208.0,
     "elo_rank": 6
   }
 }

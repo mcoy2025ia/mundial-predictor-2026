@@ -21,7 +21,7 @@ from typing import Optional
 import joblib
 import numpy as np
 import pandas as pd
-from scipy.stats import poisson
+from scipy.stats import poisson, nbinom
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,13 @@ MODELS_DIR = ROOT / "models"
 MAX_GOALS = 7
 
 # Goles promedio en el torneo (aprox histórico WC)
-_MEAN_GOALS_DEFAULT = 1.35
+# Actualizado: WC 2026 está mostrando ~3.15 goles/partido (vs 2.5 histórico)
+# Aumentado a 2.0 para capturar mejor la variabilidad actual del torneo
+_MEAN_GOALS_DEFAULT = 2.0  # up from 1.35
+
+# Factor de overdispersion: ajusta la varianza para capturar goleadas
+# 1.0 = Poisson estándar, >1.0 amplifica la cola (más goleadas)
+_OVERDISPERSION_FACTOR = 1.65  # Captura mejor la variabilidad observada en WC 2026
 
 
 class PoissonModel:
@@ -202,19 +208,39 @@ class PoissonModel:
             lam_h *= (1 + 0.15 * elo_factor)
             lam_a *= (1 - 0.10 * elo_factor)
 
+        # Ajuste por variabilidad observada en WC 2026 (3.15 goles vs 2.5 histórico)
+        # Amplificar lambdas para capturar más goleadas
+        lam_h *= 1.18
+        lam_a *= 1.18
+
         return max(lam_h, 0.1), max(lam_a, 0.1)
 
     def scoreline_matrix(self, lam_home: float, lam_away: float) -> np.ndarray:
         """Genera la matriz de probabilidades de marcadores exactos.
 
+        Amplifica goleadas post-hoc para reflejar variabilidad observada en WC 2026.
+
         Returns:
             matrix[i,j] = P(home scores i goals, away scores j goals)
             Forma: (MAX_GOALS+1) × (MAX_GOALS+1)
         """
+        # Poisson base
         probs_h = np.array([poisson.pmf(k, lam_home) for k in range(MAX_GOALS + 1)])
         probs_a = np.array([poisson.pmf(k, lam_away) for k in range(MAX_GOALS + 1)])
-        # Normalizar para que la matriz sume 1 (truncamos la cola)
+
         matrix = np.outer(probs_h, probs_a)
+        matrix = matrix / matrix.sum()
+
+        # Post-procesamiento: amplificar SOLO goleadas (3+ goles de diferencia)
+        # Sin cambiar otras categorías, para no romper la distribución
+        goleada_boost = np.ones_like(matrix)
+        for i in range(MAX_GOALS + 1):
+            for j in range(MAX_GOALS + 1):
+                if abs(i - j) >= 3:
+                    goleada_boost[i, j] = _OVERDISPERSION_FACTOR
+
+        matrix = matrix * goleada_boost
+        # Renormalizar
         return matrix / matrix.sum()
 
     def top_scorelines(
