@@ -47,9 +47,8 @@ export default function AgentDebatePanel({
     fetchDebate();
   }, [homeTeam, awayTeam]);
 
-  if (loading) return <div className="text-sm text-gray-500">Cargando análisis de agentes...</div>;
-  if (error) return <div className="text-sm text-gray-500">{error}</div>;
-  if (!debate) return null;
+  // Silencioso: si no hay debate disponible para este partido, no ocupar espacio
+  if (loading || error || !debate) return null;
 
   const context = debate.context;
   const homeCtx = context?.home_team;
@@ -64,38 +63,41 @@ export default function AgentDebatePanel({
 
   if (variant === 'compact') {
     return (
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-        <h3 className="font-bold text-blue-900 mb-3">🤖 Análisis de Agentes Expertos</h3>
-
-        {/* Presión/Status */}
-        <div className="text-xs mb-3 space-y-1">
-          <div>
-            <span className="font-semibold">{homeTeam}:</span> {homeCtx?.status}
-          </div>
-          <div>
-            <span className="font-semibold">{awayTeam}:</span> {awayCtx?.status}
-          </div>
-        </div>
-
-        {/* Top 3 marcadores */}
-        <div className="text-sm space-y-2">
-          <div className="font-semibold text-blue-900">Top 3 Predicciones:</div>
-          {marcadores.slice(0, 3).map((line: string, idx: number) => (
-            <div key={idx} className="text-xs text-gray-700 line-clamp-2">
-              {line.replace(/[*#]+/g, '').trim()}
-            </div>
-          ))}
-        </div>
-
-        <details className="mt-3 cursor-pointer">
-          <summary className="text-xs font-semibold text-blue-600 hover:text-blue-800">
+      <details className="bg-blue-50 border border-blue-200 rounded-lg mt-4 group">
+        <summary className="cursor-pointer list-none px-4 py-2.5 flex items-center justify-between">
+          <span className="font-semibold text-blue-900 text-sm">🤖 Análisis de Agentes Expertos</span>
+          <span className="text-xs text-blue-600 flex items-center gap-1">
             Ver consenso completo
-          </summary>
-          <div className="text-xs text-gray-600 mt-2 bg-white p-2 rounded border border-blue-100 max-h-40 overflow-y-auto">
+            <span className="inline-block transition-transform group-open:rotate-180">▾</span>
+          </span>
+        </summary>
+
+        <div className="px-4 pb-4">
+          {/* Presión/Status */}
+          <div className="text-xs mb-3 space-y-1">
+            <div>
+              <span className="font-semibold">{homeTeam}:</span> {homeCtx?.status}
+            </div>
+            <div>
+              <span className="font-semibold">{awayTeam}:</span> {awayCtx?.status}
+            </div>
+          </div>
+
+          {/* Top 3 marcadores */}
+          <div className="text-sm space-y-2 mb-3">
+            <div className="font-semibold text-blue-900">Top 3 Predicciones:</div>
+            {marcadores.slice(0, 3).map((line: string, idx: number) => (
+              <div key={idx} className="text-xs text-gray-700">
+                {line.replace(/[*#]+/g, '').trim()}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-xs text-gray-600 bg-white p-2 rounded border border-blue-100 max-h-40 overflow-y-auto">
             {consensoText.substring(0, 800)}...
           </div>
-        </details>
-      </div>
+        </div>
+      </details>
     );
   }
 

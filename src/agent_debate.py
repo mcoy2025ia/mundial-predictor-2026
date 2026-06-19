@@ -37,9 +37,12 @@ class AgentDebateSystem:
         self.client = httpx.Client(timeout=60)
         self.conversation_history = []
 
-    def _call_deepseek(self, prompt: str, use_reasoner: bool = True) -> str:
+    def _call_deepseek(self, prompt: str, use_reasoner: bool = True, max_tokens: Optional[int] = None) -> str:
         """Llama a DeepSeek con el prompt dado."""
         model = "deepseek-reasoner" if use_reasoner else "deepseek-chat"
+
+        if max_tokens is None:
+            max_tokens = 2000 if use_reasoner else 1000
 
         response = self.client.post(
             DEEPSEEK_URL,
@@ -47,7 +50,7 @@ class AgentDebateSystem:
                 "model": model,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 1 if use_reasoner else 0.7,
-                "max_tokens": 2000 if use_reasoner else 1000,
+                "max_tokens": max_tokens,
             },
             headers={"Authorization": f"Bearer {DEEPSEEK_API_KEY}"},
         )
@@ -592,9 +595,44 @@ ANÁLISIS FINAL (3-4 líneas):
 - ¿Dónde divergieron?
 - Confianza general en la predicción (0-10)
 - Confianza específica en el impacto clasificatorio
+
+IMPORTANTE: Termina tu respuesta con esta línea EXACTA (sin texto adicional antes ni después,
+usando los goles de tu PREDICCIÓN #1, donde "home" = {home_team} y "away" = {away_team}):
+RESULTADO_JSON: {{"home_goals": <int>, "away_goals": <int>, "probability": <float 0-1>}}
 """
-        consensus = self._call_deepseek(consensus_prompt, use_reasoner=True)
+        # max_tokens alto: el razonamiento del reasoner + las 3 predicciones + el
+        # bloque JSON final pueden agotar el límite por defecto (2000) antes de
+        # emitir la línea RESULTADO_JSON, dejando top_prediction sin parsear.
+        consensus = self._call_deepseek(consensus_prompt, use_reasoner=True, max_tokens=3500)
         return consensus
+
+    @staticmethod
+    def parse_top_prediction(consensus_text: str) -> Optional[dict]:
+        """Extrae el marcador #1 estructurado del bloque RESULTADO_JSON del consenso."""
+        import re
+
+        match = re.search(r"RESULTADO_JSON:\s*(\{.*?\})", consensus_text, re.DOTALL)
+        if not match:
+            return None
+        try:
+            data = json.loads(match.group(1))
+            home_goals = int(data["home_goals"])
+            away_goals = int(data["away_goals"])
+            if home_goals > away_goals:
+                winner = "home"
+            elif home_goals < away_goals:
+                winner = "away"
+            else:
+                winner = "draw"
+            return {
+                "home_goals": home_goals,
+                "away_goals": away_goals,
+                "probability": float(data.get("probability", 0)),
+                "predicted_winner": winner,
+            }
+        except (ValueError, KeyError, json.JSONDecodeError):
+            logger.warning("No se pudo parsear RESULTADO_JSON del consenso")
+            return None
 
     def predict_match(self, home_team: str, away_team: str) -> dict:
         """Ejecuta el debate completo para un partido CON CONTEXTO REAL."""
@@ -631,6 +669,8 @@ ANÁLISIS FINAL (3-4 líneas):
             context,
         )
 
+        top_prediction = self.parse_top_prediction(consensus)
+
         return {
             "match": f"{home_team} vs {away_team}",
             "context": context,
@@ -641,6 +681,7 @@ ANÁLISIS FINAL (3-4 líneas):
             },
             "round_2": {"rebate_1": rebate1, "rebate_2": rebate2, "rebate_3": rebate3},
             "consensus": consensus,
+            "top_prediction": top_prediction,
         }
 
     def close(self):

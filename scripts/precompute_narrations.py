@@ -728,15 +728,35 @@ def _call_deepseek(client: OpenAI, payload: dict) -> str:
 
 def _call_group_narrative(client: OpenAI, payload: dict) -> str:
     user_msg = json.dumps(payload, ensure_ascii=False)
+    model = _model_for_group_narrative(payload)
     response = client.chat.completions.create(
-        model=_model_for_group_narrative(payload),
-        max_tokens=1600,
+        model=model,
+        # deepseek-reasoner cuenta los tokens de razonamiento dentro de max_tokens;
+        # con un margen corto la respuesta final puede salir vacía (truncada antes
+        # de emitir el contenido). 3200 da margen suficiente para razonar + responder.
+        max_tokens=3200,
         messages=[
             {"role": "system", "content": GROUP_NARRATIVE_SYSTEM},
             {"role": "user", "content": user_msg},
         ],
     )
-    return _sanitize_group_narrative(response.choices[0].message.content or "")
+    text = _sanitize_group_narrative(response.choices[0].message.content or "")
+
+    if not text and model == "deepseek-reasoner":
+        # Fallback: deepseek-chat no tiene fase de razonamiento que pueda
+        # consumir todo el presupuesto de tokens, así que siempre devuelve contenido.
+        logger.warning("Respuesta vacía de deepseek-reasoner, reintentando con deepseek-chat")
+        response = client.chat.completions.create(
+            model="deepseek-chat",
+            max_tokens=1600,
+            messages=[
+                {"role": "system", "content": GROUP_NARRATIVE_SYSTEM},
+                {"role": "user", "content": user_msg},
+            ],
+        )
+        text = _sanitize_group_narrative(response.choices[0].message.content or "")
+
+    return text
 
 
 def _sanitize_group_narrative(text: str) -> str:
@@ -903,7 +923,8 @@ def main() -> None:
     group_skipped = 0
     for (group_letter, jornada_date), group_pending in sorted(group_batches.items()):
         key = f"{group_letter}|{jornada_date}|bogotano"
-        if key in group_narratives:
+        # Una entrada vacía (de un intento previo fallido) no cuenta como generada
+        if key in group_narratives and group_narratives[key].strip():
             group_skipped += 1
             continue
 

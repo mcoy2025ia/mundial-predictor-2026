@@ -453,10 +453,11 @@ function selectDailyGroupNarratives(groupNarratives: Record<string, string> | un
     })
     .filter((entry) => entry.lang === "bogotano" && entry.text?.trim());
 
+  // Solo grupos cuya previa fue generada para HOY (no >=, para no arrastrar
+  // previas de grupos que aún no juegan, diluyendo visibilidad de los que sí).
   return entries
-    .filter((entry) => entry.date >= today)
-    .sort((a, b) => a.date.localeCompare(b.date) || a.group.localeCompare(b.group))
-    .slice(0, 4)
+    .filter((entry) => entry.date === today)
+    .sort((a, b) => a.group.localeCompare(b.group))
     .map(({ group, text }) => ({ group, text }));
 }
 
