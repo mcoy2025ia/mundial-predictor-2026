@@ -553,7 +553,75 @@
         <h2 id="finops-agentes-title">FinOps IA Y Aprendizaje De Agentes</h2>
         <p>La IA no solo debe explicar bien: también debe mostrar cuánto cuesta y si mejora con retroalimentación real. Este bloque usa datos registrados en logs y resultados jugados hasta la última revisión local.</p>
       </div>
-      <div class="grid-2">
+      <div class="viz-shell">
+        <div class="kicker">Control de costos</div>
+        <h3>Por qué no se abusa del LLM: cache, RAG y rate limit antes de cada llamada</h3>
+        <p class="muted small">El Chat IA y el Narrator AI no llaman a DeepSeek por cada pregunta de cada usuario. Tres filtros bloquean el costo antes de llegar al modelo, y un cuarto guardia corta el gasto agregado si se acerca al límite diario o mensual.</p>
+        <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:10px auto 0">
+          <defs>
+            <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb0bd" stroke-width="1.5" stroke-linecap="round"/>
+            </marker>
+          </defs>
+          <g font-family="Inter, sans-serif">
+            <!-- Step 1 -->
+            <rect x="20" y="10" width="320" height="40" rx="9" fill="rgba(255,255,255,0.045)" stroke="#9fb0bd" stroke-opacity="0.4"/>
+            <text x="180" y="35" text-anchor="middle" fill="#eef4f7" font-size="12.5" font-weight="700">Pregunta del usuario</text>
+            <line x1="180" y1="50" x2="180" y2="68" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+            <!-- Step 2: Topic filter -->
+            <rect x="20" y="70" width="320" height="46" rx="9" fill="rgba(56,189,248,0.1)" stroke="#38bdf8"/>
+            <text x="180" y="91" text-anchor="middle" fill="#eef4f7" font-size="12" font-weight="700">1. Filtro de tema (regex fútbol)</text>
+            <text x="180" y="107" text-anchor="middle" fill="#9fb0bd" font-size="10">español/inglés/portugués</text>
+            <line x1="340" y1="93" x2="556" y2="93" stroke="#22c55e" stroke-width="1.4" marker-end="url(#arrow3)"/>
+            <rect x="560" y="70" width="180" height="46" rx="9" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+            <text x="650" y="89" text-anchor="middle" fill="#eef4f7" font-size="11" font-weight="700">Fuera de tema</text>
+            <text x="650" y="105" text-anchor="middle" fill="#b7f7ca" font-size="11" font-weight="700">→ respuesta fija, USD 0</text>
+            <line x1="180" y1="116" x2="180" y2="138" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+            <!-- Step 3: Cache -->
+            <rect x="20" y="140" width="320" height="46" rx="9" fill="rgba(56,189,248,0.1)" stroke="#38bdf8"/>
+            <text x="180" y="161" text-anchor="middle" fill="#eef4f7" font-size="12" font-weight="700">2. Cache SHA-256 (TTL 2h)</text>
+            <text x="180" y="177" text-anchor="middle" fill="#9fb0bd" font-size="10">hasta 400 entradas, ~70-80% hit rate</text>
+            <line x1="340" y1="163" x2="556" y2="163" stroke="#22c55e" stroke-width="1.4" marker-end="url(#arrow3)"/>
+            <rect x="560" y="140" width="180" height="46" rx="9" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+            <text x="650" y="159" text-anchor="middle" fill="#eef4f7" font-size="11" font-weight="700">Pregunta repetida</text>
+            <text x="650" y="175" text-anchor="middle" fill="#b7f7ca" font-size="11" font-weight="700">→ respuesta cache, USD 0</text>
+            <line x1="180" y1="186" x2="180" y2="208" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+            <!-- Step 4: Rate limit -->
+            <rect x="20" y="210" width="320" height="46" rx="9" fill="rgba(56,189,248,0.1)" stroke="#38bdf8"/>
+            <text x="180" y="231" text-anchor="middle" fill="#eef4f7" font-size="12" font-weight="700">3. Rate limit 20 req/hora/IP</text>
+            <text x="180" y="247" text-anchor="middle" fill="#9fb0bd" font-size="10">module-level Map, sin Redis</text>
+            <line x1="340" y1="233" x2="556" y2="233" stroke="#fb7185" stroke-width="1.4" marker-end="url(#arrow3)"/>
+            <rect x="560" y="210" width="180" height="46" rx="9" fill="rgba(251,113,133,0.12)" stroke="#fb7185"/>
+            <text x="650" y="229" text-anchor="middle" fill="#eef4f7" font-size="11" font-weight="700">Límite excedido</text>
+            <text x="650" y="245" text-anchor="middle" fill="#fecdd3" font-size="11" font-weight="700">→ HTTP 429</text>
+            <line x1="180" y1="256" x2="180" y2="278" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+            <!-- Step 5: RAG -->
+            <rect x="20" y="280" width="320" height="46" rx="9" stroke-dasharray="5,4" fill="rgba(56,189,248,0.06)" stroke="#38bdf8"/>
+            <text x="180" y="301" text-anchor="middle" fill="#eef4f7" font-size="12" font-weight="700">4. RAG (opcional): Qwen3 embeddings</text>
+            <text x="180" y="317" text-anchor="middle" fill="#9fb0bd" font-size="10">top-5 chunks inyectados al prompt</text>
+            <line x1="180" y1="326" x2="180" y2="348" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow3)"/>
+
+            <!-- Step 6: DeepSeek call (real cost) -->
+            <rect x="20" y="350" width="320" height="46" rx="9" fill="rgba(250,204,21,0.12)" stroke="#facc15"/>
+            <text x="180" y="371" text-anchor="middle" fill="#eef4f7" font-size="12" font-weight="700">5. Llamada a DeepSeek</text>
+            <text x="180" y="387" text-anchor="middle" fill="#9fb0bd" font-size="10">único paso con costo real — se guarda en cache</text>
+
+            <!-- Budget guard side note -->
+            <rect x="560" y="280" width="180" height="116" rx="9" fill="rgba(255,255,255,0.04)" stroke="#9fb0bd" stroke-opacity="0.35"/>
+            <text x="650" y="300" text-anchor="middle" fill="#eef4f7" font-size="11" font-weight="700">CostGuard</text>
+            <text x="650" y="317" text-anchor="middle" fill="#9fb0bd" font-size="9.5">budget.yaml: límite diario,</text>
+            <text x="650" y="330" text-anchor="middle" fill="#9fb0bd" font-size="9.5">mensual y por-run</text>
+            <text x="650" y="352" text-anchor="middle" fill="#9fb0bd" font-size="9.5">Si se agota: Agent Debate</text>
+            <text x="650" y="365" text-anchor="middle" fill="#9fb0bd" font-size="9.5">y agentes LLM caen a</text>
+            <text x="650" y="378" text-anchor="middle" fill="#b7f7ca" font-size="9.5" font-weight="700">Ensemble determinístico</text>
+          </g>
+        </svg>
+      </div>
+      <div class="grid-2" style="margin-top:18px;">
         <div class="viz-shell">
           <div class="kicker">FinOps actual + proyección</div>
           <h3>USD por fase operativa</h3>
