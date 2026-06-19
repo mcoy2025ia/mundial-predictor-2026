@@ -93,8 +93,8 @@ export default function AgentDebatePanel({
             ))}
           </div>
 
-          <div className="text-xs text-gray-600 bg-white p-2 rounded border border-blue-100 max-h-40 overflow-y-auto">
-            {consensoText.substring(0, 800)}...
+          <div className="text-xs text-gray-600 bg-white p-3 rounded border border-blue-100 max-h-96 overflow-y-auto whitespace-pre-wrap">
+            {consensoText}
           </div>
         </div>
       </details>
@@ -142,7 +142,7 @@ export default function AgentDebatePanel({
         <summary className="font-semibold text-blue-600 hover:text-blue-800 text-sm">
           📊 Ver análisis completo de los 3 agentes
         </summary>
-        <div className="mt-3 text-xs text-gray-700 bg-white p-4 rounded border border-blue-200 max-h-64 overflow-y-auto whitespace-pre-wrap">
+        <div className="mt-3 text-xs text-gray-700 bg-white p-4 rounded border border-blue-200 max-h-screen overflow-y-auto whitespace-pre-wrap">
           {consensoText}
         </div>
       </details>
