@@ -1,10 +1,8 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
-// Cache en memoria para no releer archivo constantemente
+// Cache en memoria para no releer constantemente
 let cachedResults: any = null;
 let cacheTime = 0;
 const CACHE_TTL = 60000; // 1 minuto
@@ -17,20 +15,22 @@ export async function GET(request: Request) {
       return NextResponse.json(cachedResults);
     }
 
-    // Leer resultados del Agent Debate
-    const resultsPath = join(
-      process.cwd(),
-      '..',
-      'data',
-      'processed',
-      'agent_debate_results.json'
+    // Cargar desde la carpeta pública (exportado por export_frontend_data.py)
+    const response = await fetch(
+      new URL('../../public/data/agent_debate_results.json', import.meta.url)
     );
 
-    const fileContent = readFileSync(resultsPath, 'utf-8');
-    const results = JSON.parse(fileContent);
+    if (!response.ok) {
+      console.warn('Agent debate results file not found');
+      return NextResponse.json([], 200); // Retornar array vacío si no existe
+    }
+
+    const results = await response.json();
 
     // Filtrar solo resultados válidos (sin errores)
-    const validResults = results.filter((r: any) => !r.error);
+    const validResults = Array.isArray(results)
+      ? results.filter((r: any) => !r.error)
+      : [];
 
     // Transformar formato para el frontend
     const formattedResults = validResults.map((result: any) => {
@@ -55,9 +55,6 @@ export async function GET(request: Request) {
     return NextResponse.json(formattedResults);
   } catch (error) {
     console.error('Error reading agent debate results:', error);
-    return NextResponse.json(
-      { error: 'Failed to load agent debate predictions' },
-      { status: 500 }
-    );
+    return NextResponse.json([], 200); // Retornar array vacío en caso de error
   }
 }

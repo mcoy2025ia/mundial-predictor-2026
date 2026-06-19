@@ -595,6 +595,22 @@ def main():
     )
     print(f"  -> {len(matches_bt)} partidos, accuracy {qatar_out['accuracy']:.1%}")
 
+    # ── Exportar Agent Debate results ───────────────────────────────────────
+    agent_debate_path = DATA_PROCESSED / "agent_debate_results.json"
+    if agent_debate_path.exists():
+        try:
+            with open(agent_debate_path, encoding="utf-8") as f:
+                agent_debate_data = json.load(f)
+            (OUT_DIR / "agent_debate_results.json").write_text(
+                json.dumps(agent_debate_data, ensure_ascii=False, indent=2),
+                encoding="utf-8"
+            )
+            print(f"\n[OK] Agent Debate results exportados ({len(agent_debate_data)} matches)")
+        except Exception as e:
+            print(f"\n[WARN] No se pudo exportar Agent Debate results: {e}")
+    else:
+        print(f"\n[WARN] Agent Debate results no encontrado en {agent_debate_path}")
+
     # ── Resumen ───────────────────────────────────────────────────────────
     print("\n[OK] Exportacion completa:")
     for f in sorted(OUT_DIR.glob("*.json")):
