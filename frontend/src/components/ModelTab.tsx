@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { GroupMatch, TeamInfo } from "@/types";
 import type { ScoreMap } from "@/lib/live";
 import { orientScore, modelVerdict } from "@/lib/live";
-import { computeAgentResults, computeAgentStatsByAgent, type AgentDebateMatch, type AgentMatchResult } from "@/lib/agentDebate";
+import { computeAgentResults, computeAgentStatsByAgent, flattenAgentResults, flattenAgentResultsByGroup, type AgentDebateMatch, type AgentMatchResult } from "@/lib/agentDebate";
 
 interface Props {
   groupMatches: Record<string, GroupMatch[]>;
@@ -344,18 +344,21 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
     () => computeAgentResults(groupMatches, liveScores, agentDebateResults),
     [groupMatches, liveScores, agentDebateResults]
   );
-  const agentByMd = useMemo(() => buildByMd(agentResults), [agentResults]);
-  const agentByGroup = useMemo(() => buildByGroup(agentResults), [agentResults]);
+  const agentByMd = useMemo(() => buildByMd(flattenAgentResults(agentResults)), [agentResults]);
+  const agentByGroup = useMemo(() => buildByGroup(flattenAgentResultsByGroup(agentResults)), [agentResults]);
 
-  // ── Agent Debate: marcador exacto (🥇 o 🥈), métrica separada del 1X2 ───────
+  // ── Agent Debate: marcador exacto, métrica separada del 1X2 ───────
   const agentScoreResults = useMemo(
     () => agentResults
-      .filter((r) => typeof r.scoreHit === "boolean")
-      .map((r) => ({ group: r.group, groupMd: r.groupMd, hit: r.scoreHit as boolean })),
+      .map((r) => ({ group: r.group, groupMd: r.groupMd, hit: r.scoreHits["Consensus"] ?? false }))
+      .filter((r) => typeof r.hit === "boolean"),
     [agentResults]
   );
   const agentScoreByMd = useMemo(() => buildByMd(agentScoreResults), [agentScoreResults]);
   const agentScoreByGroup = useMemo(() => buildByGroup(agentScoreResults), [agentScoreResults]);
+  const agentScorePlayed = agentScoreResults.length;
+  const agentScoreHits = agentScoreResults.filter((r) => r.hit).length;
+  const agentScorePct = agentScorePlayed > 0 ? Math.round((agentScoreHits / agentScorePlayed) * 100) : null;
   // ── Desempeño por agente individual ─────────────────────────────────────
   const agentStatsByAgent = useMemo(() => computeAgentStatsByAgent(agentResults), [agentResults]);
   const agentNames = useMemo(() => ["Group Analyst", "Tactical Scout", "Sentiment Reader", "Consensus"], []);

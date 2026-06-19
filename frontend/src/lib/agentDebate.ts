@@ -201,3 +201,35 @@ export function computeAgentStatsByAgent(
   }
   return stats;
 }
+
+/** Convierte AgentMatchResult a formato compatible con buildByMd (para "consensus" acumulado). */
+export function flattenAgentResults(
+  agentResults: AgentMatchResult[]
+): { groupMd: number; hit: boolean }[] {
+  const out: { groupMd: number; hit: boolean }[] = [];
+  for (const r of agentResults) {
+    // Usar el consenso como métrica agregada para compatibilidad
+    const consensusHit = r.hits["Consensus"] ?? false;
+    out.push({
+      groupMd: r.groupMd,
+      hit: consensusHit,
+    });
+  }
+  return out;
+}
+
+/** Convierte AgentMatchResult a formato compatible con buildByGroup. */
+export function flattenAgentResultsByGroup(
+  agentResults: AgentMatchResult[]
+): { group: string; groupMd: number; hit: boolean }[] {
+  const out: { group: string; groupMd: number; hit: boolean }[] = [];
+  for (const r of agentResults) {
+    const consensusHit = r.hits["Consensus"] ?? false;
+    out.push({
+      group: r.group,
+      groupMd: r.groupMd,
+      hit: consensusHit,
+    });
+  }
+  return out;
+}
