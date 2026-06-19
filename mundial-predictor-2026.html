@@ -476,12 +476,43 @@
           </div>
         </div>
       </div>
-      <div class="flow" aria-label="Flujo de datos">
-        <div class="step"><b>1. Datos</b><span>Histórico, fixture 2026 y resultados en vivo.</span></div>
-        <div class="step"><b>2. Features</b><span>ELO, forma, H2H, localía y experiencia mundialista.</span></div>
-        <div class="step"><b>3. Modelos</b><span>ELO, Poisson, XGBoost calibrado y ensemble.</span></div>
-        <div class="step"><b>4. Simulación</b><span>Grupos, mejores terceros, bracket y campeón.</span></div>
-        <div class="step"><b>5. Narrativa</b><span>Explicaciones, presión de jornada y chat contextual.</span></div>
+      <div class="viz-shell" style="margin-top:18px;overflow-x:auto;">
+        <svg viewBox="0 0 1000 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:1000px;display:block;margin:0 auto">
+          <defs>
+            <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb0bd" stroke-width="1.6" stroke-linecap="round"/>
+            </marker>
+          </defs>
+          <g font-family="Inter, sans-serif">
+            <rect x="10" y="28" width="170" height="64" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+            <text x="95" y="55" text-anchor="middle" fill="#eef4f7" font-size="13" font-weight="700">1. Datos</text>
+            <text x="95" y="74" text-anchor="middle" fill="#9fb0bd" font-size="10.5">Histórico + fixture + live</text>
+
+            <line x1="180" y1="60" x2="218" y2="60" stroke="#9fb0bd" stroke-width="1.6" marker-end="url(#arrow1)"/>
+
+            <rect x="220" y="28" width="170" height="64" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+            <text x="305" y="55" text-anchor="middle" fill="#eef4f7" font-size="13" font-weight="700">2. Features</text>
+            <text x="305" y="74" text-anchor="middle" fill="#9fb0bd" font-size="10.5">ELO, forma, H2H, localía</text>
+
+            <line x1="390" y1="60" x2="428" y2="60" stroke="#9fb0bd" stroke-width="1.6" marker-end="url(#arrow1)"/>
+
+            <rect x="430" y="28" width="170" height="64" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+            <text x="515" y="55" text-anchor="middle" fill="#eef4f7" font-size="13" font-weight="700">3. Ensemble</text>
+            <text x="515" y="74" text-anchor="middle" fill="#9fb0bd" font-size="10.5">ELO 22% · Poisson 58% · XGB 20%</text>
+
+            <line x1="600" y1="60" x2="638" y2="60" stroke="#9fb0bd" stroke-width="1.6" marker-end="url(#arrow1)"/>
+
+            <rect x="640" y="28" width="170" height="64" rx="10" fill="rgba(56,189,248,0.12)" stroke="#38bdf8"/>
+            <text x="725" y="55" text-anchor="middle" fill="#eef4f7" font-size="13" font-weight="700">4. Simulación</text>
+            <text x="725" y="74" text-anchor="middle" fill="#9fb0bd" font-size="10.5">Grupos, terceros, bracket</text>
+
+            <line x1="810" y1="60" x2="848" y2="60" stroke="#9fb0bd" stroke-width="1.6" marker-end="url(#arrow1)"/>
+
+            <rect x="850" y="28" width="140" height="64" rx="10" fill="rgba(250,204,21,0.12)" stroke="#facc15"/>
+            <text x="920" y="55" text-anchor="middle" fill="#eef4f7" font-size="13" font-weight="700">5. Narrativa</text>
+            <text x="920" y="74" text-anchor="middle" fill="#9fb0bd" font-size="10.5">Chat + Narrator AI</text>
+          </g>
+        </svg>
       </div>
     </section>
 
@@ -536,6 +567,76 @@
           <div id="costChart" class="bar-list" aria-live="polite"></div>
           <p class="muted small" style="margin-bottom:0;margin-top:16px;">El Agent Debate domina el costo porque usa <code>deepseek-reasoner</code>, hace 9 llamadas por partido y el pensamiento interno del modelo también consume tokens facturables aunque no se muestre al usuario. Narrator AI y los agentes de enriquecimiento usan <code>deepseek-chat-v3-flash</code>/<code>deepseek-chat</code>, mucho más económicos.</p>
         </div>
+        <div class="viz-shell">
+          <div class="kicker">Costo restante del torneo</div>
+          <h3>USD por modelo DeepSeek y fase</h3>
+          <p class="muted small">44 partidos de grupos + 32 de eliminatorias restantes, divididos por el modelo que realmente consume el gasto.</p>
+          <svg viewBox="0 0 480 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:6px auto 0" role="img" aria-label="Costo por modelo y fase">
+            <g font-family="Inter, sans-serif">
+              <text x="0" y="16" fill="#9fb0bd" font-size="11.5">Grupos · Flash/Chat</text>
+              <rect x="0" y="22" width="148" height="18" rx="4" fill="#38bdf8"/>
+              <text x="156" y="36" fill="#dff7e8" font-size="12" font-weight="700">USD 1.54</text>
+
+              <text x="0" y="58" fill="#9fb0bd" font-size="11.5">Grupos · Reasoner (Agent Debate)</text>
+              <rect x="0" y="64" width="380" height="18" rx="4" fill="#facc15"/>
+              <text x="388" y="78" fill="#dff7e8" font-size="12" font-weight="700">USD 3.96</text>
+
+              <text x="0" y="100" fill="#9fb0bd" font-size="11.5">Eliminatorias · Flash/Chat</text>
+              <rect x="0" y="106" width="108" height="18" rx="4" fill="#38bdf8"/>
+              <text x="116" y="120" fill="#dff7e8" font-size="12" font-weight="700">USD 1.12</text>
+
+              <text x="0" y="142" fill="#9fb0bd" font-size="11.5">Eliminatorias · Reasoner (Agent Debate)</text>
+              <rect x="0" y="148" width="276" height="18" rx="4" fill="#facc15"/>
+              <text x="284" y="162" fill="#dff7e8" font-size="12" font-weight="700">USD 2.88</text>
+
+              <rect x="0" y="182" width="12" height="12" rx="3" fill="#38bdf8"/>
+              <text x="18" y="192" fill="#9fb0bd" font-size="10.5">Flash/Chat (Narrator + agentes)</text>
+              <rect x="220" y="182" width="12" height="12" rx="3" fill="#facc15"/>
+              <text x="238" y="192" fill="#9fb0bd" font-size="10.5">Reasoner (Agent Debate)</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="viz-shell" style="margin-top:18px;">
+        <div class="kicker">Cómo se genera cada predicción</div>
+        <h3>Agent Debate: 3 agentes, 3 rondas, 1 consenso, 4 predicciones</h3>
+        <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:10px auto 0">
+          <defs>
+            <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb0bd" stroke-width="1.5" stroke-linecap="round"/>
+            </marker>
+          </defs>
+          <g font-family="Inter, sans-serif">
+            <rect x="20" y="10" width="210" height="50" rx="9" fill="rgba(56,189,248,0.12)" stroke="#38bdf8"/>
+            <text x="125" y="40" text-anchor="middle" fill="#eef4f7" font-size="12.5" font-weight="700">Group Analyst</text>
+
+            <rect x="265" y="10" width="210" height="50" rx="9" fill="rgba(56,189,248,0.12)" stroke="#38bdf8"/>
+            <text x="370" y="40" text-anchor="middle" fill="#eef4f7" font-size="12.5" font-weight="700">Tactical Scout</text>
+
+            <rect x="510" y="10" width="210" height="50" rx="9" fill="rgba(56,189,248,0.12)" stroke="#38bdf8"/>
+            <text x="615" y="40" text-anchor="middle" fill="#eef4f7" font-size="12.5" font-weight="700">Sentiment Reader</text>
+
+            <line x1="125" y1="60" x2="365" y2="108" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow2)"/>
+            <line x1="370" y1="60" x2="370" y2="108" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow2)"/>
+            <line x1="615" y1="60" x2="375" y2="108" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow2)"/>
+
+            <rect x="220" y="112" width="300" height="50" rx="9" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+            <text x="370" y="133" text-anchor="middle" fill="#eef4f7" font-size="12.5" font-weight="700">3 rondas de debate</text>
+            <text x="370" y="150" text-anchor="middle" fill="#9fb0bd" font-size="10.5">clasificación, táctica, momentum — sin ML</text>
+
+            <line x1="370" y1="162" x2="370" y2="200" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow2)"/>
+
+            <rect x="260" y="204" width="220" height="44" rx="9" fill="rgba(250,204,21,0.12)" stroke="#facc15"/>
+            <text x="370" y="231" text-anchor="middle" fill="#eef4f7" font-size="12.5" font-weight="700">Consensus</text>
+
+            <line x1="370" y1="248" x2="370" y2="262" stroke="#9fb0bd" stroke-width="1.4" marker-end="url(#arrow2)"/>
+
+            <rect x="120" y="266" width="500" height="34" rx="8" fill="rgba(255,255,255,0.045)" stroke="#9fb0bd" stroke-opacity="0.4"/>
+            <text x="370" y="288" text-anchor="middle" fill="#dff7e8" font-size="12" font-weight="700">4 predicciones evaluadas: 3 agentes + Consensus</text>
+          </g>
+        </svg>
+      </div>
+      <div class="grid-2" style="margin-top:18px;">
         <div class="viz-shell">
           <div class="kicker">Feedback real</div>
           <h3>4 predicciones por debate</h3>
