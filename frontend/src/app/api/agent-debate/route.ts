@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { readFile } from 'fs/promises';
+import path from 'path';
 
 export const runtime = 'nodejs';
 
@@ -16,16 +18,17 @@ export async function GET(request: Request) {
     }
 
     // Cargar desde la carpeta pública (exportado por export_frontend_data.py)
-    const response = await fetch(
-      new URL('../../public/data/agent_debate_results.json', import.meta.url)
-    );
+    // process.cwd() en runtime serverless apunta a la raíz del proyecto Next.js
+    const filePath = path.join(process.cwd(), 'public', 'data', 'agent_debate_results.json');
 
-    if (!response.ok) {
-      console.warn('Agent debate results file not found');
-      return NextResponse.json([], 200); // Retornar array vacío si no existe
+    let results: any;
+    try {
+      const fileContent = await readFile(filePath, 'utf-8');
+      results = JSON.parse(fileContent);
+    } catch (readErr) {
+      console.warn('Agent debate results file not found:', readErr);
+      return NextResponse.json([] as any[]); // Retornar array vacío si no existe
     }
-
-    const results = await response.json();
 
     // Filtrar solo resultados válidos (sin errores)
     const validResults = Array.isArray(results)
@@ -55,6 +58,6 @@ export async function GET(request: Request) {
     return NextResponse.json(formattedResults);
   } catch (error) {
     console.error('Error reading agent debate results:', error);
-    return NextResponse.json([], 200); // Retornar array vacío en caso de error
+    return NextResponse.json([] as any[]); // Retornar array vacío en caso de error
   }
 }
