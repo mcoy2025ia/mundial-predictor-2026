@@ -126,8 +126,9 @@ cd frontend && npx vercel --prod
 ### Agent Debate System (logic-based predictions, run after the cycle above)
 
 ```bash
-# Run the 3-agent debate for specific matches (HOME AWAY pairs), accumulates
-# into data/processed/agent_debate_results.json — idempotent, skips matches
+# Run the 3-agent debate for specific matches (HOME AWAY pairs)
+# Captures 4 predictions per match: Group Analyst, Tactical Scout, Sentiment Reader, + Consensus
+# Accumulates into data/processed/agent_debate_results.json — idempotent, skips matches
 # already debated unless --force
 python scripts/run_agent_debate.py "Mexico" "South Korea" "Scotland" "Morocco"
 
@@ -137,6 +138,12 @@ python scripts/run_agent_debate.py --force "Mexico" "South Korea"
 # Publish results to the frontend (also exports teams/predictions/etc as usual)
 python scripts/export_frontend_data.py
 ```
+
+**Output format:** Each match now includes 4 structured predictions:
+- `group_analyst`: Group classification context prediction
+- `tactical_scout`: Tactical/matchup prediction
+- `sentiment_reader`: Psychological/momentum-based prediction
+- `consensus`: Blended ranking from all 3 agentes
 
 Forward-only by design: the debate only runs for matches you explicitly pass on the CLI (typically upcoming ones). There is no retroactive backfill of already-played matches — accuracy tracking in the "Modelo" tab only reflects matches debated *and* played after the debate ran.
 
@@ -398,7 +405,11 @@ Separate from the ML ensemble and from the `src/agents/` Orchestrator above. Thr
 
 - **Agents**: Group Analyst (classification pressure, points, GD, what each team needs to advance), Tactical Scout (styles/tactics modulated by that pressure), Sentiment Reader (morale derived from the real MD1/MD2 result, e.g. "WIN vs South Africa (2-0)" reads differently than a 1-0 squeaker).
 - **3 rounds**: independent initial positions → each agent rebuts the other two → consensus round produces a ranked top-3 scoreline with classification impact ("¿quién avanza? ¿quién queda eliminado?").
-- **Structured output**: the consensus prompt requires a trailing `RESULTADO_JSON: {"home_goals": int, "away_goals": int, "probability": float}` line, parsed by `AgentDebateSystem.parse_top_prediction()` into `result["top_prediction"]` (with a derived `predicted_winner`). This is what lets the frontend compute hit/miss without parsing free-text reasoning. `max_tokens=3500` for the consensus call — deepseek-reasoner counts its thinking tokens against the budget, so a tight limit can truncate the response *before* it emits the JSON line, silently leaving `top_prediction: null`.
+- **Structured output (4 predictions per match)**: Each agent proposes an individual prediction, plus a consensus. The consensus prompt emits:
+  ```json
+  {"group_analyst": {...}, "tactical_scout": {...}, "sentiment_reader": {...}, "consensus": {...}}
+  ```
+  Parsed by `AgentDebateSystem.parse_predictions()` into all 4 predictions with agent attribution. The frontend evaluates **individual agent accuracy** vs. consensus. `max_tokens=4500` for the consensus call — deepseek-reasoner counts its thinking tokens against the budget.
 - **Real context, not generic**: `get_group_context()` computes actual standings from `data/external/wc2026_live_results.csv` (not from the frontend's pre-tournament Monte Carlo `group_standings.json`), matched to groups via `data/external/wc2026_fixture.json`. Status is granular, not just points: `"Need to WIN to secure 1st (pressure)"` vs `"Can secure 1st with DRAW (comfortable)"` vs `"Critical (0 pts, must win or OUT)"` — a team with 3 points after MD1 is not automatically "comfortable" if a draw in MD2 would let a rival overtake it on goal difference.
 - **Name normalization**: `TEAM_NAME_MAPPING` in `agent_debate.py` (`"USA" → "United States"`) bridges the fixture's naming with the live-results CSV's naming — both `get_group_context()` and the frontend's `lib/agentDebate.ts` `normalizeTeamName()` must stay in sync if more aliases are added.
 - **Running it**: `python scripts/run_agent_debate.py "Home" "Away" ...` — accumulates into `data/processed/agent_debate_results.json` (does not overwrite), is idempotent (skips a pair that already has a non-error result unless `--force`), and deduplicates by team pair on every run (guards against the Windows console crashing mid-print on emoji output, which previously produced a spurious duplicate error entry alongside the real result).
