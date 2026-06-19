@@ -263,11 +263,6 @@ export default function LiveTournament({
                           <p className="text-xs tabular-nums" style={{ color: "var(--text-muted)" }}>
                             {T.lt_forecast}: <span className="font-bold" style={{ color: "var(--text)" }}>{pickLabel}</span> · {fmtPct(v.prob)}
                           </p>
-
-                          {/* Agent Debate for this match */}
-                          <div className="mt-3 pt-3 border-t border-gray-300">
-                            <AgentDebatePanel homeTeam={m.team1} awayTeam={m.team2} variant="full" />
-                          </div>
                         </div>
                       );
                     })}
@@ -408,6 +403,11 @@ export default function LiveTournament({
                                   </span>
                                 </div>
                               )}
+
+                              {/* Agent Debate: consenso de 3 agentes para este partido */}
+                              <div className="pl-11 mt-1">
+                                <AgentDebatePanel homeTeam={m.team1} awayTeam={m.team2} variant="compact" />
+                              </div>
                             </div>
                           );
                         })}

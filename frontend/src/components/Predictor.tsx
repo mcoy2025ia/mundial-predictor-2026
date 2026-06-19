@@ -643,6 +643,9 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
         })()}
       </AnimatePresence>
 
+      {/* ── Agent Debate (consenso de 3 agentes) ── */}
+      {predicted && <AgentDebatePanel homeTeam={home} awayTeam={away} variant="compact" />}
+
       {/* ── H2H ── */}
       <AnimatePresence>
         {predicted && (
@@ -739,9 +742,6 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
           />
         )}
       </AnimatePresence>
-
-      {/* ── Agent Debate Panel ── */}
-      {predicted && <AgentDebatePanel homeTeam={home} awayTeam={away} variant="compact" />}
 
       {predicted && (
         <motion.p
