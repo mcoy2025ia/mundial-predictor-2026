@@ -123,6 +123,23 @@ python scripts/precompute_narrations.py
 cd frontend && npx vercel --prod
 ```
 
+### Agent Debate System (logic-based predictions, run after the cycle above)
+
+```bash
+# Run the 3-agent debate for specific matches (HOME AWAY pairs), accumulates
+# into data/processed/agent_debate_results.json — idempotent, skips matches
+# already debated unless --force
+python scripts/run_agent_debate.py "Mexico" "South Korea" "Scotland" "Morocco"
+
+# Re-run a specific match even if already debated (e.g. after a prompt change)
+python scripts/run_agent_debate.py --force "Mexico" "South Korea"
+
+# Publish results to the frontend (also exports teams/predictions/etc as usual)
+python scripts/export_frontend_data.py
+```
+
+Forward-only by design: the debate only runs for matches you explicitly pass on the CLI (typically upcoming ones). There is no retroactive backfill of already-played matches — accuracy tracking in the "Modelo" tab only reflects matches debated *and* played after the debate ran.
+
 ### Testing
 
 ```bash
@@ -327,9 +344,11 @@ python scripts/precompute_narrations.py --groups-only --days 1
 
 These previews use heavier DeepSeek reasoning than single-match blurbs because they must combine standings, prior results, local venue, model probabilities, and per-team pressure. They should never invent data: if a team has not played, the output must say there is no recent tournament evidence rather than classifying only by historical name.
 
+`deepseek-reasoner` counts its thinking tokens against `max_tokens`; with a tight budget the reasoning phase can consume the whole allowance and the final `content` comes back as an **empty string with a 200 OK** (no exception raised). `_call_group_narrative()` uses `max_tokens=3200` and falls back to `deepseek-chat` (no reasoning phase, so it can't truncate itself) if the reasoner response is empty. The skip-check before generating (`if key in group_narratives`) also treats an empty stored string as "not generated yet" rather than "already done" — otherwise a single bad run permanently blocks that group/date key from ever being retried.
+
 Frontend rendering:
 - `frontend/src/components/GroupNarrativeCard.tsx` renders the Markdown-like output as styled sections, tables, team blocks, and narrator phrases.
-- `frontend/src/components/LiveTournament.tsx` shows compact previews for the current day.
+- `frontend/src/components/LiveTournament.tsx` shows compact previews for the current day — `selectDailyGroupNarratives()` filters strictly to `entry.date === today` (not `>=`) with no result cap, so a group with no narrative generated for today doesn't get backfilled with a future-dated entry that dilutes/displaces the groups actually playing today.
 - `frontend/src/components/Groups.tsx` shows the full group narrative.
 
 Operational expectations:
@@ -373,6 +392,19 @@ The Orchestrator is the single API gateway. It routes each match query to at mos
 - LLM agents fail gracefully (delta=0) when neither key is set.
 - **Design specs**: see `agent/*.md` files (one per specialist) for role, input context, output schema, and cost profile. Consult when modifying or adding a new specialist.
 
+### Agent Debate System (src/agent_debate.py) — logic-based predictions, no ML
+
+Separate from the ML ensemble and from the `src/agents/` Orchestrator above. Three expert personas debate a match in three rounds using **deepseek-reasoner** (extended thinking), reasoning purely from tournament logic — group standings, classification pressure, and MD1/MD2 momentum — never from the trained model's probabilities. Built because the Poisson/XGB ensemble was underpredicting goal variability (see "Poisson Overdispersion" note below) and the user wanted an alternative grounded in pressure/narrative logic rather than statistics.
+
+- **Agents**: Group Analyst (classification pressure, points, GD, what each team needs to advance), Tactical Scout (styles/tactics modulated by that pressure), Sentiment Reader (morale derived from the real MD1/MD2 result, e.g. "WIN vs South Africa (2-0)" reads differently than a 1-0 squeaker).
+- **3 rounds**: independent initial positions → each agent rebuts the other two → consensus round produces a ranked top-3 scoreline with classification impact ("¿quién avanza? ¿quién queda eliminado?").
+- **Structured output**: the consensus prompt requires a trailing `RESULTADO_JSON: {"home_goals": int, "away_goals": int, "probability": float}` line, parsed by `AgentDebateSystem.parse_top_prediction()` into `result["top_prediction"]` (with a derived `predicted_winner`). This is what lets the frontend compute hit/miss without parsing free-text reasoning. `max_tokens=3500` for the consensus call — deepseek-reasoner counts its thinking tokens against the budget, so a tight limit can truncate the response *before* it emits the JSON line, silently leaving `top_prediction: null`.
+- **Real context, not generic**: `get_group_context()` computes actual standings from `data/external/wc2026_live_results.csv` (not from the frontend's pre-tournament Monte Carlo `group_standings.json`), matched to groups via `data/external/wc2026_fixture.json`. Status is granular, not just points: `"Need to WIN to secure 1st (pressure)"` vs `"Can secure 1st with DRAW (comfortable)"` vs `"Critical (0 pts, must win or OUT)"` — a team with 3 points after MD1 is not automatically "comfortable" if a draw in MD2 would let a rival overtake it on goal difference.
+- **Name normalization**: `TEAM_NAME_MAPPING` in `agent_debate.py` (`"USA" → "United States"`) bridges the fixture's naming with the live-results CSV's naming — both `get_group_context()` and the frontend's `lib/agentDebate.ts` `normalizeTeamName()` must stay in sync if more aliases are added.
+- **Running it**: `python scripts/run_agent_debate.py "Home" "Away" ...` — accumulates into `data/processed/agent_debate_results.json` (does not overwrite), is idempotent (skips a pair that already has a non-error result unless `--force`), and deduplicates by team pair on every run (guards against the Windows console crashing mid-print on emoji output, which previously produced a spurious duplicate error entry alongside the real result).
+- **Forward-only**: by design there is no retroactive backfill of already-played matches (cost/time tradeoff — 3 agents × 3 rounds × deepseek-reasoner per match). The "Modelo" tab's agent accuracy tables only reflect matches that were debated *before* being played.
+- **Frontend wiring**: `frontend/src/app/api/agent-debate/route.ts` serves the exported static JSON (`frontend/public/data/agent_debate_results.json`, 60s in-memory cache — never calls DeepSeek per request). `frontend/src/components/AgentDebatePanel.tsx` renders it: `variant="compact"` is a collapsed `<details>` (just a "Ver consenso completo" arrow) used in `Predictor.tsx` (right after "Marcador más probable" / altitude badge) and in `LiveTournament.tsx`'s "Próximos" tab (under each fixture's forecast badge); it returns `null` silently when no debate exists for that match, so the upcoming-matches list isn't cluttered with "not available" placeholders. `frontend/src/lib/agentDebate.ts` mirrors `lib/live.ts`'s `modelVerdict`/`orientScore` pattern (`agentVerdict`, `computeAgentResults`) so `ModelTab.tsx` can show the same per-matchday/per-group accuracy breakdown for agents side-by-side with the ML model's.
+
 ### Pre-computed Narrations (Zero LLM Cost Per User)
 `narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Group-stage dialect strategy is intentionally restrained: keep `DIALECTS_GROUP = ["bogotano"]` until the prediction/narration flow is stable; `DIALECTS_KNOCKOUT = ["bogotano","paisa","boyaco","costeño","en"]` activates automatically when `match.stage != "group"`.
 
@@ -400,6 +432,7 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── cost_guard.py       # CostGuard: reads budget.yaml, enforces LLM spend limits
 │   ├── simulator.py        # Tournament simulation (official 2026 bracket, host advantage)
 │   ├── app.py              # Streamlit demo interface
+│   ├── agent_debate.py     # Agent Debate System: 3-round logic-based debate (deepseek-reasoner)
 │   └── agents/
 │       ├── base.py         # MatchContext, AgentResult, BaseAgent ABC
 │       ├── orchestrator.py # Routing (max 2 agents), delta blending, OrchestratorOutput
@@ -429,6 +462,7 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── update_wc_results.py        # Fill NA scores in results.csv from football-data.org
 │   ├── predict_live.py             # Live predictions with per-match ELO cutoff (anti-leakage)
 │   ├── precompute_narrations.py    # Daily narrations × dialects → narrations.json (DeepSeek, 1 call/match)
+│   ├── run_agent_debate.py         # Runs Agent Debate System for given matches → agent_debate_results.json (accumulative, idempotent)
 │   ├── ablation_features.py        # Ablation test for candidate features vs base FEATURE_COLS
 │   ├── walk_forward_validation.py  # Walk-forward RPS vs ELO baseline
 │   ├── build_rag_index.py          # Generate embedding index for chat RAG
@@ -438,15 +472,18 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   │   ├── page.tsx        # Main tabbed interface; loads narrations.json and passes as prop
 │   │   ├── api/live/       # Proxy to football-data.org
 │   │   ├── api/chat/       # AI chat: tournament context injection + topic filter + cache + RAG + DeepSeek
-│   │   └── api/narrator/   # Serves narrations.json; LLM fallback for missing keys only
+│   │   ├── api/narrator/   # Serves narrations.json; LLM fallback for missing keys only
+│   │   └── api/agent-debate/ # Serves agent_debate_results.json (60s in-memory cache, no live LLM calls)
 │   ├── src/components/
-│   │   ├── Predictor.tsx   # Match predictor + UnifiedNarration (localLang + dialect selector)
-│   │   ├── ModelTab.tsx    # Live model accuracy: KPIs, per-matchday bars, per-group J1/J2/J3/FG, surprises
+│   │   ├── Predictor.tsx   # Match predictor + UnifiedNarration (localLang + dialect selector) + AgentDebatePanel
+│   │   ├── ModelTab.tsx    # Live model accuracy: KPIs, per-matchday bars, per-group J1/J2/J3/FG (ML + Agents side-by-side), surprises
+│   │   ├── AgentDebatePanel.tsx # Collapsed-by-default consensus panel (compact: Predictor/Próximos; full: detailed)
 │   │   ├── StatsTab.tsx    # WC 2026 stats dashboard: goals, top teams, top matches, score dist, upsets
 │   │   └── ...             # Groups, Simulator, Knockout, ChatTab, etc.
 │   ├── src/lib/
 │   │   ├── simulator.ts    # Client-side Monte Carlo
 │   │   ├── live.ts         # Live results fetching + orientScore + modelVerdict
+│   │   ├── agentDebate.ts  # Agent Debate verdict/accuracy helpers (mirrors live.ts for the ML model)
 │   │   └── i18n.tsx        # i18n context + regional dialects
 │   └── public/data/        # Exported JSONs: teams, predictions, narrations, group_matches, standings, etc.
 ├── tests/                  # 112+ tests: features, model, agents, cost guard, integrity, simulator, live prediction
@@ -484,6 +521,10 @@ python scripts/precompute_narrations.py
 
 # Optional: group previews only, after prompt/context changes or MD2 afternoon results
 python scripts/precompute_narrations.py --groups-only --days 1
+
+# Optional: agent debate for specific upcoming matches (forward-only, no backfill)
+python scripts/run_agent_debate.py "Mexico" "South Korea"
+python scripts/export_frontend_data.py
 
 # 4. Deploy
 cd frontend && npx vercel --prod

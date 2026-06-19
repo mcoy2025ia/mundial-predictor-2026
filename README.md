@@ -16,7 +16,8 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 - **En Vivo · Modelo vs Realidad** — marcadores del torneo, veredicto del modelo por partido terminado, posiciones por grupo y próximos partidos con pronóstico
 - **Predictor de partido** — probabilidades victoria/empate/derrota para cualquier cruce entre las 48 selecciones, con **Narrator AI** que genera una narración futbolera regional pre-computada una vez por día, sin costo por usuario
 - **Stats WC 2026** — dashboard en tiempo real: goles totales, promedio por partido, equipos más goleadores, partidos más goleadores, marcadores frecuentes y mayores sorpresas del torneo
-- **Rendimiento del modelo** — precisión por jornada interna (J1/J2/J3) con flecha de mejora, desglose por grupo con columna FG (total del grupo + conteo + delta vs J1), y top sorpresas donde el modelo erró
+- **Rendimiento del modelo** — precisión por jornada interna (J1/J2/J3) con flecha de mejora, desglose por grupo con columna FG (total del grupo + conteo + delta vs J1), y top sorpresas donde el modelo erró; incluye la misma vista para el **Agent Debate** lado a lado
+- **Agent Debate** — predicción alternativa sin ML: 3 agentes (analista de grupo, scout táctico, lector de sentimiento) debaten en 3 rondas con DeepSeek Reasoner razonando solo desde presión de clasificación, estado real del grupo y momentum de la jornada anterior; aparece en el Predictor y en "En Vivo → Próximos"
 - **Fase de grupos** — predicción de los 72 partidos, posiciones finales de cada grupo (5.000 simulaciones Monte Carlo) y previas narrativas por grupo con tabla, presión, localía, resultado anterior, dependencia y lectura por selección
 - **Proyecciones del torneo** — probabilidad de cada selección de llegar a cada ronda y de ser campeona; se actualiza con el ciclo diario (`predict_live.py --export`)
 - **Chat IA** — pregunta sobre partidos del día, tabla de grupos, predicciones; usa contexto real del torneo + DeepSeek, con filtro de temas, caché y límite por IP
@@ -117,6 +118,10 @@ python scripts/precompute_narrations.py
 # Solo recalcular previas de grupos (útil después de ajustar prompts o contexto J2/J3)
 python scripts/precompute_narrations.py --groups-only --days 1
 
+# Opcional: Agent Debate para partidos puntuales (no retroactivo, solo hacia adelante)
+python scripts/run_agent_debate.py "Mexico" "South Korea"
+python scripts/export_frontend_data.py
+
 # 4. Despliega
 cd frontend && npx vercel --prod
 ```
@@ -166,10 +171,12 @@ pytest          # 122+ tests
 
 ```
 ├── src/                  # Python: extractor, ELO/features, modelo XGBoost, Poisson, simulador
+│   └── agent_debate.py          # Agent Debate System: debate de 3 agentes en 3 rondas (DeepSeek Reasoner)
 ├── scripts/
 │   ├── live_update.py           # Ciclo completo: fetch → retrain → export (~90s)
 │   ├── predict_live.py          # Predicciones con agentes + anti-leakage por partido
 │   ├── precompute_narrations.py # Narraciones diarias + previas de grupo → narrations.json / group_narratives.json
+│   ├── run_agent_debate.py      # Corre el Agent Debate para partidos puntuales (acumulativo, idempotente)
 │   ├── run_pipeline.py          # Pipeline completo desde cero
 │   └── export_frontend_data.py  # Exporta todos los JSONs al frontend
 ├── frontend/             # Next.js 15 + React 19 + Tailwind + Recharts + Framer Motion

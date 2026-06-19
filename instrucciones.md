@@ -14,6 +14,12 @@ python scripts/predict_live.py --export
 # 3. Genera narraciones para los partidos de HOY
 python scripts/precompute_narrations.py
 
+# 3.5 Opcional: Agent Debate (predicción sin ML) para partidos puntuales que quieras
+#     analizar con los 3 agentes — no hay corrida masiva automática, se elige partido
+#     por partido. Acumulativo: no pisa debates previos, omite si ya existe salvo --force.
+python scripts/run_agent_debate.py "Mexico" "South Korea"
+python scripts/export_frontend_data.py
+
 # 4. Despliega a producción
 cd frontend && npx vercel --prod
 ```
@@ -129,7 +135,8 @@ La narración de MD3 ya incluye el análisis de clasificación completo (tabla a
 | **Total día fase grupos** | **~$0.015** |
 | **Total día MD2 con doble corrida** | **~$0.017** |
 | **Total día eliminatoria** | **~$0.025** |
+| Agent Debate (1 partido, 3 agentes × 3 rondas, deepseek-reasoner) | ~$0.08–0.10 |
 
-Con $5 en DeepSeek se cubre holgadamente todo el torneo.
+Con $5 en DeepSeek se cubre holgadamente todo el torneo. El Agent Debate es notablemente más caro por partido que el resto del ciclo (usa `deepseek-reasoner`, no `deepseek-chat`, y corre 9 llamadas por partido) — por eso no se corre masivamente para todos los partidos de una jornada, sino partido por partido cuando se quiere comparar contra el modelo ML.
 
 > **Nota:** Durante fase de grupos solo se genera dialecto **bogotano**. Al arrancar la fase eliminatoria (Round of 32, ~Jul 1), el script genera automáticamente los 5 dialectos sin cambiar nada.
