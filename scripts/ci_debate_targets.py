@@ -32,7 +32,8 @@ def played_pairs() -> set[tuple[str, str]]:
 def main() -> None:
     if not LIVE_PREDS.exists():
         return
-    preds = json.loads(LIVE_PREDS.read_text(encoding="utf-8"))
+    data = json.loads(LIVE_PREDS.read_text(encoding="utf-8"))
+    preds = data.get("predictions", []) if isinstance(data, dict) else data
     played = played_pairs()
     now = datetime.now(timezone.utc)
     cutoff = now + timedelta(hours=WINDOW_HOURS)
@@ -48,6 +49,8 @@ def main() -> None:
             kickoff = datetime.fromisoformat(str(m.get("kickoff", "")).replace("Z", "+00:00"))
         except ValueError:
             continue
+        if kickoff.tzinfo is None:
+            kickoff = kickoff.replace(tzinfo=timezone.utc)
         if now <= kickoff <= cutoff:
             teams.extend([home, away])
 
