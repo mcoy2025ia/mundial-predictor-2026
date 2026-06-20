@@ -8,7 +8,12 @@ name: WC 2026 Live Update
 # Regenerate this list with the date-extraction snippet documented in
 # docs/runbook.md if the fixture changes.
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      debate_window_hours:
+        description: "Horas hacia adelante para buscar partidos a debatir (default 36). Bajalo a 1-2 para probar con un solo partido."
+        required: false
+        default: "36"
   schedule:
     - cron: "30 22 11 6 *"
     - cron: "30 5 12 6 *"
@@ -116,6 +121,8 @@ jobs:
 
       - name: Determine upcoming matches for Agent Debate
         id: debate_targets
+        env:
+          DEBATE_WINDOW_HOURS: ${{ github.event.inputs.debate_window_hours || '36' }}
         run: |
           PAIRS=$(python scripts/ci_debate_targets.py)
           echo "pairs=$PAIRS" >> "$GITHUB_OUTPUT"

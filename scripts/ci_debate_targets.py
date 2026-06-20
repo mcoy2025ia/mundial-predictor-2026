@@ -4,13 +4,14 @@ Empty output means nothing to debate yet -- the caller should skip the step.
 """
 import csv
 import json
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 LIVE_PREDS = ROOT / "data" / "processed" / "live_predictions.json"
 LIVE_RESULTS = ROOT / "data" / "external" / "wc2026_live_results.csv"
-WINDOW_HOURS = 36
+WINDOW_HOURS = float(os.environ.get("DEBATE_WINDOW_HOURS", "36"))
 
 
 def played_pairs() -> set[tuple[str, str]]:
