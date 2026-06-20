@@ -26,6 +26,11 @@ data/raw/*.zip
 data/raw/*.parquet
 # Excepción: permitir archivos de muestra si se agregan explícitamente
 !data/raw/.gitkeep
+# Excepción: estos son inputs reales del pipeline, necesarios en CI (GitHub Actions)
+!data/raw/results.csv
+!data/raw/shootouts.csv
+!data/raw/former_names.csv
+!data/raw/goalscorers.csv
 
 # Modelos serializados (pueden ser grandes)
 models/*.pkl
