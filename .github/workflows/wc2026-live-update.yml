@@ -1,0 +1,159 @@
+name: WC 2026 Live Update
+
+# Cron triggers fire ~90 min after each group-stage match's expected final
+# whistle (kickoff + ~3h30m, covers normal time + stoppage + buffer). If a
+# match's result isn't in football-data.org's feed yet, live_update.py just
+# reports "no changes" and the run is a cheap no-op (no retrain, no LLM calls).
+# All times are UTC (GitHub Actions cron is always UTC).
+# Regenerate this list with the date-extraction snippet documented in
+# docs/runbook.md if the fixture changes.
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "30 22 11 6 *"
+    - cron: "30 5 12 6 *"
+    - cron: "30 22 12 6 *"
+    - cron: "30 4 13 6 *"
+    - cron: "30 22 13 6 *"
+    - cron: "30 1 14 6 *"
+    - cron: "30 4 14 6 *"
+    - cron: "30 7 14 6 *"
+    - cron: "30 20 14 6 *"
+    - cron: "30 23 14 6 *"
+    - cron: "30 2 15 6 *"
+    - cron: "30 5 15 6 *"
+    - cron: "30 19 15 6 *"
+    - cron: "30 22 15 6 *"
+    - cron: "30 1 16 6 *"
+    - cron: "30 4 16 6 *"
+    - cron: "30 22 16 6 *"
+    - cron: "30 1 17 6 *"
+    - cron: "30 4 17 6 *"
+    - cron: "30 7 17 6 *"
+    - cron: "30 20 17 6 *"
+    - cron: "30 23 17 6 *"
+    - cron: "30 2 18 6 *"
+    - cron: "30 5 18 6 *"
+    - cron: "30 19 18 6 *"
+    - cron: "30 22 18 6 *"
+    - cron: "30 1 19 6 *"
+    - cron: "30 4 19 6 *"
+    - cron: "30 22 19 6 *"
+    - cron: "30 1 20 6 *"
+    - cron: "0 4 20 6 *"
+    - cron: "30 6 20 6 *"
+    - cron: "30 20 20 6 *"
+    - cron: "30 23 20 6 *"
+    - cron: "30 3 21 6 *"
+    - cron: "30 7 21 6 *"
+    - cron: "30 19 21 6 *"
+    - cron: "30 22 21 6 *"
+    - cron: "30 1 22 6 *"
+    - cron: "30 4 22 6 *"
+    - cron: "30 20 22 6 *"
+    - cron: "30 0 23 6 *"
+    - cron: "30 3 23 6 *"
+    - cron: "30 6 23 6 *"
+    - cron: "30 20 23 6 *"
+    - cron: "30 23 23 6 *"
+    - cron: "30 2 24 6 *"
+    - cron: "30 5 24 6 *"
+    - cron: "30 22 24 6 *"
+    - cron: "30 1 25 6 *"
+    - cron: "30 4 25 6 *"
+    - cron: "30 23 25 6 *"
+    - cron: "30 2 26 6 *"
+    - cron: "30 5 26 6 *"
+    - cron: "30 22 26 6 *"
+    - cron: "30 3 27 6 *"
+    - cron: "30 6 27 6 *"
+    - cron: "30 0 28 6 *"
+    - cron: "0 3 28 6 *"
+    - cron: "30 5 28 6 *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wc2026-live-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Live update (fetch results, retrain if needed, export JSONs)
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/live_update.py
+
+      - name: Live predictions export (anti-leakage ELO cutoff)
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/predict_live.py --export
+
+      - name: Precompute narrations + group previews
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: python scripts/precompute_narrations.py
+
+      - name: Determine upcoming matches for Agent Debate
+        id: debate_targets
+        run: |
+          PAIRS=$(python scripts/ci_debate_targets.py)
+          echo "pairs=$PAIRS" >> "$GITHUB_OUTPUT"
+
+      - name: Run Agent Debate for upcoming matches (idempotent, skips already-debated pairs)
+        if: steps.debate_targets.outputs.pairs != ''
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python scripts/run_agent_debate.py ${{ steps.debate_targets.outputs.pairs }}
+
+      - name: Export frontend data (publish Agent Debate results)
+        if: steps.debate_targets.outputs.pairs != ''
+        run: python scripts/export_frontend_data.py
+
+      - name: Commit and push generated data
+        run: |
+          git config user.name "wc2026-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ frontend/public/data/ models/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit (no new results yet)."
+          else
+            git commit -m "data: automated live update ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+            git push
+          fi
+
+      - name: Set up Node
+        if: success()
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy frontend to Vercel
+        if: success()
+        working-directory: frontend
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx vercel --prod --token="$VERCEL_TOKEN" --yes
