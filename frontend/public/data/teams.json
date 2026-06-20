@@ -240,14 +240,14 @@
     "pen_total": 2
   },
   "Netherlands": {
-    "elo": 2139.2,
-    "rank": 8,
+    "elo": 2165.4,
+    "rank": 7,
     "flag": "🇳🇱",
     "group": "F",
     "confederation": "UEFA",
-    "goals_scored": 1.4,
+    "goals_scored": 2.0,
     "goals_conceded": 1.2,
-    "wc_matches": 56,
+    "wc_matches": 57,
     "pen_wins": 2,
     "pen_total": 10
   },
@@ -264,14 +264,14 @@
     "pen_total": 12
   },
   "Sweden": {
-    "elo": 1884.8,
-    "rank": 38,
+    "elo": 1858.6,
+    "rank": 40,
     "flag": "🇸🇪",
     "group": "F",
     "confederation": "UEFA",
-    "goals_scored": 2.8,
-    "goals_conceded": 1.8,
-    "wc_matches": 52,
+    "goals_scored": 2.4,
+    "goals_conceded": 2.6,
+    "wc_matches": 53,
     "pen_wins": 4,
     "pen_total": 6
   },
@@ -493,7 +493,7 @@
   },
   "Portugal": {
     "elo": 2144.4,
-    "rank": 7,
+    "rank": 8,
     "flag": "🇵🇹",
     "group": "K",
     "confederation": "UEFA",

@@ -1,7 +1,7 @@
 {
-  "total_matches": 996,
-  "total_goals": 2816,
-  "avg_goals_all": 2.827,
+  "total_matches": 997,
+  "total_goals": 2822,
+  "avg_goals_all": 2.83,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 96,
-      "matches": 32,
-      "avg": 3.0
+      "total": 102,
+      "matches": 33,
+      "avg": 3.091
     }
   ],
   "best_avg_edition": {
@@ -238,11 +238,11 @@
     {
       "team": "Netherlands",
       "flag": "🇳🇱",
-      "matches": 56,
-      "goals_for": 98,
-      "goals_against": 54,
-      "goal_diff": 44,
-      "avg": 1.75
+      "matches": 57,
+      "goals_for": 103,
+      "goals_against": 55,
+      "goal_diff": 48,
+      "avg": 1.81
     },
     {
       "team": "Uruguay",
@@ -265,11 +265,11 @@
     {
       "team": "Sweden",
       "flag": "🇸🇪",
-      "matches": 52,
-      "goals_for": 85,
-      "goals_against": 74,
-      "goal_diff": 11,
-      "avg": 1.63
+      "matches": 53,
+      "goals_for": 86,
+      "goals_against": 79,
+      "goal_diff": 7,
+      "avg": 1.62
     },
     {
       "team": "Russia",
