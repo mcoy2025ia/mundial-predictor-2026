@@ -8,11 +8,9 @@
       "team2": "South Africa",
       "team1_flag": "🇲🇽",
       "team2_flag": "🇿🇦",
-      "t1_win": 0.5845,
-      "draw": 0.2657,
-      "t2_win": 0.1498,
-      "score1": 2,
-      "score2": 0
+      "t1_win": 0.5854,
+      "draw": 0.2654,
+      "t2_win": 0.1493
     },
     {
       "date": "2026-06-11",
@@ -22,11 +20,9 @@
       "team2": "Czech Republic",
       "team1_flag": "🇰🇷",
       "team2_flag": "🇨🇿",
-      "t1_win": 0.3342,
-      "draw": 0.2885,
-      "t2_win": 0.3773,
-      "score1": 2,
-      "score2": 1
+      "t1_win": 0.3361,
+      "draw": 0.287,
+      "t2_win": 0.3769
     },
     {
       "date": "2026-06-18",
@@ -36,11 +32,9 @@
       "team2": "South Africa",
       "team1_flag": "🇨🇿",
       "team2_flag": "🇿🇦",
-      "t1_win": 0.5121,
-      "draw": 0.2942,
-      "t2_win": 0.1937,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.5113,
+      "draw": 0.2953,
+      "t2_win": 0.1934
     },
     {
       "date": "2026-06-18",
@@ -50,11 +44,9 @@
       "team2": "South Korea",
       "team1_flag": "🇲🇽",
       "team2_flag": "🇰🇷",
-      "t1_win": 0.4773,
-      "draw": 0.3112,
-      "t2_win": 0.2115,
-      "score1": 1,
-      "score2": 0
+      "t1_win": 0.4782,
+      "draw": 0.3113,
+      "t2_win": 0.2105
     },
     {
       "date": "2026-06-24",
@@ -64,8 +56,8 @@
       "team2": "Mexico",
       "team1_flag": "🇨🇿",
       "team2_flag": "🇲🇽",
-      "t1_win": 0.2813,
-      "draw": 0.2797,
+      "t1_win": 0.2803,
+      "draw": 0.2807,
       "t2_win": 0.439
     },
     {
@@ -76,9 +68,9 @@
       "team2": "South Korea",
       "team1_flag": "🇿🇦",
       "team2_flag": "🇰🇷",
-      "t1_win": 0.2254,
-      "draw": 0.32,
-      "t2_win": 0.4546
+      "t1_win": 0.2259,
+      "draw": 0.3228,
+      "t2_win": 0.4513
     }
   ],
   "B": [
@@ -90,11 +82,9 @@
       "team2": "Bosnia and Herzegovina",
       "team1_flag": "🇨🇦",
       "team2_flag": "🇧🇦",
-      "t1_win": 0.4847,
-      "draw": 0.2631,
-      "t2_win": 0.2522,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.4839,
+      "draw": 0.264,
+      "t2_win": 0.2521
     },
     {
       "date": "2026-06-13",
@@ -104,11 +94,9 @@
       "team2": "Switzerland",
       "team1_flag": "🇶🇦",
       "team2_flag": "🇨🇭",
-      "t1_win": 0.1006,
-      "draw": 0.1985,
-      "t2_win": 0.7009,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.1007,
+      "draw": 0.1996,
+      "t2_win": 0.6998
     },
     {
       "date": "2026-06-18",
@@ -118,11 +106,9 @@
       "team2": "Bosnia and Herzegovina",
       "team1_flag": "🇨🇭",
       "team2_flag": "🇧🇦",
-      "t1_win": 0.6053,
-      "draw": 0.2371,
-      "t2_win": 0.1576,
-      "score1": 4,
-      "score2": 1
+      "t1_win": 0.6035,
+      "draw": 0.2389,
+      "t2_win": 0.1576
     },
     {
       "date": "2026-06-18",
@@ -132,11 +118,9 @@
       "team2": "Qatar",
       "team1_flag": "🇨🇦",
       "team2_flag": "🇶🇦",
-      "t1_win": 0.576,
-      "draw": 0.253,
-      "t2_win": 0.1709,
-      "score1": 6,
-      "score2": 0
+      "t1_win": 0.5775,
+      "draw": 0.252,
+      "t2_win": 0.1705
     },
     {
       "date": "2026-06-24",
@@ -146,9 +130,9 @@
       "team2": "Canada",
       "team1_flag": "🇨🇭",
       "team2_flag": "🇨🇦",
-      "t1_win": 0.4646,
-      "draw": 0.2862,
-      "t2_win": 0.2492
+      "t1_win": 0.4606,
+      "draw": 0.2878,
+      "t2_win": 0.2516
     },
     {
       "date": "2026-06-24",
@@ -158,9 +142,9 @@
       "team2": "Qatar",
       "team1_flag": "🇧🇦",
       "team2_flag": "🇶🇦",
-      "t1_win": 0.4115,
-      "draw": 0.2988,
-      "t2_win": 0.2896
+      "t1_win": 0.4117,
+      "draw": 0.2984,
+      "t2_win": 0.2899
     }
   ],
   "C": [
@@ -172,11 +156,9 @@
       "team2": "Morocco",
       "team1_flag": "🇧🇷",
       "team2_flag": "🇲🇦",
-      "t1_win": 0.5252,
-      "draw": 0.289,
-      "t2_win": 0.1857,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.5263,
+      "draw": 0.2856,
+      "t2_win": 0.1881
     },
     {
       "date": "2026-06-13",
@@ -186,11 +168,9 @@
       "team2": "Scotland",
       "team1_flag": "🇭🇹",
       "team2_flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-      "t1_win": 0.1195,
-      "draw": 0.2058,
-      "t2_win": 0.6747,
-      "score1": 0,
-      "score2": 1
+      "t1_win": 0.1211,
+      "draw": 0.2088,
+      "t2_win": 0.6701
     },
     {
       "date": "2026-06-19",
@@ -200,9 +180,9 @@
       "team2": "Morocco",
       "team1_flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
       "team2_flag": "🇲🇦",
-      "t1_win": 0.2794,
-      "draw": 0.3055,
-      "t2_win": 0.4151
+      "t1_win": 0.268,
+      "draw": 0.3042,
+      "t2_win": 0.4278
     },
     {
       "date": "2026-06-19",
@@ -212,9 +192,9 @@
       "team2": "Haiti",
       "team1_flag": "🇧🇷",
       "team2_flag": "🇭🇹",
-      "t1_win": 0.8546,
-      "draw": 0.101,
-      "t2_win": 0.0443
+      "t1_win": 0.8588,
+      "draw": 0.0988,
+      "t2_win": 0.0425
     },
     {
       "date": "2026-06-24",
@@ -224,9 +204,9 @@
       "team2": "Brazil",
       "team1_flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
       "team2_flag": "🇧🇷",
-      "t1_win": 0.1629,
-      "draw": 0.2384,
-      "t2_win": 0.5987
+      "t1_win": 0.1585,
+      "draw": 0.2334,
+      "t2_win": 0.6081
     },
     {
       "date": "2026-06-24",
@@ -236,9 +216,9 @@
       "team2": "Haiti",
       "team1_flag": "🇲🇦",
       "team2_flag": "🇭🇹",
-      "t1_win": 0.6668,
-      "draw": 0.2332,
-      "t2_win": 0.1
+      "t1_win": 0.6736,
+      "draw": 0.2315,
+      "t2_win": 0.0949
     }
   ],
   "D": [
@@ -250,11 +230,9 @@
       "team2": "Paraguay",
       "team1_flag": "🇺🇸",
       "team2_flag": "🇵🇾",
-      "t1_win": 0.3695,
-      "draw": 0.2906,
-      "t2_win": 0.3399,
-      "score1": 4,
-      "score2": 1
+      "t1_win": 0.3707,
+      "draw": 0.294,
+      "t2_win": 0.3353
     },
     {
       "date": "2026-06-13",
@@ -264,11 +242,9 @@
       "team2": "Turkey",
       "team1_flag": "🇦🇺",
       "team2_flag": "🇹🇷",
-      "t1_win": 0.3588,
-      "draw": 0.3135,
-      "t2_win": 0.3277,
-      "score1": 2,
-      "score2": 0
+      "t1_win": 0.3516,
+      "draw": 0.3145,
+      "t2_win": 0.3338
     },
     {
       "date": "2026-06-19",
@@ -278,9 +254,9 @@
       "team2": "Australia",
       "team1_flag": "🇺🇸",
       "team2_flag": "🇦🇺",
-      "t1_win": 0.3319,
-      "draw": 0.3086,
-      "t2_win": 0.3595
+      "t1_win": 0.3733,
+      "draw": 0.3179,
+      "t2_win": 0.3087
     },
     {
       "date": "2026-06-19",
@@ -290,9 +266,9 @@
       "team2": "Paraguay",
       "team1_flag": "🇹🇷",
       "team2_flag": "🇵🇾",
-      "t1_win": 0.354,
-      "draw": 0.2996,
-      "t2_win": 0.3463
+      "t1_win": 0.2987,
+      "draw": 0.3134,
+      "t2_win": 0.3879
     },
     {
       "date": "2026-06-25",
@@ -302,9 +278,9 @@
       "team2": "United States",
       "team1_flag": "🇹🇷",
       "team2_flag": "🇺🇸",
-      "t1_win": 0.3442,
-      "draw": 0.3099,
-      "t2_win": 0.3459
+      "t1_win": 0.3126,
+      "draw": 0.3071,
+      "t2_win": 0.3803
     },
     {
       "date": "2026-06-25",
@@ -314,9 +290,9 @@
       "team2": "Australia",
       "team1_flag": "🇵🇾",
       "team2_flag": "🇦🇺",
-      "t1_win": 0.3246,
-      "draw": 0.3006,
-      "t2_win": 0.3749
+      "t1_win": 0.3515,
+      "draw": 0.3127,
+      "t2_win": 0.3358
     }
   ],
   "E": [
@@ -328,11 +304,9 @@
       "team2": "Curacao",
       "team1_flag": "🇩🇪",
       "team2_flag": "🇨🇼",
-      "t1_win": 0.8958,
-      "draw": 0.0708,
-      "t2_win": 0.0333,
-      "score1": 7,
-      "score2": 1
+      "t1_win": 0.8966,
+      "draw": 0.0703,
+      "t2_win": 0.0331
     },
     {
       "date": "2026-06-14",
@@ -342,11 +316,9 @@
       "team2": "Ecuador",
       "team1_flag": "🇨🇮",
       "team2_flag": "🇪🇨",
-      "t1_win": 0.3176,
-      "draw": 0.3012,
-      "t2_win": 0.3811,
-      "score1": 1,
-      "score2": 0
+      "t1_win": 0.3185,
+      "draw": 0.2997,
+      "t2_win": 0.3818
     },
     {
       "date": "2026-06-20",
@@ -356,9 +328,9 @@
       "team2": "Ivory Coast",
       "team1_flag": "🇩🇪",
       "team2_flag": "🇨🇮",
-      "t1_win": 0.6181,
-      "draw": 0.2225,
-      "t2_win": 0.1594
+      "t1_win": 0.6185,
+      "draw": 0.2224,
+      "t2_win": 0.1591
     },
     {
       "date": "2026-06-20",
@@ -368,9 +340,9 @@
       "team2": "Curacao",
       "team1_flag": "🇪🇨",
       "team2_flag": "🇨🇼",
-      "t1_win": 0.7422,
-      "draw": 0.1739,
-      "t2_win": 0.0839
+      "t1_win": 0.7416,
+      "draw": 0.1742,
+      "t2_win": 0.0842
     },
     {
       "date": "2026-06-25",
@@ -380,9 +352,9 @@
       "team2": "Ivory Coast",
       "team1_flag": "🇨🇼",
       "team2_flag": "🇨🇮",
-      "t1_win": 0.0872,
-      "draw": 0.1714,
-      "t2_win": 0.7414
+      "t1_win": 0.0875,
+      "draw": 0.1717,
+      "t2_win": 0.7408
     },
     {
       "date": "2026-06-25",
@@ -393,8 +365,8 @@
       "team1_flag": "🇪🇨",
       "team2_flag": "🇩🇪",
       "t1_win": 0.1654,
-      "draw": 0.2097,
-      "t2_win": 0.6249
+      "draw": 0.2102,
+      "t2_win": 0.6244
     }
   ],
   "F": [
@@ -406,11 +378,9 @@
       "team2": "Japan",
       "team1_flag": "🇳🇱",
       "team2_flag": "🇯🇵",
-      "t1_win": 0.5564,
-      "draw": 0.257,
-      "t2_win": 0.1867,
-      "score1": 2,
-      "score2": 2
+      "t1_win": 0.5573,
+      "draw": 0.2559,
+      "t2_win": 0.1868
     },
     {
       "date": "2026-06-14",
@@ -420,11 +390,9 @@
       "team2": "Tunisia",
       "team1_flag": "🇸🇪",
       "team2_flag": "🇹🇳",
-      "t1_win": 0.5426,
-      "draw": 0.2664,
-      "t2_win": 0.191,
-      "score1": 5,
-      "score2": 1
+      "t1_win": 0.5434,
+      "draw": 0.2653,
+      "t2_win": 0.1913
     },
     {
       "date": "2026-06-20",
@@ -434,9 +402,9 @@
       "team2": "Sweden",
       "team1_flag": "🇳🇱",
       "team2_flag": "🇸🇪",
-      "t1_win": 0.5269,
-      "draw": 0.2578,
-      "t2_win": 0.2153
+      "t1_win": 0.5264,
+      "draw": 0.2584,
+      "t2_win": 0.2152
     },
     {
       "date": "2026-06-20",
@@ -446,9 +414,9 @@
       "team2": "Japan",
       "team1_flag": "🇹🇳",
       "team2_flag": "🇯🇵",
-      "t1_win": 0.2368,
-      "draw": 0.2763,
-      "t2_win": 0.487
+      "t1_win": 0.2372,
+      "draw": 0.2758,
+      "t2_win": 0.4869
     },
     {
       "date": "2026-06-25",
@@ -458,9 +426,9 @@
       "team2": "Sweden",
       "team1_flag": "🇯🇵",
       "team2_flag": "🇸🇪",
-      "t1_win": 0.3338,
-      "draw": 0.2581,
-      "t2_win": 0.408
+      "t1_win": 0.3349,
+      "draw": 0.2582,
+      "t2_win": 0.4069
     },
     {
       "date": "2026-06-25",
@@ -470,9 +438,9 @@
       "team2": "Netherlands",
       "team1_flag": "🇹🇳",
       "team2_flag": "🇳🇱",
-      "t1_win": 0.1156,
-      "draw": 0.2282,
-      "t2_win": 0.6561
+      "t1_win": 0.1159,
+      "draw": 0.2275,
+      "t2_win": 0.6566
     }
   ],
   "G": [
@@ -484,11 +452,9 @@
       "team2": "Egypt",
       "team1_flag": "🇧🇪",
       "team2_flag": "🇪🇬",
-      "t1_win": 0.5354,
-      "draw": 0.2663,
-      "t2_win": 0.1982,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.5364,
+      "draw": 0.2664,
+      "t2_win": 0.1972
     },
     {
       "date": "2026-06-15",
@@ -498,11 +464,9 @@
       "team2": "New Zealand",
       "team1_flag": "🇮🇷",
       "team2_flag": "🇳🇿",
-      "t1_win": 0.5863,
-      "draw": 0.2619,
-      "t2_win": 0.1517,
-      "score1": 2,
-      "score2": 2
+      "t1_win": 0.5855,
+      "draw": 0.2627,
+      "t2_win": 0.1518
     },
     {
       "date": "2026-06-21",
@@ -512,9 +476,9 @@
       "team2": "Iran",
       "team1_flag": "🇧🇪",
       "team2_flag": "🇮🇷",
-      "t1_win": 0.4785,
-      "draw": 0.2861,
-      "t2_win": 0.2354
+      "t1_win": 0.4774,
+      "draw": 0.2855,
+      "t2_win": 0.2371
     },
     {
       "date": "2026-06-21",
@@ -524,9 +488,9 @@
       "team2": "Egypt",
       "team1_flag": "🇳🇿",
       "team2_flag": "🇪🇬",
-      "t1_win": 0.1857,
-      "draw": 0.2782,
-      "t2_win": 0.5361
+      "t1_win": 0.1856,
+      "draw": 0.2767,
+      "t2_win": 0.5377
     },
     {
       "date": "2026-06-26",
@@ -536,9 +500,9 @@
       "team2": "Iran",
       "team1_flag": "🇪🇬",
       "team2_flag": "🇮🇷",
-      "t1_win": 0.2709,
-      "draw": 0.3325,
-      "t2_win": 0.3966
+      "t1_win": 0.2705,
+      "draw": 0.332,
+      "t2_win": 0.3975
     },
     {
       "date": "2026-06-26",
@@ -548,9 +512,9 @@
       "team2": "Belgium",
       "team1_flag": "🇳🇿",
       "team2_flag": "🇧🇪",
-      "t1_win": 0.0949,
-      "draw": 0.17,
-      "t2_win": 0.735
+      "t1_win": 0.0951,
+      "draw": 0.1704,
+      "t2_win": 0.7346
     }
   ],
   "H": [
@@ -562,11 +526,9 @@
       "team2": "Cape Verde",
       "team1_flag": "🇪🇸",
       "team2_flag": "🇨🇻",
-      "t1_win": 0.786,
-      "draw": 0.1653,
-      "t2_win": 0.0487,
-      "score1": 0,
-      "score2": 0
+      "t1_win": 0.7837,
+      "draw": 0.1667,
+      "t2_win": 0.0496
     },
     {
       "date": "2026-06-15",
@@ -576,11 +538,9 @@
       "team2": "Uruguay",
       "team1_flag": "🇸🇦",
       "team2_flag": "🇺🇾",
-      "t1_win": 0.1078,
-      "draw": 0.2297,
-      "t2_win": 0.6626,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.1077,
+      "draw": 0.2292,
+      "t2_win": 0.6631
     },
     {
       "date": "2026-06-21",
@@ -590,9 +550,9 @@
       "team2": "Saudi Arabia",
       "team1_flag": "🇪🇸",
       "team2_flag": "🇸🇦",
-      "t1_win": 0.7577,
+      "t1_win": 0.758,
       "draw": 0.1795,
-      "t2_win": 0.0628
+      "t2_win": 0.0625
     },
     {
       "date": "2026-06-21",
@@ -602,9 +562,9 @@
       "team2": "Cape Verde",
       "team1_flag": "🇺🇾",
       "team2_flag": "🇨🇻",
-      "t1_win": 0.7272,
-      "draw": 0.1972,
-      "t2_win": 0.0756
+      "t1_win": 0.7277,
+      "draw": 0.1968,
+      "t2_win": 0.0755
     },
     {
       "date": "2026-06-26",
@@ -614,9 +574,9 @@
       "team2": "Saudi Arabia",
       "team1_flag": "🇨🇻",
       "team2_flag": "🇸🇦",
-      "t1_win": 0.2328,
-      "draw": 0.3382,
-      "t2_win": 0.4289
+      "t1_win": 0.2346,
+      "draw": 0.3369,
+      "t2_win": 0.4285
     },
     {
       "date": "2026-06-26",
@@ -626,9 +586,9 @@
       "team2": "Spain",
       "team1_flag": "🇺🇾",
       "team2_flag": "🇪🇸",
-      "t1_win": 0.1819,
-      "draw": 0.2624,
-      "t2_win": 0.5557
+      "t1_win": 0.1822,
+      "draw": 0.2622,
+      "t2_win": 0.5555
     }
   ],
   "I": [
@@ -640,11 +600,9 @@
       "team2": "Senegal",
       "team1_flag": "🇫🇷",
       "team2_flag": "🇸🇳",
-      "t1_win": 0.5899,
-      "draw": 0.2566,
-      "t2_win": 0.1534,
-      "score1": 3,
-      "score2": 1
+      "t1_win": 0.5902,
+      "draw": 0.2567,
+      "t2_win": 0.153
     },
     {
       "date": "2026-06-16",
@@ -655,10 +613,8 @@
       "team1_flag": "🇮🇶",
       "team2_flag": "🇳🇴",
       "t1_win": 0.1612,
-      "draw": 0.2469,
-      "t2_win": 0.5919,
-      "score1": 1,
-      "score2": 4
+      "draw": 0.2474,
+      "t2_win": 0.5914
     },
     {
       "date": "2026-06-22",
@@ -668,8 +624,8 @@
       "team2": "Iraq",
       "team1_flag": "🇫🇷",
       "team2_flag": "🇮🇶",
-      "t1_win": 0.7253,
-      "draw": 0.1914,
+      "t1_win": 0.7245,
+      "draw": 0.1922,
       "t2_win": 0.0833
     },
     {
@@ -680,8 +636,8 @@
       "team2": "Senegal",
       "team1_flag": "🇳🇴",
       "team2_flag": "🇸🇳",
-      "t1_win": 0.357,
-      "draw": 0.3204,
+      "t1_win": 0.3569,
+      "draw": 0.3206,
       "t2_win": 0.3225
     },
     {
@@ -693,8 +649,8 @@
       "team1_flag": "🇳🇴",
       "team2_flag": "🇫🇷",
       "t1_win": 0.174,
-      "draw": 0.2366,
-      "t2_win": 0.5894
+      "draw": 0.2376,
+      "t2_win": 0.5884
     },
     {
       "date": "2026-06-26",
@@ -704,9 +660,9 @@
       "team2": "Iraq",
       "team1_flag": "🇸🇳",
       "team2_flag": "🇮🇶",
-      "t1_win": 0.522,
-      "draw": 0.3004,
-      "t2_win": 0.1777
+      "t1_win": 0.5217,
+      "draw": 0.3002,
+      "t2_win": 0.1781
     }
   ],
   "J": [
@@ -718,11 +674,9 @@
       "team2": "Algeria",
       "team1_flag": "🇦🇷",
       "team2_flag": "🇩🇿",
-      "t1_win": 0.6771,
-      "draw": 0.2109,
-      "t2_win": 0.112,
-      "score1": 3,
-      "score2": 0
+      "t1_win": 0.6781,
+      "draw": 0.211,
+      "t2_win": 0.1109
     },
     {
       "date": "2026-06-16",
@@ -732,11 +686,9 @@
       "team2": "Jordan",
       "team1_flag": "🇦🇹",
       "team2_flag": "🇯🇴",
-      "t1_win": 0.6506,
-      "draw": 0.217,
-      "t2_win": 0.1324,
-      "score1": 3,
-      "score2": 1
+      "t1_win": 0.6507,
+      "draw": 0.2173,
+      "t2_win": 0.132
     },
     {
       "date": "2026-06-22",
@@ -746,9 +698,9 @@
       "team2": "Austria",
       "team1_flag": "🇦🇷",
       "team2_flag": "🇦🇹",
-      "t1_win": 0.6039,
-      "draw": 0.2281,
-      "t2_win": 0.1681
+      "t1_win": 0.6034,
+      "draw": 0.2293,
+      "t2_win": 0.1674
     },
     {
       "date": "2026-06-22",
@@ -758,9 +710,9 @@
       "team2": "Algeria",
       "team1_flag": "🇯🇴",
       "team2_flag": "🇩🇿",
-      "t1_win": 0.1906,
-      "draw": 0.2876,
-      "t2_win": 0.5218
+      "t1_win": 0.191,
+      "draw": 0.2883,
+      "t2_win": 0.5207
     },
     {
       "date": "2026-06-27",
@@ -770,9 +722,9 @@
       "team2": "Austria",
       "team1_flag": "🇩🇿",
       "team2_flag": "🇦🇹",
-      "t1_win": 0.2471,
-      "draw": 0.2903,
-      "t2_win": 0.4626
+      "t1_win": 0.2461,
+      "draw": 0.2919,
+      "t2_win": 0.4621
     },
     {
       "date": "2026-06-27",
@@ -782,9 +734,9 @@
       "team2": "Argentina",
       "team1_flag": "🇯🇴",
       "team2_flag": "🇦🇷",
-      "t1_win": 0.0588,
-      "draw": 0.1549,
-      "t2_win": 0.7863
+      "t1_win": 0.0594,
+      "draw": 0.1562,
+      "t2_win": 0.7844
     }
   ],
   "K": [
@@ -796,11 +748,9 @@
       "team2": "DR Congo",
       "team1_flag": "🇵🇹",
       "team2_flag": "🇨🇩",
-      "t1_win": 0.6746,
-      "draw": 0.2166,
-      "t2_win": 0.1088,
-      "score1": 1,
-      "score2": 1
+      "t1_win": 0.6732,
+      "draw": 0.2162,
+      "t2_win": 0.1105
     },
     {
       "date": "2026-06-17",
@@ -810,11 +760,9 @@
       "team2": "Colombia",
       "team1_flag": "🇺🇿",
       "team2_flag": "🇨🇴",
-      "t1_win": 0.1448,
-      "draw": 0.2444,
-      "t2_win": 0.6108,
-      "score1": 1,
-      "score2": 3
+      "t1_win": 0.1439,
+      "draw": 0.2442,
+      "t2_win": 0.6118
     },
     {
       "date": "2026-06-23",
@@ -824,9 +772,9 @@
       "team2": "Uzbekistan",
       "team1_flag": "🇵🇹",
       "team2_flag": "🇺🇿",
-      "t1_win": 0.6816,
-      "draw": 0.2091,
-      "t2_win": 0.1093
+      "t1_win": 0.6813,
+      "draw": 0.209,
+      "t2_win": 0.1097
     },
     {
       "date": "2026-06-23",
@@ -836,9 +784,9 @@
       "team2": "DR Congo",
       "team1_flag": "🇨🇴",
       "team2_flag": "🇨🇩",
-      "t1_win": 0.6058,
-      "draw": 0.2498,
-      "t2_win": 0.1443
+      "t1_win": 0.6045,
+      "draw": 0.251,
+      "t2_win": 0.1445
     },
     {
       "date": "2026-06-27",
@@ -848,9 +796,9 @@
       "team2": "Portugal",
       "team1_flag": "🇨🇴",
       "team2_flag": "🇵🇹",
-      "t1_win": 0.303,
-      "draw": 0.321,
-      "t2_win": 0.376
+      "t1_win": 0.3057,
+      "draw": 0.3205,
+      "t2_win": 0.3738
     },
     {
       "date": "2026-06-27",
@@ -860,9 +808,9 @@
       "team2": "Uzbekistan",
       "team1_flag": "🇨🇩",
       "team2_flag": "🇺🇿",
-      "t1_win": 0.3326,
-      "draw": 0.3058,
-      "t2_win": 0.3616
+      "t1_win": 0.3319,
+      "draw": 0.3041,
+      "t2_win": 0.364
     }
   ],
   "L": [
@@ -874,11 +822,9 @@
       "team2": "Croatia",
       "team1_flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "team2_flag": "🇭🇷",
-      "t1_win": 0.5191,
-      "draw": 0.2808,
-      "t2_win": 0.2002,
-      "score1": 4,
-      "score2": 2
+      "t1_win": 0.5204,
+      "draw": 0.2802,
+      "t2_win": 0.1994
     },
     {
       "date": "2026-06-17",
@@ -888,11 +834,9 @@
       "team2": "Panama",
       "team1_flag": "🇬🇭",
       "team2_flag": "🇵🇦",
-      "t1_win": 0.3999,
-      "draw": 0.2917,
-      "t2_win": 0.3084,
-      "score1": 1,
-      "score2": 0
+      "t1_win": 0.3992,
+      "draw": 0.2916,
+      "t2_win": 0.3092
     },
     {
       "date": "2026-06-23",
@@ -902,9 +846,9 @@
       "team2": "Ghana",
       "team1_flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "team2_flag": "🇬🇭",
-      "t1_win": 0.7038,
-      "draw": 0.2052,
-      "t2_win": 0.0911
+      "t1_win": 0.7011,
+      "draw": 0.2072,
+      "t2_win": 0.0917
     },
     {
       "date": "2026-06-23",
@@ -914,9 +858,9 @@
       "team2": "Croatia",
       "team1_flag": "🇵🇦",
       "team2_flag": "🇭🇷",
-      "t1_win": 0.131,
-      "draw": 0.2186,
-      "t2_win": 0.6503
+      "t1_win": 0.1313,
+      "draw": 0.218,
+      "t2_win": 0.6507
     },
     {
       "date": "2026-06-27",
@@ -926,9 +870,9 @@
       "team2": "England",
       "team1_flag": "🇵🇦",
       "team2_flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "t1_win": 0.0669,
-      "draw": 0.1347,
-      "t2_win": 0.7984
+      "t1_win": 0.0664,
+      "draw": 0.1345,
+      "t2_win": 0.799
     },
     {
       "date": "2026-06-27",
@@ -938,9 +882,9 @@
       "team2": "Ghana",
       "team1_flag": "🇭🇷",
       "team2_flag": "🇬🇭",
-      "t1_win": 0.5947,
-      "draw": 0.2586,
-      "t2_win": 0.1466
+      "t1_win": 0.5933,
+      "draw": 0.2587,
+      "t2_win": 0.148
     }
   ]
 }
