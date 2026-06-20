@@ -101,12 +101,17 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      # --force is required (not just a preference): models/ is gitignored
+      # and regenerated locally over time, but each CI run starts from a
+      # clean checkout with no models/*.pkl at all. Without --force,
+      # live_update.py only retrains when new results are found, leaving
+      # predict_live.py with no model to load on a "nothing changed" run.
       - name: Live update (fetch results, retrain if needed, export JSONs)
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python scripts/live_update.py
+        run: python scripts/live_update.py --force
 
       - name: Live predictions export (anti-leakage ELO cutoff)
         env:

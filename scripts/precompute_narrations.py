@@ -769,6 +769,31 @@ def _sanitize_group_narrative(text: str) -> str:
     )
 
 
+def _signature(obj) -> str:
+    """Hash corto y estable de un objeto JSON-serializable."""
+    import hashlib
+    raw = json.dumps(obj, sort_keys=True, ensure_ascii=False, default=str)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def _match_signature(match: dict) -> str:
+    """Firma del contexto que determina la narración de un partido.
+
+    Si no cambia entre corridas del mismo día (mismas probabilidades, mismo
+    contexto de grupo y mismas notas de agentes), la narración ya generada en
+    la mañana sirve igual en la tarde: no se regenera (no gasta tokens).
+    Solo cambia cuando un resultado nuevo movió la tabla/presión de ese grupo.
+    """
+    return _signature({
+        "p_home": match.get("p_home"),
+        "p_draw": match.get("p_draw"),
+        "p_away": match.get("p_away"),
+        "group_context": match.get("group_context"),
+        "agent_notes": match.get("agent_notes"),
+        "model": match.get("model"),
+    })
+
+
 def main() -> None:
     _load_env()
     api_key = os.environ.get("DEEPSEEK_API_KEY", "")
@@ -857,7 +882,28 @@ def main() -> None:
             group_narratives = {}
     logger.info("%d previas de grupo pre-existentes en group_narratives.json", len(group_narratives))
 
-    # Forzar regeneración de partidos de HOY (contexto siempre fresco)
+    # Firmas de contexto de la última corrida (cache por contexto, interno).
+    # Permiten saber si una narración/previa ya generada hoy sigue vigente o
+    # si un resultado nuevo cambió la tabla/presión y hay que regenerarla.
+    sig_dir = ROOT / "data" / "processed"
+    narration_sig_path = sig_dir / "narrations_sig.json"
+    group_sig_path = sig_dir / "group_narratives_sig.json"
+    narration_sigs: dict[str, str] = {}
+    group_narrative_sigs: dict[str, str] = {}
+    if narration_sig_path.exists():
+        try:
+            narration_sigs = json.loads(narration_sig_path.read_text(encoding="utf-8"))
+        except Exception:
+            narration_sigs = {}
+    if group_sig_path.exists():
+        try:
+            group_narrative_sigs = json.loads(group_sig_path.read_text(encoding="utf-8"))
+        except Exception:
+            group_narrative_sigs = {}
+
+    # Regenerar SOLO los partidos de HOY cuyo contexto cambió desde la última
+    # corrida. Si el contexto es idéntico (mismo grupo no tuvo resultados nuevos),
+    # se conserva la narración ya generada y no se gasta ningún token.
     for m in ([] if groups_only else pending):
         kickoff_str = m.get("kickoff", "")
         try:
@@ -865,11 +911,13 @@ def main() -> None:
         except Exception:
             continue
         if today <= kickoff_date <= cutoff:
+            sig = _match_signature(m)
             is_group = m.get("stage", "group") == "group"
             dialects = DIALECTS_GROUP if is_group else DIALECTS_KNOCKOUT
             for lang in dialects:
                 key = f"{m['home_team']}|{m['away_team']}|{lang}"
-                narrations.pop(key, None)  # borra para que se regenere con contexto fresco
+                if narration_sigs.get(key) != sig:
+                    narrations.pop(key, None)  # contexto cambió → regenerar
 
     group_batches: dict[tuple[str, str], list[dict]] = {}
     for m in pending:
@@ -878,11 +926,9 @@ def main() -> None:
         if group_letter and jornada_date:
             group_batches.setdefault((group_letter, jornada_date), []).append(m)
 
-    # Refresh only the exact group/date previews that will be regenerated.
-    # Do not delete other future previews for the same group; UTC kickoff dates
-    # can differ from the Bogota jornada date used in existing keys.
-    for group_letter, jornada_date in group_batches:
-        group_narratives.pop(f"{group_letter}|{jornada_date}|bogotano", None)
+    # Las previas de grupo se deciden por firma de contexto dentro del loop de
+    # generación (más abajo): se regeneran solo si la tabla/partidos/perfiles del
+    # grupo cambiaron desde la última corrida. No se borran ciegamente.
 
     generated = 0
     skipped = 0
@@ -893,11 +939,13 @@ def main() -> None:
         dialects = DIALECTS_GROUP if is_group else DIALECTS_KNOCKOUT
         group_letter = _group_letter(match.get("group") or team_to_group.get(home, ""))
         standings = _compute_group_standings(live_results_path, team_to_group, group_letter)
+        match_sig = _match_signature(match)
         if standings:
             logger.info("Grupo %s: tabla con %d equipos con partidos jugados", group_letter, len(standings))
         for lang in dialects:
             key = f"{home}|{away}|{lang}"
             if key in narrations:
+                narration_sigs[key] = match_sig  # vigente: refresca la firma y conserva
                 skipped += 1
                 continue
             logger.info("Generando: %s vs %s [%s]", home, away, lang)
@@ -905,10 +953,15 @@ def main() -> None:
             try:
                 text = _call_deepseek(client, payload)
                 narrations[key] = text
+                narration_sigs[key] = match_sig
                 generated += 1
                 # Guardar incremental para no perder trabajo ante interrupciones
                 narrations_path.write_text(
                     json.dumps(narrations, ensure_ascii=False, indent=2),
+                    encoding="utf-8",
+                )
+                narration_sig_path.write_text(
+                    json.dumps(narration_sigs, ensure_ascii=False, indent=2),
                     encoding="utf-8",
                 )
                 time.sleep(0.5)  # evitar rate limit en ráfaga
@@ -920,10 +973,6 @@ def main() -> None:
     group_skipped = 0
     for (group_letter, jornada_date), group_pending in sorted(group_batches.items()):
         key = f"{group_letter}|{jornada_date}|bogotano"
-        # Una entrada vacía (de un intento previo fallido) no cuenta como generada
-        if key in group_narratives and group_narratives[key].strip():
-            group_skipped += 1
-            continue
 
         standings = _compute_group_standings(live_results_path, team_to_group, group_letter)
         played_results = _load_group_results(live_results_path, team_to_group, group_letter)
@@ -935,14 +984,32 @@ def main() -> None:
             group_matches,
             played_results,
         )
+        group_sig = _signature(payload)
+
+        # Conservar si ya existe (no vacía) Y el contexto del grupo no cambió.
+        # Una entrada vacía (intento previo fallido) no cuenta como generada.
+        if (
+            key in group_narratives
+            and group_narratives[key].strip()
+            and group_narrative_sigs.get(key) == group_sig
+        ):
+            group_narrative_sigs[key] = group_sig  # vigente: refresca firma
+            group_skipped += 1
+            continue
+
         model = _model_for_group_narrative(payload)
         logger.info("Generando previa de grupo: %s %s [%s]", group_letter, jornada_date, model)
         try:
             text = _call_group_narrative(client, payload)
             group_narratives[key] = text
+            group_narrative_sigs[key] = group_sig
             group_generated += 1
             group_narratives_path.write_text(
                 json.dumps(group_narratives, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            group_sig_path.write_text(
+                json.dumps(group_narrative_sigs, ensure_ascii=False, indent=2),
                 encoding="utf-8",
             )
             time.sleep(0.5)

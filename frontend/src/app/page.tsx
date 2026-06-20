@@ -9,7 +9,7 @@ import type {
 import { LangContext, UI, type Lang } from "@/lib/i18n";
 import {
   buildFixedResults, buildLiveStats, buildScoreMap, buildVerdicts,
-  fetchLiveMatches, type LiveStats,
+  fetchLiveStatus, type LiveStats, type LiveSource, type FetchFailure, type FetchFailureReason,
 } from "@/lib/live";
 import Predictor      from "@/components/Predictor";
 import SimulatorTab   from "@/components/Simulator";
@@ -110,18 +110,69 @@ export default function Home() {
   const [groupMatches,   setGroupMatches]   = useState<Record<string, GroupMatch[]> | null>(null);
   const [groupStandings, setGroupStandings] = useState<Record<string, GroupStandingEntry[]> | null>(null);
   const [liveMatches,    setLiveMatches]    = useState<LiveMatch[]>([]);
+  const [liveSource,     setLiveSource]     = useState<LiveSource>("api");
+  const [liveEverLoaded, setLiveEverLoaded] = useState(false);
+  const [liveLastFailure,setLiveLastFailure]= useState<FetchFailure | undefined>(undefined);
   const [qatar,          setQatar]          = useState<QatarBacktest | null>(null);
   const [narrations,     setNarrations]     = useState<Record<string, string>>({});
   const [groupNarratives,setGroupNarratives]= useState<Record<string, string>>({});
   const [agentNotes,     setAgentNotes]     = useState<Record<string, string>>({});
   const [loading,        setLoading]        = useState(true);
 
-  /* Resultados reales del torneo (openfootball) — no bloquea la carga inicial.
-     Se refresca cada 5 min para captar partidos que terminan con la pestaña abierta. */
+  /* Resultados reales del torneo — no bloquea la carga inicial.
+     Polling adaptativo:
+       - éxito (api):        refresco normal cada 90s (tablas/marcadores al día durante partidos en vivo)
+       - respaldo (openfootball): reintenta la primaria cada 90s (aviso suave)
+       - fallo total (none): backoff 30s → 4 min, conserva los últimos datos buenos
+     Se pausa cuando la pestaña está oculta y se reanuda (con lectura inmediata) al volver. */
   useEffect(() => {
-    fetchLiveMatches().then(setLiveMatches);
-    const id = setInterval(() => fetchLiveMatches().then(setLiveMatches), 5 * 60_000);
-    return () => clearInterval(id);
+    const OK_INTERVAL    = 90_000;
+    const DEGRADED_RETRY = 90_000;
+    const RETRY_BASE     = 30_000;
+    const RETRY_MAX      = 4 * 60_000;
+
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let failCount = 0;
+
+    function schedule(delay: number) {
+      if (timer) clearTimeout(timer);
+      if (typeof document !== "undefined" && document.hidden) return; // reanuda en visibilitychange
+      timer = setTimeout(tick, delay);
+    }
+
+    async function tick() {
+      const { matches, source, lastFailure } = await fetchLiveStatus();
+      if (cancelled) return;
+      setLiveSource(source);
+      setLiveLastFailure(lastFailure);
+      if (source === "none") {
+        failCount += 1; // conservamos los últimos datos buenos, no pisamos con []
+        schedule(Math.min(RETRY_BASE * 2 ** (failCount - 1), RETRY_MAX));
+      } else {
+        failCount = 0;
+        setLiveMatches(matches);
+        setLiveEverLoaded(true);
+        schedule(source === "openfootball" ? DEGRADED_RETRY : OK_INTERVAL);
+      }
+    }
+
+    function onVisibility() {
+      if (cancelled) return;
+      if (document.hidden) {
+        if (timer) clearTimeout(timer);
+      } else {
+        tick(); // al volver al frente: refrescar de inmediato
+      }
+    }
+
+    tick();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
 
   const fixedResults = useMemo(() => buildFixedResults(liveMatches), [liveMatches]);
@@ -271,6 +322,10 @@ export default function Home() {
             </div>
           </div>
         </nav>
+
+        {/* ══ AVISO FUENTE EN VIVO ══════════════════════════════
+            Solo se muestra cuando la fuente primaria no respondió. */}
+        <LiveSourceBanner source={liveSource} hasData={liveEverLoaded} lastFailure={liveLastFailure} />
 
         {/* ══ HERO ══════════════════════════════════════════════ */}
         <header className="hero-brand">
@@ -492,6 +547,54 @@ export default function Home() {
         </footer>
       </div>
     </LangContext.Provider>
+  );
+}
+
+/* ── Aviso de fuente en vivo ──
+   Banner discreto que confirma cuándo la fuente primaria de resultados no
+   responde. "openfootball" = degradado (usando respaldo); "none" = sin datos,
+   reintentando solo. Con "api" no se renderiza nada. */
+const FAILURE_REASON_LABEL: Record<FetchFailureReason, string> = {
+  timeout:        "no respondió a tiempo",
+  http_error:     "respondió con error HTTP",
+  empty_data:     "respondió vacío",
+  parse_error:    "devolvió datos inválidos",
+  network_error:  "falló por red/conexión",
+};
+
+function LiveSourceBanner({
+  source, hasData, lastFailure,
+}: { source: LiveSource; hasData: boolean; lastFailure?: FetchFailure }) {
+  if (source === "api") return null;
+
+  const degraded = source === "openfootball";
+  const cause = lastFailure
+    ? ` (${FAILURE_REASON_LABEL[lastFailure.reason]}: ${lastFailure.detail})`
+    : "";
+  const text = degraded
+    ? `Fuente principal de resultados no disponible${cause} — mostrando datos de respaldo. Reintentando…`
+    : hasData
+      ? `No se pudo actualizar los resultados en vivo${cause} — mostrando los últimos datos disponibles. Reintentando…`
+      : `No se pudo conectar con los resultados en vivo${cause}. Reintentando automáticamente…`;
+
+  const bg     = degraded ? "rgba(201,152,31,0.12)" : "rgba(201,42,42,0.12)";
+  const border = degraded ? "rgba(201,152,31,0.45)" : "rgba(201,42,42,0.5)";
+  const dot    = degraded ? "#C9981F" : "#C92A2A";
+
+  return (
+    <div role="status" aria-live="polite" style={{
+      display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+      maxWidth: "80rem", margin: "0 auto", padding: "0.4rem 1rem",
+      background: bg, borderBottom: `1px solid ${border}`,
+      fontFamily: "var(--font-mono)", fontSize: "0.66rem", letterSpacing: "0.03em",
+      color: "var(--color-ink-primary)",
+    }}>
+      <span style={{
+        width: 7, height: 7, borderRadius: "50%", background: dot,
+        flexShrink: 0, animation: "live-pulse 1.6s ease-in-out infinite",
+      }} />
+      <span>{text}</span>
+    </div>
   );
 }
 

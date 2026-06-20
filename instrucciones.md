@@ -2,9 +2,32 @@
 
 ---
 
+> ## ⚠️ Regla de oro: corré SIEMPRE desde la raíz del proyecto
+>
+> Todos los `python scripts/...` se ejecutan desde la **raíz**
+> (`.../mundial-predictor-master`), **no** desde `frontend/`.
+>
+> El deploy lleva `cd frontend` adentro. Si lo corrés como `cd frontend && npx vercel --prod`,
+> tu shell **queda dentro de `frontend/`** y la próxima corrida falla con:
+> `can't open file '...\frontend\scripts\live_update.py': No such file or directory`.
+>
+> **Por eso el deploy va entre paréntesis** — `(cd frontend && npx vercel --prod)` — un
+> subshell que despliega y **te deja en la raíz**. Si igual quedaste adentro, volvé con `cd ..`.
+>
+> Antes de empezar, confirmá dónde estás:
+> ```bash
+> pwd        # debe terminar en .../mundial-predictor-master
+> ls scripts # debe listar live_update.py, predict_live.py, ...
+> ```
+
+---
+
 ## Ciclo base (todos los días con partidos)
 
 ```bash
+# 0. Asegurate de estar en la raíz (NO en frontend/)
+pwd        # → .../mundial-predictor-master
+
 # 1. Descarga resultados de ayer, recalcula ELO, reentrena modelo (~90s)
 python scripts/live_update.py
 
@@ -20,8 +43,8 @@ python scripts/precompute_narrations.py        # Default: --days 0
 python scripts/run_agent_debate.py "Mexico" "South Korea"
 python scripts/export_frontend_data.py
 
-# 4. Despliega a producción
-cd frontend && npx vercel --prod
+# 4. Despliega a producción — el subshell (...) deja tu shell en la raíz al terminar
+(cd frontend && npx vercel --prod)
 ```
 
 ---
@@ -33,20 +56,22 @@ En los días de MD2, cada día tiene **4 partidos de 2 grupos distintos**, divid
 **Protocolo: correr dos veces (solo HOY, sin futuros).**
 
 ```bash
-# --- MAÑANA (antes del primer partido del día) ---
+# --- MAÑANA (antes del primer partido del día) --- (desde la raíz)
 python scripts/live_update.py
 python scripts/predict_live.py --export
 python scripts/precompute_narrations.py        # Solo HOY (default: --days 0)
-cd frontend && npx vercel --prod
+(cd frontend && npx vercel --prod)             # subshell: vuelve a la raíz
 
 # --- TARDE (después de los 2 primeros partidos, antes de los 2 nocturnos) ---
 python scripts/live_update.py                  # registra resultados de tarde
-python scripts/predict_live.py --export        # recalcula ELO y presión
-python scripts/precompute_narrations.py        # Regenera HOY con presión actualizada
-cd frontend && npx vercel --prod               # ~30s, actualiza narrativa
+python scripts/predict_live.py --export        # recalcula ELO y presión (solo lo que cambió)
+python scripts/precompute_narrations.py        # Regenera SOLO el grupo afectado por la tarde
+(cd frontend && npx vercel --prod)             # ~30s, actualiza narrativa y vuelve a la raíz
 ```
 
-**Por qué importa:** si México pierde el partido de las 3 PM, el partido de las 8 PM se convierte en eliminatoria de facto. La narración de la mañana no lo sabe; la de la tarde sí. Ambas generan **solo para hoy**, sin consumir tokens en días futuros.
+**Por qué importa:** si México pierde el partido de las 3 PM, el partido de las 8 PM se convierte en eliminatoria de facto. La narración de la mañana no lo sabe; la de la tarde sí.
+
+**La segunda corrida no recalcula todo.** Tanto `predict_live.py --export` como `precompute_narrations.py` usan **cache por contexto**: solo recalculan los partidos/narraciones cuyo grupo cambió de tabla o presión por los resultados de la tarde. Lo generado en la mañana que sigue vigente (otros grupos, partidos sin cambios) **se conserva tal cual, sin gastar tokens**. Ambas corridas trabajan **solo sobre hoy**.
 
 ### Calendario MD2 (doble corrida)
 
@@ -66,11 +91,11 @@ cd frontend && npx vercel --prod               # ~30s, actualiza narrativa
 En la tercera jornada de cada grupo, **los dos partidos del grupo se juegan a la misma hora** (regla FIFA anti-amaño). No hay resultados de un partido que afecten al otro. Una sola corrida matutina es suficiente.
 
 ```bash
-# Solo una corrida, en la mañana antes del primer pitazo (HOY solamente)
+# Solo una corrida, en la mañana antes del primer pitazo (HOY solamente). Desde la raíz.
 python scripts/live_update.py
 python scripts/predict_live.py --export
 python scripts/precompute_narrations.py        # Default: --days 0 (solo HOY)
-cd frontend && npx vercel --prod
+(cd frontend && npx vercel --prod)             # subshell: vuelve a la raíz
 ```
 
 **Nota:** El default es ahora `--days 0` (solo hoy). No uses `--days 6` o valores altos — consume tokens innecesarios en días sin partidos del torneo.
@@ -97,12 +122,26 @@ La narración de MD3 ya incluye el análisis de clasificación completo (tabla a
 **`predict_live.py --export`**
 - Genera `frontend/public/data/live_predictions.json` con probabilidades ajustadas por agentes.
 - **Este paso es el que actualiza la pestaña Proyecciones** (por ronda y simulador). Sin él, las probabilidades de los partidos no jugados son las del último deploy.
+- **Cache por contexto:** solo vuelve a llamar a los agentes LLM de un partido si su
+  contexto de grupo cambió desde la última corrida. Si nada cambió, reusa el resultado
+  ya calculado (0 tokens). Por eso correrlo dos veces el mismo día solo recalcula los
+  grupos que jugaron. Usa `--force-agents` para ignorar el cache y recalcular todo.
 - Los agentes Travel y FIFARegs son determinísticos (siempre funcionan sin API key).
 - IntMatch usa DeepSeek — si falla por saldo, los otros dos agentes igual corren.
 
 **`precompute_narrations.py`**
-- Borra y regenera SIEMPRE las narraciones de los partidos de HOY (contexto fresco).
-- No toca partidos de días futuros — su contexto se genera cuando llegue ese día.
+- Genera narraciones y previas **solo para los partidos de HOY** (no toca días futuros).
+- **Cache por contexto:** regenera una narración/previa solo si el contexto de ese
+  grupo cambió desde la última corrida del día (tabla, puntos, presión, notas de
+  agentes). Si nada cambió para ese grupo, **conserva lo ya generado y no gasta
+  tokens**. Es lo que hace barata la segunda corrida de MD2 (ver más abajo).
+  - Ejemplo: si en la mañana generaste los 4 partidos de hoy y en la tarde solo
+    jugó un grupo, la corrida de la tarde regenera **solo ese grupo** (el que
+    cambió de tabla/presión); las narraciones de la mañana de los otros grupos se
+    quedan intactas.
+- La vigencia se guarda en `data/processed/narrations_sig.json` y
+  `group_narratives_sig.json` (internos, gitignored). Bórralos si querés forzar
+  una regeneración total.
 - A partir de MD2: incluye la tabla real del grupo (puntos, GD, GF) en el payload a DeepSeek.
 - Para MD1: la tabla está vacía (primer partido del grupo), comportamiento correcto.
 - Argumento `--days N` para ampliar la ventana más allá de hoy (default 0 días adicionales).
@@ -117,6 +156,7 @@ La narración de MD3 ya incluye el análisis de clasificación completo (tabla a
 
 | Problema | Solución |
 |---|---|
+| `can't open file '...\frontend\scripts\live_update.py': No such file or directory` | Tu shell quedó **dentro de `frontend/`** (por un `cd frontend` previo). Volvé a la raíz con `cd ..` y verificá con `pwd` (debe terminar en `mundial-predictor-master`). Para que no vuelva a pasar, desplegá con `(cd frontend && npx vercel --prod)` entre paréntesis. |
 | `live_update.py` → error football-data.org | Reintentar en 5 min. La API tiene límite de llamadas. |
 | `predict_live.py` → IntMatch error 402 | Saldo DeepSeek agotado. Recargar en platform.deepseek.com |
 | `precompute_narrations.py` → 0 partidos | Normal si no hay partidos hoy. No hace nada. |

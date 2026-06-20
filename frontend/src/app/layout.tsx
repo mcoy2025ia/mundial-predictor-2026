@@ -7,9 +7,24 @@ export const metadata: Metadata = {
   description:
     "Predictor de resultados del Mundial FIFA 2026 usando XGBoost calibrado, ratings ELO y simulación Monte Carlo.",
   openGraph: {
-    title: "Mundial 2026 Predictor",
-    description: "Predice partidos, simula el torneo y explora estadísticas históricas.",
+    title: "⚽ Mundial Predictor 2026",
+    description: "Predicciones en vivo • Análisis IA • Simulaciones del torneo FIFA 2026.",
     type: "website",
+    url: "https://mundial-predictor.vercel.app",
+    images: [
+      {
+        url: "https://mundial-predictor.vercel.app/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Mundial Predictor 2026 - XGBoost + ELO + Monte Carlo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "⚽ Mundial Predictor 2026",
+    description: "Predicciones en vivo • Análisis IA • Simulaciones del torneo FIFA 2026.",
+    images: ["https://mundial-predictor.vercel.app/api/og"],
   },
 };
 

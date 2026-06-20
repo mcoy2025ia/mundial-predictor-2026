@@ -48,57 +48,173 @@ interface ApiMatch {
   status?: string;
 }
 
+/** Causa identificada de un fetch fallido, para el log de errores y el aviso en UI. */
+export type FetchFailureReason =
+  | "timeout"
+  | "http_error"
+  | "empty_data"
+  | "parse_error"
+  | "network_error";
+
+export interface FetchFailure {
+  reason: FetchFailureReason;
+  detail: string;
+}
+
+function classifyError(err: unknown): FetchFailure {
+  if (err instanceof DOMException && err.name === "TimeoutError") {
+    return { reason: "timeout", detail: "La fuente no respondió en 8s" };
+  }
+  if (err instanceof SyntaxError) {
+    return { reason: "parse_error", detail: `JSON inválido: ${err.message}` };
+  }
+  if (err instanceof TypeError) {
+    return { reason: "network_error", detail: err.message || "Fallo de red (sin conexión o CORS)" };
+  }
+  return { reason: "network_error", detail: err instanceof Error ? err.message : String(err) };
+}
+
 /** Fuente primaria: football-data.org vía nuestro route handler. */
-async function fetchFromApi(): Promise<LiveMatch[] | null> {
+async function fetchFromApi(): Promise<{ matches: LiveMatch[] | null; failure?: FetchFailure }> {
   try {
     const res = await fetch(API_URL, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      return { matches: null, failure: { reason: "http_error", detail: `/api/live respondió ${res.status} ${res.statusText}` } };
+    }
     const data = await res.json();
     const raw: ApiMatch[] = data?.matches ?? [];
-    if (raw.length === 0) return null;
-    return raw.map((m) => ({
-      team1: normalizeName(m.team1),
-      team2: normalizeName(m.team2),
-      score1: typeof m.score1 === "number" ? m.score1 : null,
-      score2: typeof m.score2 === "number" ? m.score2 : null,
-      group: m.group,
-      round: m.round,
-      // día calendario del usuario: "partidos de hoy" según su zona horaria
-      date: m.utcDate ? new Date(m.utcDate).toLocaleDateString("en-CA") : undefined,
-      status: m.status,
-      utc: m.utcDate ?? undefined,
-    }));
-  } catch {
-    return null;
+    if (raw.length === 0) {
+      return { matches: null, failure: { reason: "empty_data", detail: "/api/live respondió 200 pero sin partidos (token vencido o sin fixtures hoy)" } };
+    }
+    return {
+      matches: raw.map((m) => ({
+        team1: normalizeName(m.team1),
+        team2: normalizeName(m.team2),
+        score1: typeof m.score1 === "number" ? m.score1 : null,
+        score2: typeof m.score2 === "number" ? m.score2 : null,
+        group: m.group,
+        round: m.round,
+        // día calendario del usuario: "partidos de hoy" según su zona horaria
+        date: m.utcDate ? new Date(m.utcDate).toLocaleDateString("en-CA") : undefined,
+        status: m.status,
+        utc: m.utcDate ?? undefined,
+      })),
+    };
+  } catch (err) {
+    return { matches: null, failure: classifyError(err) };
   }
 }
 
-/** Fallback: dataset de openfootball en GitHub. */
-async function fetchFromOpenfootball(): Promise<LiveMatch[]> {
+/** Fallback: dataset de openfootball en GitHub. Devuelve null si no se pudo consumir. */
+async function fetchFromOpenfootball(): Promise<{ matches: LiveMatch[] | null; failure?: FetchFailure }> {
   try {
     const res = await fetch(OPENFOOTBALL_URL, { signal: AbortSignal.timeout(8000) });
-    if (!res.ok) return [];
+    if (!res.ok) {
+      return { matches: null, failure: { reason: "http_error", detail: `openfootball respondió ${res.status} ${res.statusText}` } };
+    }
     const data = await res.json();
     const matches: unknown[] = data?.matches ?? [];
-    return matches.map((m) => {
-      const match = m as Record<string, unknown>;
-      return {
-        team1: normalizeName(match.team1),
-        team2: normalizeName(match.team2),
-        score1: typeof match.score1 === "number" ? match.score1 : null,
-        score2: typeof match.score2 === "number" ? match.score2 : null,
-        group: typeof match.group === "string" ? match.group : undefined,
-        round: typeof match.round === "string" ? match.round : undefined,
-        date: typeof match.date === "string" ? match.date : undefined,
-      };
-    });
+    if (matches.length === 0) {
+      return { matches: null, failure: { reason: "empty_data", detail: "openfootball respondió 200 pero sin partidos" } };
+    }
+    return {
+      matches: matches.map((m) => {
+        const match = m as Record<string, unknown>;
+        return {
+          team1: normalizeName(match.team1),
+          team2: normalizeName(match.team2),
+          score1: typeof match.score1 === "number" ? match.score1 : null,
+          score2: typeof match.score2 === "number" ? match.score2 : null,
+          group: typeof match.group === "string" ? match.group : undefined,
+          round: typeof match.round === "string" ? match.round : undefined,
+          date: typeof match.date === "string" ? match.date : undefined,
+        };
+      }),
+    };
+  } catch (err) {
+    return { matches: null, failure: classifyError(err) };
+  }
+}
+
+/* ── Log de errores de fetch en vivo (persistido en localStorage, máx 30 entradas) ──
+   Cada falla queda identificada con causa (reason) + detalle + fuente + timestamp,
+   para diagnosticar por qué la tabla/marcadores no se actualizaron sin abrir la consola. */
+export interface LiveErrorLogEntry {
+  ts: string;
+  source: "api" | "openfootball";
+  reason: FetchFailureReason;
+  detail: string;
+}
+
+const ERROR_LOG_KEY = "wc26_live_error_log";
+const ERROR_LOG_MAX = 30;
+
+function logLiveError(entry: LiveErrorLogEntry) {
+  console.error(`[live] ${entry.source} falló (${entry.reason}): ${entry.detail}`);
+  if (typeof window === "undefined") return;
+  try {
+    const raw = window.localStorage.getItem(ERROR_LOG_KEY);
+    const log: LiveErrorLogEntry[] = raw ? JSON.parse(raw) : [];
+    log.push(entry);
+    while (log.length > ERROR_LOG_MAX) log.shift();
+    window.localStorage.setItem(ERROR_LOG_KEY, JSON.stringify(log));
+  } catch {
+    // localStorage no disponible (modo privado, cuota llena, etc.) — el console.error ya quedó.
+  }
+}
+
+/** Lee el log de errores guardado (más reciente al final). */
+export function getLiveErrorLog(): LiveErrorLogEntry[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(ERROR_LOG_KEY);
+    return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
   }
 }
 
+export function clearLiveErrorLog() {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(ERROR_LOG_KEY);
+  } catch {
+    // no-op
+  }
+}
+
+/**
+ * Origen de los datos en vivo de la última lectura:
+ *  - "api":         fuente primaria (football-data.org) respondió bien.
+ *  - "openfootball": la primaria falló, se usó el respaldo (degradado).
+ *  - "none":        ninguna fuente se pudo consumir (error duro).
+ */
+export type LiveSource = "api" | "openfootball" | "none";
+
+export interface LiveFetchResult {
+  matches: LiveMatch[];
+  source: LiveSource;
+  /** Causa de la falla más reciente (solo si source !== "api"). Para mostrar/loguear el motivo exacto. */
+  lastFailure?: FetchFailure;
+}
+
+/** Lee resultados en vivo reportando de qué fuente vinieron (o si ninguna respondió, con la causa). */
+export async function fetchLiveStatus(): Promise<LiveFetchResult> {
+  const api = await fetchFromApi();
+  if (api.matches) return { matches: api.matches, source: "api" };
+  if (api.failure) logLiveError({ ts: new Date().toISOString(), source: "api", ...api.failure });
+
+  const off = await fetchFromOpenfootball();
+  if (off.matches && off.matches.length > 0) {
+    return { matches: off.matches, source: "openfootball", lastFailure: api.failure };
+  }
+  if (off.failure) logLiveError({ ts: new Date().toISOString(), source: "openfootball", ...off.failure });
+
+  return { matches: [], source: "none", lastFailure: off.failure ?? api.failure };
+}
+
 export async function fetchLiveMatches(): Promise<LiveMatch[]> {
-  return (await fetchFromApi()) ?? (await fetchFromOpenfootball());
+  return (await fetchLiveStatus()).matches;
 }
 
 export function pairKey(t1: string, t2: string): string {

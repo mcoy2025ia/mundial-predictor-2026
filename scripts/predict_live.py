@@ -12,6 +12,16 @@ Uso:
   python scripts/predict_live.py --export              # re-exporta JSONs del frontend
   python scripts/predict_live.py --add-result HOME AWAY HS AS DATE
                                                        # registra un resultado jugado
+  python scripts/predict_live.py --force-agents        # ignora cache, re-llama agentes
+                                                       # en TODOS los pendientes (caro)
+
+Cache de agentes (control de costo):
+  Los agentes LLM (Orchestrator, 4-5 llamadas/partido) solo se vuelven a invocar
+  para un partido si su contexto de grupo (puntos, partidos jugados, standings,
+  descanso) cambió respecto a la corrida anterior (live_predictions.json). Si
+  nada cambió para ese partido, se reusa el resultado de agentes ya guardado.
+  Esto evita recalcular toda una matchday completa cuando solo se jugó 1 partido
+  nuevo. Usar --force-agents para invalidar el cache manualmente.
 
 Anti-leakage garantizado:
   assert features_cutoff < match_kickoff
@@ -565,6 +575,45 @@ def get_group_context(
     }
 
 
+def _context_signature(group_ctx: dict) -> str:
+    """Hash de los campos de contexto que el Orchestrator realmente usa.
+
+    Si esta firma no cambió respecto a la corrida anterior, el partido no
+    tiene información nueva (standings, presión, descanso) y se puede
+    reusar el resultado de agentes ya calculado en vez de volver a llamar
+    al LLM.
+    """
+    import hashlib
+
+    keys = (
+        "group_points_home", "group_points_away",
+        "games_played_home", "games_played_away",
+        "days_rest_home", "days_rest_away",
+        "prev_city_home", "prev_city_away",
+        "group_standings", "simultaneous_group_matches",
+        "third_place_context",
+    )
+    raw = "|".join(str(group_ctx.get(k)) for k in keys)
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
+
+
+def _load_previous_predictions() -> dict[tuple[str, str], dict]:
+    """Carga live_predictions.json de la corrida anterior (si existe)."""
+    path = ROOT / "data" / "processed" / "live_predictions.json"
+    if not path.exists():
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        return {
+            (p["home_team"], p["away_team"]): p
+            for p in data.get("predictions", [])
+        }
+    except Exception as e:
+        logger.warning("No se pudo leer live_predictions.json previo: %s", e)
+        return {}
+
+
 def enrich_with_orchestrator(pred: dict, match: dict, group_ctx: dict,
                               elo_ratings: dict) -> dict:
     """Aplica el Orchestrator al prior del ensemble y devuelve probs ajustadas.
@@ -647,12 +696,13 @@ def run_live_predictions(
     predict_all: bool = False,
     export: bool = False,
     use_agents: bool = True,
+    force_agents: bool = False,
 ) -> list[dict]:
     _artifacts = [ROOT / "data" / "processed" / "live_predictions.json"]
     if export:
         _artifacts.append(ROOT / "frontend" / "public" / "data" / "live_predictions.json")
     with run_context("live_update", artifacts=_artifacts) as _ctx:
-        results = _run_live_predictions(predict_all, export, use_agents, _ctx)
+        results = _run_live_predictions(predict_all, export, use_agents, force_agents, _ctx)
     return results
 
 
@@ -660,6 +710,7 @@ def _run_live_predictions(
     predict_all: bool,
     export: bool,
     use_agents: bool,
+    force_agents: bool,
     _ctx: dict,
 ) -> list[dict]:
     now = datetime.now(timezone.utc).replace(tzinfo=None)
@@ -683,6 +734,9 @@ def _run_live_predictions(
     ].copy()
 
     group_standings = compute_group_standings(fixture, df_wc26_played)
+    previous = {} if force_agents else _load_previous_predictions()
+    n_agents_reused = 0
+    n_agents_called = 0
 
     results = []
     _cached_cutoff: Optional[datetime] = None
@@ -739,11 +793,26 @@ def _run_live_predictions(
                     "third_place_context": group_ctx.get("third_place_context"),
                 }
 
-        # Enriquecer con agentes si es fase de grupos
+        # Enriquecer con agentes si es fase de grupos — pero solo si el
+        # contexto de grupo cambió desde la corrida anterior (evita repetir
+        # ~5 llamadas LLM por partido cuando nada nuevo pasó para ese grupo)
         if use_agents and match["stage"] == "group" and _cached_ratings is not None:
             group_ctx = get_group_context(match, fixture, group_standings, df_wc26_played)
             if group_ctx:
-                pred = enrich_with_orchestrator(pred, match, group_ctx, _cached_ratings)
+                sig = _context_signature(group_ctx)
+                prev = previous.get((match["home_team"], match["away_team"]))
+                if prev and prev.get("_context_sig") == sig and "agents" in prev:
+                    pred["p_home"] = prev["p_home"]
+                    pred["p_draw"] = prev["p_draw"]
+                    pred["p_away"] = prev["p_away"]
+                    pred["agents"] = prev["agents"]
+                    pred["agent_notes"] = prev.get("agent_notes", {})
+                    pred["model"] = prev.get("model", pred["model"])
+                    n_agents_reused += 1
+                else:
+                    pred = enrich_with_orchestrator(pred, match, group_ctx, _cached_ratings)
+                    n_agents_called += 1
+                pred["_context_sig"] = sig
 
         results.append(pred)
 
@@ -754,12 +823,21 @@ def _run_live_predictions(
             "played" if is_played else "pending",
         )
 
+    if use_agents:
+        logger.info(
+            "Agentes: %d llamados (contexto nuevo) / %d reusados de la corrida anterior",
+            n_agents_called, n_agents_reused,
+        )
+
     _ctx["meta"] = {
         "n_live_results": len(df_live),
         "n_predictions": len(results),
         "predict_all": predict_all,
         "export": export,
         "use_agents": use_agents,
+        "force_agents": force_agents,
+        "n_agents_called": n_agents_called,
+        "n_agents_reused": n_agents_reused,
     }
 
     if not results:
@@ -783,8 +861,12 @@ def _run_live_predictions(
     if export:
         pred_frontend = OUT_DIR / "live_predictions.json"
         OUT_DIR.mkdir(parents=True, exist_ok=True)
+        # _context_sig es uso interno (cache de agentes); no exponerlo al frontend
+        results_public = [
+            {k: v for k, v in p.items() if not k.startswith("_")} for p in results
+        ]
         with open(pred_frontend, "w", encoding="utf-8") as f:
-            json.dump(results, f, ensure_ascii=False, indent=2)
+            json.dump(results_public, f, ensure_ascii=False, indent=2)
         logger.info("Exportado al frontend: %s", pred_frontend)
 
     return results
@@ -802,6 +884,9 @@ if __name__ == "__main__":
                         help="Copiar live_predictions.json al frontend/public/data/")
     parser.add_argument("--no-agents", action="store_true",
                         help="No llamar agentes LLM; exporta solo el Ensemble determinístico")
+    parser.add_argument("--force-agents", action="store_true",
+                        help="Ignorar el cache de contexto y volver a llamar a los agentes "
+                             "para TODOS los partidos pendientes (uso: cambios de prompt)")
     parser.add_argument(
         "--add-result", nargs=5,
         metavar=("HOME", "AWAY", "HS", "AS", "DATE"),
@@ -817,4 +902,5 @@ if __name__ == "__main__":
             predict_all=args.all,
             export=args.export,
             use_agents=not args.no_agents,
+            force_agents=args.force_agents,
         )

@@ -145,7 +145,7 @@ python scripts/precompute_narrations.py --days 1
 python scripts/precompute_narrations.py --groups-only
 ```
 
-Script always force-regenerates today's matches and group previews so standings, pressure, and context stay fresh. It only generates missing match keys for future days unless the key belongs to today's window.
+The script targets **today's matches and group previews only** (no future days). It uses **context-based caching**: a today narration/preview is regenerated only if that group's context changed since the last run of the day (standings, points, pressure, agent notes) — tracked by signature in `data/processed/narrations_sig.json` and `group_narratives_sig.json` (internal, gitignored). If nothing changed for a group, the morning's narration is kept as-is and no tokens are spent. This is what makes the MD2 afternoon re-run cheap: it only regenerates the group that actually played in the afternoon, not all of today's groups. Delete the `*_sig.json` files to force a full regeneration. This mirrors `predict_live.py`'s agent cache (same principle: re-call the LLM only when a match's group context actually changed; `--force-agents` to override).
 
 Group previews must analyze each team individually, not only the group as a whole. The payload includes standings, match schedule, local venue, live predictions, prior group results, and deterministic `team_profiles` with:
 - current points and goal difference
