@@ -13,7 +13,7 @@
   },
   "South Africa": {
     "elo": 1737.3,
-    "rank": 68,
+    "rank": 67,
     "flag": "🇿🇦",
     "group": "A",
     "confederation": "CAF",
@@ -209,9 +209,9 @@
     "flag": "🇪🇨",
     "group": "E",
     "confederation": "CONMEBOL",
-    "goals_scored": 1.4,
-    "goals_conceded": 0.8,
-    "wc_matches": 14,
+    "goals_scored": 1.2,
+    "goals_conceded": 0.6,
+    "wc_matches": 15,
     "pen_wins": 2,
     "pen_total": 4
   },
@@ -234,8 +234,8 @@
     "group": "E",
     "confederation": "CONCACAF",
     "goals_scored": 1.4,
-    "goals_conceded": 3.6,
-    "wc_matches": 1,
+    "goals_conceded": 3.2,
+    "wc_matches": 2,
     "pen_wins": 0,
     "pen_total": 2
   },
@@ -252,14 +252,14 @@
     "pen_total": 10
   },
   "Japan": {
-    "elo": 2100.3,
+    "elo": 2117.0,
     "rank": 11,
     "flag": "🇯🇵",
     "group": "F",
     "confederation": "AFC",
-    "goals_scored": 1.6,
+    "goals_scored": 1.8,
     "goals_conceded": 0.4,
-    "wc_matches": 26,
+    "wc_matches": 27,
     "pen_wins": 5,
     "pen_total": 12
   },
@@ -276,14 +276,14 @@
     "pen_total": 6
   },
   "Tunisia": {
-    "elo": 1753.9,
-    "rank": 64,
+    "elo": 1737.2,
+    "rank": 68,
     "flag": "🇹🇳",
     "group": "F",
     "confederation": "CAF",
-    "goals_scored": 0.4,
-    "goals_conceded": 2.2,
-    "wc_matches": 19,
+    "goals_scored": 0.2,
+    "goals_conceded": 3.0,
+    "wc_matches": 20,
     "pen_wins": 7,
     "pen_total": 13
   },
@@ -505,7 +505,7 @@
   },
   "DR Congo": {
     "elo": 1753.6,
-    "rank": 65,
+    "rank": 64,
     "flag": "🇨🇩",
     "group": "K",
     "confederation": "CAF",
@@ -553,7 +553,7 @@
   },
   "Ghana": {
     "elo": 1748.7,
-    "rank": 66,
+    "rank": 65,
     "flag": "🇬🇭",
     "group": "L",
     "confederation": "CAF",
