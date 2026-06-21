@@ -121,7 +121,7 @@
   },
   "Morocco": {
     "elo": 2124.7,
-    "rank": 9,
+    "rank": 10,
     "flag": "🇲🇦",
     "group": "C",
     "confederation": "CAF",
@@ -192,14 +192,14 @@
     "pen_total": 8
   },
   "Germany": {
-    "elo": 2123.7,
-    "rank": 10,
+    "elo": 2137.9,
+    "rank": 9,
     "flag": "🇩🇪",
     "group": "E",
     "confederation": "UEFA",
-    "goals_scored": 3.8,
-    "goals_conceded": 1.2,
-    "wc_matches": 113,
+    "goals_scored": 3.4,
+    "goals_conceded": 0.8,
+    "wc_matches": 114,
     "pen_wins": 6,
     "pen_total": 8
   },
@@ -216,14 +216,14 @@
     "pen_total": 4
   },
   "Ivory Coast": {
-    "elo": 1919.6,
-    "rank": 32,
+    "elo": 1905.4,
+    "rank": 34,
     "flag": "🇨🇮",
     "group": "E",
     "confederation": "CAF",
-    "goals_scored": 2.0,
-    "goals_conceded": 0.8,
-    "wc_matches": 10,
+    "goals_scored": 1.8,
+    "goals_conceded": 0.6,
+    "wc_matches": 11,
     "pen_wins": 10,
     "pen_total": 18
   },
@@ -565,7 +565,7 @@
   },
   "Panama": {
     "elo": 1908.6,
-    "rank": 34,
+    "rank": 33,
     "flag": "🇵🇦",
     "group": "L",
     "confederation": "CONCACAF",
