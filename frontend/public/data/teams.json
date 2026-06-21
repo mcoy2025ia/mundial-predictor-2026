@@ -336,14 +336,14 @@
     "pen_total": 4
   },
   "Spain": {
-    "elo": 2436.3,
+    "elo": 2438.7,
     "rank": 1,
     "flag": "🇪🇸",
     "group": "H",
     "confederation": "UEFA",
-    "goals_scored": 1.4,
+    "goals_scored": 1.6,
     "goals_conceded": 0.4,
-    "wc_matches": 68,
+    "wc_matches": 69,
     "pen_wins": 7,
     "pen_total": 14
   },
@@ -360,14 +360,14 @@
     "pen_total": 17
   },
   "Saudi Arabia": {
-    "elo": 1734.6,
-    "rank": 70,
+    "elo": 1732.2,
+    "rank": 71,
     "flag": "🇸🇦",
     "group": "H",
     "confederation": "AFC",
-    "goals_scored": 1.2,
-    "goals_conceded": 1.0,
-    "wc_matches": 20,
+    "goals_scored": 1.0,
+    "goals_conceded": 1.4,
+    "wc_matches": 21,
     "pen_wins": 7,
     "pen_total": 9
   },
