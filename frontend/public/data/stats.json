@@ -1,6 +1,6 @@
 {
-  "total_matches": 1007,
-  "total_goals": 2851,
+  "total_matches": 1008,
+  "total_goals": 2854,
   "avg_goals_all": 2.831,
   "n_editions": 23,
   "highest_scoring_match": {
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 131,
-      "matches": 43,
-      "avg": 3.047
+      "total": 134,
+      "matches": 44,
+      "avg": 3.045
     }
   ],
   "best_avg_edition": {

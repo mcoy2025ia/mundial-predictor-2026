@@ -444,14 +444,14 @@
     "pen_total": 23
   },
   "Algeria": {
-    "elo": 1958.7,
-    "rank": 29,
+    "elo": 1976.4,
+    "rank": 28,
     "flag": "🇩🇿",
     "group": "J",
     "confederation": "CAF",
-    "goals_scored": 2.4,
-    "goals_conceded": 0.6,
-    "wc_matches": 14,
+    "goals_scored": 1.4,
+    "goals_conceded": 0.8,
+    "wc_matches": 15,
     "pen_wins": 7,
     "pen_total": 15
   },
@@ -468,14 +468,14 @@
     "pen_total": 2
   },
   "Jordan": {
-    "elo": 1807.9,
-    "rank": 50,
+    "elo": 1790.1,
+    "rank": 52,
     "flag": "🇯🇴",
     "group": "J",
     "confederation": "AFC",
-    "goals_scored": 1.2,
+    "goals_scored": 1.0,
     "goals_conceded": 2.6,
-    "wc_matches": 1,
+    "wc_matches": 2,
     "pen_wins": 0,
     "pen_total": 3
   },
