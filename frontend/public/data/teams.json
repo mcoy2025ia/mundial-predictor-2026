@@ -241,7 +241,7 @@
   },
   "Netherlands": {
     "elo": 2165.4,
-    "rank": 7,
+    "rank": 8,
     "flag": "🇳🇱",
     "group": "F",
     "confederation": "UEFA",
@@ -492,14 +492,14 @@
     "pen_total": 12
   },
   "Portugal": {
-    "elo": 2144.4,
-    "rank": 8,
+    "elo": 2167.3,
+    "rank": 7,
     "flag": "🇵🇹",
     "group": "K",
     "confederation": "UEFA",
-    "goals_scored": 1.4,
+    "goals_scored": 2.4,
     "goals_conceded": 0.6,
-    "wc_matches": 36,
+    "wc_matches": 37,
     "pen_wins": 5,
     "pen_total": 8
   },
@@ -516,14 +516,14 @@
     "pen_total": 8
   },
   "Uzbekistan": {
-    "elo": 1839.9,
-    "rank": 44,
+    "elo": 1817.0,
+    "rank": 48,
     "flag": "🇺🇿",
     "group": "K",
     "confederation": "AFC",
-    "goals_scored": 1.0,
-    "goals_conceded": 1.6,
-    "wc_matches": 1,
+    "goals_scored": 0.4,
+    "goals_conceded": 2.4,
+    "wc_matches": 2,
     "pen_wins": 2,
     "pen_total": 5
   },

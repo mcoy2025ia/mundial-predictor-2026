@@ -1,7 +1,7 @@
 {
-  "total_matches": 1008,
-  "total_goals": 2854,
-  "avg_goals_all": 2.831,
+  "total_matches": 1009,
+  "total_goals": 2859,
+  "avg_goals_all": 2.833,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 134,
-      "matches": 44,
-      "avg": 3.045
+      "total": 139,
+      "matches": 45,
+      "avg": 3.089
     }
   ],
   "best_avg_edition": {
@@ -299,13 +299,13 @@
       "avg": 1.32
     },
     {
-      "team": "Mexico",
-      "flag": "🇲🇽",
-      "matches": 62,
-      "goals_for": 65,
-      "goals_against": 101,
-      "goal_diff": -36,
-      "avg": 1.05
+      "team": "Portugal",
+      "flag": "🇵🇹",
+      "matches": 37,
+      "goals_for": 67,
+      "goals_against": 42,
+      "goal_diff": 25,
+      "avg": 1.81
     }
   ],
   "top_upsets": [

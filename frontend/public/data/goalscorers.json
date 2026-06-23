@@ -271,45 +271,6 @@
   },
   {
     "rank": 6,
-    "scorer": "Kylian Mbappé",
-    "country": "France",
-    "flag": "🇫🇷",
-    "goals": 12,
-    "victims": [
-      {
-        "team": "Argentina",
-        "flag": "🇦🇷",
-        "goals": 5
-      },
-      {
-        "team": "Denmark",
-        "flag": "🇩🇰",
-        "goals": 2
-      },
-      {
-        "team": "Poland",
-        "flag": "🏳️",
-        "goals": 2
-      },
-      {
-        "team": "Australia",
-        "flag": "🇦🇺",
-        "goals": 1
-      },
-      {
-        "team": "Croatia",
-        "flag": "🇭🇷",
-        "goals": 1
-      },
-      {
-        "team": "Peru",
-        "flag": "🇵🇪",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 7,
     "scorer": "Pelé",
     "country": "Brazil",
     "flag": "🇧🇷",
@@ -358,36 +319,46 @@
     ]
   },
   {
-    "rank": 8,
-    "scorer": "Sándor Kocsis",
-    "country": "Hungary",
-    "flag": "🏳️",
-    "goals": 11,
+    "rank": 7,
+    "scorer": "Kylian Mbappé",
+    "country": "France",
+    "flag": "🇫🇷",
+    "goals": 12,
     "victims": [
       {
-        "team": "Germany",
-        "flag": "🇩🇪",
-        "goals": 4
+        "team": "Argentina",
+        "flag": "🇦🇷",
+        "goals": 5
       },
       {
-        "team": "South Korea",
-        "flag": "🇰🇷",
-        "goals": 3
-      },
-      {
-        "team": "Brazil",
-        "flag": "🇧🇷",
+        "team": "Denmark",
+        "flag": "🇩🇰",
         "goals": 2
       },
       {
-        "team": "Uruguay",
-        "flag": "🇺🇾",
+        "team": "Poland",
+        "flag": "🏳️",
         "goals": 2
+      },
+      {
+        "team": "Australia",
+        "flag": "🇦🇺",
+        "goals": 1
+      },
+      {
+        "team": "Croatia",
+        "flag": "🇭🇷",
+        "goals": 1
+      },
+      {
+        "team": "Peru",
+        "flag": "🇵🇪",
+        "goals": 1
       }
     ]
   },
   {
-    "rank": 9,
+    "rank": 8,
     "scorer": "Jürgen Klinsmann",
     "country": "Germany",
     "flag": "🇩🇪",
@@ -446,78 +417,112 @@
     ]
   },
   {
+    "rank": 9,
+    "scorer": "Sándor Kocsis",
+    "country": "Hungary",
+    "flag": "🏳️",
+    "goals": 11,
+    "victims": [
+      {
+        "team": "Germany",
+        "flag": "🇩🇪",
+        "goals": 4
+      },
+      {
+        "team": "South Korea",
+        "flag": "🇰🇷",
+        "goals": 3
+      },
+      {
+        "team": "Brazil",
+        "flag": "🇧🇷",
+        "goals": 2
+      },
+      {
+        "team": "Uruguay",
+        "flag": "🇺🇾",
+        "goals": 2
+      }
+    ]
+  },
+  {
     "rank": 10,
-    "scorer": "Gabriel Batistuta",
-    "country": "Argentina",
-    "flag": "🇦🇷",
+    "scorer": "Gary Lineker",
+    "country": "England",
+    "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "goals": 10,
     "victims": [
       {
-        "team": "Greece",
+        "team": "Poland",
         "flag": "🏳️",
         "goals": 3
       },
       {
-        "team": "Jamaica",
+        "team": "Cameroon",
+        "flag": "🇨🇲",
+        "goals": 2
+      },
+      {
+        "team": "Paraguay",
+        "flag": "🇵🇾",
+        "goals": 2
+      },
+      {
+        "team": "Argentina",
+        "flag": "🇦🇷",
+        "goals": 1
+      },
+      {
+        "team": "Germany",
+        "flag": "🇩🇪",
+        "goals": 1
+      },
+      {
+        "team": "Republic of Ireland",
         "flag": "🏳️",
-        "goals": 3
-      },
-      {
-        "team": "England",
-        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-        "goals": 1
-      },
-      {
-        "team": "Japan",
-        "flag": "🇯🇵",
-        "goals": 1
-      },
-      {
-        "team": "Nigeria",
-        "flag": "🇳🇬",
-        "goals": 1
-      },
-      {
-        "team": "Romania",
-        "flag": "🇷🇴",
         "goals": 1
       }
     ]
   },
   {
     "rank": 11,
-    "scorer": "Helmut Rahn",
-    "country": "Germany",
-    "flag": "🇩🇪",
+    "scorer": "Grzegorz Lato",
+    "country": "Poland",
+    "flag": "🏳️",
     "goals": 10,
     "victims": [
-      {
-        "team": "Hungary",
-        "flag": "🏳️",
-        "goals": 3
-      },
       {
         "team": "Argentina",
         "flag": "🇦🇷",
         "goals": 2
       },
       {
-        "team": "Yugoslavia",
-        "flag": "🏳️",
+        "team": "Brazil",
+        "flag": "🇧🇷",
         "goals": 2
       },
       {
-        "team": "Czechoslovakia",
-        "flag": "🏳️",
+        "team": "Haiti",
+        "flag": "🇭🇹",
+        "goals": 2
+      },
+      {
+        "team": "Peru",
+        "flag": "🇵🇪",
         "goals": 1
       },
       {
-        "team": "France",
-        "flag": "🇫🇷",
+        "team": "Sweden",
+        "flag": "🇸🇪",
         "goals": 1
       },
       {
-        "team": "Northern Ireland",
+        "team": "Tunisia",
+        "flag": "🇹🇳",
+        "goals": 1
+      },
+      {
+        "team": "Yugoslavia",
         "flag": "🏳️",
         "goals": 1
       }
@@ -564,38 +569,38 @@
   },
   {
     "rank": 13,
-    "scorer": "Gary Lineker",
-    "country": "England",
-    "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "scorer": "Helmut Rahn",
+    "country": "Germany",
+    "flag": "🇩🇪",
     "goals": 10,
     "victims": [
       {
-        "team": "Poland",
+        "team": "Hungary",
         "flag": "🏳️",
         "goals": 3
       },
       {
-        "team": "Cameroon",
-        "flag": "🇨🇲",
-        "goals": 2
-      },
-      {
-        "team": "Paraguay",
-        "flag": "🇵🇾",
-        "goals": 2
-      },
-      {
         "team": "Argentina",
         "flag": "🇦🇷",
+        "goals": 2
+      },
+      {
+        "team": "Yugoslavia",
+        "flag": "🏳️",
+        "goals": 2
+      },
+      {
+        "team": "Czechoslovakia",
+        "flag": "🏳️",
         "goals": 1
       },
       {
-        "team": "Germany",
-        "flag": "🇩🇪",
+        "team": "France",
+        "flag": "🇫🇷",
         "goals": 1
       },
       {
-        "team": "Republic of Ireland",
+        "team": "Northern Ireland",
         "flag": "🏳️",
         "goals": 1
       }
@@ -603,44 +608,39 @@
   },
   {
     "rank": 14,
-    "scorer": "Grzegorz Lato",
-    "country": "Poland",
-    "flag": "🏳️",
+    "scorer": "Gabriel Batistuta",
+    "country": "Argentina",
+    "flag": "🇦🇷",
     "goals": 10,
     "victims": [
       {
-        "team": "Argentina",
-        "flag": "🇦🇷",
-        "goals": 2
-      },
-      {
-        "team": "Brazil",
-        "flag": "🇧🇷",
-        "goals": 2
-      },
-      {
-        "team": "Haiti",
-        "flag": "🇭🇹",
-        "goals": 2
-      },
-      {
-        "team": "Peru",
-        "flag": "🇵🇪",
-        "goals": 1
-      },
-      {
-        "team": "Sweden",
-        "flag": "🇸🇪",
-        "goals": 1
-      },
-      {
-        "team": "Tunisia",
-        "flag": "🇹🇳",
-        "goals": 1
-      },
-      {
-        "team": "Yugoslavia",
+        "team": "Greece",
         "flag": "🏳️",
+        "goals": 3
+      },
+      {
+        "team": "Jamaica",
+        "flag": "🏳️",
+        "goals": 3
+      },
+      {
+        "team": "England",
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "goals": 1
+      },
+      {
+        "team": "Japan",
+        "flag": "🇯🇵",
+        "goals": 1
+      },
+      {
+        "team": "Nigeria",
+        "flag": "🇳🇬",
+        "goals": 1
+      },
+      {
+        "team": "Romania",
+        "flag": "🇷🇴",
         "goals": 1
       }
     ]
@@ -691,245 +691,6 @@
   },
   {
     "rank": 16,
-    "scorer": "Roberto Baggio",
-    "country": "Italy",
-    "flag": "🇮🇹",
-    "goals": 9,
-    "victims": [
-      {
-        "team": "Bulgaria",
-        "flag": "🏳️",
-        "goals": 2
-      },
-      {
-        "team": "Nigeria",
-        "flag": "🇳🇬",
-        "goals": 2
-      },
-      {
-        "team": "Austria",
-        "flag": "🇦🇹",
-        "goals": 1
-      },
-      {
-        "team": "Chile",
-        "flag": "🇨🇱",
-        "goals": 1
-      },
-      {
-        "team": "Czechoslovakia",
-        "flag": "🏳️",
-        "goals": 1
-      },
-      {
-        "team": "England",
-        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-        "goals": 1
-      },
-      {
-        "team": "Spain",
-        "flag": "🇪🇸",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 17,
-    "scorer": "Ademir de Menezes",
-    "country": "Brazil",
-    "flag": "🇧🇷",
-    "goals": 9,
-    "victims": [
-      {
-        "team": "Sweden",
-        "flag": "🇸🇪",
-        "goals": 4
-      },
-      {
-        "team": "Mexico",
-        "flag": "🇲🇽",
-        "goals": 2
-      },
-      {
-        "team": "Spain",
-        "flag": "🇪🇸",
-        "goals": 2
-      },
-      {
-        "team": "Yugoslavia",
-        "flag": "🏳️",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 18,
-    "scorer": "Eusébio",
-    "country": "Portugal",
-    "flag": "🇵🇹",
-    "goals": 9,
-    "victims": [
-      {
-        "team": "North Korea",
-        "flag": "🏳️",
-        "goals": 4
-      },
-      {
-        "team": "Brazil",
-        "flag": "🇧🇷",
-        "goals": 2
-      },
-      {
-        "team": "Bulgaria",
-        "flag": "🏳️",
-        "goals": 1
-      },
-      {
-        "team": "England",
-        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-        "goals": 1
-      },
-      {
-        "team": "Russia",
-        "flag": "🏳️",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 19,
-    "scorer": "Karl-Heinz Rummenigge",
-    "country": "Germany",
-    "flag": "🇩🇪",
-    "goals": 9,
-    "victims": [
-      {
-        "team": "Chile",
-        "flag": "🇨🇱",
-        "goals": 3
-      },
-      {
-        "team": "Mexico",
-        "flag": "🇲🇽",
-        "goals": 2
-      },
-      {
-        "team": "Argentina",
-        "flag": "🇦🇷",
-        "goals": 1
-      },
-      {
-        "team": "Algeria",
-        "flag": "🇩🇿",
-        "goals": 1
-      },
-      {
-        "team": "Austria",
-        "flag": "🇦🇹",
-        "goals": 1
-      },
-      {
-        "team": "France",
-        "flag": "🇫🇷",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 20,
-    "scorer": "Jairzinho",
-    "country": "Brazil",
-    "flag": "🇧🇷",
-    "goals": 9,
-    "victims": [
-      {
-        "team": "Czechoslovakia",
-        "flag": "🏳️",
-        "goals": 2
-      },
-      {
-        "team": "Argentina",
-        "flag": "🇦🇷",
-        "goals": 1
-      },
-      {
-        "team": "DR Congo",
-        "flag": "🇨🇩",
-        "goals": 1
-      },
-      {
-        "team": "England",
-        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-        "goals": 1
-      },
-      {
-        "team": "Italy",
-        "flag": "🇮🇹",
-        "goals": 1
-      },
-      {
-        "team": "Peru",
-        "flag": "🇵🇪",
-        "goals": 1
-      },
-      {
-        "team": "Romania",
-        "flag": "🇷🇴",
-        "goals": 1
-      },
-      {
-        "team": "Uruguay",
-        "flag": "🇺🇾",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 21,
-    "scorer": "David Villa",
-    "country": "Spain",
-    "flag": "🇪🇸",
-    "goals": 9,
-    "victims": [
-      {
-        "team": "Honduras",
-        "flag": "🇭🇳",
-        "goals": 2
-      },
-      {
-        "team": "Ukraine",
-        "flag": "🏳️",
-        "goals": 2
-      },
-      {
-        "team": "Australia",
-        "flag": "🇦🇺",
-        "goals": 1
-      },
-      {
-        "team": "France",
-        "flag": "🇫🇷",
-        "goals": 1
-      },
-      {
-        "team": "Chile",
-        "flag": "🇨🇱",
-        "goals": 1
-      },
-      {
-        "team": "Paraguay",
-        "flag": "🇵🇾",
-        "goals": 1
-      },
-      {
-        "team": "Portugal",
-        "flag": "🇵🇹",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 22,
     "scorer": "Uwe Seeler",
     "country": "Germany",
     "flag": "🇩🇪",
@@ -983,7 +744,134 @@
     ]
   },
   {
-    "rank": 23,
+    "rank": 17,
+    "scorer": "Vavá",
+    "country": "Brazil",
+    "flag": "🇧🇷",
+    "goals": 9,
+    "victims": [
+      {
+        "team": "Chile",
+        "flag": "🇨🇱",
+        "goals": 2
+      },
+      {
+        "team": "Sweden",
+        "flag": "🇸🇪",
+        "goals": 2
+      },
+      {
+        "team": "Russia",
+        "flag": "🏳️",
+        "goals": 2
+      },
+      {
+        "team": "Czechoslovakia",
+        "flag": "🏳️",
+        "goals": 1
+      },
+      {
+        "team": "France",
+        "flag": "🇫🇷",
+        "goals": 1
+      },
+      {
+        "team": "England",
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 18,
+    "scorer": "Jairzinho",
+    "country": "Brazil",
+    "flag": "🇧🇷",
+    "goals": 9,
+    "victims": [
+      {
+        "team": "Czechoslovakia",
+        "flag": "🏳️",
+        "goals": 2
+      },
+      {
+        "team": "Argentina",
+        "flag": "🇦🇷",
+        "goals": 1
+      },
+      {
+        "team": "DR Congo",
+        "flag": "🇨🇩",
+        "goals": 1
+      },
+      {
+        "team": "England",
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "goals": 1
+      },
+      {
+        "team": "Italy",
+        "flag": "🇮🇹",
+        "goals": 1
+      },
+      {
+        "team": "Peru",
+        "flag": "🇵🇪",
+        "goals": 1
+      },
+      {
+        "team": "Romania",
+        "flag": "🇷🇴",
+        "goals": 1
+      },
+      {
+        "team": "Uruguay",
+        "flag": "🇺🇾",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 19,
+    "scorer": "Karl-Heinz Rummenigge",
+    "country": "Germany",
+    "flag": "🇩🇪",
+    "goals": 9,
+    "victims": [
+      {
+        "team": "Chile",
+        "flag": "🇨🇱",
+        "goals": 3
+      },
+      {
+        "team": "Mexico",
+        "flag": "🇲🇽",
+        "goals": 2
+      },
+      {
+        "team": "Argentina",
+        "flag": "🇦🇷",
+        "goals": 1
+      },
+      {
+        "team": "Algeria",
+        "flag": "🇩🇿",
+        "goals": 1
+      },
+      {
+        "team": "Austria",
+        "flag": "🇦🇹",
+        "goals": 1
+      },
+      {
+        "team": "France",
+        "flag": "🇫🇷",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 20,
     "scorer": "Christian Vieri",
     "country": "Italy",
     "flag": "🇮🇹",
@@ -1027,30 +915,25 @@
     ]
   },
   {
-    "rank": 24,
-    "scorer": "Vavá",
-    "country": "Brazil",
-    "flag": "🇧🇷",
+    "rank": 21,
+    "scorer": "David Villa",
+    "country": "Spain",
+    "flag": "🇪🇸",
     "goals": 9,
     "victims": [
       {
-        "team": "Chile",
-        "flag": "🇨🇱",
+        "team": "Honduras",
+        "flag": "🇭🇳",
         "goals": 2
       },
       {
-        "team": "Sweden",
-        "flag": "🇸🇪",
-        "goals": 2
-      },
-      {
-        "team": "Russia",
+        "team": "Ukraine",
         "flag": "🏳️",
         "goals": 2
       },
       {
-        "team": "Czechoslovakia",
-        "flag": "🏳️",
+        "team": "Australia",
+        "flag": "🇦🇺",
         "goals": 1
       },
       {
@@ -1059,14 +942,97 @@
         "goals": 1
       },
       {
-        "team": "England",
-        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "team": "Chile",
+        "flag": "🇨🇱",
+        "goals": 1
+      },
+      {
+        "team": "Paraguay",
+        "flag": "🇵🇾",
+        "goals": 1
+      },
+      {
+        "team": "Portugal",
+        "flag": "🇵🇹",
         "goals": 1
       }
     ]
   },
   {
-    "rank": 25,
+    "rank": 22,
+    "scorer": "Roberto Baggio",
+    "country": "Italy",
+    "flag": "🇮🇹",
+    "goals": 9,
+    "victims": [
+      {
+        "team": "Bulgaria",
+        "flag": "🏳️",
+        "goals": 2
+      },
+      {
+        "team": "Nigeria",
+        "flag": "🇳🇬",
+        "goals": 2
+      },
+      {
+        "team": "Austria",
+        "flag": "🇦🇹",
+        "goals": 1
+      },
+      {
+        "team": "Chile",
+        "flag": "🇨🇱",
+        "goals": 1
+      },
+      {
+        "team": "Czechoslovakia",
+        "flag": "🏳️",
+        "goals": 1
+      },
+      {
+        "team": "England",
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "goals": 1
+      },
+      {
+        "team": "Spain",
+        "flag": "🇪🇸",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 23,
+    "scorer": "Ademir de Menezes",
+    "country": "Brazil",
+    "flag": "🇧🇷",
+    "goals": 9,
+    "victims": [
+      {
+        "team": "Sweden",
+        "flag": "🇸🇪",
+        "goals": 4
+      },
+      {
+        "team": "Mexico",
+        "flag": "🇲🇽",
+        "goals": 2
+      },
+      {
+        "team": "Spain",
+        "flag": "🇪🇸",
+        "goals": 2
+      },
+      {
+        "team": "Yugoslavia",
+        "flag": "🏳️",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 24,
     "scorer": "Paolo Rossi",
     "country": "Italy",
     "flag": "🇮🇹",
@@ -1105,70 +1071,41 @@
     ]
   },
   {
-    "rank": 26,
-    "scorer": "Óscar Míguez",
-    "country": "Uruguay",
-    "flag": "🇺🇾",
-    "goals": 8,
+    "rank": 25,
+    "scorer": "Eusébio",
+    "country": "Portugal",
+    "flag": "🇵🇹",
+    "goals": 9,
     "victims": [
       {
-        "team": "Bolivia",
-        "flag": "🇧🇴",
-        "goals": 3
+        "team": "North Korea",
+        "flag": "🏳️",
+        "goals": 4
       },
       {
-        "team": "Scotland",
-        "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+        "team": "Brazil",
+        "flag": "🇧🇷",
         "goals": 2
       },
       {
-        "team": "Sweden",
-        "flag": "🇸🇪",
-        "goals": 2
+        "team": "Bulgaria",
+        "flag": "🏳️",
+        "goals": 1
       },
       {
-        "team": "Czechoslovakia",
+        "team": "England",
+        "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+        "goals": 1
+      },
+      {
+        "team": "Russia",
         "flag": "🏳️",
         "goals": 1
       }
     ]
   },
   {
-    "rank": 27,
-    "scorer": "Harry Kane",
-    "country": "England",
-    "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    "goals": 8,
-    "victims": [
-      {
-        "team": "Panama",
-        "flag": "🇵🇦",
-        "goals": 3
-      },
-      {
-        "team": "Tunisia",
-        "flag": "🇹🇳",
-        "goals": 2
-      },
-      {
-        "team": "Colombia",
-        "flag": "🇨🇴",
-        "goals": 1
-      },
-      {
-        "team": "France",
-        "flag": "🇫🇷",
-        "goals": 1
-      },
-      {
-        "team": "Senegal",
-        "flag": "🇸🇳",
-        "goals": 1
-      }
-    ]
-  },
-  {
-    "rank": 28,
+    "rank": 26,
     "scorer": "Diego Maradona",
     "country": "Argentina",
     "flag": "🇦🇷",
@@ -1202,35 +1139,98 @@
     ]
   },
   {
-    "rank": 29,
-    "scorer": "Cristiano Ronaldo",
-    "country": "Portugal",
-    "flag": "🇵🇹",
+    "rank": 27,
+    "scorer": "Neymar",
+    "country": "Brazil",
+    "flag": "🇧🇷",
     "goals": 8,
     "victims": [
       {
-        "team": "Spain",
-        "flag": "🇪🇸",
+        "team": "Croatia",
+        "flag": "🇭🇷",
         "goals": 3
       },
       {
-        "team": "Ghana",
-        "flag": "🇬🇭",
+        "team": "Cameroon",
+        "flag": "🇨🇲",
         "goals": 2
       },
       {
-        "team": "Iran",
-        "flag": "🇮🇷",
+        "team": "Costa Rica",
+        "flag": "🇨🇷",
         "goals": 1
       },
       {
-        "team": "Morocco",
-        "flag": "🇲🇦",
+        "team": "Mexico",
+        "flag": "🇲🇽",
         "goals": 1
       },
       {
-        "team": "North Korea",
-        "flag": "🏳️",
+        "team": "South Korea",
+        "flag": "🇰🇷",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 28,
+    "scorer": "Guillermo Stábile",
+    "country": "Argentina",
+    "flag": "🇦🇷",
+    "goals": 8,
+    "victims": [
+      {
+        "team": "Mexico",
+        "flag": "🇲🇽",
+        "goals": 3
+      },
+      {
+        "team": "Chile",
+        "flag": "🇨🇱",
+        "goals": 2
+      },
+      {
+        "team": "United States",
+        "flag": "🇺🇸",
+        "goals": 2
+      },
+      {
+        "team": "Uruguay",
+        "flag": "🇺🇾",
+        "goals": 1
+      }
+    ]
+  },
+  {
+    "rank": 29,
+    "scorer": "Harry Kane",
+    "country": "England",
+    "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+    "goals": 8,
+    "victims": [
+      {
+        "team": "Panama",
+        "flag": "🇵🇦",
+        "goals": 3
+      },
+      {
+        "team": "Tunisia",
+        "flag": "🇹🇳",
+        "goals": 2
+      },
+      {
+        "team": "Colombia",
+        "flag": "🇨🇴",
+        "goals": 1
+      },
+      {
+        "team": "France",
+        "flag": "🇫🇷",
+        "goals": 1
+      },
+      {
+        "team": "Senegal",
+        "flag": "🇸🇳",
         "goals": 1
       }
     ]
