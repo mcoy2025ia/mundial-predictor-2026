@@ -480,14 +480,14 @@
     "pen_total": 3
   },
   "Colombia": {
-    "elo": 2208.0,
+    "elo": 2212.1,
     "rank": 6,
     "flag": "🇨🇴",
     "group": "K",
     "confederation": "CONMEBOL",
     "goals_scored": 2.0,
-    "goals_conceded": 1.4,
-    "wc_matches": 23,
+    "goals_conceded": 1.0,
+    "wc_matches": 24,
     "pen_wins": 7,
     "pen_total": 12
   },
@@ -504,14 +504,14 @@
     "pen_total": 8
   },
   "DR Congo": {
-    "elo": 1753.6,
+    "elo": 1749.6,
     "rank": 63,
     "flag": "🇨🇩",
     "group": "K",
     "confederation": "CAF",
-    "goals_scored": 1.0,
-    "goals_conceded": 0.6,
-    "wc_matches": 4,
+    "goals_scored": 0.6,
+    "goals_conceded": 0.8,
+    "wc_matches": 5,
     "pen_wins": 5,
     "pen_total": 8
   },
