@@ -60,26 +60,26 @@
     "pen_total": 8
   },
   "Qatar": {
-    "elo": 1616.4,
-    "rank": 95,
+    "elo": 1568.4,
+    "rank": 115,
     "flag": "🇶🇦",
     "group": "B",
     "confederation": "AFC",
-    "goals_scored": 0.2,
+    "goals_scored": 0.4,
     "goals_conceded": 2.2,
-    "wc_matches": 5,
+    "wc_matches": 6,
     "pen_wins": 5,
     "pen_total": 9
   },
   "Bosnia and Herzegovina": {
-    "elo": 1613.2,
-    "rank": 96,
+    "elo": 1661.2,
+    "rank": 86,
     "flag": "🇧🇦",
     "group": "B",
     "confederation": "UEFA",
-    "goals_scored": 0.8,
+    "goals_scored": 1.2,
     "goals_conceded": 1.4,
-    "wc_matches": 5,
+    "wc_matches": 6,
     "pen_wins": 3,
     "pen_total": 4
   },
@@ -229,7 +229,7 @@
   },
   "Curacao": {
     "elo": 1606.0,
-    "rank": 100,
+    "rank": 99,
     "flag": "🇨🇼",
     "group": "E",
     "confederation": "CONCACAF",
@@ -373,7 +373,7 @@
   },
   "Cape Verde": {
     "elo": 1657.8,
-    "rank": 86,
+    "rank": 87,
     "flag": "🇨🇻",
     "group": "H",
     "confederation": "CAF",
