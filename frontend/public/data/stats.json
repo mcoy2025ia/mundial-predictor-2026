@@ -1,7 +1,7 @@
 {
-  "total_matches": 1009,
-  "total_goals": 2859,
-  "avg_goals_all": 2.833,
+  "total_matches": 1011,
+  "total_goals": 2860,
+  "avg_goals_all": 2.829,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 139,
-      "matches": 45,
-      "avg": 3.089
+      "total": 140,
+      "matches": 47,
+      "avg": 2.979
     }
   ],
   "best_avg_edition": {
@@ -173,15 +173,6 @@
   },
   "top_scoring_teams": [
     {
-      "team": "Brazil",
-      "flag": "🇧🇷",
-      "matches": 116,
-      "goals_for": 241,
-      "goals_against": 109,
-      "goal_diff": 132,
-      "avg": 2.08
-    },
-    {
       "team": "Germany",
       "flag": "🇩🇪",
       "matches": 114,
@@ -189,6 +180,15 @@
       "goals_against": 132,
       "goal_diff": 109,
       "avg": 2.11
+    },
+    {
+      "team": "Brazil",
+      "flag": "🇧🇷",
+      "matches": 116,
+      "goals_for": 241,
+      "goals_against": 109,
+      "goal_diff": 132,
+      "avg": 2.08
     },
     {
       "team": "Argentina",
@@ -229,11 +229,11 @@
     {
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "matches": 75,
+      "matches": 76,
       "goals_for": 108,
       "goals_against": 70,
       "goal_diff": 38,
-      "avg": 1.44
+      "avg": 1.42
     },
     {
       "team": "Netherlands",
