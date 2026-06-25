@@ -26,9 +26,11 @@ logger = logging.getLogger("precompute_narrations")
 ROOT = Path(__file__).resolve().parent.parent
 FRONTEND_DATA = ROOT / "frontend" / "public" / "data"
 
-# Fase de grupos: solo bogotano para ahorrar tokens.
-# Fase eliminatoria: todos los dialectos.
-DIALECTS_GROUP    = ["bogotano"]
+# A partir de J3 (2026-06-24) se generan los 5 dialectos en todas las fases,
+# grupos y eliminatoria por igual -- antes solo bogotano se actualizaba en
+# grupos, lo que dejaba paisa/boyaco/costeño/en con el contexto congelado de
+# cuando se generaron por primera vez (ver fix de narraciones stale).
+DIALECTS_GROUP    = ["bogotano", "paisa", "boyaco", "costeño", "en"]
 DIALECTS_KNOCKOUT = ["bogotano", "paisa", "boyaco", "costeño", "en"]
 
 # ── Replica exacta del FULL_SYSTEM del narrator endpoint ─────────────────────
