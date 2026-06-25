@@ -183,35 +183,42 @@ export default function GroupNarrativeCard({ group, text, variant = "full" }: Pr
 
   if (variant === "compact") {
     return (
-      <div className="stat-card !p-4 text-left">
-        <div className="flex items-center justify-between gap-3 mb-3">
+      <details className="stat-card !p-0 text-left group" style={{ overflow: "hidden" }}>
+        <summary
+          className="cursor-pointer list-none flex items-center justify-between gap-3 px-4 py-3"
+        >
           <p
             className="text-[10px] uppercase tracking-[0.18em]"
             style={{ fontFamily: "var(--font-mono)", color: "var(--wc-gold)" }}
           >
             Grupo {group}
           </p>
-          <span className="text-[10px] px-2 py-1 rounded-sm bg-white/5 text-[var(--text-muted)]">
-            Previa IA
+          <span className="flex items-center gap-2 text-[10px]" style={{ color: "var(--text-muted)" }}>
+            <span className="px-2 py-1 rounded-sm bg-white/5">Previa IA</span>
+            <span>Desplegar</span>
+            <span className="inline-block transition-transform group-open:rotate-180">▾</span>
           </span>
-        </div>
-        <p className="text-sm leading-7 mb-3" style={{ color: "var(--text)" }}>
-          {summary}
-        </p>
-        {keyMatch && (
-          <div className="rounded-md border border-[var(--border-subtle)] p-3 mb-3 bg-white/[0.025]">
-            <p className="text-[10px] uppercase tracking-[0.14em] mb-1" style={{ color: "var(--text-muted)" }}>
-              Partido clave
-            </p>
-            <p className="text-xs leading-6" style={{ color: "var(--text)" }}>{keyMatch}</p>
-          </div>
-        )}
-        {finalPhrase && (
-          <p className="text-xs leading-6 italic" style={{ color: "var(--text-muted)" }}>
-            {finalPhrase}
+        </summary>
+
+        <div className="px-4 pb-4">
+          <p className="text-sm leading-7 mb-3" style={{ color: "var(--text)" }}>
+            {summary}
           </p>
-        )}
-      </div>
+          {keyMatch && (
+            <div className="rounded-md border border-[var(--border-subtle)] p-3 mb-3 bg-white/[0.025]">
+              <p className="text-[10px] uppercase tracking-[0.14em] mb-1" style={{ color: "var(--text-muted)" }}>
+                Partido clave
+              </p>
+              <p className="text-xs leading-6" style={{ color: "var(--text)" }}>{keyMatch}</p>
+            </div>
+          )}
+          {finalPhrase && (
+            <p className="text-xs leading-6 italic" style={{ color: "var(--text-muted)" }}>
+              {finalPhrase}
+            </p>
+          )}
+        </div>
+      </details>
     );
   }
 
