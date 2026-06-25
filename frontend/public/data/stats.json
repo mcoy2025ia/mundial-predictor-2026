@@ -1,7 +1,7 @@
 {
-  "total_matches": 1013,
-  "total_goals": 2865,
-  "avg_goals_all": 2.828,
+  "total_matches": 1016,
+  "total_goals": 2875,
+  "avg_goals_all": 2.83,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 145,
-      "matches": 49,
-      "avg": 2.959
+      "total": 155,
+      "matches": 52,
+      "avg": 2.981
     }
   ],
   "best_avg_edition": {
@@ -175,11 +175,11 @@
     {
       "team": "Brazil",
       "flag": "🇧🇷",
-      "matches": 116,
-      "goals_for": 241,
+      "matches": 117,
+      "goals_for": 244,
       "goals_against": 109,
-      "goal_diff": 132,
-      "avg": 2.08
+      "goal_diff": 135,
+      "avg": 2.09
     },
     {
       "team": "Germany",
