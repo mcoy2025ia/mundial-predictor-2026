@@ -39,6 +39,11 @@ logging.basicConfig(
 from src.agent_debate import AgentDebateSystem, normalize_team_name
 
 OUTPUT_FILE = ROOT / "data/processed/agent_debate_results.json"
+# data/processed/ esta gitignored: en CI cada corrida arranca de un checkout
+# limpio y este archivo no existe. El JSON publicado en frontend/public/data/
+# SI esta en git y refleja el historial acumulado real entre corridas, asi
+# que sirve de semilla cuando no hay copia local en data/processed/.
+PUBLISHED_FILE = ROOT / "frontend/public/data/agent_debate_results.json"
 
 DEFAULT_MATCHES = [
     ("Mexico", "South Korea"),
@@ -58,6 +63,9 @@ def safe_print(text: str) -> None:
 def load_existing() -> list[dict]:
     if OUTPUT_FILE.exists():
         with open(OUTPUT_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    if PUBLISHED_FILE.exists():
+        with open(PUBLISHED_FILE, encoding="utf-8") as f:
             return json.load(f)
     return []
 
