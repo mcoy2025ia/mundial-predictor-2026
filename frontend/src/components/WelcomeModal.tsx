@@ -14,6 +14,8 @@ interface Props {
   groupMatches: Record<string, GroupMatch[]>;
   liveScores: ScoreMap;
   onGoToPredictor: () => void;
+  onGoToModel: () => void;
+  onGoToBestThirds: () => void;
 }
 
 const AGENT_NAMES = ["Group Analyst", "Tactical Scout", "Sentiment Reader", "Consensus"] as const;
@@ -28,7 +30,7 @@ function buildByMd(results: { groupMd: number; hit: boolean }[]) {
   return map;
 }
 
-export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor }: Props) {
+export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor, onGoToModel, onGoToBestThirds }: Props) {
   const T = useLang();
   const [open, setOpen] = useState(false);
   const [agentDebateResults, setAgentDebateResults] = useState<AgentDebateMatch[]>([]);
@@ -77,9 +79,9 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
 
   if (!open || mdPct === null || !bestAgent) return null;
 
-  function go() {
+  function go(action: () => void) {
     setOpen(false);
-    onGoToPredictor();
+    action();
   }
 
   return (
@@ -145,17 +147,41 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
             </p>
           </div>
 
-          <button
-            onClick={go}
-            style={{
-              marginTop: "1.1rem", width: "100%", padding: "0.7rem 1rem", borderRadius: 12,
-              border: "none", cursor: "pointer", fontFamily: "var(--font-body)", fontWeight: 700,
-              fontSize: "0.85rem", color: "#1a1410",
-              background: "linear-gradient(135deg, var(--color-wc-gold), #e8c873)",
-            }}
-          >
-            {T.welcomeCta}
-          </button>
+          <div style={{ marginTop: "1.1rem", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+            <button
+              onClick={() => go(onGoToPredictor)}
+              style={{
+                width: "100%", padding: "0.7rem 1rem", borderRadius: 12,
+                border: "none", cursor: "pointer", fontFamily: "var(--font-body)", fontWeight: 700,
+                fontSize: "0.85rem", color: "#1a1410",
+                background: "linear-gradient(135deg, var(--color-wc-gold), #e8c873)",
+              }}
+            >
+              {T.welcomeCtaPredictor}
+            </button>
+            <button
+              onClick={() => go(onGoToModel)}
+              style={{
+                width: "100%", padding: "0.65rem 1rem", borderRadius: 12,
+                border: "1px solid rgba(212,168,67,0.35)", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.8rem",
+                color: "var(--color-wc-gold)", background: "rgba(212,168,67,0.06)",
+              }}
+            >
+              {T.welcomeCtaModel}
+            </button>
+            <button
+              onClick={() => go(onGoToBestThirds)}
+              style={{
+                width: "100%", padding: "0.65rem 1rem", borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.12)", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.8rem",
+                color: "var(--color-ink-secondary)", background: "rgba(255,255,255,0.03)",
+              }}
+            >
+              {T.welcomeCtaBestThirds}
+            </button>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>

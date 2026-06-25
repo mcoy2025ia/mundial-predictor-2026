@@ -101,6 +101,7 @@ export default function Home() {
   const [lang,  setLang]  = useState<Lang>("bogotano");
   const [tab,   setTab]   = useState<TabId>("envivo");
   const [theme, setTheme] = useState<"dark"|"light">("dark");
+  const [jumpToStandingsToken, setJumpToStandingsToken] = useState(0);
 
   const [teams,          setTeams]          = useState<Record<string, TeamInfo> | null>(null);
   const [predictions,    setPredictions]    = useState<Record<string, Prediction> | null>(null);
@@ -261,6 +262,8 @@ export default function Home() {
             groupMatches={groupMatches}
             liveScores={liveScores}
             onGoToPredictor={() => setTab("predictor")}
+            onGoToModel={() => setTab("modelo")}
+            onGoToBestThirds={() => { setTab("envivo"); setJumpToStandingsToken((n) => n + 1); }}
           />
         )}
 
@@ -487,6 +490,7 @@ export default function Home() {
                     teams={teams} predictions={predictions} groups={groups}
                     liveMatches={liveMatches} stats={liveStats} verdicts={verdicts}
                     groupNarratives={groupNarratives}
+                    jumpToStandingsToken={jumpToStandingsToken}
                   />
                 </TabPane>
               )}

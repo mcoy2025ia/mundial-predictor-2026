@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TeamInfo, Prediction, LiveMatch } from "@/types";
 import type { LiveStats, MatchVerdict } from "@/lib/live";
@@ -18,6 +18,8 @@ interface Props {
   stats: LiveStats;
   verdicts: MatchVerdict[];
   groupNarratives?: Record<string, string>;
+  /** Incrementa este valor para forzar un salto a "posiciones" (ej. desde fuera del tab). */
+  jumpToStandingsToken?: number;
 }
 
 type LiveSection = "resultados" | "posiciones" | "proximos";
@@ -30,7 +32,7 @@ function fill(template: string, vals: string[]) {
 }
 
 export default function LiveTournament({
-  teams, predictions, groups, liveMatches, stats, verdicts, groupNarratives,
+  teams, predictions, groups, liveMatches, stats, verdicts, groupNarratives, jumpToStandingsToken,
 }: Props) {
   const T = useLang();
   const [section, setSection] = useState<LiveSection>("resultados");
@@ -50,6 +52,11 @@ export default function LiveTournament({
     setSectionDir(newIdx > currentIdx ? 1 : -1);
     setSection(s);
   }
+
+  useEffect(() => {
+    if (jumpToStandingsToken) switchSection("posiciones");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jumpToStandingsToken]);
 
   const ROUND_LABEL: Record<string, string> = {
     LAST_32: T.roundOf32, LAST_16: T.roundOf16,

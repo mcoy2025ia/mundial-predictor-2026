@@ -100,7 +100,9 @@ const _es = {
   welcomeBestAgent: (agent: string, pct: number) =>
     `El más certero en este momento es ${agent}, con ${pct}% de aciertos.`,
   welcomePath:     "Ruta: Predictor → elige un partido → Predecir resultado → despliega \"🤖 Análisis de Agentes Expertos\" → Ver consenso completo.",
-  welcomeCta:      "Ver el análisis de los agentes →",
+  welcomeCtaPredictor:  "⚡ Ir al Predictor",
+  welcomeCtaModel:      "🤖 Ver análisis de los agentes",
+  welcomeCtaBestThirds: "🥉 Ver mejores terceros",
   simTitle:         "Grupos del Mundial 2026",
   simCount:         "Simulaciones",
   simBtn:           "🎲 Simular torneo",
@@ -352,7 +354,9 @@ const _en = {
   welcomeBestAgent: (agent: string, pct: number) =>
     `The most accurate right now is ${agent}, with ${pct}% correct.`,
   welcomePath:     "Path: Predictor tab → pick a match → \"Predecir resultado\" → expand \"🤖 Análisis de Agentes Expertos\" → \"Ver consenso completo\".",
-  welcomeCta:      "See the agents' analysis →",
+  welcomeCtaPredictor:  "⚡ Go to Predictor",
+  welcomeCtaModel:      "🤖 See agents' analysis",
+  welcomeCtaBestThirds: "🥉 See best third-placed",
   simTitle:         "2026 World Cup Groups",
   simCount:         "Simulations",
   simBtn:           "🎲 Simulate tournament",
