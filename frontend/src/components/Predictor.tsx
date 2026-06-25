@@ -222,7 +222,16 @@ interface Props {
   liveMatches?: LiveMatch[];
   narrations?: Record<string, string>;
   agentNotes?: Record<string, string>;
+  onSelectDialect?: (lang: Lang) => void;
 }
+
+const DIALECT_OPTIONS: Array<{ key: Lang; label: string; flag: string }> = [
+  { key: "bogotano", label: "Bogotano", flag: "🇨🇴" },
+  { key: "paisa",    label: "Paisa",    flag: "🇨🇴" },
+  { key: "boyaco",   label: "Boyaco",   flag: "🇨🇴" },
+  { key: "costeño",  label: "Costeño",  flag: "🇨🇴" },
+  { key: "en",       label: "English",  flag: "🇺🇸" },
+];
 
 // ── Pressure badges ────────────────────────────────────────────────────────────
 
@@ -352,7 +361,7 @@ function mostLikelyScore(
   return best;
 }
 
-export default function Predictor({ teams, predictions, matches, liveMatches, narrations, agentNotes }: Props) {
+export default function Predictor({ teams, predictions, matches, liveMatches, narrations, agentNotes, onSelectDialect }: Props) {
   const T = useLang();
   const teamList = useMemo(
     () => Object.entries(teams).sort((a, b) => a[0].localeCompare(b[0])),
@@ -423,6 +432,19 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
         .slice(0, 6),
     [matches, home, away]
   );
+
+  const [showDialectPicker, setShowDialectPicker] = useState(false);
+
+  function requestPredict() {
+    if (home === away) return;
+    setShowDialectPicker(true);
+  }
+
+  function pickDialectAndPredict(dialect: Lang) {
+    setShowDialectPicker(false);
+    onSelectDialect?.(dialect);
+    handlePredict();
+  }
 
   function handlePredict() {
     if (home === away) return;
@@ -638,10 +660,69 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
           </div>
 
           <div className="px-3 sm:px-6 pb-4 sm:pb-6">
-            <PredictCTA onClick={handlePredict} disabled={loading || home === away} loading={loading} />
+            <PredictCTA onClick={requestPredict} disabled={loading || home === away} loading={loading} />
           </div>
         </div>
       </motion.div>
+
+      {/* ── Selector de dialecto: obligatorio antes de narrar la predicción ── */}
+      <AnimatePresence>
+        {showDialectPicker && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => setShowDialectPicker(false)}
+            style={{
+              position: "fixed", inset: 0, zIndex: 200,
+              background: "rgba(8,6,10,0.72)", backdropFilter: "blur(3px)",
+              display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem",
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 10, scale: 0.97 }} transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                maxWidth: 380, width: "100%",
+                background: "var(--color-arena-card)", border: "1px solid rgba(212,168,67,0.25)",
+                borderRadius: 18, padding: "1.4rem",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+              }}
+            >
+              <p style={{
+                fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.12em",
+                textTransform: "uppercase", color: "var(--color-wc-gold)", fontWeight: 700,
+                marginBottom: "0.4rem",
+              }}>
+                🎙️ Antes de narrar…
+              </p>
+              <p style={{
+                fontFamily: "var(--font-body)", fontSize: "0.85rem", color: "var(--color-ink-primary)",
+                marginBottom: "1.1rem", lineHeight: 1.5,
+              }}>
+                ¿En qué dialecto quieres que el narrador cuente esta predicción?
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {DIALECT_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.key}
+                    onClick={() => pickDialectAndPredict(opt.key)}
+                    style={{
+                      padding: "0.6rem 0.5rem", borderRadius: 10, cursor: "pointer",
+                      border: "1px solid rgba(212,168,67,0.25)", background: "rgba(212,168,67,0.06)",
+                      color: "var(--color-ink-primary)", fontFamily: "var(--font-body)",
+                      fontWeight: 600, fontSize: "0.8rem",
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
+                    }}
+                  >
+                    <span>{opt.flag}</span>
+                    <span>{opt.label}</span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Marcador más probable (Poisson) ── */}
       <AnimatePresence>

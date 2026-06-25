@@ -494,7 +494,7 @@ export default function Home() {
               )}
               {tab === "predictor" && teams && predictions && (
                 <TabPane key="predictor">
-                  <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} narrations={narrations} agentNotes={agentNotes} />
+                  <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} narrations={narrations} agentNotes={agentNotes} onSelectDialect={setLang} />
                 </TabPane>
               )}
               {tab === "grupos" && groupMatches && groupStandings && (
