@@ -94,6 +94,13 @@ const _es = {
   lt_bestThirdsCut:     "Línea de clasificación — 8 mejores terceros",
   lt_bestThirdsGap:     "le faltan {0} pts para alcanzar al 8°",
   lt_bestThirdsGapGd:   "mismos pts, {0} de DG para alcanzar al 8°",
+  welcomeBadge:    "Cómo van los Agentes de IA",
+  welcomeIntro:    (jor: number, pct: number) =>
+    `En la Jornada ${jor} de fase de grupos, el Agent Debate (los 3 agentes de IA que analizan cada partido sin usar las probabilidades del modelo) está acertando un ${pct}% de los resultados.`,
+  welcomeBestAgent: (agent: string, pct: number) =>
+    `El más certero en este momento es ${agent}, con ${pct}% de aciertos.`,
+  welcomePath:     "Ruta: Predictor → elige un partido → Predecir resultado → despliega \"🤖 Análisis de Agentes Expertos\" → Ver consenso completo.",
+  welcomeCta:      "Ver el análisis de los agentes →",
   simTitle:         "Grupos del Mundial 2026",
   simCount:         "Simulaciones",
   simBtn:           "🎲 Simular torneo",
@@ -339,6 +346,13 @@ const _en = {
   lt_bestThirdsCut:     "Qualification line — best 8 third-placed teams",
   lt_bestThirdsGap:     "needs {0} pts to reach 8th",
   lt_bestThirdsGapGd:   "same pts, {0} GD to reach 8th",
+  welcomeBadge:    "How the AI Agents are doing",
+  welcomeIntro:    (jor: number, pct: number) =>
+    `In group-stage Matchday ${jor}, the Agent Debate (3 AI agents that analyze each match without using the model's probabilities) is getting ${pct}% of outcomes right.`,
+  welcomeBestAgent: (agent: string, pct: number) =>
+    `The most accurate right now is ${agent}, with ${pct}% correct.`,
+  welcomePath:     "Path: Predictor tab → pick a match → \"Predecir resultado\" → expand \"🤖 Análisis de Agentes Expertos\" → \"Ver consenso completo\".",
+  welcomeCta:      "See the agents' analysis →",
   simTitle:         "2026 World Cup Groups",
   simCount:         "Simulations",
   simBtn:           "🎲 Simulate tournament",

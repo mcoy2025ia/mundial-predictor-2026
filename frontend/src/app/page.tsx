@@ -19,6 +19,7 @@ import LiveTournament from "@/components/LiveTournament";
 import ModelTab       from "@/components/ModelTab";
 import ChatTab        from "@/components/ChatTab";
 import StatsTab       from "@/components/StatsTab";
+import WelcomeModal    from "@/components/WelcomeModal";
 
 /* ─────────────────────────────────────────────────────────────
    UI DEL SHELL (hero, navbar, tabs, footer)
@@ -253,6 +254,15 @@ export default function Home() {
     /* Context provider: toda la app recibe el idioma activo */
     <LangContext.Provider value={lang}>
       <div data-theme={theme} style={{ background: mainBg, minHeight: "100dvh", transition: "background 0.25s" }}>
+
+        {/* ══ VENTANA EMERGENTE: cómo van los Agentes de IA ══════ */}
+        {groupMatches && (
+          <WelcomeModal
+            groupMatches={groupMatches}
+            liveScores={liveScores}
+            onGoToPredictor={() => setTab("predictor")}
+          />
+        )}
 
         {/* ══ NAVBAR ══════════════════════════════════════════ */}
         <nav className="navbar-wc">
