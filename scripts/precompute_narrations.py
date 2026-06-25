@@ -825,9 +825,24 @@ def main() -> None:
             except ValueError:
                 pass
 
-    from datetime import datetime, timezone, timedelta
-    today = datetime.now(timezone.utc).date()
+    from datetime import datetime, timezone, timedelta, date
+    from zoneinfo import ZoneInfo
+    # "Hoy" se define en hora Bogota, no UTC: un kickoff a las 9pm Bogota cae en
+    # el dia siguiente en UTC y quedaba fuera de la ventana por defecto (--days 0),
+    # dejando ese partido sin narrar hasta que alguien notara el hueco a mano.
+    today = datetime.now(ZoneInfo("America/Bogota")).date()
     cutoff = today + timedelta(days=days_ahead)
+
+    def _kickoff_date_bogota(kickoff_str: str) -> date | None:
+        if not kickoff_str:
+            return None
+        try:
+            dt = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt.astimezone(ZoneInfo("America/Bogota")).date()
+        except Exception:
+            return None
 
     all_group = [m for m in live_preds if m.get("stage") == "group"]
     logger.info("%d partidos de grupo en live_predictions.json", len(all_group))
@@ -855,10 +870,8 @@ def main() -> None:
         home, away = m.get("home_team"), m.get("away_team")
         if (home, away) in played_set:
             continue  # Este partido ya se jugó, no incluir en pendientes
-        kickoff_str = m.get("kickoff", "")
-        try:
-            kickoff_date = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00")).date()
-        except Exception:
+        kickoff_date = _kickoff_date_bogota(m.get("kickoff", ""))
+        if kickoff_date is None:
             continue
         if today <= kickoff_date <= cutoff:
             pending.append(m)
@@ -907,10 +920,8 @@ def main() -> None:
     # corrida. Si el contexto es idéntico (mismo grupo no tuvo resultados nuevos),
     # se conserva la narración ya generada y no se gasta ningún token.
     for m in ([] if groups_only else pending):
-        kickoff_str = m.get("kickoff", "")
-        try:
-            kickoff_date = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00")).date()
-        except Exception:
+        kickoff_date = _kickoff_date_bogota(m.get("kickoff", ""))
+        if kickoff_date is None:
             continue
         if today <= kickoff_date <= cutoff:
             sig = _match_signature(m)
