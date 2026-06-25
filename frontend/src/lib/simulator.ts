@@ -166,7 +166,7 @@ export function runMonteCarlo(
   const positions = ["first", "second", "third", "fourth"] as const;
   const counts: Record<string, Record<string, number>> = {};
   for (const t of allTeams) {
-    counts[t] = Object.fromEntries([...stages, ...positions].map((s) => [s, 0]));
+    counts[t] = Object.fromEntries([...stages, ...positions, "bestThird"].map((s) => [s, 0]));
   }
 
   const elos = Object.fromEntries(allTeams.map((t) => [t, teams[t]?.elo ?? 1500]));
@@ -193,6 +193,7 @@ export function runMonteCarlo(
 
     thirds.sort((a, b) => b.pts - a.pts || b.elo - a.elo);
     const qualifiedThirds = new Map(thirds.slice(0, 8).map((x) => [x.group, x.team]));
+    for (const t of qualifiedThirds.values()) counts[t].bestThird++;
     const thirdByR32 = assignThirds(qualifiedThirds);
 
     // ── Ronda de 32 según el bracket oficial ──
@@ -234,6 +235,7 @@ export function runMonteCarlo(
       second:  counts[team].second  / n,
       third:   counts[team].third   / n,
       fourth:  counts[team].fourth  / n,
+      bestThird: counts[team].bestThird / n,
       r32:     counts[team].r32     / n,
       r16:     counts[team].r16     / n,
       qf:      counts[team].qf      / n,

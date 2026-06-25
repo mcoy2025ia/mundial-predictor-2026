@@ -126,6 +126,8 @@ export interface SimResult {
   second: number;
   third: number;
   fourth: number;
+  // Probabilidad de ser uno de los 8 mejores terceros (subconjunto de "third")
+  bestThird: number;
   // Knockout stages
   r32: number;
   r16: number;

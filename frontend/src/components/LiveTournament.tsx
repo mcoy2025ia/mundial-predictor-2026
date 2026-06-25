@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TeamInfo, Prediction, LiveMatch } from "@/types";
 import type { LiveStats, MatchVerdict } from "@/lib/live";
-import { computeGroupStandings, rankBestThirds } from "@/lib/live";
+import { computeGroupStandings, rankBestThirds, buildFixedResults } from "@/lib/live";
+import { runMonteCarlo } from "@/lib/simulator";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 import { useLang } from "@/lib/i18n";
 import GroupNarrativeCard from "./GroupNarrativeCard";
@@ -91,6 +92,16 @@ export default function LiveTournament({
   }, [liveMatches, groups]);
 
   const bestThirds = useMemo(() => rankBestThirds(standings), [standings]);
+
+  /* Probabilidad de quedar entre los 8 mejores terceros: Monte Carlo sobre los
+     partidos de grupo que faltan, fijando los resultados reales ya jugados
+     (mismo motor que el simulador completo, sin simular la fase eliminatoria). */
+  const fixedResults = useMemo(() => buildFixedResults(liveMatches), [liveMatches]);
+  const bestThirdProb = useMemo(() => {
+    if (Object.keys(teams).length === 0) return new Map<string, number>();
+    const sim = runMonteCarlo(predictions, groups, teams, 3000, fixedResults);
+    return new Map(sim.map((r) => [r.team, r.bestThird]));
+  }, [predictions, groups, teams, fixedResults]);
 
   const today = new Date().toLocaleDateString("en-CA");
   const bogotaToday = todayBogota();
@@ -313,10 +324,10 @@ export default function LiveTournament({
                       {bestThirds.allComplete ? T.lt_bestThirdsNoteFinal : T.lt_bestThirdsNoteProv}
                     </span>
                   </div>
-                  <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-baseline mb-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
+                  <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.8rem_2.4rem_1.9rem_2.6rem] gap-x-1.5 items-baseline mb-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
                     <span />
                     <span />
-                    {[T.group, T.lt_playedHead, T.lt_gdHead, T.lt_ptsHead].map((h) => (
+                    {[T.group, T.lt_playedHead, T.lt_gdHead, T.lt_ptsHead, T.lt_bestThirdsProb].map((h) => (
                       <span
                         key={h}
                         className="text-[9px] uppercase tracking-wider text-right"
@@ -344,7 +355,7 @@ export default function LiveTournament({
                               {T.lt_bestThirdsCut}
                             </div>
                           )}
-                          <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-center text-xs">
+                          <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.8rem_2.4rem_1.9rem_2.6rem] gap-x-1.5 items-center text-xs">
                             <span
                               className="tabular-nums text-[10px]"
                               style={{ color: i < 8 ? "var(--wc-gold)" : "var(--text-muted)" }}
@@ -374,6 +385,9 @@ export default function LiveTournament({
                             </span>
                             <span className="tabular-nums font-bold text-right" style={{ color: "var(--wc-gold)" }}>
                               {r.points}
+                            </span>
+                            <span className="tabular-nums text-right" style={{ color: i < 8 ? "#22c55e" : "var(--text-muted)" }}>
+                              {fmtPct(bestThirdProb.get(r.team) ?? 0)}
                             </span>
                           </div>
                         </div>

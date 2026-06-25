@@ -94,6 +94,7 @@ const _es = {
   lt_bestThirdsCut:     "Línea de clasificación — 8 mejores terceros",
   lt_bestThirdsGap:     "le faltan {0} pts para alcanzar al 8°",
   lt_bestThirdsGapGd:   "mismos pts, {0} de DG para alcanzar al 8°",
+  lt_bestThirdsProb:    "Prob.",
   welcomeBadge:    "Cómo van los Agentes de IA",
   welcomeIntro:    (jor: number, pct: number) =>
     `En la Jornada ${jor} de fase de grupos, el Agent Debate (los 3 agentes de IA que analizan cada partido sin usar las probabilidades del modelo) está acertando un ${pct}% de los resultados.`,
@@ -348,6 +349,7 @@ const _en = {
   lt_bestThirdsCut:     "Qualification line — best 8 third-placed teams",
   lt_bestThirdsGap:     "needs {0} pts to reach 8th",
   lt_bestThirdsGapGd:   "same pts, {0} GD to reach 8th",
+  lt_bestThirdsProb:    "Prob.",
   welcomeBadge:    "How the AI Agents are doing",
   welcomeIntro:    (jor: number, pct: number) =>
     `In group-stage Matchday ${jor}, the Agent Debate (3 AI agents that analyze each match without using the model's probabilities) is getting ${pct}% of outcomes right.`,
