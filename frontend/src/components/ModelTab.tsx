@@ -363,6 +363,24 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
   const agentStatsByAgent = useMemo(() => computeAgentStatsByAgent(agentResults), [agentResults]);
   const agentNames = useMemo(() => ["Group Analyst", "Tactical Scout", "Sentiment Reader", "Consensus"], []);
 
+  // ── Agente que más acierta (mínimo 1 partido evaluado) ──────────────────
+  const bestAgent = useMemo(() => {
+    let best: { name: string; pct: number } | null = null;
+    for (const name of agentNames) {
+      const stats = agentStatsByAgent[name];
+      if (!stats || stats.played === 0) continue;
+      const pct = Math.round((stats.hits / stats.played) * 100);
+      if (!best || pct > best.pct) best = { name, pct };
+    }
+    return best;
+  }, [agentStatsByAgent, agentNames]);
+
+  // ── Marcadores por partido: qué predijo cada agente, partido por partido ──
+  const agentMatchRows = useMemo(
+    () => [...agentResults].sort((a, b) => b.groupMd - a.groupMd || a.group.localeCompare(b.group)),
+    [agentResults]
+  );
+
   if (played === 0) {
     return (
       <div className="max-w-3xl mx-auto text-center py-16">
@@ -411,6 +429,123 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
         <MatchdayAccuracy title="🤖 Precisión por jornada · Agentes" byMd={agentByMd} />
       </div>
 
+      {/* Desempeño por agente: 4 predicciones (3 agentes + consenso) */}
+      {agentStatsByAgent && Object.keys(agentStatsByAgent).length > 0 && (
+        <div className="rounded-xl p-5 space-y-4" style={{ ...cardBg, borderColor: "rgba(101,165,206,0.15)" }}>
+          <div>
+            <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+              🤖 Precisión por experto (1X2)
+            </h3>
+            <p className="text-[0.6rem] mt-1" style={{ color: "var(--color-ink-muted)" }}>
+              Evaluación de las 4 predicciones: Group Analyst, Tactical Scout, Sentiment Reader, y Consenso
+            </p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {agentNames.map((agentName) => {
+              const stats = agentStatsByAgent[agentName];
+              if (!stats) return null;
+              const pct = stats.played > 0 ? Math.round((stats.hits / stats.played) * 100) : null;
+              const isBest = bestAgent?.name === agentName && stats.played > 0;
+              const color = pct !== null && pct >= 50 ? "var(--color-wc-gold)" : "var(--color-ink-muted)";
+              const emoji = agentName === "Group Analyst" ? "🔵" : agentName === "Tactical Scout" ? "🟠" : agentName === "Sentiment Reader" ? "🟡" : "🏆";
+              return (
+                <div
+                  key={agentName}
+                  className="relative rounded-lg p-3 space-y-2"
+                  style={{
+                    background: isBest ? "rgba(201,152,31,0.10)" : "rgba(255,255,255,0.03)",
+                    border: isBest ? "1px solid rgba(201,152,31,0.5)" : "1px solid rgba(255,255,255,0.07)",
+                  }}
+                >
+                  {isBest && (
+                    <span
+                      className="absolute -top-2 -right-1 text-[0.5rem] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
+                      style={{ background: "var(--color-wc-gold)", color: "#1a1410" }}
+                    >
+                      🔥 más certero
+                    </span>
+                  )}
+                  <div className="text-xs font-bold whitespace-normal" style={{ color: "var(--color-ink)" }}>
+                    {emoji} {agentName}
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-baseline gap-2">
+                      <div className="font-mono font-black text-base" style={{ color }}>
+                        {pct !== null ? `${pct}%` : "—"}
+                      </div>
+                      <div className="text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
+                        {stats.hits}/{stats.played}
+                      </div>
+                    </div>
+                    <div className="rounded-full overflow-hidden" style={{ height: 3, background: "rgba(255,255,255,0.06)" }}>
+                      <div
+                        className="h-full rounded-full transition-all duration-700"
+                        style={{ width: pct !== null ? `${pct}%` : "0%", background: color }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Marcadores por partido: qué predijo cada agente vs el resultado real */}
+          {agentMatchRows.length > 0 && (
+            <div className="space-y-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <h4 className="text-xs font-bold" style={{ color: "var(--color-ink)" }}>
+                🎯 Marcadores por partido
+              </h4>
+              <div className="space-y-2">
+                {agentMatchRows.map((r) => (
+                  <div
+                    key={`${r.team1}|${r.team2}`}
+                    className="rounded-lg p-3 space-y-1.5"
+                    style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+                  >
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <span className="text-[0.7rem] font-bold" style={{ color: "var(--color-ink)" }}>
+                        {teams[r.team1]?.flag} {r.team1} {r.score1}–{r.score2} {r.team2} {teams[r.team2]?.flag}
+                      </span>
+                      <span className="font-mono text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
+                        GRP {r.group} · J{r.groupMd}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5">
+                      {agentNames.map((agentName) => {
+                        const g = r.goals[agentName];
+                        const hit = r.hits[agentName];
+                        if (!g) return null;
+                        const emoji = agentName === "Group Analyst" ? "🔵" : agentName === "Tactical Scout" ? "🟠" : agentName === "Sentiment Reader" ? "🟡" : "🏆";
+                        return (
+                          <div
+                            key={agentName}
+                            className="flex items-center justify-between gap-1 rounded px-2 py-1"
+                            style={{
+                              background: hit ? "rgba(52,211,153,0.08)" : "rgba(207,10,44,0.08)",
+                              border: `1px solid ${hit ? "rgba(52,211,153,0.25)" : "rgba(207,10,44,0.2)"}`,
+                            }}
+                          >
+                            <span className="text-[0.58rem] truncate" style={{ color: "var(--color-ink-muted)" }}>
+                              {emoji} {agentName}
+                            </span>
+                            <span
+                              className="font-mono text-[0.62rem] font-bold shrink-0"
+                              style={{ color: hit ? "#34d399" : "var(--color-wc-red)" }}
+                            >
+                              {hit ? "✅" : "❌"} {g.g1}-{g.g2}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Por grupo: Modelo ML vs Agentes, lado a lado */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <GroupAccuracyTable
@@ -452,56 +587,6 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
           />
         </div>
       </div>
-
-      {/* Desempeño por agente: 4 predicciones (3 agentes + consenso) */}
-      {agentStatsByAgent && Object.keys(agentStatsByAgent).length > 0 && (
-        <div className="rounded-xl p-5 space-y-4" style={{ ...cardBg, borderColor: "rgba(101,165,206,0.15)" }}>
-          <div>
-            <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
-              🤖 Precisión por experto (1X2)
-            </h3>
-            <p className="text-[0.6rem] mt-1" style={{ color: "var(--color-ink-muted)" }}>
-              Evaluación de las 4 predicciones: Group Analyst, Tactical Scout, Sentiment Reader, y Consenso
-            </p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {agentNames.map((agentName) => {
-              const stats = agentStatsByAgent[agentName];
-              if (!stats) return null;
-              const pct = stats.played > 0 ? Math.round((stats.hits / stats.played) * 100) : null;
-              const color = pct !== null && pct >= 50 ? "var(--color-wc-gold)" : "var(--color-ink-muted)";
-              const emoji = agentName === "Group Analyst" ? "🔵" : agentName === "Tactical Scout" ? "🟠" : agentName === "Sentiment Reader" ? "🟡" : "🏆";
-              return (
-                <div
-                  key={agentName}
-                  className="rounded-lg p-3 space-y-2"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-                >
-                  <div className="text-xs font-bold whitespace-normal" style={{ color: "var(--color-ink)" }}>
-                    {emoji} {agentName}
-                  </div>
-                  <div className="space-y-1.5">
-                    <div className="flex items-baseline gap-2">
-                      <div className="font-mono font-black text-base" style={{ color }}>
-                        {pct !== null ? `${pct}%` : "—"}
-                      </div>
-                      <div className="text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
-                        {stats.hits}/{stats.played}
-                      </div>
-                    </div>
-                    <div className="rounded-full overflow-hidden" style={{ height: 3, background: "rgba(255,255,255,0.06)" }}>
-                      <div
-                        className="h-full rounded-full transition-all duration-700"
-                        style={{ width: pct !== null ? `${pct}%` : "0%", background: color }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* Sorpresas */}
       {surprises.length > 0 && (

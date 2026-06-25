@@ -127,10 +127,14 @@ export interface AgentMatchResult {
   groupMd: number;
   team1: string;
   team2: string;
+  score1: number;
+  score2: number;
   /** Acertó quién gana (1X2) para cada predicción (por agente + consenso). */
   hits: Record<string, boolean>;
   /** Acertó el marcador exacto para cada predicción. */
   scoreHits: Record<string, boolean | null>;
+  /** Marcador predicho (orientado a team1/team2) por cada agente + consenso. */
+  goals: Record<string, { g1: number; g2: number }>;
 }
 
 export interface AgentStats {
@@ -161,6 +165,7 @@ export function computeAgentResults(
 
       const hits: Record<string, boolean> = {};
       const scoreHits: Record<string, boolean | null> = {};
+      const goals: Record<string, { g1: number; g2: number }> = {};
 
       // Evaluar cada predicción (4: 3 agentes + consenso)
       for (const pred of debateMatch.predictions) {
@@ -170,6 +175,7 @@ export function computeAgentResults(
 
         hits[agentName] = winner === actual;
         scoreHits[agentName] = g1 === score.s1 && g2 === score.s2;
+        goals[agentName] = { g1, g2 };
       }
 
       out.push({
@@ -177,8 +183,11 @@ export function computeAgentResults(
         groupMd: roundToJor(m.round ?? "Matchday 1"),
         team1: m.team1,
         team2: m.team2,
+        score1: score.s1,
+        score2: score.s2,
         hits,
         scoreHits,
+        goals,
       });
     }
   }
