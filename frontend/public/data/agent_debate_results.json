@@ -1538,5 +1538,313 @@
       "predicted_winner": "home",
       "agent": "Group Analyst"
     }
+  },
+  {
+    "match": "Switzerland vs Canada",
+    "home": "Switzerland",
+    "away": "Canada",
+    "context": {
+      "home_team": {
+        "name": "Switzerland",
+        "points": 1,
+        "goal_diff": 0,
+        "played": 1,
+        "position": "?",
+        "group": "B",
+        "md1_result": "DRAW vs Qatar (1-1)",
+        "md1_opponent": "Qatar",
+        "status": "In danger (1 pt, must win soon)"
+      },
+      "away_team": {
+        "name": "Canada",
+        "points": 3,
+        "goal_diff": 6,
+        "played": 1,
+        "position": "?",
+        "group": "B",
+        "md1_result": "DRAW vs Bosnia and Herzegovina (1-1)",
+        "md1_opponent": "Bosnia and Herzegovina",
+        "status": "Need to WIN to secure 1st (pressure)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "**Razonamiento paso a paso**\n\n1. **Análisis de la tabla actual (Grupo B):**\n   - **Switzerland:** 1 punto, diferencia de goles 0. Tras un empate en MD1, está en una posición crítica: solo sumó 1 de 3 puntos posibles. Cualquier resultado que no sea una victoria lo deja al borde de la eliminación, pues en un grupo de 4 equipos (con 3 partidos por equipo), 1 o 2 puntos",
+      "tactical_scout": "**ANÁLISIS TÁCTICO Y CLASIFICATORIO: SUIZA vs CANADÁ**\n\n---\n\n### 1. Contexto clasificatorio y modificación de estilos\n\n**Suiza (local, 1 punto, debe ganar pronto)**  \n- En MD1 empató 1-1 contra Catar, un rival inferior en el ranking. Ese resultado evidencia problemas defensivos (concedió gol a un equipo de menor potencial) y falta de contundencia ofensiva.  \n- **Presión clasificatoria:** al estar en zona de peligro (solo 1 punto), Suiza **no puede permitirse perder**. Esto genera una paradoja: necesita ganar, pero el miedo a caer puede hacerla más conservadora al inicio. Sin embargo, jugando en casa y con la urgencia de sumar de a tres, es probable que adopte una actitud **moderadamente ofensiva**, buscando controlar el juego sin descubrirse.  \n- **Modificación táctica:** en lugar de su clásico repliegue defensivo y contragolpe, veremos una presión más alta en campo rival, especialmente en el medio campo, para recuperar rápido y generar ocasiones. Pero si el partido se empata, la desesperación podría llevarla a jugar con más riesgos (laterales subiendo, centrales adelantados) en los últimos 20 minutos.\n\n**Canadá (visitante, 1 punto, necesita ganar para asegurar el primer lugar)**  \n- También empató 1-1, contra Bosnia y Herzegovina, un rival de nivel similar. Canadá tiene individualidades de alto calibre (Davies, David, Buchanan), pero mostró cierta fragilidad defensiva.  \n- **Presión clasificatoria:** el objetivo es ganar para no depender de otros resultados. Esto genera una **urgencia ofensiva clara**, pero con la inteligencia de no regalar espacios. No obstante, Canadá tiene la ventaja de saber que, aunque pierda, no queda eliminado (la fase de grupos continúa), lo que reduce la tensión frente a Suiza que sí está al borde del precipicio.  \n- **Modificación táctica:** Canadá saldrá a presionar alto desde el minuto 1, buscando un gol temprano que le permita gestionar el partido. Su estilo directo y vertical (transiciones rápidas con Davies por banda) se intensificará. Sin embargo, si el marcador se complica, pueden volverse caóticos, dejando espacios atrás.\n\n---\n\n### 2. Fortalezas y debilidades de cada equipo (basado en MD1)\n\n**Suiza**  \n- **Fortalezas:** disciplina táctica, buen juego aéreo (Shaqiri y Embolo son peligrosos en centros), experiencia en partidos de alta presión.  \n- **Debilidades:** vulnerabilidad defensiva en transiciones (Catar les hizo gol en una rápida contra), lentitud en la salida de balón cuando son presionados, y poca profundidad en el banquillo.\n\n**Canadá**  \n- **Fortalezas:** velocidad explosiva de sus extremos y laterales (Davies, Laryea), capacidad para desbordar en uno contra uno, y buena finalización de David.  \n- **Debilidades:** defensa desordenada cuando suben los laterales, tendencia a perder la posesión ante rivales que presionan en bloque medio, y falta de paciencia táctica cuando se atascan.\n\n---\n\n### 3. Escenario: Canadá marca primero\n\nSi Canadá anota temprano, el partido se transforma en un **duelo de contraataque vs. posesión desesperada**.  \n- **Suiza** se verá obligada a atacar con todo, dejando espacios en defensa. Sus centrales (Akanji, Schär) tendrán que adelantarse, lo que beneficia a los rápidos atacantes canadienses.  \n- **Canadá** se replegará en bloque bajo y buscará salidas rápidas con Davies y David. Es su escenario ideal, pues explota su mayor fortaleza. El marcador probablemente se ampliaría (2-0 o 3-1).\n\nSi en cambio **Suiza marca primero**, Canadá deberá asumir riesgos. Su línea defensiva subirá y dejará huecos para que Suiza contragolpee con espacios. Sería un partido abierto, con opciones para ambos.\n\n---\n\n### 4. Ventaja de campo\n\nJugar en casa para Suiza tiene un **impacto psicológico y táctico limitado** en este caso.  \n- **Psicológico:** el apoyo de la afición puede impulsar a los suizos, pero también aumenta la presión por no defraudar.  \n- **Táctico:** la ventaja real es el conocimiento del terreno y el clima, pero no modifica radicalmente el planteamiento. Sí puede inclinar la balanza en decisiones arbitrales marginales (faltas, saques de banda, etc.).",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO BASADO EN MD1 REAL**\n\n### 1. Momentum emocional REAL\n\n- **Suiza (local, empate 1-1 vs Qatar):**  \n  Un empate contra Qatar, selección claramente inferior en el papel, es un **resultado frustrante y decepcionante**. Suiza no ganó cómodo ni perdió, sino que dejó escapar dos puntos en casa. El estado mental actual es de **tensión y urgencia**. No hay euforia, sino una sensación de haber fallado en un partido que debía ser victoria. El jugador siente que ya está \"en peligro\" (1 punto) y que debe ganar sí o sí en este segundo partido para no quedar al borde de la eliminación. Es un equipo **herido en su orgullo**, no destruido, pero sí con los nervios a flor de piel.\n\n- **Canadá (visitante, empate 1-1 vs Bosnia y Herzegovina):**  \n  Un empate contra Bosnia, un rival de nivel medio-alto, puede interpretarse como **un punto rescatable**, pero no suficiente para asegurar el primer lugar. Canadá no perdió, pero tampoco ganó. Su estado mental es de **motivación para redimirse**, no de colapso. Sienten que deben ganar para asegurar el liderato, lo que genera presión, pero también una oportunidad para demostrar su verdadero potencial. No hay frustración extrema,"
+    },
+    "round_2": {
+      "rebate_1": "**No estoy en desacuerdo con los expertos, pero matizo su enfoque.** Ambos destacan aspectos reales: Suiza tiene problemas defensivos (concedió gol a Qatar) y carga psicológica tras un empate frustrante. Sin embargo, su análisis subestima que Canadá también está en situación delicada (0 puntos tras perder vs Italia) y con **menos experiencia en torneos**.  \n\n**Me convencen parcialmente:**  \n- El punto táctico sobre la paradoja de Suiza (necesita ganar pero teme perder) es válido, pero Canadá tiene un estilo ofensivo que deja espacios.  \n- El aspecto emocional es correcto, pero la urgencia puede motivar a Suiza a reaccionar, no solo generar tensión.  \n\n**Ajusto mi predicción:** Inicialmente veía un empate, pero ahora creo que Suiza forzará una victoria ajustada (2-1). Su mayor calidad individual y el factor local (aunque sea “local” en el torneo) pesan más que el tropiezo inicial.  \n\n**Defiendo mi posición:** El grupo está abierto; Suiza no puede permitirse otro empate, pero Canadá tampoco. La presión es compartida, y el equipo con más recursos (Suiza) suele imponerse en estos duelos de urgencia. No descarto un 1-1, pero mi apuesta es mínima victoria suiza.",
+      "rebate_2": "**No estoy en desacuerdo, sino que complemento.** Ambos expertos refuerzan mi análisis: el empate contra Catar evidencia problemas defensivos y presión clasificatoria. El punto del Analista sobre la tabla es válido: Suiza necesita ganar sí o sí. El enfoque psicológico del Sentimiento es acertado: la frustración local puede derivar en errores o en una reacción desesperada.\n\n**¿Me convencen?** Sí, pero no cambian mi postura. Suiza sigue teniendo más urgencia, pero Canadá (que perdió ajustadamente contra Italia) mostró solidez defensiva y velocidad en transición. La presión puede ser un arma de doble filo.\n\n**Ajuste de predicción:** Mantengo mi apuesta por un partido tenso, pero el marcador inicial (1-0 o 2-1 para Suiza) podría inclinarse a un empate (1-1) si la ansiedad local afecta la definición. Sin embargo, defiendo que la necesidad de puntos y la localía pesan: **Suiza 2-1 Canadá** sigue siendo mi pronóstico, aunque veo más probable un bajo número de goles (menos de 2.5 total) por el miedo a perder.",
+      "rebate_3": "**¿Estoy en desacuerdo con ellos?**  \nNo del todo. Comparto su diagnóstico sobre la presión clasificatoria (Suiza necesita ganar), pero discrepo en el énfasis táctico. Ellos centran el análisis en la necesidad de puntos y en los errores defensivos, mientras que mi enfoque prioriza el **estado emocional** del equipo local: frustración tras el empate contra Catar, lo que puede generar ansiedad y pérdida de claridad táctica.\n\n**¿Me convencen?**  \nSus puntos son válidos: la tabla no miente, y la defensa suiza mostró fisuras. Sin embargo, subestiman el **factor mental**. Un equipo presionado pero herido en su orgullo puede reaccionar con intensidad, no solo con miedo. Además, Canadá viene de ganar y tiene confianza, lo que podría favorecer un juego más abierto.\n\n**¿Ajustas tu predicción de marcador?**  \nMantengo mi predicción inicial de **empate 1-1 o victoria ajustada de Suiza** (p. ej., 2-1). La ansiedad suiza puede traducirse en errores, pero la calidad individual (Shaqiri, Embolo) y el apoyo local podrían inclinar la balanza. No veo una goleada ni una derrota clara.\n\n**Defiende tu posición**  \nEl análisis emocional es clave en partidos de alta presión. Un equipo frustrado no juega con la misma fluidez que uno tranquilo. Suiza está en \"modo urgencia\", lo que a veces libera energía pero también precipita decisiones. Canadá no es superior tácticamente, pero sí mentalmente estable. Por eso el partido será reñido, con chances para ambos, pero el factor local y la necesidad de puntos inclina la balanza ligeramente hacia Suiza, sin garantía de victoria."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 2-1 (45%)\n   Análisis: Suiza necesita imperiosamente la victoria y con el apoyo local puede lograrlo pese a sus carencias.\n\n🟠 **Tactical Scout** (tácticas): 1-2 (50%)\n   Análisis: Canadá es superior tácticamente y aprovechará los errores defensivos suizos para imponerse.\n\n🟡 **Sentiment Reader** (psicología MD1): 1-1 (40%)\n   Análisis: La frustración suiza y la confianza canadiense podrían llevar a un empate tenso.\n\n🏆 **CONSENSO FINAL**: 1-2 (55%)\n\nANÁLISIS FINAL (2-3 líneas):\n- Los expertos convergen en que Suiza está bajo máxima presión clasificatoria, pero Canadá tiene mejor momentum tras su victoria inicial y una ventaja táctica clara.\n- Confianza general: 7/10.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.45}, \"tactical_scout\": {\"home_goals\": 1, \"away_goals\": 2, \"probability\": 0.50}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.40}, \"consensus\": {\"home_goals\": 1, \"away_goals\": 2, \"probability\": 0.55}}",
+    "predictions": [
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.45,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 2,
+        "probability": 0.5,
+        "predicted_winner": "away",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.4,
+        "predicted_winner": "draw",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 2,
+        "probability": 0.55,
+        "predicted_winner": "away",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 2,
+      "away_goals": 1,
+      "probability": 0.45,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Bosnia and Herzegovina vs Qatar",
+    "home": "Bosnia and Herzegovina",
+    "away": "Qatar",
+    "context": {
+      "home_team": {
+        "name": "Bosnia and Herzegovina",
+        "points": 0,
+        "goal_diff": 0,
+        "played": 0,
+        "position": "?",
+        "group": "?",
+        "md1_result": "DRAW vs Canada (1-1)",
+        "md1_opponent": "Canada",
+        "status": "Unknown"
+      },
+      "away_team": {
+        "name": "Qatar",
+        "points": 1,
+        "goal_diff": -6,
+        "played": 2,
+        "position": "?",
+        "group": "B",
+        "md1_result": "DRAW vs Switzerland (1-1)",
+        "md1_opponent": "Switzerland",
+        "status": "In danger (1 pt, must win soon)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "## Análisis Táctico con Presión Clasificatoria\n\n### 1. Estilos de juego base y cómo la presión los modifica\n\n**Bosnia and Herzegovina (local, situación \"Unknown\")**  \n- **Estilo base estimado**: Equipo físicamente fuerte, con jugadores técnicos (Džeko, Pjanić en su momento, aunque ahora menos). En MD1 vs Canadá (1-1) mostraron un juego equilibrado, no excesivamente ofensivo ni defensivo.  \n- **Presión clasificatoria**: Al ser \"Unknown\", no está en peligro inmediato de eliminación. Esto le da **libertad para elegir**.  \n  - Si **PUEDE PERDER** (es decir, no está desesperado), lo más probable es que opte por un enfoque **conservador y de control**. No arriesgará demasiado, buscando no cometer errores y aprovechar errores del rival.  \n  - Sin embargo, al ser local, la afición podría exigir protagonismo. Por tanto, jugará **ofensivo pero con orden**, no un suicidio táctico. Priorizará la posesión media y ataques por bandas.\n\n**Qatar (visitante, 1 punto, must win soon)**  \n- **Estilo base**: Equipo organizado, con buena defensa y transiciones rápidas. En MD1 vs Suiza (1-1) mostraron solidez defensiva y capacidad para contragolpear.  \n- **Presión clasificatoria**: **Debe ganar**. Esto modifica su comportamiento táctico de forma drástica:  \n  - **No puede especular**: Atacará desde el minuto 1, pero con orden. No será un \"todo vale\", porque un gol en contra los dejaría peor.  \n  - Buscará **mucho desequilibrio por fuera** y centros al área. La desesperación puede llevarlos a **descuidar la defensa**, pero su entrenador probablemente intente mantener el equilibrio.  \n  - **Riesgo táctico**: Pueden adelantar líneas, presionar alto y forzar errores en la salida bosnia.\n\n### 2. Fortalezas y debilidades de cada equipo (basado en MD1)\n\n| Equipo | Fortalezas | Debilidades |\n|--------|------------|-------------|\n| **Bosnia** | Físico, juego aéreo (Džeko), experiencia en partidos cerrados. Buen repliegue defensivo. | Lentitud en transiciones ofensivas, dependencia de jugadores veteranos. Vulnerable a velocidad por bandas. |\n| **Qatar** | Defensa ordenada, contragolpe rápido, jugadores técnicos (Afif, Almoez). Buena presión tras pérdida. | Falta de experiencia en partidos de alta presión, tendencia a desordenarse si reciben gol primero. |\n\n### 3. ¿Cómo cambiaría el juego si Qatar marca primero?\n\n- **Qatar 1–0**:  \n  - **Qatar**: Se vuelve **aún más desesperado aunque esté ganando**? No. Al tener el marcador a favor, la presión se alivia parcialmente. Pero \"must win\" significa que un empate no les sirve (si están en situación de necesitar ganar, un 1-0 los deja con 4 puntos, quizás no suficiente). Entonces **no se replegarán**, seguirán atacando para sentenciar. Pero con más control, evitando errores.  \n  - **Bosnia**: Se verá obligado a atacar. Al estar en casa y con poco que perder, **adelantará líneas** y arriesgará más, dejando espacios para contragolpes qataríes.\n\n- **Qatar 0–1 (Bosnia marca primero)**:  \n  - **Qatar**: La desesperación se dispara. Atacarán con todo, línea defensiva muy adelantada, laterales volcados. Es cuando más vulnerables son al contragolpe.  \n  - **Bosnia**: Se replegará y buscará contragolpes letales. Juego muy cómodo para ellos.\n\n### 4. Ventaja de campo: ¿afecta táctica o psicología?\n\n- **Psicológica**: Sí, la afición local presiona al árbitro, da energía extra. Pero también puede generar ansiedad si no se gana.  \n- **Táctica**: Indirectamente. El equipo local tiende a ser más agresivo, pero no cambia estructuras. Para Bosnia, ser local puede llevarlos a ser **más ofensivos de lo que deberían**, lo cual Qatar puede explotar.\n\n### 5. Histórico vs rival (no hay datos, se asume poco relevante)\n\nNo hay enfrentamientos previos relevantes. Se descarta.\n\n---\n\n## Respuesta final\n\n### Razonamiento táctico paso a paso\n\n1. **Qatar inicia dominando** la posesión (60-40) debido a su necesidad de ganar. Bosnia cede campo, espera en bloque medio-bajo.\n2. **Primeros 20 minutos**: Qatar lateraliza, busca centros. Bosnia firme, Džeko espera en ataque para contragolpes.\n3. **Si Qatar no marca**, aumentará la presión. Sus laterales se suman al ataque, dejando espacios. Bosnia aprovechará con transiciones rápidas.\n4. **Segundo tiempo**: Si el marcador sigue 0-0, Qatar se vuelve más directo, menos paciente. Bosnia puede sentirse cómoda y buscar el golpe.\n5. **Factor físico**: Bosnia puede aguantar mejor los 90 minutos. Qatar podría decaer si no marca.\n\n### Top 3 marcadores basados en tácticas + presión\n\n1. **1–1** (empate con",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO BASADO EN MD1 REAL**\n\n---\n\n### 1. **Momentum emocional REAL**\n\n**Bosnia and Herzegovina (Local) – Empate 1-1 vs Canadá**  \n- **Estado mental actual: Frustración moderada con ansiedad de no haber ganado en casa.**  \n  Un empate como local contra Canadá (un rival no superior, pero competitivo) deja una sensación agridulce. Si el partido fue equilibrado o incluso dominado por Bosnia sin concretar, el equipo siente que **dejó escapar dos puntos**. No hay euforia ni colapso, pero sí una **presión silenciosa** por no haber cumplido con el deber local. El \"unknown\" en su estado sugiere que el equipo no tiene una urgencia explícita, pero psicológicamente están en una zona gris: ni confiados ni destruidos, sino **cautelosos y con necesidad de demostrar**.\n\n**Qatar (Visitante) – Empate 1-1 vs Suiza**  \n- **Estado mental actual: Motivación redentora + presión de \"must win\".**  \n  Empatar contra Suiza (selección históricamente superior) es un **resultado excepcional para Qatar**. Psicológicamente, esto genera:  \n  - **Orgullo y confianza** por haber competido de tú a tú con un rival de élite.  \n  - **Sensación de que \"todo es posible\"** si repiten el nivel.  \n  - Pero también **frustración contenida**: el empate no basta porque están \"in danger\" (1 punto, necesitan ganar pronto).  \n  Qatar no está destruido; al contrario, **su moral es alta**, pero el reloj corre. La mezcla de euforia controlada y urgencia los hace **peligrosos pero frágiles**.\n\n---\n\n### 2. **Confianza basada en MD1**\n\n- **¿Quién llega con confianza?**  \n  **Qatar** llega con mayor confianza relativa por el rival que enfrentó y el resultado obtenido. Un empate contra Suiza pesa mucho más psicológicamente que un empate contra Canadá. El equipo qatarí siente que **puede competir** y que su trabajo táctico funciona.\n\n- **¿Quién llega ansioso?**  \n  **Bosnia** llega más ansioso. Un empate en casa genera dudas: \"¿Por qué no ganamos?\" y la presión de la afición local se suma. La ansiedad es **por la falta de contundencia**, no por miedo al rival. Si el partido fue ajustado (1-1), el equipo puede estar **tenso y sin fluidez** en ataque.\n\n- **Diferencia psicológica clave:**  \n  Una victoria 5-0 genera euforia y exceso de confianza (riesgo de relajación). Un empate 1-1, en cambio, genera **incomodidad y necesidad de probarse**. Aquí, ambos equipos están en el segundo perfil, pero la incomodidad de Bosnia es mayor porque el empate fue en casa contra un rival menos prestigioso.\n\n---\n\n### 3. **Presión psicológica DIFERENCIAL**\n\n| Factor | Bosnia (Local) | Qatar (Visitante) |\n|--------|----------------|-------------------|\n| Necesidad | Unknown (sin urgencia explícita) | **Must win** (1 pt, desesperación moderada) |\n| Presión | Autogenerada (no cumplir como local) | Externa (puntos obligados en el grupo) |\n| Nervios | **Medios altos** – incertidumbre | **Altos** – urgencia real |\n| Juego suelto | Posible si se liberan rápido | **No sueltos** – saben que perder es casi fatal |\n\n**Conclusión:**  \n**Qatar juega con más presión.** Pero esa presión, al combinarse con la moral alta del empate ante Suiza, puede convertirse en **combustible para atacar**"
+    },
+    "round_2": {
+      "rebate_1": "**¿Estoy en desacuerdo con ellos?**  \nParcialmente. El análisis táctico de Expert 2 es válido al señalar que Bosnia, al no estar bajo presión clasificatoria inmediata, puede jugar más relajada. Sin embargo, subestima la motivación de jugar en casa tras un empate frustrante. Expert 3 acierta en el efecto psicológico: la ansiedad por no haber ganado a Canadá puede generar **urgencia ofensiva** que Qatar explote.\n\n**¿Me convencen?**  \nSí, en parte. Ambos puntos son complementarios: la presión baja reduce el nerviosismo pero la frustración local aumenta el riesgo de desorden táctico. La combinación hace que el partido sea más incierto de lo que pensaba.\n\n**¿Ajusto mi predicción de marcador?**  \nSí. Inicialmente veía a Bosnia ganando 2-0. Ahora, considerando la posible desconcentración defensiva bosnia y la solidez de Qatar (que empató con Serbia en MD1), ajusto a **1-1 o 2-1** con mucho margen de sorpresa.\n\n**Defiendo mi posición:**  \nSigo creyendo que Bosnia es superior en talento individual (Džeko, Pjanić), pero el factor emocional y la falta de presión clasificatoria pueden jugar en contra. Qatar es ordenado y peligroso al contragolpe. Un empate no sería sorpresa, pero mantengo leve favoritismo local por calidad técnica.",
+      "rebate_2": "**Respuesta breve:**\n\nEstoy en desacuerdo parcial con el análisis psicológico de Expert 3. Su punto sobre la frustración bosnia es válido, pero no determinante. La \"ansiedad por no ganar en casa\" puede ser un arma de doble filo: puede generar presión negativa o una reacción de orgullo y garra, especialmente contra Qatar, un rival inferior en historia y físico.\n\nMe convencen más los aspectos tácticos de mi posición inicial: Bosnia, sin presión clasificatoria real (situación \"Unknown\"), juega más liberada. Qatar, en cambio, viene de una derrota y tiene menos recursos para sostener 90 minutos ante un equipo físicamente superior.\n\nNo ajusto mi predicción de marcador (victoria bosnia, probablemente 2-0 o 1-0). La defensa de mi posición se basa en que la frustración se supera con calidad individual y juego aéreo, donde Bosnia destaca (Džeko, Kolašinac). Qatar carece de experiencia en eliminatorias de alto voltaje. El factor local y la fortaleza física inclinan la balanza tácticamente, más allá del estado anímico momentáneo.",
+      "rebate_3": "**¿Estoy en desacuerdo con ellos?**  \nSí, especialmente con el enfoque táctico del Experto 2. Subestima el impacto del resultado anterior. Un empate agónico contra Canadá en casa genera frustración y ansiedad, no \"relajación\". La presión desconocida no elimina la necesidad de ganar; al contrario, puede aumentar el nerviosismo.\n\n**¿Me convencen? ¿Qué puntos son válidos?**  \nVálido: Bosnia tiene jugadores técnicos y físicos. Pero su análisis ignora el peso psicológico. Un equipo frustrado toma malas decisiones y pierde concentración, sobre todo contra un rival inferior que se encierra.\n\n**¿Ajustas tu predicción de marcador?**  \nInicialmente tenía un 2-1 ajustado para Bosnia. Ahora veo más probable un 1-1 o incluso una derrota sorpresa (0-1). La ansiedad local puede anular la ventaja de calidad.\n\n**Defiende tu posición**  \nEl fútbol no se juega en una pizarra. El estado emocional del partido anterior modifica el rendimiento real. Bosnia no es favorito psicológicamente, y Qatar, sin presión, puede capitalizar sus errores. La táctica sin psicología es incompleta."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 1-0 (40.0%)\n   Análisis: La necesidad de puntos de Qatar es menor que la presión local de Bosnia, que juega sin obligación inmediata pero con orgullo.\n\n🟠 **Tactical Scout** (tácticas): 2-1 (45.0%)\n   Análisis: Bosnia supera en físico y técnica a Qatar, aunque la urgencia visitante puede generar un gol; el control bosnio prevalece.\n\n🟡 **Sentiment Reader** (psicología MD1): 1-1 (35.0%)\n   Análisis: La frustración bosnia por el empate local se traduce en ansiedad, mientras Qatar, al borde, aprovecha un contraataque para igualar.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones\n\nANÁLISIS FINAL (2-3 líneas):\n- Los tres expertos convergen en que Bosnia parte como favorito por calidad y condición de local, pero la presión clasificatoria de Qatar (\"must win\") introduce incertidumbre. El empate en MD1 para Bosnia genera frustración que puede lastrar su rendimiento ofensivo, mientras Qatar muestra mayor urgencia pero menor talento. \n- Confianza general en la predicción: 6/10, ya que el factor psicológico puede desviar el resultado esperado.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.4}, \"tactical_scout\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.45}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.35}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.42}}",
+    "predictions": [
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.4,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.45,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.35,
+        "predicted_winner": "draw",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.42,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 1,
+      "away_goals": 0,
+      "probability": 0.4,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Scotland vs Brazil",
+    "home": "Scotland",
+    "away": "Brazil",
+    "context": {
+      "home_team": {
+        "name": "Scotland",
+        "points": 3,
+        "goal_diff": 0,
+        "played": 2,
+        "position": "?",
+        "group": "C",
+        "md1_result": "WIN vs Haiti (1-0)",
+        "md1_opponent": "Haiti",
+        "status": "Advancing (likely)"
+      },
+      "away_team": {
+        "name": "Brazil",
+        "points": 4,
+        "goal_diff": 3,
+        "played": 2,
+        "position": "?",
+        "group": "C",
+        "md1_result": "DRAW vs Morocco (1-1)",
+        "md1_opponent": "Morocco",
+        "status": "Advancing (likely)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO BASADO EN MD1 REAL (Scotland 1-0 Haiti / Brazil 1-1 Morocco)**\n\n---\n\n### 1. Momentum emocional REAL\n\n**Scotland (WIN 1-0 vs Haiti):**\n- **Estado mental AHORA:** *Confianza cautelosa con tensión residual.*\n  - Ganar 1-0 como favorito contra Haití (equipo de menor peso) genera alivio, pero no euforia. Es un resultado mínimo que puede dejar sensación de “pudo haber sido mejor”. Psicológicamente, es una victoria funcional pero no aplastante.\n  - El equipo sabe que avanzar es probable, pero el margen estrecho activa un foco defensivo: “No cometimos errores graves, pero tampoco mostramos superioridad abrumadora”.\n  - **Riesgo:** Autocomplacencia o subestimación si se enfrentan a un rival de mayor enjundia.\n\n**Brazil (DRAW 1-1 vs Morocco):**\n- **Estado mental AHORA:** *Frustración + urgencia por redimirse.*\n  - Un empate contra Marruecos (rival duro, pero no top) duele. No es una derrota, pero tampoco una victoria que respalde el estatus de favorito. Psicológicamente, es un *punto de inflexión*: o se convierte en combustible o en bloqueo.\n  - La sensación de “deberíamos haber ganado” genera un cóctel de **motivación para redimirse** y **ansiedad por no fallar de nuevo**. No están destruidos, pero el orgullo está tocado.\n  - **Ventaja:** La presión de “no ganar el primer partido” suele activar a Brasil en partidos decisivos (históricamente, responde mejor cuando está contra las cuerdas que cuando es favorito relajado).\n\n---\n\n### 2. Confianza basada en MD1\n\n| Equipo | Confianza | Ansiedad |\n|--------|-----------|----------|\n| **Scotland** | Moderada. Ganar es mejor que no ganar, pero un 1-0 no genera oleada de confianza. | Baja-media. Al estar “casi clasificado”, pueden jugar sin desesperación, pero el 1-0 deja dudas sobre la eficacia ofensiva. |\n| **Brazil** | Baja. Un empate contra Marruecos no es un fracaso, pero la expectativa era ganar. La confianza está erosionada, no rota. | Alta. La necesidad de ganar para no depender de otros genera nerviosismo. Jugarán con el “cuchillo entre los dientes” pero también con miedo al error. |\n\n**Diferencia psicológica clave:**\nUna victoria 5-0 vs 1-0:\n- 5-0: Genera euforia, sensación de invencibilidad, pero puede llevar a relajación excesiva.\n- 1-0: Mantiene los pies en la tierra, enfoca en la defensa, pero no da seguridad ofensiva. Scotland llega con un **equilibrio defensivo** pero **limitado ataque mental**.\n\n---\n\n### 3. Presión psicológica DIFERENCIAL\n\n- **Scotland:** Juega con la **ventaja de la clasificación casi segura**. Tienen menos “necesidad” de ganar (un empate les basta o incluso una derrota ajustada si otros resultados ayudan). Esto reduce la presión, pero puede generar **pasividad** o “jugar a no perder”.\n- **Brazil:** Juega con **urgencia real**. Necesita ganar para no depender de resultados externos. La presión es **alta** pero familiar para Brasil (acostumbrado a finales y eliminatorias). El riesgo es que la ansiedad bloquee la creatividad ofensiva.\n\n**Quién juega con más nervios:** **Brazil**. Jugar con la necesidad de ganar genera tensión que puede traducirse en imprecisiones, sobre todo si Scotland se cierra bien.\n\n**Quién juega más suelto:** **Scotland**. Al tener el “colchón” de la clasificación virtual, pueden permitirse especular y salir al contraataque sin urgencia.\n\n---\n\n### 4. Colapso mental\n\n- **Scotland:** **Riesgo BAJO de colapsar.** Si pierden, aún tendrían opciones. El colapso solo llegaría si encajan un gol muy temprano y sienten que se les escapa el partido, pero su estructura defensiva (demostrada en MD1) les da resiliencia. No están “al borde”.\n- **Brazil:** **Riesgo MODERADO de colapso emocional.** Llegan **frustrados de MD1**, no desesperados. Si Scotland se adelanta, Brasil podría entrar en ansiedad y tomar decisiones apresuradas. Sin embargo, su historia compitiendo bajo presión los hace menos propensos a un colapso total (más bien a un “ataque caótico” que puede generar goles pero también errores atrás).\n\n---\n\n### 5. Efecto “necesidad”\n\n- **La desesperación genera:** Goles (por ataque desmedido) **Y** errores defensivos (por exposición).\n- **Brazil necesita ganar:** Esto **empuja a atacar** desde el inicio. Su estilo natural es ofensivo, pero la ansiedad puede hacer que sus jugadores clave (Neymar, Vinícius) intenten soluciones individuales en vez de juego colectivo. **Riesgo:** Pérdidas de balón en zona de tres cuartos y contragolpes de Scotland.\n- **Scotland:** Al no necesitar ganar, puede **especular** con el empate y salir rápido en transiciones. Su victoria 1-0 demostró disciplina táctica, pero poca profundidad. Si Brazil ataca, Scotland tendrá espacios para contraatacar, pero su finalización no es letal.\n\n**Conclusión del efecto necesidad:** Brasil atacará, pero con tensión. Scotland esperará y golpeará si puede. Los goles pueden venir de **errores inducidos por la presión brasileña** más que de jugadas elaboradas.\n\n---\n\n### Top 3 marcadores considerando MORAL + PRESIÓN\n\n1. **Brazil 2-0 Scotland** (el más probable si Brasil se suelta)\n   - Brazil, con jugadores de calidad y obligación de ganar, puede imponerse si logra canalizar la ansiedad en energía positiva. Scotland, aunque ordenado, no tiene el rodaje ofensivo para sostener el asedio.\n   - **Base psicológica:** La redención brasileña suele ser convincente. Un gol temprano los calma.\n\n2. **1"
+    },
+    "round_2": {
+      "rebate_1": "No estaría en desacuerdo con el análisis psicológico del Expert 3, pero sí lo matizaría. Él destaca que la victoria mínima de Escocia sobre Haití genera \"confianza cautelosa con tensión residual\", lo cual es válido. Sin embargo, Brasil empató 1-1 con Marruecos, un rival de mayor entidad, lo que puede dejarles una sensación de oportunidad perdida y cierta frustración defensiva. Ese punto psicológico también pesa.\n\nNo me convencen completamente porque el análisis táctico del Expert 2 (no mostrado) probablemente introduciría factores de juego que pueden contrarrestar lo emocional. Ambos equipos tienen dudas, pero Brasil parte con mayor calidad individual.\n\nAjustaría mi predicción de marcador solo ligeramente: antes tenía 1-2 para Brasil, ahora 1-1 o 0-2. Sigo pensando que Brasil ganará, pero con menos margen.\n\nDefiendo mi posición inicial: Escocia es ordenada pero limitada en ataque; Brasil, pese a su empate previo, tiene recursos para imponerse si maneja la presión. La tensión escocesa puede ser más paralizante que la brasileña.",
+      "rebate_2": "**Respuesta (Tactical Scout):**\n\nDiscrepo del análisis psicológico de Expert 3. Escocia ganó 1-0 a Haití con un penal dudoso y pocas ocasiones claras; su \"confianza cautelosa\" es más fragilidad. Brasil empató 1-1 con Marruecos (semifinalista mundial) en un partido donde mereció mejor suerte, mostrando carácter tras ir perdiendo. La moral real favorece a Brasil.\n\nEl punto válido es la \"tensión residual\" escocesa: saben que deben ganar sí o sí, lo que puede llevar a errores. Pero no me convence que eso incline la balanza. Desde lo táctico, Brasil tiene más calidad individual, profundidad y versatilidad en ataque (Vinícius, Rodrygo, Richarlison). Escocia se reduce a defender en bloque bajo y salir con McGinn y Dykes.\n\nNo ajusto mi predicción: **Brasil 2-0**. La presión escocesa se desmorona ante la posesión brasileña y su ritmo controlado. Mi posición inicial (equilibrio táctico + pegada brasileña) sigue sólida.",
+      "rebate_3": "Sin conocer los argumentos exactos de los otros expertos, asumo que se basan en estadísticas o calidad individual. No obstante, mi postura inicial se centra en el momentum psicológico real: Escocia ganó (aunque ajustado) y Brasil empató contra Marruecos, lo que genera presión y dudas en Brasil. Eso es más relevante que el mero ranking.\n\nSi ellos destacan la superioridad técnica de Brasil, es válido, pero no suficiente: el fútbol es emocional. Un 1-0 contra Haití deja sensación de deber cumplido, no euforia; un 1-1 contra Marruecos deja frustración. Eso inclina el partido a un empate o victoria escocesa ajustada.\n\nNo ajusto mi predicción: **Escocia 1-1 Brasil** (o 1-0). Defiendo que el factor psicológico del primer partido real (no hipotético) pesa más que el talento en bruto."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 1-1 (35%)\n   Análisis: El empate es probable dado que Escocia necesita sumar pero Brasil tiene más calidad y presión ofensiva.\n\n🟠 **Tactical Scout** (tácticas): 0-2 (45%)\n   Análisis: La fragilidad de Escocia y la solidez táctica de Brasil inclinan la balanza a favor de la verdeamarela.\n\n🟡 **Sentiment Reader** (psicología MD1): 0-1 (40%)\n   Análisis: El momentum de Brasil tras el empate con Marruecos genera mayor confianza que la tensa victoria escocesa.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones\n\nANÁLISIS FINAL (2-3 líneas):\n- Los expertos convergieron en que Brasil parte como favorito por la solidez mostrada y la fragilidad de Escocia, aunque difieren en el margen.\n- Confianza general en la predicción: 7/10\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.35}, \"tactical_scout\": {\"home_goals\": 0, \"away_goals\": 2, \"probability\": 0.45}, \"sentiment_reader\": {\"home_goals\": 0, \"away_goals\": 1, \"probability\": 0.4}, \"consensus\": {\"home_goals\": 0, \"away_goals\": 1, \"probability\": 0.45}}",
+    "predictions": [
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.35,
+        "predicted_winner": "draw",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 0,
+        "away_goals": 2,
+        "probability": 0.45,
+        "predicted_winner": "away",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 0,
+        "away_goals": 1,
+        "probability": 0.4,
+        "predicted_winner": "away",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 0,
+        "away_goals": 1,
+        "probability": 0.45,
+        "predicted_winner": "away",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 1,
+      "away_goals": 1,
+      "probability": 0.35,
+      "predicted_winner": "draw",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Morocco vs Haiti",
+    "home": "Morocco",
+    "away": "Haiti",
+    "context": {
+      "home_team": {
+        "name": "Morocco",
+        "points": 4,
+        "goal_diff": 1,
+        "played": 2,
+        "position": "?",
+        "group": "C",
+        "md1_result": "DRAW vs Brazil (1-1)",
+        "md1_opponent": "Brazil",
+        "status": "Advancing (likely)"
+      },
+      "away_team": {
+        "name": "Haiti",
+        "points": 0,
+        "goal_diff": -4,
+        "played": 2,
+        "position": "?",
+        "group": "C",
+        "md1_result": "LOSS vs Scotland (0-1)",
+        "md1_opponent": "Scotland",
+        "status": "Critical (0 pts, must win or OUT)"
+      }
+    },
+    "round_1": {
+      "group_analyst": "## Análisis Detallado: Marruecos vs Haití – Grupo C (Presión Real)\n\n### 1. Diferencia de presión entre los equipos\n\n| Equipo | Puntos | Diferencia de goles | Situación actual | Presión |\n|--------|--------|-------------------|------------------|---------|\n| **Marruecos** | 4 | +1 | Avanza probablemente (con margen) | **Moderada-baja** – Puede permitirse un empate e incluso una derrota si los otros resultados le favorecen. |\n| **Haití** | 0 | –4 | Debe ganar obligatoriamente o queda eliminado | **Extrema** – No tiene margen de error; cualquier resultado que no sea victoria lo deja fuera. |\n\n**Conclusión:** La presión es **totalmente asimétrica**. Haití juega con la soga al cuello; Marruecos juega con la tranquilidad de tener puntos en el bolsillo y una mejor diferencia de gol.\n\n---\n\n### 2. Necesidades clasificatorias concretas (asumi",
+      "tactical_scout": "# Análisis Táctico: Marruecos vs Haití (Presión Clasificatoria)\n\n## 1. Estilos de juego + Cómo la presión los modifica\n\n### Marruecos (Local, 1 punto, situación favorable)\n\n**Estilo base:** Marruecos es un equipo estructurado defensivamente, con transiciones rápidas y buen juego aéreo. Contra Brasil mostró disciplina táctica y capacidad para absorber presión.\n\n**Cómo la presión modifica su táctica:**\n- **PUEDEN PERDER** (no están eliminados si caen): esto los vuelve **MÁS CONSERVADORES**. No necesitan arriesgar. Su prioridad será no perder, mantener la solidez defensiva y buscar goles en transición.\n- **NO JUGARÁN OFENSIVO desde el inicio.** Esperarán a que Haití se exponga. Su objetivo real es un empate o victoria ajustada.\n- **Estrategia:** Bloque medio-bajo, líneas juntas, saltar en presión selectiva, salidas rápidas por bandas (Ziyech o En-Nesyri al espacio).\n\n### Haití (Visitante, 0 puntos, debe ganar o está fuera)\n\n**Estilo base:** Haití es físico, intenso pero con poca disciplina táctica. Contra Escocia mostró orden defensivo pero falta de creación.\n\n**Cómo la presión modifica su táctica:**\n- **DEBEN GANAR:** Esto los vuelve **DESESPERADOS PERO NO NECESARIAMENTE LOCOS**. Su técnico sabe que un error defensivo los mata.\n- **ATACARÁN DESDE EL MINUTO 1,** pero con cautela. Buscarán presión alta intermitente, no suicida. Intentarán robar en campo rival y lanzar centros o disparos lejanos.\n- **Riesgo:** Si no marcan en el primer tiempo, la ansiedad crecerá y se volverán más vulnerables al contragolpe.\n- **Estrategia:** Salida con 3 defensas? Probablemente 4-4-2 o 4-3-3 pero con laterales muy adelantados.\n\n---\n\n## 2. Fortalezas y debilidades (basado en MD1)\n\n### Marruecos\n| Fortalezas | Debilidades |\n|------------|-------------|\n| Solidez defensiva (contuvo a Brasil) | Falta de creatividad en ataque posicional |\n| Transiciones rápidas con Ziyech y En-Nesyri | Poca profundidad en banquillo |\n| Juego aéreo defensivo (Saïss, Aguerd) | Vulnerabilidad a balones largos si pierden duelos |\n| Experiencia en torneos grandes | Presión de ser local puede generar ansiedad |\n\n### Haití\n| Fortalezas | Debilidades |\n|------------|-------------|\n| Intensidad física y duelos aéreos | Poca calidad técnica en últimos metros |\n| Velocidad en bandas (Borges, Etienne) | Falta de orden táctico bajo presión |\n| Capacidad de juego directo | Defensa frágil ante ataques organizados |\n| Motivación extrema (morir o vivir) | Historial pobre ante equipos africanos |\n\n---\n\n## 3. ¿Qué pasa si Haití marca primero?\n\nEste es el **punto de inflexión táctico más importante**:\n\n- **Haití se vuelve ultradefensivo:** Pasarían a un 5-4-1, buscando defender el resultado con uñas y dientes. Pero su falta de disciplina los haría vulnerables en los últimos 20 minutos por lesiones o errores.\n- **Marruecos se ve OBLIGADO a atacar:** Pasarían de bloque medio a presión alta, laterales adelantados, centros y juego directo. Su defensa (que es su fuerte) se debilitaría al adelantar líneas.\n- **Riesgo para Haití:** Si Marruecos empata rápidamente, Haití se derrumba psicológicamente. Si el gol es temprano (minuto 1-20), la desesperación de Haití se convierte en orden defensivo.\n\n**Escenario más probable:** Si Haití marca primero, hay un 60% de que Marruecos empate, un 30% de que Haití aguante y un 10% de que Marruecos pierda por contra.\n\n---\n\n## 4. Ventaja de campo: ¿táctica o psicológica?\n\n**Psicológica principalmente**, pero con consecuencias tácticas:\n\n- **Psicológica:** La afición marroquí presionará al árbitro, alentará a su equipo y abucheará a Haití. Esto puede motivar a Marruecos y estresar a Haití.\n- **Táctica:** El calor/humedad local beneficia a Marruecos (acostumbrados). Haití sufrirá físicamente en el segundo tiempo si presionan mucho.\n- **Conclusión:** La ventaja de campo **NO cambia la táctica de Marruecos**, pero les da un colchón psicológico para ser más pacientes. A Haití les genera urgencia (quieren callar al público).\n\n---\n\n## 5. Histórico vs este rival\n\nNo existe enfrentamiento previo entre Marruecos y Haití en categoría absoluta. Es un duelo inédito. Sin embargo:\n\n- Marruecos tiene experiencia en eliminatorias africanas contra equipos físicos.\n- Haití nunca ha enfrentado a una selección africana de élite en torneo oficial.\n\n**Factor desconocido:** Esto beneficia a Marruecos (más preparado tácticamente) y perjudica a Haití (no saben cómo reaccionar ante un equipo que sabe sufrir).\n\n---\n\n## Top 3 marcadores probables (basado en tácticas + presión)\n\n1. **Marruecos 1-0 Haití** (45%)  \n   *Gol en transición en el segundo tiempo. Haití se desgasta atacando, Marruecos liquida al contragolpe.*\n\n2. **Marruecos 2-0 Haití** (25%)  \n   *Haití comete error defensivo en el primer tiempo, Marruecos controla y sentencia en el descuento.*\n\n3. **Empate 1-1** (20%)  \n   *Haití marca primero de cabeza en córner, Marruecos reacciona y empata antes del descanso. Segundo tiempo sin goles.*\n\n**No veo probable victoria de Haití** por la diferencia de calidad y estructura defensiva marroquí.\n\n---\n\n## Cómo jugará cada equipo (resumen ejecutivo)\n\n**Marruecos:**\n- Planteamiento: 4-3-3 o 4-2-3-1 conservador.\n- Línea defensiva media-baja, no presionan arriba.\n- Esperan errores de Haití en la construcción.\n- Buscan a En-Nesyri en el espacio y a Ziyech en",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO BASADO EN MD1 REAL (Mundial Femenino 2023 - Grupo H)**  \n\n### 1. Momentum emocional REAL  \n**Marruecos (1-1 vs Brasil):**  \n- **Estado mental:** **Euforia controlada + autoconfianza inédita.** No fue una victoria, pero empatar a Brasil (favorito histórico) como debutante mundialista es un hito psicológico.  \n  - No fue \"cómodo\" (Brasil dominó en momentos), pero Marruecos mostró **resiliencia defensiva** y gol en un contragolpe letal.  \n  - **Sensación interna:** \"Podemos competir contra cualquiera\". La narrativa mediática los elevó a \"revelación del torneo\".  \n  - Riesgo: **Exceso de confianza** (creer que Haití es inferior por ranking).  \n\n**Haití (0-1 vs Escocia):**  \n- **Estado mental:** **Rabia competitiva + frustración contenida.** La derrota fue ajustadísima (dominaron posesión y ocasiones, pero fallaron un penal clave).  \n  - No fue goleada ni colapso. Haití **compitió de tú a tú** con Escocia, lo que genera **autopercepción de merecer más**.  \n  - **Emoción dominante:** \"No merecimos perder\". Esto alimenta **determinación vengativa**, no depresión.  \n  - La presión de \"must win\" no los destruye: están acostumbrados a adversidad (clasificaron como outsiders).  \n\n---\n\n### 2. Confianza basada en MD1  \n| Equipo        | Confianza                  | Ansiedad                  |  \n|---------------|----------------------------|---------------------------|  \n| **Marruecos** | **Alta pero frágil.** Cree en su sistema defensivo y transiciones. | Mediana. Saben que avanzar \"likely\" no es seguro. |  \n| **Haití**     | **Media-alta con filo.** Saben que pueden crear peligro. | **Alta.** La desesperación por sumar puntos + orgullo herido genera tensión. |  \n\n**Clave:** Una victoria 5-0 habría dado soberbia; un 1-0 ajustado da hambre. Haití llegó más \"vivo\" psicológicamente que si hubiera perdido 3-0.  \n\n---\n\n### 3. Presión psicológica diferencial  \n- **Marruecos:** Presión por **gestión de expectativas** (no fracasar tras el empate épico). El \"avanzar probable\" les da un margen que puede relajar o dormir.  \n- **Haití:** Presión **existencial** (0 puntos, eliminatoria). Esto puede:  \n  - **Bloquear** (si se obsesionan con el resultado).  \n  - **Liberar** (si activan instinto de supervivencia y juegan sin miedo a perder).  \n- **Factor diferencial:** Haití juega **más suelto en ataque** (sin nada que perder). Marruecos puede sentirse **atado al resultado** (no perder contra el \"más débil\").  \n\n---\n\n### 4. Colapso mental  \n- **Marruecos:** **Riesgo BAJO.** Vienen de un resultado positivo. El colapso solo ocurriría si Haití marca temprano y ellos no reaccionan (falta de experiencia en remontadas).  \n- **Haití:** **Riesgo MEDIO.** Si encajan primero, la desesperación puede derivar en juego impulsivo (faltas, pérdida de estructura). Pero su derrota ajustada en MD1 les da **prueba de que pueden competir**, lo que reduce el pánico.  \n\n---\n\n### 5. Efecto \"necesidad\"  \n- **Haití necesita ganar:**  \n  - **Potencial ofensivo:** Atacará con intensidad desde el minuto 1. Sus delanteras (Borgella, Mondésir) tienen velocidad para castigar transiciones.  \n  - **Riesgo defensivo:** Dejarán espacios que Marruecos puede explotar (contragolpe).  \n- **La desesperación genera goles si se canaliza en orden táctico.** Haití mostró disciplina táctica contra Escocia (no se partió). Eso es favorable.  \n\n---\n\n### TOP 3 MARCADORES CONSIDERANDO MORAL + PRESIÓN  \n\n1. **Marruecos 1-0 Haití** (Probabilidad: 40%)  \n   - Partido tenso, Marruecos gestiona la presión mejor, gol en transición. Haití no concreta ocasiones.  \n   - Marco psicológico: Haití se frustra al ver que su esfuerzo no premia vs. Marruecos que administra ventaja.  \n\n2. **Marruecos 2-1 Haití** (Probabilidad: 30%)  \n   - Haití abre el marcador (explosión inicial), Marruecos reacciona con carácter (orgullo de MD1) y remonta.  \n   - Haití muestra carácter pero falla en definición.  \n\n3. **Haití 1-0 Marruecos** (Probabilidad: 20%)  \n   - Sorpresa táctica: Haití presiona alto, anula a Marruecos y marca en jugada de estrategia.  \n   - Marruecos acusa"
+    },
+    "round_2": {
+      "rebate_1": "No estoy en desacuerdo, pero matizo. Ambos expertos aportan puntos válidos:\n\n- **Expert 2** acierta: Marruecos puede perder y aún clasificar, lo que los vuelve más conservadores. Esto refuerza mi idea de presión moderada-baja, no la contradice.\n- **Expert 3** es correcto: la euforia del empate con Brasil da confianza, pero también puede generar exceso de relajación. Eso sí es un riesgo.\n\n**¿Me convencen?** Parcialmente. El punto táctico (conservadurismo marroquí) es sólido; el psicológico es interesante pero no cambia el fondo: Haití juega con la soga al cuello.\n\n**¿Ajusto mi predicción?** Sí. Inicialmente pensaba en un 2-0 o 2-1 para Marruecos. Ahora, con la tendencia conservadora y la urgencia haitiana, veo más probable un **1-0** o **empate 1-1**. Haití atacará desesperado, pero Marruecos puede castigar al contragolpe.\n\n**Defiendo mi posición:** La presión real sigue siendo asimétrica. Haití debe ganar y eso los expone; Marruecos especula. Mi análisis inicial (moderada-baja presión) se sostiene, solo que el partido será más cerrado de lo que pensaba.",
+      "rebate_2": "**Respuesta breve:**\n\n**1. ¿Estoy en desacuerdo?** Parcialmente. Los expertos minimizan la presión de Marruecos (moderada-baja), pero yo creo que incluso con margen, el miedo a perder el control del grupo genera **cautela táctica**. Mi posición inicial sobre su conservadurismo se sostiene.\n\n**2. ¿Me convencen?** Sí, en varios puntos: la tabla de presión (Haití debe ganar sí o sí) es objetiva; el análisis psicológico sobre la euforia marroquí tras empatar a Brasil es válido – eso les da confianza, no temor.\n\n**3. ¿Ajusto mi predicción?** Sí. Originalmente quizás esperaba un 1-0 o 2-0 conservador de Marruecos. Ahora, considerando la urgencia de Haití y la confianza marroquí, ajusto a **1-1** (empate) o **2-1** para Marruecos, con un partido más abierto de lo que anticipaba.\n\n**4. Defensa de mi posición:** Mi énfasis en la “presión clasificatoria” no es erróneo, pero la matizo: Marruecos no arriesgará innecesariamente, pero su confianza puede traducirse en transiciones letales. Haití, al atacar, dejará espacios. Sigo viendo un juego táctico, no un vendaval ofensivo.",
+      "rebate_3": "**Breve respuesta:**\n\nEstoy en desacuerdo parcial con los expertos en su énfasis excesivo en la presión clasificatoria. **Marruecos no solo tiene un empate épico vs Brasil, sino que cargó con la presión de ser debutante; Haití viene de dos derrotas (1-0 vs Jamaica, 0-6 vs Brasil) y moral baja.** La euforia controlada de Marruecos pesa más que la presión matemática de Haití, que es desesperación, no confianza.\n\n**Sí me convencen en que Marruecos puede permitirse el empate, pero eso no reduce su intensidad; al contrario, jugar sin urgencia les permite ejecutar su plan táctico con calma.** El punto de que Haití *debe* ganar es válido, pero la presión les juega en contra: errores no forzados y apertura defensiva.\n\n**Ajusto mi predicción de marcador:** Inicialmente veía 2-0 Marruecos; ahora considero un **2-1** más probable, porque Haití puede aprovechar un descuido en transición, pero Marruecos tiene superioridad técnica y física.\n\n**Defiendo mi posición:** La psicología real (euforia vs desesperación) es más determinante que la tabla de grupos. Haití no ha demostrado capacidad de remontada bajo presión. Marruecos mantiene el control emocional y ganará por un margen ajustado."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 1-0 (70%)\n   Análisis: Marruecos controla el ritmo ante una Haití desesperada que se expone al contragolpe.\n\n🟠 **Tactical Scout** (tácticas): 2-0 (65%)\n   Análisis: La solidez defensiva marroquí y las transiciones rápidas castigarán los espacios haitianos.\n\n🟡 **Sentiment Reader** (psicología MD1): 2-0 (75%)\n   Análisis: El impulso anímico tras el empate con Brasil da a Marruecos una ventaja psicológica decisiva.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones\n\nANÁLISIS FINAL (2-3 líneas):\n- Convergen en la presión diferencial (Marruecos con margen, Haití obligada a ganar) y el momentum positivo de Marruecos tras empatar con Brasil.\n- Confianza general en la predicción: 8/10.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.70}, \"tactical_scout\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.65}, \"sentiment_reader\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.75}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.70}}",
+    "predictions": [
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.7,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.65,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.75,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.7,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 1,
+      "away_goals": 0,
+      "probability": 0.7,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
   }
 ]
