@@ -374,6 +374,20 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
     return { date, fixtures: fixtures.filter((f) => teams[f.team1] && teams[f.team2]) };
   }, [liveMatches, teams, todayStr]);
 
+  /* Agrupa los partidos de hoy por grupo (J3: hasta 3 grupos/6 partidos el
+     mismo día) para que cada grupo tenga su propia fila en vez de un único
+     scroll horizontal donde se pierden los partidos de los otros grupos. */
+  const dayFixturesByGroup = useMemo(() => {
+    const groups = new Map<string, typeof day.fixtures>();
+    for (const f of day.fixtures) {
+      const key = f.group ?? "";
+      const arr = groups.get(key);
+      if (arr) arr.push(f);
+      else groups.set(key, [f]);
+    }
+    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [day.fixtures]);
+
   /* Carga por defecto el primer partido pendiente del día: solo queda dar Predecir */
   const autoloaded = useRef(false);
   useEffect(() => {
@@ -470,39 +484,53 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
               })}
             </span>
           </div>
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {day.fixtures.map((f) => {
-              const isSel =
-                (home === f.team1 && away === f.team2) ||
-                (home === f.team2 && away === f.team1);
-              const done = f.score1 !== null && f.score2 !== null;
-              return (
-                <button
-                  key={`${f.team1}|${f.team2}`}
-                  onClick={() => { setHome(f.team1); setAway(f.team2); setPredicted(false); }}
-                  className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
-                  style={{
-                    background: isSel ? "rgba(212,168,67,0.12)" : "var(--color-arena-elevated)",
-                    border: `1px solid ${isSel ? "rgba(212,168,67,0.45)" : "rgba(255,255,255,0.07)"}`,
-                    color: "var(--color-ink-primary)",
-                    fontFamily: "var(--font-body)",
-                    cursor: "pointer",
-                  }}
-                >
-                  <span>{teams[f.team1]?.flag} {f.team1}</span>
+          <div className="space-y-2">
+            {dayFixturesByGroup.map(([group, fixtures]) => (
+              <div key={group || "sin-grupo"} className="flex items-center gap-2">
+                {group && (
                   <span
-                    className="tabular-nums"
-                    style={{
-                      fontFamily: "var(--font-mono)", fontSize: "0.7rem",
-                      color: done ? "var(--color-wc-gold)" : "var(--color-ink-muted)",
-                    }}
+                    className="shrink-0 text-[10px] uppercase tracking-wider w-5 text-center"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--color-ink-muted)" }}
                   >
-                    {done ? `${f.score1}–${f.score2}` : "vs"}
+                    {group.replace("Group ", "")}
                   </span>
-                  <span>{f.team2} {teams[f.team2]?.flag}</span>
-                </button>
-              );
-            })}
+                )}
+                <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide flex-1">
+                  {fixtures.map((f) => {
+                    const isSel =
+                      (home === f.team1 && away === f.team2) ||
+                      (home === f.team2 && away === f.team1);
+                    const done = f.score1 !== null && f.score2 !== null;
+                    return (
+                      <button
+                        key={`${f.team1}|${f.team2}`}
+                        onClick={() => { setHome(f.team1); setAway(f.team2); setPredicted(false); }}
+                        className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
+                        style={{
+                          background: isSel ? "rgba(212,168,67,0.12)" : "var(--color-arena-elevated)",
+                          border: `1px solid ${isSel ? "rgba(212,168,67,0.45)" : "rgba(255,255,255,0.07)"}`,
+                          color: "var(--color-ink-primary)",
+                          fontFamily: "var(--font-body)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <span>{teams[f.team1]?.flag} {f.team1}</span>
+                        <span
+                          className="tabular-nums"
+                          style={{
+                            fontFamily: "var(--font-mono)", fontSize: "0.7rem",
+                            color: done ? "var(--color-wc-gold)" : "var(--color-ink-muted)",
+                          }}
+                        >
+                          {done ? `${f.score1}–${f.score2}` : "vs"}
+                        </span>
+                        <span>{f.team2} {teams[f.team2]?.flag}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </motion.div>
       )}
