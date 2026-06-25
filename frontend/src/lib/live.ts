@@ -365,6 +365,31 @@ export function computeGroupStandings(
   return out;
 }
 
+/* ── Mejores terceros: ranking cruzado entre los 3°s de cada grupo ──
+   Mismo criterio FIFA usado para desempate intra-grupo (pts → GD → GF →
+   alfabético como proxy del sorteo, sin datos de fair play). Se recalcula
+   en cada refresh de datos en vivo — "oficial" solo cuando los 12 grupos
+   completaron sus 3 partidos; antes de eso es una foto provisional, ya
+   que no todos los grupos juegan la misma cantidad de partidos el mismo día. */
+export interface ThirdPlaceRow extends StandingRow {
+  group: string;
+}
+
+export function rankBestThirds(
+  standingsByGroup: [string, StandingRow[]][]
+): { ranked: ThirdPlaceRow[]; allComplete: boolean } {
+  const ranked: ThirdPlaceRow[] = standingsByGroup
+    .filter(([, rows]) => rows.length >= 3)
+    .map(([group, rows]) => ({ ...rows[2], group }))
+    .sort(
+      (a, b) => b.points - a.points || b.gd - a.gd || b.gf - a.gf || a.team.localeCompare(b.team)
+    );
+  const allComplete =
+    standingsByGroup.length === 12 &&
+    standingsByGroup.every(([, rows]) => rows.every((r) => r.played === 3));
+  return { ranked, allComplete };
+}
+
 /* ── Veredicto del modelo vs resultado real ── */
 export type Verdict = { hit: boolean; predicted: "t1" | "draw" | "t2"; prob: number };
 

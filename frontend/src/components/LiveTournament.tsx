@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { TeamInfo, Prediction, LiveMatch } from "@/types";
 import type { LiveStats, MatchVerdict } from "@/lib/live";
-import { computeGroupStandings } from "@/lib/live";
+import { computeGroupStandings, rankBestThirds } from "@/lib/live";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 import { useLang } from "@/lib/i18n";
 import GroupNarrativeCard from "./GroupNarrativeCard";
@@ -25,6 +25,9 @@ type LiveSection = "resultados" | "posiciones" | "proximos";
 const MVR_PREVIEW = 6;
 
 function fmtPct(n: number) { return `${(n * 100).toFixed(0)}%`; }
+function fill(template: string, vals: string[]) {
+  return template.replace(/\{(\d)\}/g, (_, i) => vals[parseInt(i)] ?? "");
+}
 
 export default function LiveTournament({
   teams, predictions, groups, liveMatches, stats, verdicts, groupNarratives,
@@ -77,6 +80,8 @@ export default function LiveTournament({
       .filter(([, rows]) => rows.some((r) => r.played > 0))
       .sort(([a], [b]) => a.localeCompare(b));
   }, [liveMatches, groups]);
+
+  const bestThirds = useMemo(() => rankBestThirds(standings), [standings]);
 
   const today = new Date().toLocaleDateString("en-CA");
   const bogotaToday = todayBogota();
@@ -286,6 +291,89 @@ export default function LiveTournament({
           {/* POSICIONES: Grupos oficiales */}
           {section === "posiciones" && (
             <div className="space-y-3">
+              {bestThirds.ranked.length > 0 && (
+                <div className="stat-card !p-4 text-left mb-1">
+                  <div className="flex items-baseline justify-between gap-2 mb-2">
+                    <span className="text-xs font-black" style={{ color: "var(--wc-gold)" }}>
+                      🥉 {T.lt_bestThirds}
+                    </span>
+                    <span
+                      className="text-[9px] uppercase tracking-wider text-right"
+                      style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
+                    >
+                      {bestThirds.allComplete ? T.lt_bestThirdsNoteFinal : T.lt_bestThirdsNoteProv}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-baseline mb-1.5 pb-1.5 border-b border-[var(--border-subtle)]">
+                    <span />
+                    <span />
+                    {[T.group, T.lt_playedHead, T.lt_gdHead, T.lt_ptsHead].map((h) => (
+                      <span
+                        key={h}
+                        className="text-[9px] uppercase tracking-wider text-right"
+                        style={{ fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="space-y-1.5">
+                    {bestThirds.ranked.map((r, i) => {
+                      const eighth = bestThirds.ranked[7];
+                      const gap = i > 7 && eighth
+                        ? r.points === eighth.points
+                          ? fill(T.lt_bestThirdsGapGd, [`${eighth.gd - r.gd}`])
+                          : fill(T.lt_bestThirdsGap, [`${eighth.points - r.points}`])
+                        : null;
+                      return (
+                        <div key={r.group}>
+                          {i === 8 && (
+                            <div
+                              className="my-1 pt-1 border-t-2 text-[8px] uppercase tracking-wider"
+                              style={{ borderColor: "var(--wc-gold)", color: "var(--wc-gold)", fontFamily: "var(--font-mono)" }}
+                            >
+                              {T.lt_bestThirdsCut}
+                            </div>
+                          )}
+                          <div className="grid grid-cols-[1.4rem_1fr_1.4rem_1.8rem_2.4rem_1.9rem] gap-x-1.5 items-center text-xs">
+                            <span
+                              className="tabular-nums text-[10px]"
+                              style={{ color: i < 8 ? "var(--wc-gold)" : "var(--text-muted)" }}
+                            >
+                              {i + 1}°
+                            </span>
+                            <span className="flex items-center gap-1.5 min-w-0">
+                              <span
+                                className="w-2 h-2 rounded-full shrink-0"
+                                style={{ background: i < 8 ? "#22c55e" : "rgba(255,255,255,0.10)" }}
+                              />
+                              <span className="truncate">{flag(r.team)} {r.team}</span>
+                              {gap && (
+                                <span className="text-[9px] truncate" style={{ color: "var(--text-muted)" }}>
+                                  ({gap})
+                                </span>
+                              )}
+                            </span>
+                            <span className="text-[10px]" style={{ color: "var(--text-muted)" }}>
+                              {r.group}
+                            </span>
+                            <span className="tabular-nums text-right" style={{ color: "var(--text-muted)" }}>
+                              {r.played}
+                            </span>
+                            <span className="tabular-nums text-right" style={{ color: "var(--text-muted)" }}>
+                              {r.gd > 0 ? `+${r.gd}` : r.gd}
+                            </span>
+                            <span className="tabular-nums font-bold text-right" style={{ color: "var(--wc-gold)" }}>
+                              {r.points}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               <SectionTitle title={T.lt_standings} note={T.lt_standingsNote} />
 
               {standings.length === 0 ? (
