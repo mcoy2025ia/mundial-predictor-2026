@@ -2,9 +2,9 @@
   {
     "home_team": "Turkey",
     "away_team": "United States",
-    "p_home": 0.4089,
-    "p_draw": 0.31,
-    "p_away": 0.2811,
+    "p_home": 0.4056,
+    "p_draw": 0.3087,
+    "p_away": 0.2857,
     "is_neutral": false,
     "kickoff": "2026-06-26T02:00:00",
     "model": "ensemble_agent_adjusted",
@@ -75,18 +75,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Turkey faces elimination with 0 points and must win, while USA with 6 points may rotate, boosting Turkey's win probability.",
+      "IntMatch-Analytics-Pro": "Turkey faces elimination with 0 points and must win against a qualified US side likely to rotate, creating desperate attacking pressure but vulnerability to counters.",
       "Travel-Logistics-Quant": "home_fatigue=0.003(ic=0.000 heat=0.003) away_fatigue=0.014(ic=0.014 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Turkey's underdog status and potential giant-killing narrative may slightly boost morale against a higher-rated US side.",
+      "Media-Sentiment-Parser": "No specific pre-match media signals detected; baseline sentiment assumed.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=already_through(6pts) d=-0.025; away_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "Paraguay",
     "away_team": "Australia",
-    "p_home": 0.3551,
+    "p_home": 0.3596,
     "p_draw": 0.3056,
-    "p_away": 0.3393,
+    "p_away": 0.3348,
     "is_neutral": true,
     "kickoff": "2026-06-26T02:00:00",
     "model": "ensemble_agent_adjusted",
@@ -157,18 +157,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both sides level on 3pts with qualification at stake, but no clear tactical or situational edge justifies redistribution.",
+      "IntMatch-Analytics-Pro": "MD3 creates do-or-die scenario for Paraguay needing a win to progress, while Australia may settle for a draw knowing US likely tops group, tilting urgency toward Paraguay.",
       "Travel-Logistics-Quant": "no significant travel/climate factors",
-      "Media-Sentiment-Parser": "No media sentiment available; no adjustment applied.",
+      "Media-Sentiment-Parser": "No recent media sentiment or morale signals available for this neutral-group match.",
       "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020; away_pressure=third_place_watch(3pts) d=+0.020"
     }
   },
   {
     "home_team": "Curacao",
     "away_team": "Ivory Coast",
-    "p_home": 0.101,
-    "p_draw": 0.1819,
-    "p_away": 0.7171,
+    "p_home": 0.1105,
+    "p_draw": 0.1736,
+    "p_away": 0.7159,
     "is_neutral": true,
     "kickoff": "2026-06-25T20:00:00",
     "model": "ensemble_agent_adjusted",
@@ -239,18 +239,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Curacao must win to have any chance of advancing, while Ivory Coast may play cautiously to avoid suspensions and secure a draw against a desperate opponent.",
+      "IntMatch-Analytics-Pro": "Curacao must win to have any chance of advancing, while Ivory Coast can secure progression with a draw, creating desperation for the home side.",
       "Travel-Logistics-Quant": "home_fatigue=0.025(ic=0.017 heat=0.008) away_fatigue=0.001(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media signals detected for this mismatch; heavy underdog Curacao may have slight squad pride but no tangible morale pressure.",
+      "Media-Sentiment-Parser": "No recent media context available; no morale or pressure signals detected.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=third_place_watch(3pts) d=+0.020"
     }
   },
   {
     "home_team": "Ecuador",
     "away_team": "Germany",
-    "p_home": 0.1618,
-    "p_draw": 0.2236,
-    "p_away": 0.6147,
+    "p_home": 0.1633,
+    "p_draw": 0.2219,
+    "p_away": 0.6148,
     "is_neutral": true,
     "kickoff": "2026-06-25T20:00:00",
     "model": "ensemble_agent_adjusted",
@@ -321,18 +321,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Ecuador must win to have a chance to advance, while Germany with 6 points may rotate and defend, increasing home win probability.",
+      "IntMatch-Analytics-Pro": "Ecuador, with only 1 point, must win to have any chance of advancing, while Germany, already qualified with 6 points, may rotate and lack urgency.",
       "Travel-Logistics-Quant": "no significant travel/climate factors",
-      "Media-Sentiment-Parser": "Ecuador may draw morale from underdog narrative against Germany, while Germany's historical big-match pressure slightly dampens their win probability.",
+      "Media-Sentiment-Parser": "Ecuador, as a heavy underdog (15% win probability), may gain marginal morale from a 'nothing to lose' mindset on neutral ground, while Germany faces slight pressure to meet expectations as the clear favorite, potentially tightening their performance.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=already_through(6pts) d=-0.025; away_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "Japan",
     "away_team": "Sweden",
-    "p_home": 0.3687,
-    "p_draw": 0.2418,
-    "p_away": 0.3895,
+    "p_home": 0.3727,
+    "p_draw": 0.2366,
+    "p_away": 0.3908,
     "is_neutral": true,
     "kickoff": "2026-06-25T23:00:00",
     "model": "ensemble_agent_adjusted",
@@ -403,18 +403,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both sides face must-win pressure with group tight, but MD3 simultaneous kickoff and likely Swedish caution to avoid early exit tilt probabilities toward the draw.",
+      "IntMatch-Analytics-Pro": "Japan's superior Elo and qualification pressure to secure knockout spot against a lower-ranked Sweden side in must-win MD3 match slightly boost home win probability.",
       "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.018(ic=0.000 heat=0.018) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media sentiment signal detected; neutral site match with no strong external pressure cues.",
+      "Media-Sentiment-Parser": "No specific media sentiment or morale signals available for this match.",
       "FIFA-Regs-Strategist": "home_pressure=comfortable(4pts) d=-0.005; away_pressure=third_place_watch(3pts) d=+0.020"
     }
   },
   {
     "home_team": "Tunisia",
     "away_team": "Netherlands",
-    "p_home": 0.1182,
-    "p_draw": 0.1914,
-    "p_away": 0.6903,
+    "p_home": 0.1039,
+    "p_draw": 0.2062,
+    "p_away": 0.6899,
     "is_neutral": true,
     "kickoff": "2026-06-25T23:00:00",
     "model": "ensemble_agent_adjusted",
@@ -485,18 +485,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Tunisia, with 0 points from 2 games, faces a must-win on MD3, while Netherlands, on 4 points, may rotate, likely pushing home side to desperation aggression.",
+      "IntMatch-Analytics-Pro": "Tunisia's desperate 0‑point standing increases their attacking urgency in a must‑win MD3, while the Netherlands with 4 points may rotate slightly, shifting draw probability upward.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.013(ic=0.001 heat=0.012) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Tunisia, as a heavy underdog in a must-win group finale, may rally with extra morale against a Netherlands side facing pressure to top the group.",
+      "Media-Sentiment-Parser": "Netherlands face massive expectations as heavy favorites, and Tunisia's underdog spirit could slightly boost their morale in a high-stakes neutral-site group finale.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Egypt",
     "away_team": "Iran",
-    "p_home": 0.291,
-    "p_draw": 0.342,
-    "p_away": 0.367,
+    "p_home": 0.2882,
+    "p_draw": 0.3408,
+    "p_away": 0.371,
     "is_neutral": true,
     "kickoff": "2026-06-27T03:00:00",
     "model": "ensemble_agent_adjusted",
@@ -567,18 +567,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Egypt's 4 points leaves them needing a win to secure top spot, while Iran's 2 points in a tight group forces them to push for victory, but Egypt's slight advantage in the must-win dynamic shifts probability toward the home side.",
+      "IntMatch-Analytics-Pro": "Egypt needs only a draw to likely advance, so they may sit deep and counter, while Iran must push for a win, but both lack strong form signals.",
       "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.035(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media sentiment or pressure signals available for this neutral-group match.",
+      "Media-Sentiment-Parser": "No specific media sentiment or morale signals detected for this neutral-site fixture.",
       "FIFA-Regs-Strategist": "home_pressure=comfortable(4pts) d=-0.005; away_pressure=needs_result(2pts) d=+0.015"
     }
   },
   {
     "home_team": "New Zealand",
     "away_team": "Belgium",
-    "p_home": 0.0988,
-    "p_draw": 0.1736,
-    "p_away": 0.7276,
+    "p_home": 0.1065,
+    "p_draw": 0.1747,
+    "p_away": 0.7188,
     "is_neutral": true,
     "kickoff": "2026-06-27T03:00:00",
     "model": "ensemble_agent_adjusted",
@@ -649,18 +649,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both sides face elimination pressure with New Zealand at 1 point and Belgium at 2 points in a tightly contested Group G, while simultaneous kickoffs in MD3 may encourage cautious play from the underdog.",
+      "IntMatch-Analytics-Pro": "New Zealand desperate for win with 1 point, while Belgium in must-win situation, but simultaneous MD3 encourages defensive caution, slightly boosting draw probability.",
       "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.000(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "New Zealand as heavy underdog may have slight morale boost in final group match, but Belgium's psychological edge still dominant.",
+      "Media-Sentiment-Parser": "Massive Elo gap and Belgium's stature create a low-pressure underdog morale boost for New Zealand in a likely dead-rubber group stage finale.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=needs_result(2pts) d=+0.015"
     }
   },
   {
     "home_team": "Cape Verde",
     "away_team": "Saudi Arabia",
-    "p_home": 0.2679,
-    "p_draw": 0.3396,
-    "p_away": 0.3925,
+    "p_home": 0.2698,
+    "p_draw": 0.3435,
+    "p_away": 0.3868,
     "is_neutral": true,
     "kickoff": "2026-06-27T00:00:00",
     "model": "ensemble_agent_adjusted",
@@ -731,18 +731,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both teams need points to advance, but Cape Verde has slight tactical edge with counter-attacking style against Saudi Arabia's possession approach, plus simultaneous MD3 pressure favors disciplined defending.",
+      "IntMatch-Analytics-Pro": "Desperate need for points (2pts, 2 games played) at simultaneous kickoff favors Cape Verde pushing, while Saudi Arabia (1pt) may also be forced but weaker away form tilts slight advantage to the home side.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.038(ic=0.003 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Cape Verde may have slight morale boost as underdog in a neutral-site group finale, but overall media sentiment is limited without specific recent reports.",
+      "Media-Sentiment-Parser": "No specific media sentiment or morale signals available for this neutral-group fixture.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(2pts) d=+0.015; away_pressure=needs_result(1pts) d=+0.015"
     }
   },
   {
     "home_team": "Uruguay",
     "away_team": "Spain",
-    "p_home": 0.1957,
-    "p_draw": 0.2792,
-    "p_away": 0.5251,
+    "p_home": 0.1975,
+    "p_draw": 0.2744,
+    "p_away": 0.5281,
     "is_neutral": true,
     "kickoff": "2026-06-27T00:00:00",
     "model": "ensemble_agent_adjusted",
@@ -813,18 +813,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Uruguay need a win to avoid group elimination (2pts, MD3), while Spain's 4pts may allow rotation, increasing home desperation.",
+      "IntMatch-Analytics-Pro": "Uruguay must win to survive (2pts vs 4pts), and with Spain already qualified, Group H's simultaneous kickoff encourages defensive discipline from the leader, tightening the contest.",
       "Travel-Logistics-Quant": "home_fatigue=0.008(ic=0.000 heat=0.008) away_fatigue=0.042(ic=0.034 heat=0.008) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Uruguay may draw morale from underdog status against Spain in a neutral group stage match, but Spain's dominant ELO rating and perceived superiority slightly dampen Uruguay's resilience.",
+      "Media-Sentiment-Parser": "Uruguay as clear underdog may gain slight morale boost facing Spain, despite no media context.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(2pts) d=+0.015; altitude=1566m both_affected"
     }
   },
   {
     "home_team": "Norway",
     "away_team": "France",
-    "p_home": 0.1878,
-    "p_draw": 0.2731,
-    "p_away": 0.5392,
+    "p_home": 0.1887,
+    "p_draw": 0.2737,
+    "p_away": 0.5376,
     "is_neutral": true,
     "kickoff": "2026-06-26T19:00:00",
     "model": "ensemble_agent_adjusted",
@@ -895,18 +895,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "MD3 simultaneous kickoff with both teams on 6pts and top of group increases caution and defensive approach, raising draw odds.",
-      "Travel-Logistics-Quant": "France has traveled only 436 km from Philadelphia to Boston while Norway has traveled over 8400 km from New York, giving France a significant fatigue advantage despite equal rest days.",
-      "Media-Sentiment-Parser": "Neutral site with no specific media sentiment available; no morale or pressure signals detected.",
+      "IntMatch-Analytics-Pro": "Both teams top with 6pts, MD3 simultaneous kickoff incentivizes cautious play, favoring draw.",
+      "Travel-Logistics-Quant": "Norway faces severe travel fatigue from 8464 km journey while France travels minimally from Philadelphia, slightly disadvantaging the nominal home team.",
+      "Media-Sentiment-Parser": "No media sentiment provided; neutral venue and clear Elo gap, but no morale signals to adjust.",
       "FIFA-Regs-Strategist": "home_pressure=already_through(6pts) d=-0.025; away_pressure=already_through(6pts) d=-0.025; home_MD3_rotation_risk(6pts); away_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "Senegal",
     "away_team": "Iraq",
-    "p_home": 0.5439,
-    "p_draw": 0.2781,
-    "p_away": 0.1779,
+    "p_home": 0.5402,
+    "p_draw": 0.2815,
+    "p_away": 0.1783,
     "is_neutral": true,
     "kickoff": "2026-06-26T19:00:00",
     "model": "ensemble_agent_adjusted",
@@ -977,18 +977,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both Senegal and Iraq are eliminated with 0 points, but Senegal's superior Elo rating and desperation for pride in the final group match create moderate win pressure, slightly reducing draw and away probabilities.",
+      "IntMatch-Analytics-Pro": "Both teams are winless with 0 points and face elimination, so Senegal with superior Elo and desperation should push hard for a win.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.035(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media sentiment or morale signals detected for this neutral-site match between Senegal and Iraq.",
+      "Media-Sentiment-Parser": "No specific media sentiment or morale/pressure signals available for this neutral-group match.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Algeria",
     "away_team": "Austria",
-    "p_home": 0.2638,
-    "p_draw": 0.298,
-    "p_away": 0.4381,
+    "p_home": 0.2645,
+    "p_draw": 0.299,
+    "p_away": 0.4365,
     "is_neutral": true,
     "kickoff": "2026-06-28T02:00:00",
     "model": "ensemble_agent_adjusted",
@@ -1059,17 +1059,17 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both teams on 3pts and GD may decide progress, so simultaneous MD3 fixtures encourage cautious play, slightly boosting draw and home resilience at tight neutral venue.",
+      "IntMatch-Analytics-Pro": "MD3 simultaneous – both sides on 3pts from 2 games need a win for knockout progress, likely aggressive approach from Algeria as home-flagged underdog, slight boost to draw chance given reciprocal need not to lose.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.012(ic=0.000 heat=0.012) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media sentiment identified; morale and pressure appear neutral between both squads.",
+      "Media-Sentiment-Parser": "No media context provided, so no adjustment to squad morale or pressure signals.",
       "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020; away_pressure=third_place_watch(3pts) d=+0.020"
     }
   },
   {
     "home_team": "Jordan",
     "away_team": "Argentina",
-    "p_home": 0.065,
-    "p_draw": 0.1719,
+    "p_home": 0.0748,
+    "p_draw": 0.162,
     "p_away": 0.7631,
     "is_neutral": true,
     "kickoff": "2026-06-28T02:00:00",
@@ -1141,18 +1141,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Jordan must win to stay alive, while Argentina with 6 pts could rotate, increasing draw/upset potential in simultaneous MD3 kickoff.",
+      "IntMatch-Analytics-Pro": "Jordan's desperate 0-point situation and Argentina's 6-point clinched lead create a high motivation imbalance, while simultaneous MD3 matches favor a cautiously adventurous home side seeking a miracle.",
       "Travel-Logistics-Quant": "home_fatigue=0.018(ic=0.000 heat=0.018) away_fatigue=0.018(ic=0.000 heat=0.018) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Jordan faces a massive underdog challenge against Argentina, but with nothing to lose in the final group match, morale could be slightly boosted while pressure is off.",
+      "Media-Sentiment-Parser": "Jordan, as a massive underdog in a dead-rubber group match against Argentina, may gain a slight morale boost from having nothing to lose, though media focus is minimal.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=already_through(6pts) d=-0.025; away_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "Colombia",
     "away_team": "Portugal",
-    "p_home": 0.2786,
-    "p_draw": 0.3305,
-    "p_away": 0.3909,
+    "p_home": 0.279,
+    "p_draw": 0.3295,
+    "p_away": 0.3915,
     "is_neutral": true,
     "kickoff": "2026-06-27T23:30:00",
     "model": "ensemble_agent_adjusted",
@@ -1223,18 +1223,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Colombia already qualified with 6 points may rotate, allowing a motivated Portugal to push for top spot.",
+      "IntMatch-Analytics-Pro": "Colombia, already qualified, likely rotates key players, reducing win probability; Portugal still chasing qualification plays cautiously, raising draw and away win chances.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.039(ic=0.014 heat=0.025) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media narrative available; minor positive adjustment for Colombia based on slight ELO advantage in a neutral group stage match.",
+      "Media-Sentiment-Parser": "No media sentiment or morale signals available; probabilities remain unchanged at neutral site.",
       "FIFA-Regs-Strategist": "home_pressure=already_through(6pts) d=-0.025; home_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "DR Congo",
     "away_team": "Uzbekistan",
-    "p_home": 0.3807,
-    "p_draw": 0.2829,
-    "p_away": 0.3364,
+    "p_home": 0.3762,
+    "p_draw": 0.2879,
+    "p_away": 0.3359,
     "is_neutral": true,
     "kickoff": "2026-06-27T23:30:00",
     "model": "ensemble_agent_adjusted",
@@ -1305,18 +1305,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "With 1 point and -2 goal difference, DR Congo must win to have any chance of advancing and faces a desperate Uzbekistan side already eliminated, favoring a high-stakes home push despite neutral venue.",
+      "IntMatch-Analytics-Pro": "DR Congo's desperate 1-point need for qualification against dead-last Uzbekistan likely boosts home win probability, though neutral Atlanta venue limits full host advantage.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.018(ic=0.003 heat=0.015) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No media context available; morale and pressure signals are neutral.",
+      "Media-Sentiment-Parser": "No significant media sentiment available for this neutral-site Group K match between DR Congo and Uzbekistan.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Panama",
     "away_team": "England",
-    "p_home": 0.0704,
-    "p_draw": 0.1451,
-    "p_away": 0.7845,
+    "p_home": 0.0723,
+    "p_draw": 0.1434,
+    "p_away": 0.7843,
     "is_neutral": true,
     "kickoff": "2026-06-27T21:00:00",
     "model": "ensemble_agent_adjusted",
@@ -1387,18 +1387,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Panama faces elimination with 0 points, while England, already through, may rotate; simultaneous MD3 fixtures create a desperate, defensive Panama dynamic favoring home upset or draw.",
+      "IntMatch-Analytics-Pro": "Panama must win to have any chance of advancing, increasing desperation and likelihood of an upset against an England side likely to rotate with qualification nearly assured.",
       "Travel-Logistics-Quant": "no significant travel/climate factors",
-      "Media-Sentiment-Parser": "No media sentiment data available; prior probabilities unchanged.",
+      "Media-Sentiment-Parser": "Panama as heavy underdog may draw slight morale boost from a nothing-to-lose mindset against dominant England, but lowered confidence due to neutral group stage setting.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Croatia",
     "away_team": "Ghana",
-    "p_home": 0.5791,
-    "p_draw": 0.2699,
-    "p_away": 0.151,
+    "p_home": 0.5758,
+    "p_draw": 0.2722,
+    "p_away": 0.152,
     "is_neutral": true,
     "kickoff": "2026-06-27T21:00:00",
     "model": "ensemble_agent_adjusted",
@@ -1469,9 +1469,9 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Croatia trails Ghana by 1 point and must win to advance; Ghana may defend their lead, increasing home win pressure.",
-      "Travel-Logistics-Quant": "Ghana's extreme intercity travel distance creates fatigue disadvantage, partially offset by 4 days rest for both teams.",
-      "Media-Sentiment-Parser": "No specific media sentiment or pressure signals available for this neutral-ground match.",
+      "IntMatch-Analytics-Pro": "Croatia (3pts) face must-win MD3 vs Ghana (4pts) – home side will push aggressively but clear tactical edge of Elo is offset by Ghana's draw‑and‑advance scenario, slightly raising home win and draw probability.",
+      "Travel-Logistics-Quant": "Ghana faces significant travel fatigue from 8749 km between matches, while Croatia's moderate 539 km shift and equal rest days create a slight home advantage.",
+      "Media-Sentiment-Parser": "No significant media sentiment data available; probabilities remain unchanged.",
       "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020"
     }
   }
