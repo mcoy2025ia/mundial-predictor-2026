@@ -149,26 +149,27 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
 
           <div style={{ marginTop: "1.1rem", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
             <button
-              onClick={() => go(onGoToPredictor)}
-              style={{
-                width: "100%", padding: "0.7rem 1rem", borderRadius: 12,
-                border: "none", cursor: "pointer", fontFamily: "var(--font-body)", fontWeight: 700,
-                fontSize: "0.85rem", color: "#1a1410",
-                background: "linear-gradient(135deg, var(--color-wc-gold), #e8c873)",
-              }}
-            >
-              {T.welcomeCtaPredictor}
-            </button>
-            <button
               onClick={() => go(onGoToModel)}
               style={{
-                width: "100%", padding: "0.65rem 1rem", borderRadius: 12,
-                border: "1px solid rgba(212,168,67,0.35)", cursor: "pointer",
-                fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.8rem",
-                color: "var(--color-wc-gold)", background: "rgba(212,168,67,0.06)",
+                width: "100%", padding: "0.85rem 1rem", borderRadius: 12,
+                border: "none", cursor: "pointer", fontFamily: "var(--font-body)", fontWeight: 800,
+                fontSize: "0.92rem", color: "#fff",
+                background: "linear-gradient(135deg, var(--color-wc-red), #ff4d5e)",
+                boxShadow: "0 8px 24px rgba(207,10,44,0.4)",
               }}
             >
               {T.welcomeCtaModel}
+            </button>
+            <button
+              onClick={() => go(onGoToPredictor)}
+              style={{
+                width: "100%", padding: "0.6rem 1rem", borderRadius: 12,
+                border: "1px solid rgba(212,168,67,0.3)", cursor: "pointer",
+                fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.78rem",
+                color: "var(--color-wc-gold)", background: "rgba(212,168,67,0.05)",
+              }}
+            >
+              {T.welcomeCtaPredictor}
             </button>
             <button
               onClick={() => go(onGoToBestThirds)}
