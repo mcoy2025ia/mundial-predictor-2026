@@ -15,7 +15,7 @@ import Predictor      from "@/components/Predictor";
 import SimulatorTab   from "@/components/Simulator";
 import Groups         from "@/components/Groups";
 import Knockout       from "@/components/Knockout";
-import LiveTournament from "@/components/LiveTournament";
+import LiveTournament, { type LiveSection } from "@/components/LiveTournament";
 import ModelTab       from "@/components/ModelTab";
 import ChatTab        from "@/components/ChatTab";
 import StatsTab       from "@/components/StatsTab";
@@ -101,7 +101,8 @@ export default function Home() {
   const [lang,  setLang]  = useState<Lang>("bogotano");
   const [tab,   setTab]   = useState<TabId>("envivo");
   const [theme, setTheme] = useState<"dark"|"light">("dark");
-  const [jumpToStandingsToken, setJumpToStandingsToken] = useState(0);
+  const [liveJumpSection, setLiveJumpSection] = useState<LiveSection | null>(null);
+  const [liveJumpToken,   setLiveJumpToken]   = useState(0);
 
   const [teams,          setTeams]          = useState<Record<string, TeamInfo> | null>(null);
   const [predictions,    setPredictions]    = useState<Record<string, Prediction> | null>(null);
@@ -261,9 +262,9 @@ export default function Home() {
           <WelcomeModal
             groupMatches={groupMatches}
             liveScores={liveScores}
-            onGoToPredictor={() => setTab("predictor")}
+            onGoToPredictor={() => { setTab("envivo"); setLiveJumpSection("proximos"); setLiveJumpToken((n) => n + 1); }}
             onGoToModel={() => setTab("modelo")}
-            onGoToBestThirds={() => { setTab("envivo"); setJumpToStandingsToken((n) => n + 1); }}
+            onGoToBestThirds={() => { setTab("envivo"); setLiveJumpSection("posiciones"); setLiveJumpToken((n) => n + 1); }}
           />
         )}
 
@@ -490,7 +491,8 @@ export default function Home() {
                     teams={teams} predictions={predictions} groups={groups}
                     liveMatches={liveMatches} stats={liveStats} verdicts={verdicts}
                     groupNarratives={groupNarratives}
-                    jumpToStandingsToken={jumpToStandingsToken}
+                    jumpToSection={liveJumpSection}
+                    jumpToken={liveJumpToken}
                   />
                 </TabPane>
               )}
