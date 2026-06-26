@@ -246,6 +246,9 @@ class AgentDebateSystem:
                     info["status"] = "Critical (0 pts, must win or OUT)"
                 elif info["points"] == 1:
                     info["status"] = "In danger (1 pt, must win soon)"
+                elif info["points"] >= 6:
+                    # 6 puntos = Dos victorias o 2V+1E (YA CLASIFICADO)
+                    info["status"] = "Already through (6 pts, qualified)"
                 elif info["points"] >= 3:
                     # Equipo con 3+ puntos: analizar si puede perder
                     if info["played"] == 1:  # MD1 completado, MD2 pendiente
@@ -262,6 +265,21 @@ class AgentDebateSystem:
                             info["status"] = f"Need to WIN to secure 1st (pressure)"
                         else:
                             info["status"] = f"Advancing (likely, but watch GD)"
+                    elif info["played"] == 2:  # MD2 completado, MD3 pendiente
+                        # En MD3: con 3 puntos, puede perder; con 4-5 es cómodo; con 6 ya está fuera
+                        max_others_after_md3 = max_other_pts + 3
+                        team_with_draw = info["points"] + 1
+
+                        if info["points"] == 3:
+                            # 3 puntos: puede perder solo si otro baja
+                            if max_other_pts < 3:  # Otro equipo aún tiene menos
+                                info["status"] = "Third place watch (3 pts, tight)"
+                            else:
+                                info["status"] = "Must win (3 pts, depends on others)"
+                        elif info["points"] in [4, 5]:
+                            info["status"] = "Comfortable (4-5 pts, likely advances)"
+                        else:
+                            info["status"] = "Unknown"
                     else:
                         info["status"] = "Advancing (likely)"
                 else:
@@ -364,36 +382,41 @@ IMPORTANTE: Usa SOLO lógica deportiva y presión de clasificación REAL basada 
         away = context.get("away_team", {})
 
         prompt = f"""
-Eres un estratega táctico de fútbol experto. Analizas NO SOLO tácticas, sino cómo la presión clasificatoria CAMBIA las tácticas.
+Eres un estratega táctico de fútbol experto. Analizas NO SOLO tácticas, sino cómo la SITUACIÓN DE CLASIFICACIÓN CAMBIA las tácticas.
 
 **SITUACION TACTÍCA + CLASIFICATORIA:**
 - **{home.get("name")}** (Local): {home.get("status")}
+  - Puntos: {home.get("points")} | Partidos jugados: {home.get("played")}
   - MD1: {home.get("md1_result")}
-  - ¿Jugará ofensivo o conservador basado en su situación?
+  - Implicación táctica: ¿Juega para ganar, conservador, o de rotación?
 
 - **{away.get("name")}** (Visitante): {away.get("status")}
+  - Puntos: {away.get("points")} | Partidos jugados: {away.get("played")}
   - MD1: {away.get("md1_result")}
-  - ¿Jugará desesperado o ordenado?
+  - Implicación táctica: ¿Ataca desde el minuto 1 o busca contragolpes?
 
 **ANALIZA:**
-1. Estilos de juego (ofensivo/defensivo) + cómo la presión los modifica
-   - Si {home.get("name")} PUEDE PERDER: ¿se vuelve más ofensivo o se repliega?
-   - Si {away.get("name")} DEBE GANAR: ¿ataca desde el minuto 1 o busca contragolpes?
+1. ¿Cómo la clasificación CAMBIA las tácticas?
+   - Si ya clasificado (6 pts): Probablemente ROTA o juega de forma más relajada
+   - Si debe ganar (0-2 pts): ATAQUE directo desde el inicio
+   - Si puede perder (3-5 pts): Juego EQUILIBRADO, busca no perder pero tampoco tira todo
 
-2. Fortalezas/debilidades DE CADA EQUIPO en este torneo (basado en MD1)
+2. Estilos históricos de {home.get("name")} y {away.get("name")} en torneos
 
-3. Cómo cambiaría el juego táctico si {away.get("name")} marca primero
+3. Cómo cambiaría el juego si {away.get("name")} marca primero
 
-4. Ventaja de campo: ¿afecta la táctica o solo la psicología?
+4. Ventaja de campo: ¿afecta la táctica o solo psicología?
 
-5. Histórico vs este rival (si existe)
+5. Posibles alineaciones (XI de rotación vs XI ofensivo)
 
 **RESPONDE:**
 - Razonamiento táctico paso a paso
-- Top 3 marcadores basados en TÁCTICAS + PRESIÓN
-- Cómo crees que jugaría cada equipo dado su estado actual
+- Top 3 marcadores basados en TÁCTICAS + SITUACIÓN
+- Confianza en la predicción táctica (ej: 70% si situación clara, 40% si partidos trabados)
 
-IMPORTANTE: La presión clasificatoria MODIFICA las tácticas. Analiza ambas.
+IMPORTANTE:
+- Si un equipo ya está clasificado (6 pts): NO tiene "presión de eliminación". Juega de otra forma.
+- Analiza la situación ACTUAL, no presiones del pasado.
 """
         response = self._call_deepseek(prompt, use_reasoner=True)
         return response

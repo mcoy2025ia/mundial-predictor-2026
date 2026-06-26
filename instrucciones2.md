@@ -174,14 +174,32 @@ mano si necesitás verla **antes** de que dispare el próximo cron.
 
 ---
 
-## MD3 — partidos simultáneos (ya cubierto por el CI)
+## MD3 — partidos simultáneos + actualización de terceros (3x diarias)
 
 En la tercera jornada de cada grupo, los dos partidos se juegan a la misma hora (regla
-FIFA anti-amaño) — no hay un bloque que afecte al otro el mismo día, así que una sola
-corrida del CI por jornada es suficiente y ya está calendarizada.
+FIFA anti-amaño). Se corren **3 actualizaciones por día** para refrescar probabilidades
+de terceros, **pero SIN regenerar narraciones** (ahorran tokens, no cambian).
 
-**Horario:** 6 AM Bogotá (11 AM UTC) para que la gente vea predicciones frescas antes
-de las pollas tempranas del día.
+**Flujo:** `update_third_place_probs.py` (Monte Carlo ~5s) en lugar de full cycle.
+
+### Horarios de J3 (Terceros actualizables 3x/día)
+
+| Fecha | Grupo(s) | Primer bloque | Segundo bloque | Tercer bloque |
+|-------|----------|---|---|---|
+| Jun 24 | A, B, C | 18:00 UTC | 00:30 UTC | 03:00 UTC |
+| Jun 25 | D, E, F | 20:00 UTC | 02:00 UTC | 04:00 UTC |
+| Jun 26 | G, H, I | 19:00 UTC | 04:00 UTC | 05:00 UTC |
+| Jun 27 | J, K, L | 02:00 UTC | 04:30 UTC | 06:00 UTC |
+
+**Ejecución manual (si hace falta antes del CI):**
+```bash
+git pull origin master
+python scripts/update_third_place_probs.py  # 5 segundos, no toca narrations
+git add frontend/public/data/group_standings.json
+git commit -m "data: terceros actualizado ($(date -u +%Y-%m-%dT%H:%M:%SZ))"
+git push origin master
+(cd frontend && npx vercel --prod)
+```
 
 | Fecha | Grupos |
 |---|---|
