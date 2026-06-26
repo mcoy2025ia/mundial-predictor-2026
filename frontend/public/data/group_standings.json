@@ -4,33 +4,33 @@
       "team": "Mexico",
       "flag": "🇲🇽",
       "first": 0.5358,
-      "second": 0.2542,
-      "third": 0.1412,
+      "second": 0.2544,
+      "third": 0.141,
       "fourth": 0.0688
     },
     {
       "team": "Czech Republic",
       "flag": "🇨🇿",
       "first": 0.2234,
-      "second": 0.3086,
-      "third": 0.285,
+      "second": 0.3084,
+      "third": 0.2852,
       "fourth": 0.183
     },
     {
       "team": "South Korea",
       "flag": "🇰🇷",
       "first": 0.1654,
-      "second": 0.296,
+      "second": 0.2958,
       "third": 0.3106,
-      "fourth": 0.228
+      "fourth": 0.2282
     },
     {
       "team": "South Africa",
       "flag": "🇿🇦",
       "first": 0.0754,
-      "second": 0.1412,
+      "second": 0.1414,
       "third": 0.2632,
-      "fourth": 0.5202
+      "fourth": 0.52
     }
   ],
   "B": [
@@ -38,24 +38,24 @@
       "team": "Switzerland",
       "flag": "🇨🇭",
       "first": 0.6166,
-      "second": 0.241,
-      "third": 0.1038,
+      "second": 0.2406,
+      "third": 0.1042,
       "fourth": 0.0386
     },
     {
       "team": "Canada",
       "flag": "🇨🇦",
       "first": 0.2474,
-      "second": 0.4256,
-      "third": 0.2276,
-      "fourth": 0.0994
+      "second": 0.4262,
+      "third": 0.2268,
+      "fourth": 0.0996
     },
     {
       "team": "Bosnia and Herzegovina",
       "flag": "🇧🇦",
       "first": 0.1008,
-      "second": 0.2366,
-      "third": 0.4304,
+      "second": 0.2364,
+      "third": 0.4306,
       "fourth": 0.2322
     },
     {
@@ -63,8 +63,8 @@
       "flag": "🇶🇦",
       "first": 0.0352,
       "second": 0.0968,
-      "third": 0.2382,
-      "fourth": 0.6298
+      "third": 0.2384,
+      "fourth": 0.6296
     }
   ],
   "C": [
@@ -105,59 +105,59 @@
     {
       "team": "United States",
       "flag": "🇺🇸",
-      "first": 0.3678,
-      "second": 0.2616,
-      "third": 0.2128,
-      "fourth": 0.1578
+      "first": 0.3682,
+      "second": 0.2614,
+      "third": 0.213,
+      "fourth": 0.1574
     },
     {
       "team": "Australia",
       "flag": "🇦🇺",
-      "first": 0.2382,
-      "second": 0.2732,
-      "third": 0.2474,
-      "fourth": 0.2412
+      "first": 0.2376,
+      "second": 0.273,
+      "third": 0.2472,
+      "fourth": 0.2422
     },
     {
       "team": "Paraguay",
       "flag": "🇵🇾",
-      "first": 0.209,
-      "second": 0.231,
-      "third": 0.2638,
-      "fourth": 0.2962
+      "first": 0.2088,
+      "second": 0.2312,
+      "third": 0.2636,
+      "fourth": 0.2964
     },
     {
       "team": "Turkey",
       "flag": "🇹🇷",
-      "first": 0.185,
-      "second": 0.2342,
-      "third": 0.276,
-      "fourth": 0.3048
+      "first": 0.1854,
+      "second": 0.2344,
+      "third": 0.2762,
+      "fourth": 0.304
     }
   ],
   "E": [
     {
       "team": "Germany",
       "flag": "🇩🇪",
-      "first": 0.728,
-      "second": 0.195,
+      "first": 0.7282,
+      "second": 0.1948,
       "third": 0.0702,
       "fourth": 0.0068
     },
     {
       "team": "Ecuador",
       "flag": "🇪🇨",
-      "first": 0.1512,
+      "first": 0.151,
       "second": 0.4774,
-      "third": 0.3144,
+      "third": 0.3146,
       "fourth": 0.057
     },
     {
       "team": "Ivory Coast",
       "flag": "🇨🇮",
       "first": 0.1176,
-      "second": 0.304,
-      "third": 0.5034,
+      "second": 0.3042,
+      "third": 0.5032,
       "fourth": 0.075
     },
     {
@@ -181,16 +181,16 @@
     {
       "team": "Sweden",
       "flag": "🇸🇪",
-      "first": 0.167,
+      "first": 0.1668,
       "second": 0.319,
-      "third": 0.3546,
+      "third": 0.3548,
       "fourth": 0.1594
     },
     {
       "team": "Japan",
       "flag": "🇯🇵",
-      "first": 0.1514,
-      "second": 0.3442,
+      "first": 0.1516,
+      "second": 0.344,
       "third": 0.3152,
       "fourth": 0.1892
     },
@@ -198,8 +198,8 @@
       "team": "Tunisia",
       "flag": "🇹🇳",
       "first": 0.0392,
-      "second": 0.1076,
-      "third": 0.2362,
+      "second": 0.1078,
+      "third": 0.236,
       "fourth": 0.617
     }
   ],
@@ -207,8 +207,8 @@
     {
       "team": "Belgium",
       "flag": "🇧🇪",
-      "first": 0.6004,
-      "second": 0.2536,
+      "first": 0.6006,
+      "second": 0.2534,
       "third": 0.1102,
       "fourth": 0.0358
     },
@@ -216,15 +216,15 @@
       "team": "Iran",
       "flag": "🇮🇷",
       "first": 0.235,
-      "second": 0.4026,
-      "third": 0.2548,
+      "second": 0.4024,
+      "third": 0.255,
       "fourth": 0.1076
     },
     {
       "team": "Egypt",
       "flag": "🇪🇬",
-      "first": 0.1392,
-      "second": 0.2718,
+      "first": 0.139,
+      "second": 0.272,
       "third": 0.4244,
       "fourth": 0.1646
     },
@@ -232,8 +232,8 @@
       "team": "New Zealand",
       "flag": "🇳🇿",
       "first": 0.0254,
-      "second": 0.072,
-      "third": 0.2106,
+      "second": 0.0722,
+      "third": 0.2104,
       "fourth": 0.692
     }
   ],
@@ -241,8 +241,8 @@
     {
       "team": "Spain",
       "flag": "🇪🇸",
-      "first": 0.735,
-      "second": 0.2134,
+      "first": 0.7352,
+      "second": 0.2132,
       "third": 0.043,
       "fourth": 0.0086
     },
@@ -250,16 +250,16 @@
       "team": "Uruguay",
       "flag": "🇺🇾",
       "first": 0.2324,
-      "second": 0.6098,
-      "third": 0.1266,
+      "second": 0.61,
+      "third": 0.1264,
       "fourth": 0.0312
     },
     {
       "team": "Saudi Arabia",
       "flag": "🇸🇦",
-      "first": 0.0224,
+      "first": 0.0222,
       "second": 0.1142,
-      "third": 0.561,
+      "third": 0.5612,
       "fourth": 0.3024
     },
     {
@@ -277,22 +277,22 @@
       "flag": "🇫🇷",
       "first": 0.6916,
       "second": 0.2014,
-      "third": 0.083,
-      "fourth": 0.024
+      "third": 0.0832,
+      "fourth": 0.0238
     },
     {
       "team": "Norway",
       "flag": "🇳🇴",
-      "first": 0.181,
-      "second": 0.4404,
+      "first": 0.1812,
+      "second": 0.4402,
       "third": 0.2612,
       "fourth": 0.1174
     },
     {
       "team": "Senegal",
       "flag": "🇸🇳",
-      "first": 0.1062,
-      "second": 0.2674,
+      "first": 0.106,
+      "second": 0.2676,
       "third": 0.441,
       "fourth": 0.1854
     },
@@ -301,8 +301,8 @@
       "flag": "🇮🇶",
       "first": 0.0212,
       "second": 0.0908,
-      "third": 0.2148,
-      "fourth": 0.6732
+      "third": 0.2146,
+      "fourth": 0.6734
     }
   ],
   "J": [
@@ -310,24 +310,24 @@
       "team": "Argentina",
       "flag": "🇦🇷",
       "first": 0.7484,
-      "second": 0.1814,
-      "third": 0.0566,
+      "second": 0.1812,
+      "third": 0.0568,
       "fourth": 0.0136
     },
     {
       "team": "Austria",
       "flag": "🇦🇹",
       "first": 0.1634,
-      "second": 0.486,
-      "third": 0.2548,
-      "fourth": 0.0958
+      "second": 0.4864,
+      "third": 0.2546,
+      "fourth": 0.0956
     },
     {
       "team": "Algeria",
       "flag": "🇩🇿",
       "first": 0.0748,
-      "second": 0.255,
-      "third": 0.4894,
+      "second": 0.2548,
+      "third": 0.4896,
       "fourth": 0.1808
     },
     {
@@ -335,8 +335,8 @@
       "flag": "🇯🇴",
       "first": 0.0134,
       "second": 0.0776,
-      "third": 0.1992,
-      "fourth": 0.7098
+      "third": 0.199,
+      "fourth": 0.71
     }
   ],
   "K": [
@@ -387,24 +387,24 @@
       "flag": "🇭🇷",
       "first": 0.2328,
       "second": 0.5542,
-      "third": 0.1606,
-      "fourth": 0.0524
+      "third": 0.1604,
+      "fourth": 0.0526
     },
     {
       "team": "Ghana",
       "flag": "🇬🇭",
       "first": 0.0386,
-      "second": 0.1306,
+      "second": 0.131,
       "third": 0.3662,
-      "fourth": 0.4646
+      "fourth": 0.4642
     },
     {
       "team": "Panama",
       "flag": "🇵🇦",
       "first": 0.0234,
-      "second": 0.1008,
-      "third": 0.407,
-      "fourth": 0.4688
+      "second": 0.1004,
+      "third": 0.4072,
+      "fourth": 0.469
     }
   ]
 }

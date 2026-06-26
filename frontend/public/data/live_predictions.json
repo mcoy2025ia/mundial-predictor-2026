@@ -1,174 +1,10 @@
 [
   {
-    "home_team": "Turkey",
-    "away_team": "United States",
-    "p_home": 0.4016,
-    "p_draw": 0.3107,
-    "p_away": 0.2877,
-    "is_neutral": false,
-    "kickoff": "2026-06-26T02:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.295,
-    "xgb_draw": 0.3603,
-    "xgb_away": 0.3447,
-    "elo_home": 0.2767,
-    "elo_draw": 0.2136,
-    "elo_away": 0.5097,
-    "poisson_home": 0.4698,
-    "poisson_draw": 0.3237,
-    "poisson_away": 0.2065,
-    "top_scorelines": [
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1945
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.1887
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1159
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1125
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "prob": 0.1003
-      }
-    ],
-    "lambda_home": 1.031,
-    "lambda_away": 0.596,
-    "stage": "group",
-    "group": "Group D",
-    "venue": "Los Angeles (Inglewood)",
-    "round": "Matchday 15",
-    "group_context": {
-      "group_name": "Group D",
-      "matchday": 3,
-      "home_points": 0,
-      "away_points": 6,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.United States 6pts 2.Australia 3pts 3.Paraguay 3pts 4.Turkey 0pts",
-      "simultaneous_group_matches": "Paraguay vs Australia",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Turkey at 0 points faces elimination and must attack, while the United States, already qualified, may rotate players, slightly boosting Turkey's win probability.",
-      "Travel-Logistics-Quant": "home_fatigue=0.003(ic=0.000 heat=0.003) away_fatigue=0.014(ic=0.014 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media sentiment or pressure signals available to adjust probabilities.",
-      "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=already_through(6pts) d=-0.025; away_MD3_rotation_risk(6pts)"
-    }
-  },
-  {
-    "home_team": "Paraguay",
-    "away_team": "Australia",
-    "p_home": 0.3624,
-    "p_draw": 0.3043,
-    "p_away": 0.3334,
-    "is_neutral": true,
-    "kickoff": "2026-06-26T02:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.3027,
-    "xgb_draw": 0.2914,
-    "xgb_away": 0.4059,
-    "elo_home": 0.2981,
-    "elo_draw": 0.2293,
-    "elo_away": 0.4726,
-    "poisson_home": 0.3902,
-    "poisson_draw": 0.3505,
-    "poisson_away": 0.2594,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.2121
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1834
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.139
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1202
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "prob": 0.0793
-      }
-    ],
-    "lambda_home": 0.865,
-    "lambda_away": 0.655,
-    "stage": "group",
-    "group": "Group D",
-    "venue": "San Francisco Bay Area (Santa Clara)",
-    "round": "Matchday 15",
-    "group_context": {
-      "group_name": "Group D",
-      "matchday": 3,
-      "home_points": 3,
-      "away_points": 3,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.United States 6pts 2.Australia 3pts 3.Paraguay 3pts 4.Turkey 0pts",
-      "simultaneous_group_matches": "Turkey vs United States",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "MD3 with both teams on 3pts creates a must-win pressure for Paraguay (inferior goal difference likely needs victory) while host USA plays simultaneously, potentially incentivizing defensive caution for Australia.",
-      "Travel-Logistics-Quant": "no significant travel/climate factors",
-      "Media-Sentiment-Parser": "No specific media sentiment or morale signals available for this neutral-group match.",
-      "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020; away_pressure=third_place_watch(3pts) d=+0.020"
-    }
-  },
-  {
     "home_team": "Egypt",
     "away_team": "Iran",
-    "p_home": 0.2945,
-    "p_draw": 0.343,
-    "p_away": 0.3624,
+    "p_home": 0.2863,
+    "p_draw": 0.3413,
+    "p_away": 0.3723,
     "is_neutral": true,
     "kickoff": "2026-06-27T03:00:00",
     "model": "ensemble_agent_adjusted",
@@ -178,13 +14,13 @@
       "xgb": 0.2
     },
     "xgb_home": 0.2623,
-    "xgb_draw": 0.3024,
-    "xgb_away": 0.4353,
+    "xgb_draw": 0.3023,
+    "xgb_away": 0.4354,
     "elo_home": 0.3206,
     "elo_draw": 0.2467,
     "elo_away": 0.4327,
     "poisson_home": 0.2819,
-    "poisson_draw": 0.3932,
+    "poisson_draw": 0.3933,
     "poisson_away": 0.3248,
     "top_scorelines": [
       {
@@ -210,11 +46,11 @@
       {
         "home": 0,
         "away": 2,
-        "prob": 0.062
+        "prob": 0.0619
       }
     ],
     "lambda_home": 0.613,
-    "lambda_away": 0.679,
+    "lambda_away": 0.678,
     "stage": "group",
     "group": "Group G",
     "venue": "Seattle",
@@ -228,7 +64,7 @@
       "away_games_played": 2,
       "group_standings": "1.Egypt 4pts 2.Iran 2pts 3.Belgium 2pts 4.New Zealand 1pts",
       "simultaneous_group_matches": "New Zealand vs Belgium",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -239,18 +75,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Egypt leads Group G with 4 points and only needs a draw to advance, while Iran trails with 2 points and must win, creating desperation that slightly boosts Egypt's win probability.",
+      "IntMatch-Analytics-Pro": "Egypt, needing only a draw to likely advance, sit deep; Iran must push forward, creating counter-attack chances for Egypt.",
       "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.035(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media sentiment detected for this neutral-ground group stage match.",
+      "Media-Sentiment-Parser": "No media signals available; morale adjustment is negligible due to neutral venue and balanced sides.",
       "FIFA-Regs-Strategist": "home_pressure=comfortable(4pts) d=-0.005; away_pressure=needs_result(2pts) d=+0.015"
     }
   },
   {
     "home_team": "New Zealand",
     "away_team": "Belgium",
-    "p_home": 0.1001,
-    "p_draw": 0.1717,
-    "p_away": 0.7282,
+    "p_home": 0.0989,
+    "p_draw": 0.1749,
+    "p_away": 0.7262,
     "is_neutral": true,
     "kickoff": "2026-06-27T03:00:00",
     "model": "ensemble_agent_adjusted",
@@ -259,20 +95,20 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1398,
-    "xgb_draw": 0.225,
-    "xgb_away": 0.6352,
+    "xgb_home": 0.1411,
+    "xgb_draw": 0.2269,
+    "xgb_away": 0.632,
     "elo_home": 0.088,
     "elo_draw": 0.0998,
     "elo_away": 0.8122,
-    "poisson_home": 0.0776,
-    "poisson_draw": 0.1883,
-    "poisson_away": 0.7341,
+    "poisson_home": 0.0775,
+    "poisson_draw": 0.188,
+    "poisson_away": 0.7344,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1702
+        "prob": 0.1701
       },
       {
         "home": 0,
@@ -282,21 +118,21 @@
       {
         "home": 0,
         "away": 3,
-        "prob": 0.1476
+        "prob": 0.1477
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.0959
+        "prob": 0.0957
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.076
+        "prob": 0.0759
       }
     ],
     "lambda_home": 0.446,
-    "lambda_away": 1.776,
+    "lambda_away": 1.777,
     "stage": "group",
     "group": "Group G",
     "venue": "Vancouver",
@@ -310,7 +146,7 @@
       "away_games_played": 2,
       "group_standings": "1.Egypt 4pts 2.Iran 2pts 3.Belgium 2pts 4.New Zealand 1pts",
       "simultaneous_group_matches": "Egypt vs Iran",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -321,18 +157,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "New Zealand (1pt, must-win) faces elimination pressure against Belgium (2pts, needs result) on simultaneous MD3, slightly boosting home desperation while Belgium's Elo dominance is reduced.",
+      "IntMatch-Analytics-Pro": "New Zealand faces knockout-or-bust pressure with 1 point in MD3, likely pushing aggressively against a Belgium side that can secure progression with a draw, increasing home and draw probabilities slightly.",
       "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.000(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Despite significant Elo gap and low prior odds, New Zealand may feel a slight underdog motivation as group stage elimination risk raises morale, but overall signal is weak given neutral venue and limited media pressure.",
+      "Media-Sentiment-Parser": "New Zealand face a low-expectation underdog opportunity in a must-win group finale, which can slightly boost morale and resilience despite Belgium's overwhelming Elo advantage.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=needs_result(2pts) d=+0.015"
     }
   },
   {
     "home_team": "Cape Verde",
     "away_team": "Saudi Arabia",
-    "p_home": 0.2681,
-    "p_draw": 0.3425,
-    "p_away": 0.3894,
+    "p_home": 0.2669,
+    "p_draw": 0.3411,
+    "p_away": 0.3921,
     "is_neutral": true,
     "kickoff": "2026-06-27T00:00:00",
     "model": "ensemble_agent_adjusted",
@@ -341,20 +177,20 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2938,
-    "xgb_draw": 0.3011,
-    "xgb_away": 0.4051,
+    "xgb_home": 0.2947,
+    "xgb_draw": 0.301,
+    "xgb_away": 0.4043,
     "elo_home": 0.3046,
     "elo_draw": 0.2342,
     "elo_away": 0.4612,
     "poisson_home": 0.2321,
-    "poisson_draw": 0.4001,
+    "poisson_draw": 0.4002,
     "poisson_away": 0.3678,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.284
+        "prob": 0.2841
       },
       {
         "home": 0,
@@ -377,7 +213,7 @@
         "prob": 0.0739
       }
     ],
-    "lambda_home": 0.517,
+    "lambda_home": 0.516,
     "lambda_away": 0.721,
     "stage": "group",
     "group": "Group H",
@@ -392,7 +228,7 @@
       "away_games_played": 2,
       "group_standings": "1.Spain 4pts 2.Uruguay 2pts 3.Cape Verde 2pts 4.Saudi Arabia 1pts",
       "simultaneous_group_matches": "Uruguay vs Spain",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -403,18 +239,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both Cape Verde (2pts) and Saudi Arabia (1pt) face elimination pressure in MD3, with Cape Verde's desperation slightly favoring them and increasing draw likelihood in a neutral-site duel.",
+      "IntMatch-Analytics-Pro": "Cape Verde needs a win to advance, while Saudi Arabia defends cautiously; Group H MD3 simultaneous matches favor a conservative approach early.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.038(ic=0.003 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No significant media signal identified; neutral venue and similar stakes offer no clear morale or pressure edge.",
+      "Media-Sentiment-Parser": "No significant media signals available for this fixture; maintaining prior probabilities.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(2pts) d=+0.015; away_pressure=needs_result(1pts) d=+0.015"
     }
   },
   {
     "home_team": "Uruguay",
     "away_team": "Spain",
-    "p_home": 0.1935,
-    "p_draw": 0.2767,
-    "p_away": 0.5298,
+    "p_home": 0.1755,
+    "p_draw": 0.2739,
+    "p_away": 0.5505,
     "is_neutral": true,
     "kickoff": "2026-06-27T00:00:00",
     "model": "ensemble_agent_adjusted",
@@ -423,13 +259,13 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1503,
-    "xgb_draw": 0.2687,
-    "xgb_away": 0.581,
+    "xgb_home": 0.1512,
+    "xgb_draw": 0.2692,
+    "xgb_away": 0.5796,
     "elo_home": 0.1093,
     "elo_draw": 0.1111,
     "elo_away": 0.7797,
-    "poisson_home": 0.2282,
+    "poisson_home": 0.2281,
     "poisson_draw": 0.3415,
     "poisson_away": 0.4304,
     "top_scorelines": [
@@ -474,7 +310,7 @@
       "away_games_played": 2,
       "group_standings": "1.Spain 4pts 2.Uruguay 2pts 3.Cape Verde 2pts 4.Saudi Arabia 1pts",
       "simultaneous_group_matches": "Cape Verde vs Saudi Arabia",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -485,18 +321,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Uruguay cling to knockout hopes with 2pts on MD3, pushing for a win against a Spain side likely rotated given their 4pts cushion, slightly raising draw probability in a must-win scenario.",
+      "IntMatch-Analytics-Pro": "Spain has points control and superior Elo, while Uruguay's limited qualification pressure makes a desperate push unlikely, favoring Spain.",
       "Travel-Logistics-Quant": "home_fatigue=0.008(ic=0.000 heat=0.008) away_fatigue=0.042(ic=0.034 heat=0.008) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Uruguay may benefit from underdog motivation against a superior Spanish side, while Spain faces no notable negative media pressure.",
+      "Media-Sentiment-Parser": "Uruguay may be motivated to exceed expectations against a historically strong Spain side, potentially boosting morale slightly.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(2pts) d=+0.015; altitude=1566m both_affected"
     }
   },
   {
     "home_team": "Norway",
     "away_team": "France",
-    "p_home": 0.1847,
-    "p_draw": 0.268,
-    "p_away": 0.5473,
+    "p_home": 0.1874,
+    "p_draw": 0.2714,
+    "p_away": 0.5412,
     "is_neutral": true,
     "kickoff": "2026-06-26T19:00:00",
     "model": "ensemble_agent_adjusted",
@@ -505,9 +341,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2297,
-    "xgb_draw": 0.2434,
-    "xgb_away": 0.5269,
+    "xgb_home": 0.2296,
+    "xgb_draw": 0.2436,
+    "xgb_away": 0.5267,
     "elo_home": 0.19,
     "elo_draw": 0.157,
     "elo_away": 0.653,
@@ -518,12 +354,12 @@
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1777
+        "prob": 0.1778
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1425
+        "prob": 0.1426
       },
       {
         "home": 1,
@@ -556,7 +392,7 @@
       "away_games_played": 2,
       "group_standings": "1.France 6pts 2.Norway 6pts 3.Senegal 0pts 4.Iraq 0pts",
       "simultaneous_group_matches": "Senegal vs Iraq",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -567,18 +403,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both teams level on 6 points and playing simultaneously on neutral ground creates high uncertainty with no clear tactical edge.",
-      "Travel-Logistics-Quant": "Norway faces extreme intercity travel of 8464 km from New York to Boston, while France has only 436 km from Philadelphia, giving France a significant recovery advantage despite equal rest days.",
-      "Media-Sentiment-Parser": "No specific media sentiment or squad news provided; neutral venue and typical underdog setup with no clear morale signals.",
+      "IntMatch-Analytics-Pro": "Both teams on 6pts and likely to rotate for top spot, making a cautious draw more probable than the prior suggests.",
+      "Travel-Logistics-Quant": "Home team traveled ~8464 km from New York to Boston while away traveled only ~436 km from Philadelphia, giving France a significant travel fatigue advantage despite equal rest days.",
+      "Media-Sentiment-Parser": "Norway's underdog status (Elo ~214 points lower) and neutral venue may provide slight morale boost, but France's squad depth limits meaningful shift.",
       "FIFA-Regs-Strategist": "home_pressure=already_through(6pts) d=-0.025; away_pressure=already_through(6pts) d=-0.025; home_MD3_rotation_risk(6pts); away_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "Senegal",
     "away_team": "Iraq",
-    "p_home": 0.5481,
-    "p_draw": 0.2767,
-    "p_away": 0.1752,
+    "p_home": 0.5453,
+    "p_draw": 0.277,
+    "p_away": 0.1777,
     "is_neutral": true,
     "kickoff": "2026-06-26T19:00:00",
     "model": "ensemble_agent_adjusted",
@@ -588,14 +424,14 @@
       "xgb": 0.2
     },
     "xgb_home": 0.6911,
-    "xgb_draw": 0.1789,
-    "xgb_away": 0.13,
+    "xgb_draw": 0.1794,
+    "xgb_away": 0.1295,
     "elo_home": 0.6729,
     "elo_draw": 0.1496,
     "elo_away": 0.1776,
     "poisson_home": 0.4153,
     "poisson_draw": 0.381,
-    "poisson_away": 0.2037,
+    "poisson_away": 0.2036,
     "top_scorelines": [
       {
         "home": 0,
@@ -638,7 +474,7 @@
       "away_games_played": 2,
       "group_standings": "1.France 6pts 2.Norway 6pts 3.Senegal 0pts 4.Iraq 0pts",
       "simultaneous_group_matches": "Norway vs France",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -649,18 +485,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Both teams at 0 points with two losses face elimination, creating a desperate win-or-go-home scenario that heavily favors the higher-Elo Senegal in a must-win matchday 3 clash.",
+      "IntMatch-Analytics-Pro": "Both Senegal and Iraq are facing elimination with 0 points each, and simultaneous kickoff in MD3 may force desperate early attacking play, benefiting the stronger Senegal side.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.035(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No specific media sentiment or morale signals identified for this neutral-site match.",
+      "Media-Sentiment-Parser": "No relevant media sentiment or morale signals detected for this matchup.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Algeria",
     "away_team": "Austria",
-    "p_home": 0.2698,
-    "p_draw": 0.3017,
-    "p_away": 0.4284,
+    "p_home": 0.2636,
+    "p_draw": 0.2979,
+    "p_away": 0.4385,
     "is_neutral": true,
     "kickoff": "2026-06-28T02:00:00",
     "model": "ensemble_agent_adjusted",
@@ -669,9 +505,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2873,
-    "xgb_draw": 0.3188,
-    "xgb_away": 0.394,
+    "xgb_home": 0.2872,
+    "xgb_draw": 0.3193,
+    "xgb_away": 0.3936,
     "elo_home": 0.3372,
     "elo_draw": 0.2602,
     "elo_away": 0.4027,
@@ -682,12 +518,12 @@
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1837
+        "prob": 0.1838
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1709
+        "prob": 0.171
       },
       {
         "home": 1,
@@ -720,7 +556,7 @@
       "away_games_played": 2,
       "group_standings": "1.Argentina 6pts 2.Austria 3pts 3.Algeria 3pts 4.Jordan 0pts",
       "simultaneous_group_matches": "Jordan vs Argentina",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -731,18 +567,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "MD3 simultaneous fixture, both teams level on 3pts needing win to progress behind Argentina; Algeria’s desperation and potential counter-attacking threat vs. Austria’s higher Elo but must attack, favoring tense draw or home upset.",
+      "IntMatch-Analytics-Pro": "Both sides level on 3 points in a must-win Group J MD3 scenario, encouraging Algeria to push for the win and Austria to counter, but the simultaneous kickoff and neutral site in Kansas City slightly increase the chance of a draw.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.012(ic=0.000 heat=0.012) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No specific media sentiment or morale signals detected in this neutral-group fixture.",
+      "Media-Sentiment-Parser": "No media sentiment or morale signals available, so no adjustment made.",
       "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020; away_pressure=third_place_watch(3pts) d=+0.020"
     }
   },
   {
     "home_team": "Jordan",
     "away_team": "Argentina",
-    "p_home": 0.0667,
-    "p_draw": 0.1673,
-    "p_away": 0.7659,
+    "p_home": 0.0693,
+    "p_draw": 0.1696,
+    "p_away": 0.7611,
     "is_neutral": true,
     "kickoff": "2026-06-28T02:00:00",
     "model": "ensemble_agent_adjusted",
@@ -751,9 +587,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1094,
-    "xgb_draw": 0.1784,
-    "xgb_away": 0.7122,
+    "xgb_home": 0.1098,
+    "xgb_draw": 0.1804,
+    "xgb_away": 0.7097,
     "elo_home": 0.0228,
     "elo_draw": 0.08,
     "elo_away": 0.8972,
@@ -779,12 +615,12 @@
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1227
+        "prob": 0.1226
       },
       {
         "home": 0,
         "away": 4,
-        "prob": 0.0696
+        "prob": 0.0697
       }
     ],
     "lambda_home": 0.279,
@@ -802,7 +638,7 @@
       "away_games_played": 2,
       "group_standings": "1.Argentina 6pts 2.Austria 3pts 3.Algeria 3pts 4.Jordan 0pts",
       "simultaneous_group_matches": "Algeria vs Austria",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -813,18 +649,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Jordan must win to qualify, while Argentina may rotate, but Argentina's superior quality still makes them heavy favorites.",
+      "IntMatch-Analytics-Pro": "Argentina has already qualified and may rotate heavily in MD3, while Jordan needs a win to have any chance of advancing, creating a significant motivation mismatch.",
       "Travel-Logistics-Quant": "home_fatigue=0.018(ic=0.000 heat=0.018) away_fatigue=0.018(ic=0.000 heat=0.018) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Jordan faces a do-or-die group finale against Argentina with nothing to lose, which often boosts underdog morale and resilience.",
+      "Media-Sentiment-Parser": "Jordan, as a massive underdog with no chance to advance, may play without pressure and embrace the spoiler role against Argentina.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=already_through(6pts) d=-0.025; away_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "Colombia",
     "away_team": "Portugal",
-    "p_home": 0.2793,
-    "p_draw": 0.33,
-    "p_away": 0.3907,
+    "p_home": 0.2724,
+    "p_draw": 0.3361,
+    "p_away": 0.3915,
     "is_neutral": true,
     "kickoff": "2026-06-27T23:30:00",
     "model": "ensemble_agent_adjusted",
@@ -833,15 +669,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.415,
-    "xgb_draw": 0.277,
-    "xgb_away": 0.3079,
+    "xgb_home": 0.4132,
+    "xgb_draw": 0.2779,
+    "xgb_away": 0.3089,
     "elo_home": 0.4186,
     "elo_draw": 0.253,
     "elo_away": 0.3284,
-    "poisson_home": 0.2047,
+    "poisson_home": 0.2046,
     "poisson_draw": 0.3567,
-    "poisson_away": 0.4386,
+    "poisson_away": 0.4387,
     "top_scorelines": [
       {
         "home": 0,
@@ -866,7 +702,7 @@
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0939
+        "prob": 0.094
       }
     ],
     "lambda_home": 0.529,
@@ -884,7 +720,7 @@
       "away_games_played": 2,
       "group_standings": "1.Colombia 6pts 2.Portugal 4pts 3.DR Congo 1pts 4.Uzbekistan 0pts",
       "simultaneous_group_matches": "DR Congo vs Uzbekistan",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -895,18 +731,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Colombia already through with 6pts may rotate players, reducing home win probability slightly, while Portugal's need for a draw to secure qualification increases draw and away chances.",
+      "IntMatch-Analytics-Pro": "Colombia already qualified with 6pts and likely rotates, while Portugal needs at least a draw to secure advancement, raising draw and away win probabilities.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.039(ic=0.014 heat=0.025) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No specific media sentiment or morale signals available for neutral group stage match.",
+      "Media-Sentiment-Parser": "No significant media sentiment signals detected for this neutral-site group stage match.",
       "FIFA-Regs-Strategist": "home_pressure=already_through(6pts) d=-0.025; home_MD3_rotation_risk(6pts)"
     }
   },
   {
     "home_team": "DR Congo",
     "away_team": "Uzbekistan",
-    "p_home": 0.3754,
-    "p_draw": 0.2899,
-    "p_away": 0.3347,
+    "p_home": 0.3769,
+    "p_draw": 0.2872,
+    "p_away": 0.3359,
     "is_neutral": true,
     "kickoff": "2026-06-27T23:30:00",
     "model": "ensemble_agent_adjusted",
@@ -915,13 +751,13 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4577,
-    "xgb_draw": 0.2276,
-    "xgb_away": 0.3147,
+    "xgb_home": 0.4574,
+    "xgb_draw": 0.2291,
+    "xgb_away": 0.3135,
     "elo_home": 0.3267,
     "elo_draw": 0.2516,
     "elo_away": 0.4217,
-    "poisson_home": 0.3534,
+    "poisson_home": 0.3535,
     "poisson_draw": 0.3323,
     "poisson_away": 0.3143,
     "top_scorelines": [
@@ -966,7 +802,7 @@
       "away_games_played": 2,
       "group_standings": "1.Colombia 6pts 2.Portugal 4pts 3.DR Congo 1pts 4.Uzbekistan 0pts",
       "simultaneous_group_matches": "Colombia vs Portugal",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -977,18 +813,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "DR Congo faces must-win MD3 after 1 pt, while Uzbekistan with 0 pts may push forward, leaving them vulnerable to counter-attacks.",
+      "IntMatch-Analytics-Pro": "DR Congo's slight desperation (1pt) elevates home win adjustment, while Uzbekistan's elimination risk reduces away win probability.",
       "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.018(ic=0.003 heat=0.015) rest_factor=1.0",
-      "Media-Sentiment-Parser": "No recent media context available for either squad; morale effects are negligible.",
+      "Media-Sentiment-Parser": "No significant media sentiment or pressure signals detected for this neutral-site match.",
       "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Panama",
     "away_team": "England",
-    "p_home": 0.0697,
-    "p_draw": 0.1366,
-    "p_away": 0.7937,
+    "p_home": 0.0761,
+    "p_draw": 0.1365,
+    "p_away": 0.7873,
     "is_neutral": true,
     "kickoff": "2026-06-27T21:00:00",
     "model": "ensemble_agent_adjusted",
@@ -997,9 +833,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.121,
-    "xgb_draw": 0.23,
-    "xgb_away": 0.649,
+    "xgb_home": 0.1215,
+    "xgb_draw": 0.2301,
+    "xgb_away": 0.6484,
     "elo_home": 0.0634,
     "elo_draw": 0.0871,
     "elo_away": 0.8495,
@@ -1034,7 +870,7 @@
       }
     ],
     "lambda_home": 0.29,
-    "lambda_away": 2.076,
+    "lambda_away": 2.075,
     "stage": "group",
     "group": "Group L",
     "venue": "New York/New Jersey (East Rutherford)",
@@ -1048,7 +884,7 @@
       "away_games_played": 2,
       "group_standings": "1.England 4pts 2.Ghana 4pts 3.Croatia 3pts 4.Panama 0pts",
       "simultaneous_group_matches": "Croatia vs Ghana",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -1059,18 +895,18 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Panama must win to have any chance of advancing, creating desperation pressure that slightly lifts their win probability, though England's superior quality remains decisive.",
+      "IntMatch-Analytics-Pro": "Panama must win to stay alive, while England may rotate given 4pts and qualification near certain, increasing Panama's desperation-driven win probability.",
       "Travel-Logistics-Quant": "no significant travel/climate factors",
-      "Media-Sentiment-Parser": "Panama, as a massive underdog with less than 6% win probability, may feel a slight morale boost from having nothing to lose against England in a neutral group stage finale.",
+      "Media-Sentiment-Parser": "Panama, as a heavy underdog facing England, may gain slight morale from underdog mentality and reduced pressure, while England's vast favoritism could bring complacency or external expectations, slightly shifting probabilities.",
       "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030"
     }
   },
   {
     "home_team": "Croatia",
     "away_team": "Ghana",
-    "p_home": 0.5771,
-    "p_draw": 0.2692,
-    "p_away": 0.1537,
+    "p_home": 0.5886,
+    "p_draw": 0.2637,
+    "p_away": 0.1477,
     "is_neutral": true,
     "kickoff": "2026-06-27T21:00:00",
     "model": "ensemble_agent_adjusted",
@@ -1079,9 +915,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6122,
-    "xgb_draw": 0.2464,
-    "xgb_away": 0.1415,
+    "xgb_home": 0.6127,
+    "xgb_draw": 0.2462,
+    "xgb_away": 0.1411,
     "elo_home": 0.727,
     "elo_draw": 0.1297,
     "elo_away": 0.1432,
@@ -1130,7 +966,7 @@
       "away_games_played": 2,
       "group_standings": "1.England 4pts 2.Ghana 4pts 3.Croatia 3pts 4.Panama 0pts",
       "simultaneous_group_matches": "Panama vs England",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.L:Croatia 3pts GD-1 GF3 5.A:South Korea 3pts GD-1 GF2 6.J:Algeria 3pts GD-2 GF2 7.D:Paraguay 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
     },
     "agents": [
       "GroupScenario-Reasoner",
@@ -1141,9 +977,9 @@
     ],
     "agent_notes": {
       "GroupScenario-Reasoner": "",
-      "IntMatch-Analytics-Pro": "Croatia must win to advance (3pts) against a Ghana side that can advance with a draw (4pts), creating heightened urgency for Croatia despite neutral venue.",
-      "Travel-Logistics-Quant": "Ghana faces severe long-haul travel fatigue (8749 km) compared to Croatia's moderate 539 km, giving Croatia a slight edge despite neutral venue.",
-      "Media-Sentiment-Parser": "No specific media or morale signals available for this match.",
+      "IntMatch-Analytics-Pro": "Croatia's desperate 3 points in MD3 vs Ghana's solid 4 and possible rotation, plus home-like strong host support in Philadelphia, drive significant home win adjustment.",
+      "Travel-Logistics-Quant": "Ghana faces extreme intercontinental travel distance (~8749 km) and possible timezone shift from Boston to Philadelphia, while Croatia travels a moderate ~539 km from Toronto within similar timezone, giving a slight fatigue advantage to Croatia.",
+      "Media-Sentiment-Parser": "No specific media sentiment or pressure signals available for this match.",
       "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020"
     }
   }
