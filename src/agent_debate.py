@@ -684,15 +684,24 @@ Responde BREVEMENTE (máx 300 palabras):
         context: dict,
     ) -> str:
         """Ronda 3: Los 3 agentes llegan a consenso CON IMPACTO EN CLASIFICACION."""
-        home = context.get("home_team", {})
-        away = context.get("away_team", {})
+        # Contexto nuevo: tabla completa del grupo (no el viejo home_team/away_team)
+        table = context.get("table", [])
+        scenarios = context.get("classification_scenarios", {})
+        table_str = "\n".join(
+            f"  {r['pos']}. {r['team']} — {r['pts']} pts, GD {r['gd']:+d} (J{r['played']})"
+            for r in table
+        )
 
         consensus_prompt = f"""
 Los 3 expertos debaten sobre: {home_team} vs {away_team}
 
-**CONTEXTO DE CLASIFICACION:**
-- {home.get("name")}: {home.get("status")} ({home.get("points")} pts)
-- {away.get("name")}: {away.get("status")} ({away.get("points")} pts)
+**TABLA ACTUAL DEL GRUPO {context.get("group", "?")}:**
+{table_str or "  (sin datos)"}
+
+**ESCENARIOS DE CLASIFICACION:**
+- Si gana {home_team}: {scenarios.get("if_home_wins", "N/A")}
+- Si empatan: {scenarios.get("if_draw", "N/A")}
+- Si gana {away_team}: {scenarios.get("if_away_wins", "N/A")}
 
 POSICIONES INICIALES Y REBATES:
 
@@ -728,6 +737,9 @@ RESPONDE EN ESTE FORMATO:
 ANÁLISIS FINAL (2-3 líneas):
 - ¿En qué convergieron los 3 expertos? (presión diferencial, MD1 momentum, etc)
 - Confianza general en la predicción (0-10)
+
+REGLA DE PROBABILIDAD: la probabilidad es de ESE marcador exacto. Ningún marcador exacto
+es dominante: usa valores realistas (típicamente 0.12–0.30; nunca 0.5 o más para un score puntual).
 
 IMPORTANTE: Termina tu respuesta con esta línea EXACTA (sin texto adicional antes ni después.
 Las 4 predicciones son: 1 de cada agente individual + 1 de consenso):
