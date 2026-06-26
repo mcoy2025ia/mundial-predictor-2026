@@ -61,11 +61,23 @@ on:
     - cron: "30 6 23 6 *"
     - cron: "30 20 23 6 *"
     - cron: "30 23 23 6 *"
-    # J3 (Matchday 3) — single run at 6 AM Bogota (11 AM UTC) for early prediction polls
-    - cron: "0 11 24 6 *"
-    - cron: "0 11 25 6 *"
-    - cron: "0 11 26 6 *"
-    - cron: "0 11 27 6 *"
+    # J3 (Matchday 3) — 3 daily runs to update third-place probabilities only (no narrations)
+    # Jun 24 (Groups A,B,C)
+    - cron: "0 18 24 6 *"
+    - cron: "30 0 25 6 *"
+    - cron: "0 3 25 6 *"
+    # Jun 25 (Groups D,E,F)
+    - cron: "0 20 25 6 *"
+    - cron: "0 2 26 6 *"
+    - cron: "0 4 26 6 *"
+    # Jun 26 (Groups G,H,I)
+    - cron: "0 19 26 6 *"
+    - cron: "0 4 27 6 *"
+    - cron: "0 5 27 6 *"
+    # Jun 27 (Groups J,K,L)
+    - cron: "0 2 27 6 *"
+    - cron: "30 4 27 6 *"
+    - cron: "0 6 28 6 *"
     - cron: "30 0 28 6 *"
     - cron: "0 3 28 6 *"
     - cron: "30 5 28 6 *"
@@ -95,30 +107,49 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      # --force is required (not just a preference): models/ is gitignored
-      # and regenerated locally over time, but each CI run starts from a
-      # clean checkout with no models/*.pkl at all. Without --force,
-      # live_update.py only retrains when new results are found, leaving
-      # predict_live.py with no model to load on a "nothing changed" run.
-      - name: Live update (fetch results, retrain if needed, export JSONs)
+      # Determine if this run is during J3 (Jun 24-27) → update terceros only
+      - name: Detect J3 (Matchday 3) — group stage simultaneous matches
+        id: is_j3
+        run: |
+          DAY=$(date -u +%d)
+          MONTH=$(date -u +%m)
+          if [ "$MONTH" = "06" ] && [ "$DAY" -ge "24" ] && [ "$DAY" -le "27" ]; then
+            echo "is_j3=true" >> "$GITHUB_OUTPUT"
+            echo "J3 detected (Jun $DAY): updating terceros only (no narrations/debate)"
+          else
+            echo "is_j3=false" >> "$GITHUB_OUTPUT"
+            echo "Not J3: running full cycle (live_update → predict → narrations → debate)"
+          fi
+
+      # ============ J3 PATH: Update terceros (Monte Carlo) only ============
+      - name: "[J3] Update third-place probabilities (Monte Carlo, ~5s)"
+        if: steps.is_j3.outputs.is_j3 == 'true'
+        run: python scripts/update_third_place_probs.py
+
+      # ============ NORMAL PATH: Full cycle (pre-J3 and post-J3) ============
+      - name: "[Full Cycle] Live update (fetch results, retrain if needed)"
+        if: steps.is_j3.outputs.is_j3 == 'false'
         env:
           FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/live_update.py --force
 
-      - name: Live predictions export (anti-leakage ELO cutoff)
+      - name: "[Full Cycle] Live predictions export (anti-leakage ELO cutoff)"
+        if: steps.is_j3.outputs.is_j3 == 'false'
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/predict_live.py --export
 
-      - name: Precompute narrations + group previews
+      - name: "[Full Cycle] Precompute narrations + group previews"
+        if: steps.is_j3.outputs.is_j3 == 'false'
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: python scripts/precompute_narrations.py
 
-      - name: Determine upcoming matches for Agent Debate
+      - name: "[Full Cycle] Determine upcoming matches for Agent Debate"
+        if: steps.is_j3.outputs.is_j3 == 'false'
         id: debate_targets
         env:
           DEBATE_WINDOW_HOURS: ${{ github.event.inputs.debate_window_hours || '36' }}
@@ -126,15 +157,15 @@ jobs:
           PAIRS=$(python scripts/ci_debate_targets.py)
           echo "pairs=$PAIRS" >> "$GITHUB_OUTPUT"
 
-      - name: Run Agent Debate for upcoming matches (idempotent, skips already-debated pairs)
-        if: steps.debate_targets.outputs.pairs != ''
+      - name: "[Full Cycle] Run Agent Debate for upcoming matches"
+        if: steps.is_j3.outputs.is_j3 == 'false' && steps.debate_targets.outputs.pairs != ''
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/run_agent_debate.py ${{ steps.debate_targets.outputs.pairs }}
 
-      - name: Export frontend data (publish Agent Debate results)
-        if: steps.debate_targets.outputs.pairs != ''
+      - name: "[Full Cycle] Export frontend data (publish Agent Debate results)"
+        if: steps.is_j3.outputs.is_j3 == 'false' && steps.debate_targets.outputs.pairs != ''
         run: python scripts/export_frontend_data.py
 
       - name: Commit and push generated data
