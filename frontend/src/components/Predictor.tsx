@@ -394,7 +394,20 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
       if (arr) arr.push(f);
       else groups.set(key, [f]);
     }
-    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
+    // Ordena por HORA de juego (kickoff UTC), no alfabéticamente por grupo.
+    // En J3 los grupos juegan a horas distintas (p.ej. I a las 19:00, G a las 03:00):
+    // el grupo que arranca primero debe ir primero. Fallback alfabético si no hay hora.
+    const earliest = (fs: typeof day.fixtures) =>
+      Math.min(...fs.map((f) => (f.utc ? Date.parse(f.utc) : Number.POSITIVE_INFINITY)));
+    return [...groups.entries()].sort(([ga, fa], [gb, fb]) => {
+      const ta = earliest(fa);
+      const tb = earliest(fb);
+      const fta = Number.isFinite(ta);
+      const ftb = Number.isFinite(tb);
+      if (fta && ftb && ta !== tb) return ta - tb;
+      if (fta !== ftb) return fta ? -1 : 1; // el que tiene hora conocida va primero
+      return ga.localeCompare(gb);           // misma hora o sin datos → alfabético estable
+    });
   }, [day.fixtures]);
 
   /* Carga por defecto el primer partido pendiente del día: solo queda dar Predecir */
