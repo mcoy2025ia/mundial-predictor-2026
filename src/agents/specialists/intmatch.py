@@ -29,8 +29,9 @@ FOCUS (in priority order):
    ELO prior; a team that hasn't scored in 3 games is overrated by the prior.
 2. STYLE CLASH from goal trends: high-scoring + leaky vs low-scoring + solid
    → favor the side whose strength exploits the other's weakness.
-3. GOAL SOURCE: a team with HIGH dependency on one scorer is fragile if that
-   player is neutralized; spread scoring is more reliable.
+3. GOAL SOURCE: goal concentration on one scorer is a FACT, not automatically a
+   weakness — it often signals an elite finisher. Count it against a team only with a
+   confirmed absence or a matchup that can isolate him; otherwise it can be a strength.
 4. HEAD-TO-HEAD: persistent historical dominance is a real tactical signal.
 5. QUALIFICATION PRESSURE: 0-1pts → desperate; 6pts already-through → rotation.
 6. MATCHDAY: MD3 simultaneous = cautious play (↑draw); host advantage USA/MEX/CAN.

@@ -1,7 +1,7 @@
 # Agent Name: IntMatch-Analytics-Pro
 
 > **OPTIONAL ENRICHMENT LAYER**  
-> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
+> The core Ensemble (ELO + Poisson + XGB) already produces a calibrated prediction without this agent (RPS ~0.196, never "perfect").  
 > This agent provides contextual adjustments when available.
 
 > **Now evidence-driven (2026-06):** receives real form (scores + opponent quality

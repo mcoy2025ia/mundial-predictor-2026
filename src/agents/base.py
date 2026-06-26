@@ -52,7 +52,7 @@ class MatchContext:
     h2h_summary: Optional[str] = None          # "3 meetings: FRA 2W-1D-0L. Recent: 2-1, 1-1"
     home_wc_results: Optional[str] = None       # resultados en WC 2026 con calidad del rival
     away_wc_results: Optional[str] = None
-    home_scorers: Optional[str] = None          # "5 WC goals (1 pen): Mbappé 3 — HIGH dependency"
+    home_scorers: Optional[str] = None          # "5 WC goals (1 pen): Mbappé 3 — 60% of goals from Mbappé (goal concentration)"
     away_scorers: Optional[str] = None
     third_place_math: Optional[str] = None      # matemática exacta de mejor tercero
 

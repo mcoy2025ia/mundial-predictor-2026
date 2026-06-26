@@ -25,7 +25,8 @@ MORALE SIGNALS (from evidence):
 - Upset just pulled off (beat a much stronger team) → euphoria, ride the wave short-term
 - Just got upset / collapsed → wounded, can react either way (note the risk)
 - Underdog with <25% prior vs a giant, nothing to lose → small +morale buffer
-- One-man goal dependency → psychological fragility if that scorer is contained
+- Goal concentration on one scorer is not inherently fragile; treat containment as a
+  morale risk only with real evidence (a confirmed absence, or being repeatedly shut down)
 
 CONSTRAINTS:
 - Deltas sum to 0 (redistribution only)

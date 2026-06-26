@@ -1,7 +1,7 @@
 # Agent Name: Travel-Logistics-Quant
 
 > **OPTIONAL ENRICHMENT LAYER**  
-> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
+> The core Ensemble (ELO + Poisson + XGB) already produces a calibrated prediction without this agent (RPS ~0.196, never "perfect").  
 > This agent provides fatigue/logistics context when available.
 
 ## Role: Biometric Fatigue & Logistics Quantitative Analyst

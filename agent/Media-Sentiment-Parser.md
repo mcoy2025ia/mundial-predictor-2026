@@ -1,7 +1,7 @@
 # Agent Name: Media-Sentiment-Parser
 
 > **OPTIONAL ENRICHMENT LAYER**  
-> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
+> The core Ensemble (ELO + Poisson + XGB) already produces a calibrated prediction without this agent (RPS ~0.196, never "perfect").  
 > This agent provides morale/sentiment context when available.
 
 > **Now evidence-driven (2026-06):** instead of invented headlines (we have no

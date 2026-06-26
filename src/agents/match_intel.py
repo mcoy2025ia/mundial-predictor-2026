@@ -237,11 +237,14 @@ class MatchIntel:
         top_goals = int(by_player.iloc[0])
         dependency = top_goals / total if total else 0
         scorers_str = ", ".join(f"{p} {int(g)}" for p, g in by_player.head(3).items())
+        # NOTE: goal concentration is reported as a NEUTRAL FACT, not a weakness.
+        # A high share from one player often means an elite finisher, not fragility.
+        # Agents decide if it matters (only with a confirmed absence or isolating matchup).
         dep_flag = ""
         if dependency >= 0.6 and total >= 2:
-            dep_flag = f" — HIGH dependency ({dependency*100:.0f}% from {top_player})"
+            dep_flag = f" — {dependency*100:.0f}% of goals from {top_player} (goal concentration)"
         elif by_player.size >= 3:
-            dep_flag = " — spread scoring (squad depth)"
+            dep_flag = f" — spread across {by_player.size} scorers"
         return f"{total} WC goals ({pens} pen): {scorers_str}{dep_flag}"
 
     # ── Matemática exacta de mejor tercero ───────────────────────────────────

@@ -313,7 +313,7 @@ Cost: Capped in configs/budget.yaml
 ```python
 """WorldCup2026-Core-Orchestrator: single entry point for the multi-agent system.
 
-Routes to at most 2 sub-agents per call, strips tokens, applies weighted delta blending.
+Routes to up to 5 sub-agents in group stage (2 in knockout), strips tokens, applies weighted delta blending.
 """
 ```
 

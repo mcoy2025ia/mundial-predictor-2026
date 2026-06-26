@@ -31,11 +31,13 @@ Return ONLY a JSON object:
 }
 
 SIGNALS:
-- HIGH goal dependency on one scorer → fragile; opponent can key on that player (slightly ↓ that team)
-- Spread scoring across 3+ players → resilient attack (slightly ↑ that team in tight games)
+- Goal concentration on one scorer is NOT automatically a weakness — it often means an
+  elite finisher. Treat it as a risk ONLY if that player has a confirmed injury/suspension,
+  or a clear matchup lets the opponent isolate him. Otherwise it can be a strength.
+- Spread scoring across 3+ players → resilient, harder-to-shut-down attack
 - Fewer rest days than the opponent (congestion) → fatigue risk, especially MD3 (↓ that team)
 - Concrete injury/suspension of a key player → apply a real penalty to that side
-- A confirmed key absence outweighs a dependency hint
+- A confirmed key absence is the only signal that turns goal concentration into fragility
 
 CONSTRAINTS:
 - Deltas sum to 0 (redistribution only)
