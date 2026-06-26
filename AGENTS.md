@@ -14,7 +14,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 - Temporal split strategy (test = Qatar 2022 to avoid leakage in time-series data)
 - **Narrator AI** — pre-computed regional narrations (DeepSeek, run once per day) stored in `narrations.json`; zero LLM calls per user, dialect selector per match, group standings context from MD2 onward
 - AI chat assistant (DeepSeek + RAG with DashScope embeddings) with topic filter, response cache, rate limiting, and live tournament context injection
-- Multi-agent system (Orchestrator + 6 specialists) that enrich predictions with contextual analysis when API budget allows
+- Multi-agent system (Orchestrator + 7 specialists) fed real derived evidence (form, H2H, goal trends, scorers, third-place math) via `src/agents/match_intel.py` — they reason from data, not team names
 - 122+ pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
 
 ---
@@ -329,12 +329,15 @@ To add a result manually: `python scripts/predict_live.py --add-result "Argentin
 - **`logs/pipeline_runs.jsonl`**: one entry per pipeline run
 
 ### Multi-Agent Architecture (src/agents/)
-The Orchestrator is the single API gateway. It routes each match query to at most 2 sub-agents based on available context (injuries, odds, altitude, etc.). Each agent returns a `delta_P` (adjustment to XGBoost prior). The Orchestrator blends deltas with per-agent weights and confidence, clamped to 12% max total shift, then renormalizes to sum=1.
-- **LLM agents**: IntMatch-Analytics-Pro, Roster-Data-Scout, Media-Sentiment-Parser, Travel-Logistics-Quant — all route through `src/agents/specialists/_llm.py`
-- **LLM provider**: DeepSeek (`DEEPSEEK_API_KEY`) is primary; Anthropic Codex (`ANTHROPIC_API_KEY`) is fallback. Codex model aliases in `_MODEL_MAP` are remapped to `deepseek-chat` automatically.
-- **Deterministic agents** (no LLM): FinOps-Bookmaker-Alpha (odds math), FIFA-Regs-Strategist (altitude/bracket), Travel-Logistics-Quant (haversine fallback)
-- LLM agents fail gracefully (delta=0) when neither key is set.
-- **Design specs**: see `agent/*.md` files (one per specialist) for role, input context, output schema, and cost profile. Consult when modifying or adding a new specialist.
+The Orchestrator is the single API gateway. It routes each match to up to 5 sub-agents in group stage (2 in knockout). Each agent returns a `delta_P` (adjustment to the Ensemble prior), blended with per-agent weights × confidence, clamped to 12% max total shift, then renormalized to sum=1.
+
+**MatchIntel evidence layer (`src/agents/match_intel.py`).** Agents used to be starved (`MatchContext` only had ELO + group points → delta=0). `MatchIntel` now injects rich, zero-cost signals into `MatchContext`: recent form with scores + opponent quality tier (elite/strong/mid/weak), goal-scoring/conceding trends, momentum, head-to-head, current-tournament results, goal-source concentration from `goalscorers.csv`, and exact best-third math (cross-group cutoff in pts + GD). Built once per `predict_live.py` run.
+
+- **LLM agents**: IntMatch-Analytics-Pro (tactics from form/trends/H2H/goal-source), GroupScenario-Reasoner (classification pressure + third-place math, `deepseek-reasoner`), Roster-Data-Scout (**repurposed** to goal-source dependency + fatigue, no injury feed), Media-Sentiment-Parser (morale from real results), Travel-Logistics-Quant — all route through `src/agents/specialists/_llm.py`
+- **LLM provider**: DeepSeek (`DEEPSEEK_API_KEY`) is primary; Anthropic Claude (`ANTHROPIC_API_KEY`) is fallback. Claude model aliases in `_MODEL_MAP` are remapped to `deepseek-chat`. `_llm.py` retries `deepseek-reasoner` with `deepseek-chat` when reasoning truncation returns empty content (200 OK).
+- **Deterministic agents** (no LLM): FinOps-Market-Calibration-Validator (odds math, inactive without odds), FIFA-Regs-Strategist (altitude/bracket/classification), Travel-Logistics-Quant (haversine fallback)
+- Agents fail gracefully (delta=0) when their required signal is missing.
+- **Design specs**: see `agent/*.md` files (one per specialist) for role, input context, output schema, and cost profile.
 
 ### Pre-computed Narrations (Zero LLM Cost Per User)
 `narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Dialect strategy: `DIALECTS_GROUP = ["bogotano"]` during group stage (~$0.003/run); `DIALECTS_KNOCKOUT = ["bogotano","paisa","boyaco","costeño","en"]` activates automatically when `match.stage != "group"`.

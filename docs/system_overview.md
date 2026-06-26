@@ -140,13 +140,15 @@ python scripts/predict_live.py --export [--no-agents]
 ```
 
 1. **ensemble:** Compute prior probabilities (ELO + Poisson + XGB blend)
-2. **agents:** (Optional) Route to max 2 specialists (LLM or deterministic)
-   - IntMatch-Analytics-Pro: Tactical context
-   - Roster-Data-Scout: Injury/availability
-   - Media-Sentiment-Parser: Morale signals
-   - Travel-Logistics-Quant: Fatigue/timezone
-   - FinOps-Bookmaker-Alpha: Market calibration check
-   - FIFA-Regs-Strategist: Bracket/altitude penalty
+2. **MatchIntel:** Compute free derived evidence (form, H2H, goal trends, scorers, third-place math) → inject into MatchContext
+3. **agents:** (Optional) Route to up to 5 specialists in group stage (2 in knockout)
+   - IntMatch-Analytics-Pro: Tactics from form/trends/H2H/goal-source
+   - GroupScenario-Reasoner: Classification pressure + third-place math
+   - Roster-Data-Scout: Goal-source dependency + fatigue (repurposed; no injury feed)
+   - Media-Sentiment-Parser: Morale from real results
+   - Travel-Logistics-Quant: Fatigue/timezone/altitude
+   - FinOps-Market-Calibration-Validator: Market calibration check (if odds)
+   - FIFA-Regs-Strategist: Bracket/altitude/classification penalty
 3. **blend:** Clamp agent deltas to ±12%, renormalize
 4. **output:** `live_predictions.json` (group stage + knockouts)
 
@@ -452,15 +454,17 @@ Orchestrator (single entry point)
 
 ### 15.2 Agents (7 Specialists)
 
+All LLM agents are fed real derived evidence via `src/agents/match_intel.py` (form, goal trends, momentum, H2H, current-tournament results, goal-source concentration, exact best-third math).
+
 | Agent | Type | Role | Trigger |
 |---|---|---|---|
-| **IntMatch-Analytics-Pro** | LLM (Haiku) | Tactical matchup, discipline, climate | Group stage; high pressure scenarios |
-| **Roster-Data-Scout** | LLM (Sonnet) | Injury data, squad depth, xG/xA | If injuries provided |
-| **Media-Sentiment-Parser** | LLM (Sonnet) | Press sentiment, morale, momentum | Group stage MD2+ |
-| **Travel-Logistics-Quant** | Hybrid | Fatigue, timezone, altitude | International travel > 2h |
-| **FinOps-Bookmaker-Alpha** | Deterministic | Market probability calibration | If odds provided; removes overround |
-| **FIFA-Regs-Strategist** | Deterministic | Bracket math, altitude penalty | Knockout stage; altitude > 2000m |
-| **GroupScenario-Reasoner** | LLM (Sonnet) | Qualification pressure, best-3rd | MD2 and MD3 (group stage only) |
+| **IntMatch-Analytics-Pro** | LLM | Tactics from form/trends/H2H/goal-source, discipline, climate | Group stage; high pressure scenarios |
+| **GroupScenario-Reasoner** | LLM (reasoner) | Qualification pressure + exact third-place math | MD2 and MD3 (group stage only) |
+| **Roster-Data-Scout** | LLM | Goal-source dependency + fatigue/congestion (repurposed; no injury feed) | Has scorer/rest/injury signal |
+| **Media-Sentiment-Parser** | LLM | Morale from real results (euphoria/crisis), momentum | Group stage MD2+ |
+| **Travel-Logistics-Quant** | Hybrid | Fatigue, inter-city travel, heat, altitude | International travel / altitude |
+| **FinOps-Market-Calibration-Validator** | Deterministic | Market probability calibration | If odds provided; removes overround |
+| **FIFA-Regs-Strategist** | Deterministic | Bracket math, classification pressure, altitude penalty | Group stage + knockout |
 
 ### 15.3 Budget Guard
 
