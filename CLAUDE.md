@@ -2,6 +2,106 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+---
+
+## 🔴 TOURNAMENT STATUS
+**Live: WC 2026 Group Stage — Matchday 3 runs Jun 24–27 (simultaneous group matches)**
+- **J3 ops:** third-place probabilities update 3×/day via `update_third_place_probs.py` (CI auto-detects Jun 24–27); full cycle resumes after
+- **Next Phase:** Knockout rounds (Round of 32 ~Jul 1 → Final Jul 19, 2026)
+- **Memory System:** Auto-memory at `~/.claude/projects/mundial-predictor-master/memory/` tracks roadmap phases, UI changes, and model improvements across conversations
+- **See Also:** `docs/runbook.md` for daily operational cycles, `docs/finops.md` for AI cost tracking
+
+---
+
+## Quick Reference: Daily Matchday Cycle
+
+```bash
+# After each group-stage matchday, run this sequence (~90s total):
+python scripts/live_update.py              # Fetch results → retrain model
+python scripts/predict_live.py --export    # Update live predictions (anti-leakage cutoff)
+python scripts/precompute_narrations.py    # Regenerate narrations × dialects
+cd frontend && npx vercel --prod           # Deploy
+```
+
+**MD2 Double-Run (Jun 18–23 afternoon/evening blocks):** Run steps above twice — once before afternoon matches, again after afternoon results, so evening predictions reflect real qualification pressure.
+
+**MD3 Simultaneous Matches (Jun 24–27):** CI runs `update_third_place_probs.py` 3×/day (terceros only, no narrations). Narratives emphasize scenarios, goal difference, best-third qualification (not assumed sequential results).
+
+---
+
+## Quick Command Reference
+
+| Task | Command |
+|------|---------|
+| **Setup** | `python -m venv .venv && .venv\Scripts\activate && pip install -r requirements.txt && cd frontend && npm install` |
+| **Full pipeline** | `python scripts/run_pipeline.py` |
+| **Live update (all steps)** | `python scripts/live_update.py` |
+| **Live predictions only** | `python scripts/predict_live.py --export` |
+| **Narrations only** | `python scripts/precompute_narrations.py` |
+| **Agent debate** | `python scripts/run_agent_debate.py "Team1" "Team2" && python scripts/export_frontend_data.py` |
+| **All tests** | `pytest` |
+| **Single test** | `pytest tests/test_model.py::test_temporal_split_no_leakage` |
+| **Frontend dev** | `cd frontend && npm run dev` (http://localhost:3000) |
+| **Streamlit app** | `streamlit run src/app.py` |
+| **Vercel status** | `vercel status` |
+| **Vercel deploy preview** | `vercel` (from project root) |
+| **Vercel deploy production** | `vercel --prod` or `cd frontend && npx vercel --prod` |
+
+---
+
+## Critical Gotchas
+
+### JSON Encoding (UTF-8)
+**IMPORTANT:** Files under `frontend/public/data/` must use UTF-8 encoding. **Do NOT rewrite JSON with PowerShell `Get-Content | Set-Content`** — this causes encoding corruption (mojibake: `MÃ©xico`, `arrancÃ³`, `Â`, `â€`, `ðŸ`). Always use Python scripts (`Path.write_text(..., encoding="utf-8")`) or Node.js for JSON generation.
+
+### Live Predictions Anti-Leakage
+`scripts/predict_live.py` enforces a strict cutoff: `features_cutoff = kickoff - 60s`. Any match where `features_cutoff >= match_kickoff` aborts with an error. This prevents using a match's own result as a feature in its own prediction.
+
+### DeepSeek-Reasoner Token Limits
+`deepseek-reasoner` (used in group narratives and agent debate) counts thinking tokens against `max_tokens`. If the reasoning phase consumes the entire budget, the final `content` returns as an empty string with a 200 OK (no exception). `precompute_narrations.py` falls back to `deepseek-chat` if this occurs, and treats empty strings as "not generated yet" to allow retries.
+
+### Agent Debate Forward-Only
+Agent Debate runs *before* a match is played and accumulates results into `data/processed/agent_debate_results.json`. There is no retroactive backfill of already-played matches (cost/time tradeoff). Accuracy tracking in "Modelo" tab only reflects matches debated *and then played after* the debate ran.
+
+### Frontend Data Flow
+Pre-computed data (narrations, group previews, predictions) must be exported to `frontend/public/data/` and deployed. Local `frontend/src/lib/live.ts` fetches live results from `/api/live` (server-side proxy to football-data.org). The simulator uses client-side Monte Carlo — no backend call needed.
+
+---
+
+## Troubleshooting
+
+| Problem | Diagnosis | Fix |
+|---------|-----------|-----|
+| **Live predictions are stale** | Run `git status` to check if `frontend/public/data/live_predictions.json` is out of date | `python scripts/predict_live.py --export && cd frontend && npx vercel --prod` |
+| **Narrations show mojibake (MÃ©xico)** | PowerShell rewrote a JSON file with wrong encoding | Delete the corrupted file and regenerate: `rm frontend/public/data/narrations.json && python scripts/precompute_narrations.py` |
+| **Chat/API failing silently** | Check rate limiter (20 req/hour/IP), cache, topic filter in order | See `frontend/src/app/api/chat/route.ts` layers 1–3; test with curl: `curl -X POST http://localhost:3000/api/chat -d '{"message":"..."}' -H "Content-Type: application/json"` |
+| **Agent Debate produced empty string** | deepseek-reasoner hit token limit (max_tokens=4500 for consensus) | Reduce context size or retry later; fallback to `deepseek-chat` (no reasoning phase) is automatic |
+| **live_update.py returns exit code 1** | Data fetch or model training failed | Check `logs/pipeline_runs.jsonl` for error entry; re-run with `--dry-run` to preview |
+| **Model RPS is worse than baseline** | Feature set or temporal split is broken | Verify test set is Qatar 2022 (not random), FEATURE_COLS are present, no leakage via `pytest tests/test_model.py::test_temporal_split_no_leakage` |
+| **Narrations missing for knockout** | Pre-computed narrations only run for *today's* matches | `python scripts/precompute_narrations.py --days 1` to include tomorrow; narration endpoint has LLM fallback for missing keys |
+| **Tournament context stale in chat** | Chat injects `group_standings.json` + today's `group_matches.json` at runtime | Verify `export_frontend_data.py` ran and files are deployed |
+
+---
+
+## Table of Contents
+- [Tournament Status & Quick Reference](#🔴-tournament-status)
+- [Quick Command Reference](#quick-command-reference)
+- [Critical Gotchas](#critical-gotchas)
+- [Troubleshooting](#troubleshooting)
+- [Project Overview](#project-overview)
+- [Documentation Guide](#documentation-guide)
+- [WC 2026 Operations](#during-wc-2026-operations)
+- [Development Commands](#development-commands)
+- [Architecture](#architecture)
+- [Vercel Deployment](#vercel-deployment)
+- [Key Decisions & Patterns](#key-decisions--patterns)
+- [File Structure](#file-structure-summary)
+- [Common Workflows](#common-workflows)
+- [Testing Strategy](#testing-strategy)
+- [Environment & Secrets](#environment--secrets)
+
+---
+
 ## Project Overview
 
 **Mundial Predictor 2026** is an end-to-end ML pipeline for predicting FIFA World Cup results using XGBoost with custom ELO ratings, feature engineering, Monte Carlo tournament simulation, live match tracking, and an AI chat assistant.
@@ -14,8 +114,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Temporal split strategy (test = Qatar 2022 to avoid leakage in time-series data)
 - **Narrator AI** — pre-computed match narrations and group previews (DeepSeek, run once/twice per day depending on matchday) stored in `narrations.json` and `group_narratives.json`; zero LLM calls per user for cached content, Bogotá/neutral Spanish during group-stage stabilization, group standings context from MD2 onward
 - AI chat assistant (DeepSeek + RAG with DashScope embeddings) with topic filter, response cache, rate limiting, and live tournament context injection
-- Multi-agent system (Orchestrator + 6 specialists) that enrich predictions with contextual analysis when API budget allows
-- 141 passed, 1 skipped pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
+- Multi-agent system (Orchestrator + 7 specialists) that enrich predictions with contextual analysis when API budget allows. Agents are fed real derived evidence (form, H2H, goal trends, scorers, third-place math) via `src/agents/match_intel.py` — they reason from data, not team names
+- 151 passed, 1 skipped pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
 
 ---
 
@@ -61,11 +161,13 @@ Matchday 2 (Jun 18–23) has afternoon and evening blocks in the same day. **Run
 1. **Before afternoon matches:** Full cycle with morning predictions
 2. **After afternoon results:** Re-run `predict_live.py --export` + `precompute_narrations.py` so evening matches see updated pressure and qualification paths
 
-### J3 Simultaneous Matches
-Matchday 3 (Jun 24) has group matches kicking off simultaneously. Narratives must emphasize:
+### J3 Simultaneous Matches (Jun 24–27)
+Matchday 3 has group matches kicking off simultaneously. Narratives must emphasize:
 - Direct qualification scenarios (not assumed sequential results)
 - Goal difference and best-third qualification pressure
 - Scenarios and probabilities, not deterministic claims
+
+**Third-place updates run 3×/day** (not the full cycle). Since simultaneous matches don't change narrations, the CI runs `scripts/update_third_place_probs.py` (Monte Carlo only, ~5s) at the fixture's three daily windows to refresh best-third probabilities. The workflow auto-detects J3 (Jun 24–27) and takes the light path; outside J3 it runs the full cycle. Timings are in `.github/workflows/wc2026-live-update.yml` and documented in `instrucciones2.md`.
 
 ### Cost & Agent Debate
 - **Group stage:** Narrator in Bogotá/neutral Spanish only (budget stability)
@@ -214,7 +316,7 @@ pytest -v
 # Run a single test
 pytest tests/test_model.py::test_temporal_split_no_leakage
 
-# Test count: 112+ tests across core pipeline, agents, cost guard, and integrity checks
+# Test count: 152 tests (151 passed, 1 skipped) across core pipeline, agents, cost guard, and integrity checks
 ```
 
 ### Development Servers
@@ -242,6 +344,93 @@ npm start
 ```bash
 cd frontend
 npm run lint
+```
+
+---
+
+## Vercel Deployment
+
+**Deployment Context:** This is a Vercel-hosted Next.js 15 app with Python backend scripts (ML model, narrations, agent debate). Frontend data is pre-computed and deployed as static JSON. No real-time LLM calls per user except chat/narrator (cached).
+
+### Deploy Sequence (After Matchday)
+
+```bash
+# 1. Update model + export data (~90s)
+python scripts/live_update.py              # Fetch results, retrain, export JSONs
+python scripts/predict_live.py --export    # Update live predictions
+python scripts/precompute_narrations.py    # Regenerate narrations
+
+# 2. Verify files exist and are UTF-8 clean
+ls -la frontend/public/data/*.json
+
+# 3. Deploy to production (from frontend dir or project root)
+cd frontend && npx vercel --prod
+# OR from project root:
+vercel --prod --cwd frontend
+
+# 4. Verify deployment succeeded
+vercel status
+# Check Vercel dashboard: vercel.com/projects/mundial-predictor
+```
+
+### Preview vs. Production
+
+- **Preview deployment** (`vercel` or `vercel --confirm=false`): Generates a unique URL for testing, doesn't update live site
+- **Production deployment** (`vercel --prod`): Updates the live `mundial-predictor.vercel.app` domain — impacts all users immediately
+
+During tournament operations, always use `--prod` after testing locally.
+
+### Environment Variables (Vercel Dashboard)
+
+All secrets are stored in Vercel project settings, not in code:
+
+| Var | Scope | Purpose |
+|-----|-------|---------|
+| `FOOTBALL_DATA_TOKEN` | Production | Live match results from football-data.org |
+| `DEEPSEEK_API_KEY` | Production | AI narrations, chat, agent debate |
+| `DASHSCOPE_API_KEY` | Production | Query embeddings for chat RAG (Qwen3) |
+| `ANTHROPIC_API_KEY` | Production | Fallback LLM for agents + narrator |
+
+To sync local dev:
+```bash
+# Pull env vars from Vercel into .env.local
+vercel env pull
+# Or install CLI: npm i -g vercel && vercel login
+```
+
+### Common Deployment Issues
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| **Build fails: "next.js not found"** | `npm install` not run in `frontend/` dir | `cd frontend && npm install && cd ..` then redeploy |
+| **504 timeout on `/api/live`** | football-data.org API is slow or down | Check status at football-data.org; `/api/live` has 30s timeout by default |
+| **Stale data on site** | Static JSON files not deployed | Verify files in `frontend/public/data/` exist and `npx vercel --prod` actually ran (check Vercel dashboard deployment list) |
+| **Narrations show mojibake** | JSON encoding corruption during export | Re-run `python scripts/precompute_narrations.py` (forces UTF-8 via Python, not PowerShell) and redeploy |
+| **Chat/API returns 429 (rate limit)** | 20 requests/hour/IP limit hit | Rate limit is per client IP; test with different browser/incognito; limit is intended for abuse prevention |
+
+### Rollback (if production breaks)
+
+```bash
+# View recent deployments
+vercel deployments
+
+# Rollback to previous deployment (replace DEPLOYMENT_ID)
+vercel rollback DEPLOYMENT_ID
+
+# OR revert code and redeploy
+git revert HEAD
+# ... fix code ...
+vercel --prod
+```
+
+### Monitoring
+
+```bash
+# Check live logs
+vercel logs frontend --production
+
+# View function invocations (API calls)
+vercel logs frontend --follow
 ```
 
 ---
@@ -461,11 +650,14 @@ To add a result manually: `python scripts/predict_live.py --add-result "Argentin
 - **`logs/pipeline_runs.jsonl`**: one entry per pipeline run
 
 ### Multi-Agent Architecture (src/agents/)
-The Orchestrator is the single API gateway. It routes each match query to at most 2 sub-agents based on available context (injuries, odds, altitude, etc.). Each agent returns a `delta_P` (adjustment to XGBoost prior). The Orchestrator blends deltas with per-agent weights and confidence, clamped to 12% max total shift, then renormalizes to sum=1.
-- **LLM agents**: IntMatch-Analytics-Pro, Roster-Data-Scout, Media-Sentiment-Parser, Travel-Logistics-Quant — all route through `src/agents/specialists/_llm.py`
-- **LLM provider**: DeepSeek (`DEEPSEEK_API_KEY`) is primary; Anthropic Claude (`ANTHROPIC_API_KEY`) is fallback. Claude model aliases in `_MODEL_MAP` are remapped to `deepseek-chat` automatically.
-- **Deterministic agents** (no LLM): FinOps-Bookmaker-Alpha (odds math), FIFA-Regs-Strategist (altitude/bracket), Travel-Logistics-Quant (haversine fallback)
-- LLM agents fail gracefully (delta=0) when neither key is set.
+The Orchestrator is the single API gateway. It routes each match to up to 5 sub-agents in group stage (2 in knockout) based on context. Each agent returns a `delta_P` (adjustment to the Ensemble prior). The Orchestrator blends deltas with per-agent weights × confidence, clamped to 12% max total shift, then renormalizes to sum=1.
+
+**MatchIntel evidence layer (`src/agents/match_intel.py`) — IMPORTANT.** The agents used to be *starved*: `MatchContext` only carried ELO + group points, so IntMatch/Media guessed from team names and Roster skipped (no injury feed). `MatchIntel` now computes **rich, zero-cost signals from data already on disk** and injects them into `MatchContext` (12 new fields): recent form with scores + opponent quality tier (elite/strong/mid/weak by ELO), goal-scoring/conceding trends, momentum (hot/rising/falling/cold), head-to-head record, current-tournament results, goal-source concentration from `goalscorers.csv` (one-man dependency vs squad depth), and the **exact best-third math** (cross-group cutoff in points + GD). Built once per `predict_live.py` run and passed into `enrich_with_orchestrator`. This lifted agent confidence from ~0.2 to 0.5–0.9 in practice.
+
+- **LLM agents**: IntMatch-Analytics-Pro (tactics from form/trends/H2H/goal-source), GroupScenario-Reasoner (classification pressure + third-place math, `deepseek-reasoner`), Roster-Data-Scout (**repurposed** to goal-source dependency + fatigue, since we have no injury feed), Media-Sentiment-Parser (morale derived from real results), Travel-Logistics-Quant (deterministic + LLM for altitude) — all route through `src/agents/specialists/_llm.py`
+- **LLM provider**: DeepSeek (`DEEPSEEK_API_KEY`) is primary; Anthropic Claude (`ANTHROPIC_API_KEY`) is fallback. Claude model aliases in `_MODEL_MAP` are remapped to `deepseek-chat` automatically. **`_llm.py` retries `deepseek-reasoner` with `deepseek-chat` when reasoning truncation returns empty content (200 OK)** — this is what was making GroupScenario-Reasoner return all-zeros.
+- **Deterministic agents** (no LLM): FinOps-Market-Calibration-Validator (odds math, inactive without odds), FIFA-Regs-Strategist (altitude/bracket/classification pressure), Travel-Logistics-Quant (haversine fallback)
+- Agents fail gracefully (delta=0) when their required signal is missing (no injuries, no odds, no API key).
 - **Design specs**: see `agent/*.md` files (one per specialist) for role, input context, output schema, and cost profile. Consult when modifying or adding a new specialist.
 
 ### Agent Debate System (src/agent_debate.py) — logic-based predictions, no ML
@@ -514,15 +706,18 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── app.py              # Streamlit demo interface
 │   ├── agent_debate.py     # Agent Debate System: 3-round logic-based debate (deepseek-reasoner)
 │   └── agents/
-│       ├── base.py         # MatchContext, AgentResult, BaseAgent ABC
-│       ├── orchestrator.py # Routing (max 2 agents), delta blending, OrchestratorOutput
+│       ├── base.py         # MatchContext (+ MatchIntel fields), AgentResult, BaseAgent ABC
+│       ├── match_intel.py  # Free derived evidence: form, H2H, goal trends, scorers, third-place math
+│       ├── orchestrator.py # Routing (up to 5 in group stage), delta blending, OrchestratorOutput
 │       └── specialists/
-│           ├── intmatch.py  # Tactical matchup (Claude Haiku)
-│           ├── roster.py    # Injury/WAR analysis (Claude Sonnet)
-│           ├── media.py     # Sentiment/morale (Claude Sonnet)
-│           ├── travel.py    # Fatigue/altitude (Claude Haiku + deterministic)
-│           ├── finops.py    # Odds implied probs (deterministic)
-│           └── fifa_regs.py # Bracket/altitude math (deterministic)
+│           ├── intmatch.py        # Tactics from form/trends/H2H/goal-source
+│           ├── group_scenario.py  # Classification pressure + third-place math (deepseek-reasoner)
+│           ├── roster.py          # Goal-source dependency + fatigue (repurposed; no injury feed)
+│           ├── media.py           # Morale derived from real results
+│           ├── travel.py          # Fatigue/altitude (deterministic + LLM)
+│           ├── finops.py          # Odds implied probs (deterministic, inactive without odds)
+│           ├── fifa_regs.py       # Bracket/altitude/classification math (deterministic)
+│           └── _llm.py            # LLM gateway: DeepSeek→Claude, reasoner-empty fallback
 ├── agent/                  # Agent design specs (one .md per specialist)
 │   ├── intmatch_analytics_pro.md
 │   ├── roster_data_scout.md
@@ -540,7 +735,8 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── export_frontend_data.py     # Generate JSONs for frontend
 │   ├── live_update.py              # Orchestrator: fetch results → retrain → export
 │   ├── update_wc_results.py        # Fill NA scores in results.csv from football-data.org
-│   ├── predict_live.py             # Live predictions with per-match ELO cutoff (anti-leakage)
+│   ├── predict_live.py             # Live predictions with per-match ELO cutoff (anti-leakage) + MatchIntel agents
+│   ├── update_third_place_probs.py # Recompute ONLY third-place probs (Monte Carlo ~5s, no narrations) — J3 3x/day
 │   ├── precompute_narrations.py    # Daily narrations × dialects → narrations.json (DeepSeek, 1 call/match)
 │   ├── run_agent_debate.py         # Runs Agent Debate System for given matches → agent_debate_results.json (accumulative, idempotent)
 │   ├── ablation_features.py        # Ablation test for candidate features vs base FEATURE_COLS
@@ -566,7 +762,7 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   │   ├── agentDebate.ts  # Agent Debate verdict/accuracy helpers (mirrors live.ts for the ML model)
 │   │   └── i18n.tsx        # i18n context + regional dialects
 │   └── public/data/        # Exported JSONs: teams, predictions, narrations, group_matches, standings, etc.
-├── tests/                  # 112+ tests: features, model, agents, cost guard, integrity, simulator, live prediction
+├── tests/                  # 152 tests: features, model, agents, cost guard, integrity, simulator, live prediction
 ├── data/
 │   ├── raw/                # results.csv (incl. WC 2026 fixture), shootouts.csv, goalscorers.csv
 │   ├── processed/          # Generated CSVs, parquets, JSONs (regenerable, gitignored)

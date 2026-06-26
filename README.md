@@ -5,7 +5,7 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0-EB5E28)
 ![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=nextdotjs&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-141%20passed%2C%201%20skipped-2ea44f)
+![Tests](https://img.shields.io/badge/tests-151%20passed%2C%201%20skipped-2ea44f)
 
 > 🇨🇦🇺🇸🇲🇽 El torneo está **en juego** (11 jun – 19 jul 2026). La web integra los resultados oficiales al final de cada partido: el modelo recalcula los ELO y actualiza todas las probabilidades con los datos reales de la copa.
 
@@ -66,23 +66,29 @@ Datos históricos (49k+ partidos, 1872–2026)
 
 **Importante:** Los agentes son un ENRIQUECIMIENTO opcional. El Ensemble predice con precisión completa sin ellos.
 
+Cada agente recibe **evidencia real derivada gratis** (`src/agents/match_intel.py`): forma reciente con marcadores y calidad del rival (elite/strong/mid/weak), tendencias de goles, momentum, head-to-head, resultados del torneo, fuente de goles (dependencia de un goleador vs profundidad) y la **matemática exacta de mejor tercero** (corte cross-group en puntos + diferencia de gol). Así razonan sobre datos concretos, no sobre el nombre del equipo.
+
 Si habilitado + presupuesto disponible:
 ```
 Ensemble prior (p_home, p_draw, p_away)
+   ├─► MatchIntel: computa evidencia real (forma, goleadores, terceros…)
    ├─► Orchestrator: evalúa contexto del partido
-   └─► Selecciona máximo 2 agentes especializados
-        ├─ IntMatch-Analytics-Pro: tácticas, presión, clima
-        ├─ Roster-Data-Scout: lesiones, disponibilidad
-        ├─ Media-Sentiment-Parser: sentimiento de prensa
-        ├─ Travel-Logistics-Quant: fatiga, altitud
-        ├─ FinOps-Market-Calibration-Validator: odds vs. modelo
-        └─ FIFA-Regs-Strategist: bracket, altitud
+   └─► Selecciona hasta 5 agentes especializados (3-5 en fase de grupos)
+        ├─ IntMatch-Analytics-Pro: tácticas desde forma/tendencias/H2H/goleadores
+        ├─ GroupScenario-Reasoner: presión de clasificación + matemática de terceros
+        ├─ Roster-Data-Scout: dependencia de goleador + fatiga/congestión
+        ├─ Media-Sentiment-Parser: moral derivada de resultados reales (euforia/crisis)
+        ├─ Travel-Logistics-Quant: fatiga, viaje inter-sede, calor, altitud
+        ├─ FinOps-Market-Calibration-Validator: odds vs. modelo (si hay odds)
+        └─ FIFA-Regs-Strategist: bracket, presión de clasificación, altitud
              └─► Cada agente produce delta_P (ajuste a prior)
-                  └─► Blend: suma ponderada, clamped ±12%
+                  └─► Blend: suma ponderada × confianza, clamped ±12%
                        └─► Output final: (p_home', p_draw', p_away') = prior + deltas
 ```
 
 **Coste:** $2–$5/día (configurable). **Si agotado:** sistema cae back a Ensemble (sin degradación).
+
+> **Nota de diseño:** los agentes que dependen de feeds externos que no tenemos (tarjetas/suspensiones, odds de casas) quedan inactivos con `delta=0` salvo que se inyecte esa data. El resto corre con señales gratis computadas de `results.csv`, `wc2026_live_results.csv` y `goalscorers.csv`.
 
 ---
 
@@ -100,7 +106,7 @@ Ensemble prior (p_home, p_draw, p_away)
 
 ## Ciclo diario durante el torneo
 
-El ciclo se corre cada mañana antes de los partidos del día. En J2/MD2 hay una segunda corrida en la tarde cuando ya terminaron los primeros dos partidos, para que los partidos de la noche y las previas de grupo incorporen la presión real de puntos, diferencia de gol y mejores terceros. En J3/MD3 se recalculan escenarios de clasificación con partidos simultáneos por grupo.
+El ciclo se corre cada mañana antes de los partidos del día. En J2/MD2 hay una segunda corrida en la tarde cuando ya terminaron los primeros dos partidos, para que los partidos de la noche y las previas de grupo incorporen la presión real de puntos, diferencia de gol y mejores terceros. En J3/MD3 (partidos simultáneos por grupo) se corre `update_third_place_probs.py` **3 veces al día** según los horarios del fixture: recalcula solo las probabilidades de mejor tercero (Monte Carlo ~5s) sin regenerar narraciones, ya que estas no cambian con resultados simultáneos.
 
 ```bash
 # 1. Descarga resultados de ayer, recalcula ELO, reentrena (~90s)
@@ -151,7 +157,7 @@ cp .env.example .env.local              # agrega las keys (ver tabla abajo)
 npm run dev                             # http://localhost:3000
 
 # Tests
-pytest          # 122+ tests
+pytest          # 152 tests
 ```
 
 **Variables de entorno** (`frontend/.env.local` y Vercel):
@@ -171,10 +177,15 @@ pytest          # 122+ tests
 
 ```
 ├── src/                  # Python: extractor, ELO/features, modelo XGBoost, Poisson, simulador
-│   └── agent_debate.py          # Agent Debate System: debate de 3 agentes en 3 rondas (DeepSeek Reasoner)
+│   ├── agent_debate.py          # Agent Debate System: debate de 3 agentes en 3 rondas (DeepSeek Reasoner)
+│   └── agents/
+│       ├── match_intel.py       # Evidencia derivada gratis (forma, H2H, goleadores, terceros) para los agentes
+│       ├── orchestrator.py      # Routing (hasta 5 en grupos), blend de deltas
+│       └── specialists/         # IntMatch, GroupScenario, Roster, Media, Travel, FinOps, FIFA-Regs
 ├── scripts/
 │   ├── live_update.py           # Ciclo completo: fetch → retrain → export (~90s)
 │   ├── predict_live.py          # Predicciones con agentes + anti-leakage por partido
+│   ├── update_third_place_probs.py # Solo recalcula terceros (Monte Carlo ~5s, sin narraciones) — J3 3x/día
 │   ├── precompute_narrations.py # Narraciones diarias + previas de grupo → narrations.json / group_narratives.json
 │   ├── run_agent_debate.py      # Corre el Agent Debate para partidos puntuales (acumulativo, idempotente)
 │   ├── run_pipeline.py          # Pipeline completo desde cero
@@ -185,7 +196,7 @@ pytest          # 122+ tests
 │   ├── src/app/api/narrator/# Sirve narrations.json; LLM solo si la narración no está pre-computada
 │   ├── src/components/      # Predictor (dialecto), Groups, ModelTab (J1/J2/J3/FG), StatsTab, etc.
 │   └── public/data/         # JSONs: teams, predictions, narrations, group_matches, standings…
-├── tests/                # 122+ tests: pipeline, agentes, integridad, simulador
+├── tests/                # 152 tests: pipeline, agentes, integridad, simulador
 ├── data/
 │   ├── raw/              # results.csv, shootouts.csv, goalscorers.csv (gitignored)
 │   └── external/         # wc2026_fixture.json · wc2026_live_results.csv
