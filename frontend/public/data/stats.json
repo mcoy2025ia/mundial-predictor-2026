@@ -254,15 +254,6 @@
       "avg": 1.51
     },
     {
-      "team": "Sweden",
-      "flag": "🇸🇪",
-      "matches": 54,
-      "goals_for": 87,
-      "goals_against": 80,
-      "goal_diff": 7,
-      "avg": 1.61
-    },
-    {
       "team": "Hungary",
       "flag": "🏳️",
       "matches": 32,
@@ -270,6 +261,15 @@
       "goals_against": 57,
       "goal_diff": 30,
       "avg": 2.72
+    },
+    {
+      "team": "Sweden",
+      "flag": "🇸🇪",
+      "matches": 54,
+      "goals_for": 87,
+      "goals_against": 80,
+      "goal_diff": 7,
+      "avg": 1.61
     },
     {
       "team": "Russia",
