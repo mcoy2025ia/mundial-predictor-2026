@@ -48,6 +48,7 @@ from src.features import compute_elo_ratings, compute_current_form
 from src.model import load_model
 from src.ensemble import DEFAULT_WEIGHTS, _elo_proba as elo_proba
 from src.poisson_model import PoissonModel
+from src.agents.match_intel import MatchIntel
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("predict_live")
@@ -572,6 +573,7 @@ def get_group_context(
         "simultaneous_group_matches": build_simultaneous_group_context(match, fixture),
         "third_place_context": build_third_place_context(standings),
         "venue_city": venue,
+        "_raw_standings": standings,   # tabla completa para MatchIntel.third_place_math
     }
 
 
@@ -597,6 +599,23 @@ def _context_signature(group_ctx: dict) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
+def _load_elo_snapshot() -> dict:
+    """Carga elo_current.json (snapshot de ELO) para etiquetar calidad de rivales.
+
+    Usado solo por MatchIntel para clasificar rivales (elite/strong/mid/weak).
+    No afecta las features anti-leakage del modelo (esas usan ELO por cutoff).
+    """
+    path = ROOT / "data" / "processed" / "elo_current.json"
+    if not path.exists():
+        return {}
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.warning("No se pudo leer elo_current.json: %s", e)
+        return {}
+
+
 def _load_previous_predictions() -> dict[tuple[str, str], dict]:
     """Carga live_predictions.json de la corrida anterior (si existe)."""
     path = ROOT / "data" / "processed" / "live_predictions.json"
@@ -615,7 +634,8 @@ def _load_previous_predictions() -> dict[tuple[str, str], dict]:
 
 
 def enrich_with_orchestrator(pred: dict, match: dict, group_ctx: dict,
-                              elo_ratings: dict) -> dict:
+                              elo_ratings: dict,
+                              intel: Optional[MatchIntel] = None) -> dict:
     """Aplica el Orchestrator al prior del ensemble y devuelve probs ajustadas.
 
     Si el Orchestrator falla (sin API key, budget agotado, etc.), devuelve pred sin cambios.
@@ -625,6 +645,20 @@ def enrich_with_orchestrator(pred: dict, match: dict, group_ctx: dict,
         from src.agents.orchestrator import Orchestrator
 
         altitude = _CITY_ALTITUDE_M.get(group_ctx.get("venue_city", ""), 0)
+
+        # MatchIntel: enriquecimiento derivado (forma, H2H, goleadores, terceros)
+        enr: dict = {}
+        if intel is not None:
+            try:
+                enr = intel.enrich(
+                    home=pred["home_team"],
+                    away=pred["away_team"],
+                    as_of=match["kickoff"],
+                    group=group_ctx.get("group_name"),
+                    standings=group_ctx.get("_raw_standings"),
+                )
+            except Exception as e:
+                logger.debug("MatchIntel enrich falló: %s", e)
 
         ctx = MatchContext(
             team_home=pred["home_team"],
@@ -651,6 +685,19 @@ def enrich_with_orchestrator(pred: dict, match: dict, group_ctx: dict,
             group_standings=group_ctx.get("group_standings"),
             simultaneous_group_matches=group_ctx.get("simultaneous_group_matches"),
             third_place_context=group_ctx.get("third_place_context"),
+            # ── MatchIntel ──
+            home_form=enr.get("home_form"),
+            away_form=enr.get("away_form"),
+            home_goal_trend=enr.get("home_goal_trend"),
+            away_goal_trend=enr.get("away_goal_trend"),
+            home_momentum=enr.get("home_momentum"),
+            away_momentum=enr.get("away_momentum"),
+            h2h_summary=enr.get("h2h_summary"),
+            home_wc_results=enr.get("home_wc_results"),
+            away_wc_results=enr.get("away_wc_results"),
+            home_scorers=enr.get("home_scorers"),
+            away_scorers=enr.get("away_scorers"),
+            third_place_math=enr.get("third_place_math"),
         )
 
         out = Orchestrator().predict(ctx)
@@ -734,6 +781,12 @@ def _run_live_predictions(
     ].copy()
 
     group_standings = compute_group_standings(fixture, df_wc26_played)
+
+    # MatchIntel: features derivadas gratis (forma, H2H, goleadores, momentum,
+    # matemática de terceros) para alimentar a los agentes con evidencia real.
+    _elo_snapshot = _load_elo_snapshot()
+    intel = MatchIntel(df_all, df_wc26_played, fixture, _elo_snapshot)
+
     previous = {} if force_agents else _load_previous_predictions()
     n_agents_reused = 0
     n_agents_called = 0
@@ -810,7 +863,7 @@ def _run_live_predictions(
                     pred["model"] = prev.get("model", pred["model"])
                     n_agents_reused += 1
                 else:
-                    pred = enrich_with_orchestrator(pred, match, group_ctx, _cached_ratings)
+                    pred = enrich_with_orchestrator(pred, match, group_ctx, _cached_ratings, intel)
                     n_agents_called += 1
                 pred["_context_sig"] = sig
 

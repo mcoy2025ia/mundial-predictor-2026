@@ -4,6 +4,12 @@
 > The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
 > This agent provides morale/sentiment context when available.
 
+> **Now evidence-driven (2026-06):** instead of invented headlines (we have no
+> press feed), morale is inferred from REAL on-pitch evidence via
+> `src/agents/match_intel.py`: recent form with scores/opponent tier, momentum
+> (hot/rising/falling/cold), tournament results, and goal-source fragility. A 4-0
+> win over an [elite] side reads as euphoria; being blanked 3 games reads as crisis.
+
 ## Role: Media Sentiment & Group Behavioral Psychologist
 
 ## Core Variables & Weighting

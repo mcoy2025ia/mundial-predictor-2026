@@ -17,9 +17,16 @@ Return ONLY a JSON object:
   "notes": string                     // 1 sentence in Spanish, max 100 chars
 }
 
+You receive the EXACT best-third math (cross-group cutoff in points and goal
+difference) plus each team's tournament results. Use it: a 3rd-placed team that
+needs a win AND goal difference to overtake another group's third plays very
+differently from one already safe.
+
 CONSTRAINTS:
 - Deltas sum to 0 (redistribution only)
 - 0-1pts → needs win/result; 3pts → depends on GD; 6pts → qualification/rotation risk
+- Use third_place_math: if a team is OUTSIDE the top-8 thirds, it must chase goals (↑variance)
+- A team already INSIDE top-8 thirds or already through may rotate (↓its win prob)
 - J2: is this team's "winnable" match or "hard" match?
 - J3: simultaneous group behavior + top-2 + best-third scenarios
 - NEVER invent injuries, weather, odds, facts not in JSON
@@ -42,13 +49,19 @@ class GroupScenarioReasonerAgent(BaseAgent):
             "standings": ctx.group_standings,
             "same_kickoff_group_matches": ctx.simultaneous_group_matches,
             "best_thirds_snapshot": ctx.third_place_context,
+            "third_place_math": ctx.third_place_math,
+            "home_tournament_results": ctx.home_wc_results,
+            "away_tournament_results": ctx.away_wc_results,
             "round_label": ctx.round_label,
         }
         raw = call_claude(
             _SYSTEM,
             payload,
             model=self.model,
-            max_tokens=550,
+            # deepseek-reasoner cuenta tokens de razonamiento contra max_tokens;
+            # con poco margen devuelve content="" (200 OK). 1200 da espacio al
+            # razonamiento + el JSON final.
+            max_tokens=1200,
             agent_name=self.name,
             match=f"{ctx.team_home} vs {ctx.team_away}",
         )

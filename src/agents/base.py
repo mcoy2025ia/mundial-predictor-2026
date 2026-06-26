@@ -42,6 +42,19 @@ class MatchContext:
     simultaneous_group_matches: Optional[str] = None
     third_place_context: Optional[str] = None
     matchday: Optional[int] = None            # 1, 2, o 3 en fase de grupos
+    # ── Inteligencia de partido (MatchIntel, todo derivado gratis) ───────────
+    home_form: Optional[str] = None           # "(3W-1D-1L) W 2-0 vs RSA[weak] | ..."
+    away_form: Optional[str] = None
+    home_goal_trend: Optional[str] = None      # "scored 2.4/g, conceded 0.6/g, 2 clean sheets"
+    away_goal_trend: Optional[str] = None
+    home_momentum: Optional[str] = None        # "hot" / "rising" / "falling" / "cold"
+    away_momentum: Optional[str] = None
+    h2h_summary: Optional[str] = None          # "3 meetings: FRA 2W-1D-0L. Recent: 2-1, 1-1"
+    home_wc_results: Optional[str] = None       # resultados en WC 2026 con calidad del rival
+    away_wc_results: Optional[str] = None
+    home_scorers: Optional[str] = None          # "5 WC goals (1 pen): Mbappé 3 — HIGH dependency"
+    away_scorers: Optional[str] = None
+    third_place_math: Optional[str] = None      # matemática exacta de mejor tercero
 
 
 @dataclass

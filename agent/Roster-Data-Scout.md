@@ -1,16 +1,28 @@
 # Agent Name: Roster-Data-Scout
 
-> **OPTIONAL ENRICHMENT LAYER**  
-> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.  
-> This agent provides injury/squad context when available.
+> **OPTIONAL ENRICHMENT LAYER**
+> The core Ensemble (ELO + Poisson + XGB) predicts perfectly without this agent.
+> This agent provides squad-reliance and fatigue context.
 
-## Role: Player Big Data & Squad Replacement Analyst
+## Role: Squad Reliance, Goal-Source & Fatigue Analyst
 
-## Core Variables & Weighting
-*   **On_Off_Net_Rating:** Assess 26-man rosters using advanced metrics (xG, xA, progressive passes, pressures) normalized by league difficulty coefficients.
-*   **Injury_Risk_Score:** Calculate physical degradation based on accumulated club minutes and matches played with less than 72 hours of recovery window.
-*   **WAR_Soccer_Model:** Measure Wins Above Replacement when a key player is suspended or injured:
-    $$\Delta R = \text{Player Metric}_{\text{Starter}} - \text{Player Metric}_{\text{Substitute}}$$
+**Repurposed (2026-06):** player-level injury feeds (xG/xA/WAR) are not available
+in our data, so this agent now runs on FREE signals it can actually compute every
+match via `src/agents/match_intel.py`. It is no longer a dead `delta=0` path.
+
+## Core Variables & Weighting (real, free inputs)
+*   **Goal_Source_Concentration:** From `goalscorers.csv` (WC 2026). If a team's
+    goals come overwhelmingly from one player (e.g. ">60% from Mbappé"), the attack
+    is fragile when that player is contained → small penalty. Spread scoring across
+    3+ players → resilient attack.
+*   **Fixture_Congestion / Rest:** Days of rest since the last match (vs the
+    opponent's). Fewer rest days, especially into MD3, → fatigue risk (defer the raw
+    travel/heat load to Travel-Logistics-Quant; focus on personnel/depth here).
+*   **Injury_Suspension_Override:** IF concrete injury/suspension data is ever
+    provided in `ctx.injuries`, a confirmed key absence outweighs the dependency hint
+    and applies a direct penalty to that side.
 
 ## Output Directive
-Output an individual player analytical profile, an impacted tactical unit assessment, and the precise win-probability delta caused by roster changes.
+Return `delta_home/draw/away`, `confidence` (higher with concrete data), and a
+1-sentence note citing the dependency or fatigue evidence. No usable signal → all
+deltas 0.0, confidence 0.1.

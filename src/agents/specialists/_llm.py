@@ -141,7 +141,29 @@ def call_claude(
             text = response.choices[0].message.content or ""
             real_tokens = getattr(response.usage, "total_tokens", estimated_tokens)
             logger.debug("DeepSeek [%s/%s]: %d tokens", agent_name, effective_model, real_tokens)
-            return text
+
+            # deepseek-reasoner cuenta sus tokens de razonamiento contra max_tokens.
+            # Si el razonamiento agota el presupuesto, `content` vuelve VACÍO con
+            # 200 OK (sin excepción). Reintentamos una vez con deepseek-chat
+            # (sin fase de razonamiento → no puede truncarse a sí mismo).
+            if not text.strip() and "reasoner" in effective_model:
+                logger.info(
+                    "[%s] deepseek-reasoner devolvió vacío (razonamiento agotó max_tokens); "
+                    "fallback a deepseek-chat", agent_name or effective_model,
+                )
+                retry = client.chat.completions.create(
+                    model="deepseek-chat",
+                    max_tokens=max_tokens,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user",   "content": user_msg},
+                    ],
+                )
+                text = retry.choices[0].message.content or ""
+
+            if text.strip():
+                return text
+            logger.warning("DeepSeek devolvió vacío (%s); intentando Claude fallback", effective_model)
         except Exception as exc:
             logger.warning("DeepSeek falló (%s), intentando Claude fallback: %s", effective_model, exc)
 
