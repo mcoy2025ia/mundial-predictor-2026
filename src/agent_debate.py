@@ -104,6 +104,88 @@ class AgentDebateSystem:
         }
         return context
 
+    def get_full_group_context(self, home_team: str, away_team: str) -> dict:
+        """Contexto COMPLETO del grupo: tabla 4 equipos, partidos jugados, análisis de terceros."""
+        import pandas as pd
+        import json
+
+        # Cargar resultados y fixture
+        try:
+            results_df = pd.read_csv(ROOT / "data/external/wc2026_live_results.csv")
+        except:
+            results_df = pd.DataFrame()
+
+        # Calcular standings reales
+        standings = self._calculate_real_standings(results_df)
+
+        # Obtener grupo del partido
+        team_to_group = self._load_group_mapping()
+        group_letter = team_to_group.get(normalize_team_name(home_team), "?")
+
+        if group_letter not in standings:
+            return {"error": f"Group {group_letter} not found"}
+
+        # Tabla completa del grupo (4 equipos ordenados)
+        group_standings = standings[group_letter]
+        table = sorted(
+            [
+                {
+                    "pos": i + 1,
+                    "team": t,
+                    "pts": group_standings[t]["points"],
+                    "played": group_standings[t]["played"],
+                    "gf": group_standings[t]["gf"],
+                    "ga": group_standings[t]["ga"],
+                    "gd": group_standings[t]["gd"],
+                }
+                for i, t in enumerate(group_standings.keys())
+            ],
+            key=lambda x: (-x["pts"], -x["gd"], -x["gf"]),
+        )
+
+        # Partidos jugados del grupo (histórico)
+        matches_played = []
+        if not results_df.empty:
+            group_matches = results_df[
+                (results_df["home_team"].isin(group_standings.keys())) |
+                (results_df["away_team"].isin(group_standings.keys()))
+            ].sort_values("date")
+
+            for _, row in group_matches.iterrows():
+                h_score = row["home_score"]
+                a_score = row["away_score"]
+                if not (pd.isna(h_score) or pd.isna(a_score)):
+                    matches_played.append({
+                        "date": row["date"],
+                        "result": f"{row['home_team']} {int(h_score)}-{int(a_score)} {row['away_team']}"
+                    })
+
+        # Análisis de terceros: ¿cuál es el mejor tercero actual?
+        # (simplificado: si hay >3 grupos jugados, comparar terceros)
+        best_third = {"team": "TBD", "pts": 0, "gd": -999}
+        third_analysis = f"This group 3rd: {table[2]['team']} ({table[2]['pts']} pts, GD {table[2]['gd']})"
+
+        # Escenarios de clasificación para este partido
+        scenarios = {
+            "if_home_wins": f"{home_team} → 1st, {away_team} → 2nd (likely)",
+            "if_draw": f"Both on same points, GD decides ranking",
+            "if_away_wins": f"{away_team} → 1st, {home_team} → 2nd (likely)",
+        }
+
+        # Contexto completo
+        full_context = {
+            "group": group_letter,
+            "table": table,
+            "matches_played": matches_played,
+            "best_third_so_far": best_third,
+            "third_analysis": third_analysis,
+            "classification_scenarios": scenarios,
+            "home_team_name": home_team,
+            "away_team_name": away_team,
+        }
+
+        return full_context
+
     def _calculate_real_standings(self, results_df) -> dict:
         """Calcula standings reales basado en resultados jugados."""
         import pandas as pd
@@ -331,45 +413,59 @@ class AgentDebateSystem:
     def agent_1_group_analyst(
         self, home_team: str, away_team: str, context: dict
     ) -> str:
-        """Agent 1: Group Analyst - Analiza lógica clasificatoria con datos reales."""
-        home = context.get("home_team", {})
-        away = context.get("away_team", {})
+        """Agent 1: Group Analyst - Analiza TODA la secuencia del grupo + clasificación."""
+        group = context.get("group", "?")
+        table = context.get("table", [])
+        matches = context.get("matches_played", [])
+        scenarios = context.get("classification_scenarios", {})
+
+        # Formatear tabla
+        table_str = "Posición | Equipo | Pts | J | GF | GA | GD\n"
+        for row in table:
+            table_str += f"{row['pos']}. {row['team']:20} | {row['pts']} | {row['played']} | {row['gf']} | {row['ga']} | {row['gd']}\n"
+
+        # Formatear histórico
+        matches_str = "\n".join([f"  {m['date']}: {m['result']}" for m in matches[-5:]])  # Últimos 5
 
         prompt = f"""
-Eres un experto analista de grupos en torneos de fútbol. Tienes datos REALES del torneo.
+Eres un experto analista de grupos en torneos de fútbol. ANALIZA LA SECUENCIA COMPLETA del grupo, no solo estos 2 equipos.
 
-**SITUACION ACTUAL DEL PARTIDO:**
-Grupo: {home.get("group", "?")}
-- **{home.get("name")}** (Local): {home.get("points")} pts | GD: {home.get("goal_diff")} | Posición: {home.get("position")} | Estado: {home.get("status")}
-  - MD1 Result: {home.get("md1_result")} (vs {home.get("md1_opponent")})
+**TABLA ACTUAL GRUPO {group}:**
+{table_str}
 
-- **{away.get("name")}** (Visitante): {away.get("points")} pts | GD: {away.get("goal_diff")} | Posición: {away.get("position")} | Estado: {away.get("status")}
-  - MD1 Result: {away.get("md1_result")} (vs {away.get("md1_opponent")})
+**HISTÓRICO DE PARTIDOS (últimos):**
+{matches_str or "  (No matches yet)"}
 
-**ANALIZA PROFUNDAMENTE:**
-1. ¿Cuál es la diferencia de presión entre los dos equipos?
-   - {home.get("name")}: {home.get("status")}
-   - {away.get("name")}: {away.get("status")}
+**PRÓXIMO PARTIDO:** {home_team} vs {away_team}
 
-2. ¿Qué necesita cada equipo para CLASIFICAR?
-   - Si {home.get("name")} GANA: ¿avanza?
-   - Si EMPATAN: ¿quién queda en riesgo?
-   - Si {away.get("name")} GANA: ¿cambia el panorama?
+**ESCENARIOS DE CLASIFICACIÓN:**
+- Si {home_team} gana: {scenarios.get("if_home_wins", "N/A")}
+- Si empatan: {scenarios.get("if_draw", "N/A")}
+- Si {away_team} gana: {scenarios.get("if_away_wins", "N/A")}
 
-3. ¿Cómo influye MD1 en el estado mental de cada equipo?
-   - {home.get("name")} salió de MD1: {home.get("md1_result")} → ¿moral alta o tensión?
-   - {away.get("name")} salió de MD1: {away.get("md1_result")} → ¿motivado o desesperado?
+**ANALIZA PROFUNDAMENTE (extendiéndote):**
 
-4. PRESIÓN DIFERENCIAL: ¿Quién juega con más urgencia? ¿Quién puede perder?
+1. **SECUENCIA DEL GRUPO:** ¿Qué patrones ves en los partidos ya jugados?
+   - ¿Hay favoritos claros?
+   - ¿Hay sorpresas (como la derrota de Alemania 1-0 vs Ecuador)?
+   - ¿Cómo impacta eso en la dinámica?
 
-5. Basándote en ESTA presión real, ¿cuáles marcadores son más probables?
+2. **PRESIÓN DIFERENCIAL REAL:**
+   - ¿Qué presión tiene {home_team}? (Clasificación segura? Debe ganar? Corre riesgo de tercero?)
+   - ¿Qué presión tiene {away_team}? (Mismos análisis)
+   - ¿Alguien juega a no perder? ¿Alguien juega desesperado?
 
-**RESPONDE CON:**
-- Razonamiento paso a paso
-- Top 3 marcadores con probabilidad
-- Explicación clasificatoria concreta
+3. **ANÁLISIS DE TERCEROS:**
+   - {context.get("third_analysis", "N/A")}
+   - ¿Si {home_team} gana 2-0 vs {away_team}, mejora su posición de tercero en otros grupos?
+   - ¿Qué diferencia de goles es crítica?
 
-IMPORTANTE: Usa SOLO lógica deportiva y presión de clasificación REAL basada en la tabla actual.
+4. **MARCADORES MÁS PROBABLES:**
+   - Basándote en la secuencia del grupo y presión real
+   - Top 3 marcadores con probabilidad
+   - Justificación por cada uno
+
+**IMPORTANTE:** Análiza toda la secuencia, no solo 2 equipos. El batacazo de Ecuador vs Alemania cambió dinámicas.
 """
         response = self._call_deepseek(prompt, use_reasoner=True)
         return response
@@ -377,46 +473,64 @@ IMPORTANTE: Usa SOLO lógica deportiva y presión de clasificación REAL basada 
     def agent_2_tactical_scout(
         self, home_team: str, away_team: str, context: dict
     ) -> str:
-        """Agent 2: Tactical Scout - Analiza tácticas y presión clasificatoria."""
-        home = context.get("home_team", {})
-        away = context.get("away_team", {})
+        """Agent 2: Tactical Scout - Analiza tácticas MODULADAS por presión de clasificación."""
+        group = context.get("group", "?")
+        table = context.get("table", [])
+        matches = context.get("matches_played", [])
+
+        # Encontrar posiciones en tabla
+        home_row = next((r for r in table if r["team"] == home_team), None)
+        away_row = next((r for r in table if r["team"] == away_team), None)
+
+        home_status = f"{home_row['pos']}º lugar, {home_row['pts']} pts" if home_row else "?"
+        away_status = f"{away_row['pos']}º lugar, {away_row['pts']} pts" if away_row else "?"
 
         prompt = f"""
-Eres un estratega táctico de fútbol experto. Analizas NO SOLO tácticas, sino cómo la SITUACIÓN DE CLASIFICACIÓN CAMBIA las tácticas.
+Eres un estratega táctico experto. NO analizas solo tácticas → analizas CÓMO LA PRESIÓN DE CLASIFICACIÓN MODULA LAS TÁCTICAS.
 
-**SITUACION TACTÍCA + CLASIFICATORIA:**
-- **{home.get("name")}** (Local): {home.get("status")}
-  - Puntos: {home.get("points")} | Partidos jugados: {home.get("played")}
-  - MD1: {home.get("md1_result")}
-  - Implicación táctica: ¿Juega para ganar, conservador, o de rotación?
+**TABLA Y CONTEXTO:**
+{home_team}: {home_status}
+{away_team}: {away_status}
 
-- **{away.get("name")}** (Visitante): {away.get("status")}
-  - Puntos: {away.get("points")} | Partidos jugados: {away.get("played")}
-  - MD1: {away.get("md1_result")}
-  - Implicación táctica: ¿Ataca desde el minuto 1 o busca contragolpes?
+**HISTÓRICO (últimos partidos):**
+{chr(10).join([f"  {m['result']}" for m in matches[-3:]] or ["  (sin datos)"])}
 
-**ANALIZA:**
-1. ¿Cómo la clasificación CAMBIA las tácticas?
-   - Si ya clasificado (6 pts): Probablemente ROTA o juega de forma más relajada
-   - Si debe ganar (0-2 pts): ATAQUE directo desde el inicio
-   - Si puede perder (3-5 pts): Juego EQUILIBRADO, busca no perder pero tampoco tira todo
+**PRESIÓN TÁCTICA:**
+- Si {home_team} DEBE GANAR (0-2 pts): Ataca siempre. Riesgo defensivo.
+- Si {home_team} PUEDE PERDER (3-5 pts): Balance ataque/defensa. Busca no perder.
+- Si {home_team} YA CLASIFICADO (6 pts): Probablemente ROTA. Juego más relajado/experimental.
 
-2. Estilos históricos de {home.get("name")} y {away.get("name")} en torneos
+(Mismo análisis para {away_team})
 
-3. Cómo cambiaría el juego si {away.get("name")} marca primero
+**ANALIZA PROFUNDAMENTE:**
 
-4. Ventaja de campo: ¿afecta la táctica o solo psicología?
+1. **PRESIÓN TÁCTICA REAL (no genérica):**
+   - {home_team}: ¿Presión de clasificación? ¿O presión de terceros (ganar + goles)?
+   - {away_team}: ¿Desesperado o conservador?
+   - ¿Alguien jugará en "modo rotación"?
 
-5. Posibles alineaciones (XI de rotación vs XI ofensivo)
+2. **MODIFICACIÓN TÁCTICA POR PRESIÓN:**
+   - Si {home_team} está en 1º pero {away_team} en 4º:
+     * {home_team} puede jugar más relajado (MENOS ofensivo)
+     * {away_team} DEBE atacar (DEFENSA más expuesta)
+   - Esto cambia el patrón de goles esperado
 
-**RESPONDE:**
-- Razonamiento táctico paso a paso
-- Top 3 marcadores basados en TÁCTICAS + SITUACIÓN
-- Confianza en la predicción táctica (ej: 70% si situación clara, 40% si partidos trabados)
+3. **ANÁLISIS DE TERCEROS EN TÁCTICA:**
+   - ¿{home_team} necesita ganar 2+ goles para mejorar su posición de tercero?
+   - ¿Eso afecta su táctica? (Ataque más agresivo en 2ª mitad si van 1-0 abajo)
 
-IMPORTANTE:
-- Si un equipo ya está clasificado (6 pts): NO tiene "presión de eliminación". Juega de otra forma.
-- Analiza la situación ACTUAL, no presiones del pasado.
+4. **ESTILOS HISTÓRICOS + PRESIÓN ACTUAL:**
+   - Estilo conocido de {home_team} en torneos
+   - ¿Cómo se adapta ese estilo cuando tiene presión de clasificación?
+
+5. **MARCADORES MÁS PROBABLES POR TÁCTICA:**
+   - Top 3 con confianza
+   - Explicación: "Si {home_team} juega conservador (ya clasificado), espero 0-0 o 1-0"
+
+**IMPORTANTE:**
+- La presión de TERCEROS es tan importante como la de 1º/2º/eliminación
+- Analiza si alguien necesita "ganar X goles" para tercero
+- Presión ≠ solo jugar ofensivo → presión sobre terceros = estrategia de ataque+goles
 """
         response = self._call_deepseek(prompt, use_reasoner=True)
         return response
@@ -424,58 +538,59 @@ IMPORTANTE:
     def agent_3_sentiment_reader(
         self, home_team: str, away_team: str, context: dict
     ) -> str:
-        """Agent 3: Sentiment Reader - Analiza moral REAL basada en MD1."""
-        home = context.get("home_team", {})
-        away = context.get("away_team", {})
+        """Agent 3: Sentiment Reader - Analiza MOMENTUM real de la SECUENCIA del grupo."""
+        table = context.get("table", [])
+        matches = context.get("matches_played", [])
 
-        # Interpretar el resultado de MD1 en términos psicológicos
-        home_md1 = home.get("md1_result", "No data")
-        away_md1 = away.get("md1_result", "No data")
+        # Formatear histórico completo
+        matches_str = "\n".join([f"  {m['result']}" for m in matches]) or "  (sin datos)"
+
+        # Obtener filas de tabla para ambos equipos
+        home_row = next((r for r in table if r["team"] == home_team), None)
+        away_row = next((r for r in table if r["team"] == away_team), None)
 
         prompt = f"""
-Eres un experto en psicología deportiva. Analizas el MOMENTUM REAL basado en MD1.
+Eres un experto en psicología deportiva. Analizas el MOMENTUM REAL de LA SECUENCIA COMPLETA del grupo, no solo MD1.
 
-**MOMENTUM REAL DE MD1 (hace poco, aún fresco emocionalmente):**
+**HISTÓRICO COMPLETO DEL GRUPO (lo que pasó, patrones emocionales):**
+{matches_str}
 
-**{home.get("name")}** (Local):
-- Resultado: {home_md1}
-- Estado actual: {home.get("status")}
-- Psicológicamente: ¿Ganó cómodo (confiado), ganó ajustado (tenso), o perdió (destruido)?
+**POSICIONES ACTUALES:**
+{home_team}: {home_row['pos']}º, {home_row['pts']} pts, GD {home_row['gd']} ({home_row['gf']}-{home_row['ga']})
+{away_team}: {away_row['pos']}º, {away_row['pts']} pts, GD {away_row['gd']} ({away_row['gf']}-{away_row['ga']})
 
-**{away.get("name")}** (Visitante):
-- Resultado: {away_md1}
-- Estado actual: {away.get("status")}
-- Psicológicamente: ¿Fue goleada (colapsado), derrota ajustada (puede recuperarse), o victoria (eufórico)?
+**ANALIZA PROFUNDAMENTE (extendiéndote):**
 
-**ANALIZA PROFUNDAMENTE:**
+1. **PATRONES EMOCIONALES EN LA SECUENCIA:**
+   - Últimos resultados: ¿hay una tendencia? (mejorando, empeorando, consistente)
+   - Ejemplo: "Ecuador sorprendió con victoria sobre Alemania 1-0 → moral alta, Alemania derrumbada"
+   - ¿Hay equipos colapsados vs equipos en racha?
 
-1. **Momentum emocional REAL:**
-   - Si {home.get("name")} {home_md1}: ¿cuál es su estado mental AHORA?
-   - Si {away.get("name")} {away_md1}: ¿está motivado para redimirse o destruido?
+2. **MOMENTUM DIFERENCIAL:**
+   - {home_team}: ¿llega en racha positiva o negativa? ¿Confiado o dudando?
+   - {away_team}: ¿misma evaluación?
+   - ¿Quién tiene VENTAJA PSICOLÓGICA?
 
-2. **Confianza basada en MD1:**
-   - ¿Quién llega a este partido con confianza? ¿Quién llega ansioso?
-   - Una victoria 5-0 vs una victoria 1-0 son psicológicamente DIFERENTES
+3. **PRESIÓN EMOCIONAL (no solo lógica):**
+   - {home_team} está en posición {home_row['pos']}. ¿Miedo a perder o confianza de ganar?
+   - {away_team} está en posición {away_row['pos']}. ¿Desesperación o tranquilidad?
+   - ¿Alguien colapsará bajo presión? ¿Alguien jugará "suelto"?
 
-3. **Presión psicológica DIFERENCIAL:**
-   - {home.get("name")} necesita: {home.get("status")}
-   - {away.get("name")} necesita: {away.get("status")}
-   - ¿Quién juega con más "nervios"? ¿Quién juega "suelto"?
+4. **EFECTO SORPRESA:**
+   - ¿Ha habido goleadas en el grupo? ¿Sorpresas?
+   - Ejemplo: Si Alemania perdió 1-0 y juega ahora, ¿psicológicamente buscará revancha (más arriesgado)?
+   - ¿Eso genera más goles?
 
-4. **Colapso mental:**
-   - ¿{home.get("name")} tiene riesgo de colapsar (0 pts después de MD2)?
-   - ¿{away.get("name")} llegó desesperado desde MD1?
-
-5. **Efecto "necesidad":**
-   - ¿Genera goles la desesperación o errores?
-   - {away.get("name")} necesita ganar → ¿ataca o se bloquea?
+5. **PRESIÓN DE TERCEROS (emocional):**
+   - {home_team}: ¿solo le importa clasificar de tercero? ¿Eso genera más urgencia emocional?
+   - ¿Necesita ganar por goleada? ¿Eso afecta su psicología (presión → errores)?
 
 **RESPONDE:**
-- Análisis psicológico basado en MD1 REAL
-- Top 3 marcadores considerando MORAL + PRESIÓN
-- Cómo el resultado de MD1 influye en este partido
+- Análisis psicológico basado en SECUENCIA real del grupo
+- Top 3 marcadores considerando MOMENTUM + PRESIÓN EMOCIONAL
+- Cómo la secuencia de partidos influye emocionalmente en este partido
 
-IMPORTANTE: La psicología deportiva se basa en eventos REALES, no teóricos. MD1 fue hace poco.
+IMPORTANTE: No analices solo los 2 equipos. El contexto completo (goleadas, sorpresas, colapsas) define la psicología.
 """
         response = self._call_deepseek(prompt, use_reasoner=True)
         return response
@@ -701,13 +816,18 @@ RESULTADO_JSON: {{"group_analyst": {{"home_goals": <int>, "away_goals": <int>, "
             return []
 
     def predict_match(self, home_team: str, away_team: str) -> dict:
-        """Ejecuta el debate completo para un partido CON CONTEXTO REAL."""
+        """Ejecuta el debate completo para un partido CON CONTEXTO COMPLETO DEL GRUPO."""
         logger.info(f"Iniciando Agent Debate para: {home_team} vs {away_team}")
 
-        context = self.get_group_context(home_team, away_team)
+        # Contexto completo del grupo (tabla 4 equipos, histórico, terceros)
+        context = self.get_full_group_context(home_team, away_team)
+
+        if "error" in context:
+            logger.error(f"  Error cargando contexto: {context['error']}")
+            return None
 
         # Log contexto para auditoría
-        logger.info(f"  Contexto cargado: {home_team} ({context['home_team'].get('status')}) vs {away_team} ({context['away_team'].get('status')})")
+        logger.info(f"  Grupo {context['group']}: {len(context['table'])} equipos, {len(context['matches_played'])} partidos jugados")
 
         # Ronda 1: Posiciones iniciales
         logger.info("  Ronda 1: Posiciones iniciales...")
