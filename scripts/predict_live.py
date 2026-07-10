@@ -44,7 +44,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.extractor import load_results, load_former_names
 from src.pipeline_logger import run_context
-from src.features import compute_elo_ratings, compute_current_form
+from src.features import compute_elo_ratings, compute_current_form, get_tournament_weight
 from src.model import load_model
 from src.ensemble import DEFAULT_WEIGHTS, _elo_proba as elo_proba
 from src.poisson_model import PoissonModel
@@ -284,6 +284,30 @@ def build_live_features(
 
     _, ratings = compute_elo_ratings(df_combined)
     return df_combined, ratings
+
+
+def fit_poisson_before_date(df_combined: pd.DataFrame, match_date) -> Optional[PoissonModel]:
+    """Ajusta un Poisson SOLO con partidos anteriores a la fecha del partido.
+
+    El pkl global (run_pipeline) se ajusta sobre TODO el dataset, incluidos los
+    partidos WC 2026 ya jugados — para una predicción retroactiva eso filtra los
+    goles del propio partido dentro de las fuerzas ataque/defensa (58% del peso
+    del ensemble). Este refit con corte a medianoche del día del partido replica
+    el modelo tal como habría quedado tras el retrain de la jornada anterior
+    (la cadencia operativa real: el pipeline reentrena entre jornadas, no entre
+    kickoffs del mismo día).
+
+    n_iter=30: converge a <0.6pp de diferencia en 1X2 vs las 100 iteraciones
+    del pipeline (medido 2026-07-09 sobre cruces reales de knockout) y baja el
+    costo de 75s a ~22s por fit — se cachea por fecha en el loop de predicción.
+    """
+    try:
+        df = df_combined[df_combined["date"] < pd.Timestamp(match_date)].copy()
+        df["tournament_weight"] = df["tournament"].map(get_tournament_weight).fillna(0.2)
+        return PoissonModel().fit(df, n_iter=30)
+    except Exception as e:
+        logger.warning("Refit Poisson por fecha falló (%s); se usa el pkl global.", e)
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -824,6 +848,10 @@ def _run_live_predictions(
     _cached_cutoff: Optional[datetime] = None
     _cached_df: Optional[pd.DataFrame] = None
     _cached_ratings: Optional[dict] = None
+    # Poisson por fecha para predicciones retroactivas (partidos ya jugados):
+    # el pkl global vio los goles de esos partidos, así que se refit con corte
+    # a medianoche del día del partido. Cache por fecha (~22s por fit).
+    _poisson_by_date: dict = {}
 
     for match in fixture:
         kickoff: datetime = match["kickoff"]
@@ -845,13 +873,25 @@ def _run_live_predictions(
             _cached_df, _cached_ratings = build_live_features(df_all, df_live, cutoff)
             _cached_cutoff = cutoff
 
+        # Partido ya jugado → Poisson refit sin sus propios goles (anti-leakage).
+        # Partido futuro → el pkl global es limpio por construcción (solo vio
+        # resultados que preceden a cualquier kickoff futuro).
+        if is_played:
+            match_date = kickoff.date()
+            if match_date not in _poisson_by_date:
+                logger.info("Retro: refit Poisson con datos < %s (anti-leakage)", match_date)
+                _poisson_by_date[match_date] = fit_poisson_before_date(_cached_df, match_date)
+            match_poisson = _poisson_by_date[match_date] or poisson_model
+        else:
+            match_poisson = poisson_model
+
         try:
             pred = predict_single_match(
                 match["home_team"], match["away_team"],
                 elo_ratings=_cached_ratings,
                 df_combined=_cached_df,
                 model=model,
-                poisson_model=poisson_model,
+                poisson_model=match_poisson,
                 is_neutral=match["is_neutral"],
                 kickoff=kickoff,
             )
