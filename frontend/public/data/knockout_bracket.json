@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T18:01:04.016055+00:00",
+  "generated_at": "2026-07-10T19:52:23.022118+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -1060,24 +1060,24 @@
         "away_label": "Belgium",
         "resolved": true,
         "pred": {
-          "p_home": 0.5743,
-          "p_draw": 0.2478,
-          "p_away": 0.1778,
+          "p_home": 0.5769,
+          "p_draw": 0.2456,
+          "p_away": 0.1775,
           "top_scorelines": [
             {
               "home": 1,
               "away": 0,
-              "prob": 0.1864
+              "prob": 0.1839
             },
             {
               "home": 0,
               "away": 0,
-              "prob": 0.1588
+              "prob": 0.1541
             },
             {
               "home": 1,
               "away": 1,
-              "prob": 0.1145
+              "prob": 0.1146
             }
           ]
         }

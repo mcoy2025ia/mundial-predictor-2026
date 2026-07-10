@@ -1427,9 +1427,9 @@
   {
     "home_team": "Spain",
     "away_team": "Belgium",
-    "p_home": 0.5743,
-    "p_draw": 0.2478,
-    "p_away": 0.1778,
+    "p_home": 0.5769,
+    "p_draw": 0.2456,
+    "p_away": 0.1775,
     "is_neutral": true,
     "kickoff": "2026-07-10T19:00:00",
     "model": "ensemble_live",
@@ -1444,38 +1444,38 @@
     "elo_home": 0.6948,
     "elo_draw": 0.1414,
     "elo_away": 0.1637,
-    "poisson_home": 0.515,
-    "poisson_draw": 0.2957,
-    "poisson_away": 0.1893,
+    "poisson_home": 0.5194,
+    "poisson_draw": 0.2918,
+    "poisson_away": 0.1888,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1864
+        "prob": 0.1839
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1588
+        "prob": 0.1541
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1145
+        "prob": 0.1146
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1093
+        "prob": 0.1097
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.0976
+        "prob": 0.096
       }
     ],
-    "lambda_home": 1.173,
-    "lambda_away": 0.615,
+    "lambda_home": 1.193,
+    "lambda_away": 0.623,
     "stage": "knockout",
     "group": "",
     "venue": "Los Angeles (Inglewood)",
