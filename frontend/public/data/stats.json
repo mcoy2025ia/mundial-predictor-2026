@@ -1,6 +1,6 @@
 {
-  "total_matches": 1061,
-  "total_goals": 3027,
+  "total_matches": 1062,
+  "total_goals": 3030,
   "avg_goals_all": 2.853,
   "n_editions": 23,
   "highest_scoring_match": {
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 307,
-      "matches": 97,
-      "avg": 3.165
+      "total": 310,
+      "matches": 98,
+      "avg": 3.163
     }
   ],
   "best_avg_edition": {
@@ -220,11 +220,11 @@
     {
       "team": "Spain",
       "flag": "🇪🇸",
-      "matches": 72,
-      "goals_for": 117,
-      "goals_against": 75,
-      "goal_diff": 42,
-      "avg": 1.62
+      "matches": 73,
+      "goals_for": 119,
+      "goals_against": 76,
+      "goal_diff": 43,
+      "avg": 1.63
     },
     {
       "team": "England",
@@ -274,10 +274,10 @@
     {
       "team": "Belgium",
       "flag": "🇧🇪",
-      "matches": 56,
-      "goals_for": 82,
-      "goals_against": 79,
-      "goal_diff": 3,
+      "matches": 57,
+      "goals_for": 83,
+      "goals_against": 81,
+      "goal_diff": 2,
       "avg": 1.46
     },
     {
@@ -459,6 +459,6 @@
     "goals_against": 35,
     "win_pct": 44.4,
     "elo_current": 2179.9,
-    "elo_rank": 9
+    "elo_rank": 8
   }
 }
