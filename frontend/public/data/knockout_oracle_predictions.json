@@ -1,0 +1,347 @@
+{
+  "generated_at": "2026-07-10T18:16:57.629933+00:00",
+  "agent": "Oráculo de Eliminatorias",
+  "rounds": [
+    "Final",
+    "Match for third place",
+    "Quarter-final",
+    "Semi-final"
+  ],
+  "panel": [
+    "Group Analyst",
+    "Tactical Scout",
+    "Sentiment Reader",
+    "Especialista en Definiciones",
+    "Consenso"
+  ],
+  "n": 3,
+  "matches": [
+    {
+      "match": "Spain vs Belgium",
+      "home": "Spain",
+      "away": "Belgium",
+      "round": "Quarter-final",
+      "model": {
+        "favorite": "Spain",
+        "fav_prob": 0.5757
+      },
+      "panel": [
+        {
+          "agente": "Group Analyst",
+          "especialidad": "campaña y regularidad en el torneo",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 0
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Spain",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "España no ha recibido goles en el torneo y domina el historial. Bélgica encaja y se queda sin respuesta ante la solidez española en 90'.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "**Análisis desde Group Analyst:**  \nEspaña ha sido la defensa más sólida del torneo (0 goles encajados en 5 partidos, con victorias sobre Uruguay, Austria y Portugal). Su regularidad es perfecta en fases decisivas. Bélgica, aunque ofensiva, ha mostrado fragilidad atrás (1.0 goles encajados por partido) y no ha enfrentado una defensa tan férrea. El historial reciente (5-0, 2-0) refuerza el dominio español. Con 4 días de descanso igualados, la tendencia indica que España resolverá en 90' sin necesidad de prórroga ni penaltis."
+        },
+        {
+          "agente": "Tactical Scout",
+          "especialidad": "táctica, transiciones y balón parado",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 0
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Spain",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "La defensa inexpugnable de España y su control de balón anulan las transiciones belgas; marcan en jugadas de estrategia y sentencian antes del 90'.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "España ha demostrado una solidez defensiva impecable (cinco porterías a cero) que neutraliza las transiciones rápidas de Bélgica, cuyo punto fuerte es el contraataque. En balón parado, la estatura y el orden de España superan a una defensa belga que ha concedido goles contra rivales de élite. La posesión paciente de España desgastará a Bélgica y encontrará espacios en la segunda mitad."
+        },
+        {
+          "agente": "Sentiment Reader",
+          "especialidad": "psicología, momentum y temple",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 0
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Spain",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "La defensa perfecta, el historial reciente y la localía imponen a España, que resuelve sin necesidad de prórroga ni penaltis.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "España llega con una confianza absoluta tras 5 partidos sin encajar un gol y una racha de victorias ante rivales de elite. Su solidez defensiva y su historial arrollador frente a Bélgica pesan más que la buena ofensiva belga. La diferencia de ELO y el factor local consolidan un dominio que se traduce en victoria en los 90 minutos."
+        },
+        {
+          "agente": "Especialista en Definiciones",
+          "especialidad": "prórroga y penales",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 0
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Spain",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "España domina con defensa sólida y ataque preciso; Bélgica encaja goles. La calidad y el ritmo evitan prórroga, pese al riesgo de penales.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "España llega con una defensa impecable (0 goles encajados en 5 partidos) y un ataque efectivo, mientras Bélgica es más frágil atrás pero peligrosa arriba. La profundidad de banca y el descanso igualado no pesan lo suficiente para forzar alargues: España tiene el temple y la solidez para resolver en 90 minutos, evitando su irregular historial en penales."
+        }
+      ],
+      "consensus": {
+        "agente": "Consenso",
+        "especialidad": "veredicto reconciliado del panel",
+        "marcador_90_minutos": {
+          "equipo_local": 2,
+          "equipo_visitante": 0
+        },
+        "habra_tiempo_extra": false,
+        "marcador_120_minutos": null,
+        "habra_penaltis": false,
+        "resultado_penaltis": null,
+        "equipo_clasificado": "Spain",
+        "fase_de_definicion": "90_minutos",
+        "conviccion": "alta",
+        "explicacion": "España no ha recibido goles, domina el historial y controla; Bélgica encaja y no vulnera la defensa. Resuelven en 90'.",
+        "valido": true,
+        "predicted_winner": "home",
+        "_analysis": "ANÁLISIS: Los cuatro votos son unánimes a favor de España en 90 minutos, con alta convicción. La solidez defensiva (0 goles encajados) y el dominio histórico, junto con la diferencia de ELO, descartan la necesidad de prórroga o penaltis. Bélgica encaja goles con frecuencia y no ha mostrado capacidad para frenar a España en el torneo. El partido se resuelve sin sobresaltos."
+      },
+      "generated_at": "2026-07-10T18:15:08.269024+00:00"
+    },
+    {
+      "match": "Norway vs England",
+      "home": "Norway",
+      "away": "England",
+      "round": "Quarter-final",
+      "model": {
+        "favorite": "England",
+        "fav_prob": 0.581
+      },
+      "panel": [
+        {
+          "agente": "Group Analyst",
+          "especialidad": "campaña y regularidad en el torneo",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 3
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "England",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "England mantiene una defensa sólida (2 goles encajados en 5 partidos) y ataque efectivo, mientras Norway encaja demasiados goles para sostener una eliminatoria.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Norway ha mostrado irregularidad defensiva pese a victorias ajustadas, mientras que England llega con solidez y un historial de grupo dominante. La diferencia de ELO y el mayor control en partidos de alta presión inclinan la balanza hacia los ingleses en los 90 minutos."
+        },
+        {
+          "agente": "Tactical Scout",
+          "especialidad": "táctica, transiciones y balón parado",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 2
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "England",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "media",
+          "explicacion": "Inglaterra impone solidez defensiva y oficio. Noruega presiona alto pero deja huecos. Gol visitante en transición resuelve la eliminatoria sin prórroga.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Noruega explota transiciones verticales y balón parado, pero su defensa es frágil. Inglaterra es sólida, con bloque medio y salidas rápidas. La experiencia inglesa en eliminatorias y su mejor control defensivo decantarán el partido. Espero un marcador ajustado pero sin necesidad de tiempo extra."
+        },
+        {
+          "agente": "Sentiment Reader",
+          "especialidad": "psicología, momentum y temple",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 2
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "England",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "Inglaterra impone con su solidez defensiva y temple en partidos grandes, mientras Noruega muestra vulnerabilidad atrás pese a su pegada; la jerarquía y el momentum favorable deciden en los 90 minutos.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Noruega llega con moral alta tras remontar partidos duros, pero su fragilidad defensiva (1.8 goles encajados por partido) es una losa ante un rival como Inglaterra, que ha mostrado solidez atrás y temple para sacar resultados en cruces cerrados. El historial reciente de penales de Inglaterra (aunque irregular) y su momentum caliente pesan más que la garra local; la jerarquía y la experiencia en eliminatorias inclinan la balanza hacia los ingleses sin necesidad de alargues."
+        },
+        {
+          "agente": "Especialista en Definiciones",
+          "especialidad": "prórroga y penales",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 2
+          },
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "England",
+          "fase_de_definicion": "tiempo_extra",
+          "conviccion": "media",
+          "explicacion": "Partido equilibrado, ambos con pegada. Inglaterra impone su mayor profundidad y experiencia en la prórroga para romper el empate.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Noruega ha demostrado capacidad para ganar partidos cerrados ante rivales de élite, pero su defensa es frágil (1.8 goles encajados por partido). Inglaterra posee mayor solidez defensiva y experiencia en eliminatorias, aunque su historial en penales es irregular. La igualdad en el marcador durante 90 minutos es probable, pero el fondo de banquillo y el temple inglés inclinan la balanza en el tiempo extra."
+        }
+      ],
+      "consensus": {
+        "agente": "Consenso",
+        "especialidad": "veredicto reconciliado del panel",
+        "marcador_90_minutos": {
+          "equipo_local": 1,
+          "equipo_visitante": 2
+        },
+        "habra_tiempo_extra": false,
+        "marcador_120_minutos": null,
+        "habra_penaltis": false,
+        "resultado_penaltis": null,
+        "equipo_clasificado": "England",
+        "fase_de_definicion": "90_minutos",
+        "conviccion": "alta",
+        "explicacion": "La defensa inglesa y su jerarquía en eliminatorias imponen; la fragilidad defensiva noruega impide sostener el empate. Triunfo visitante en 90'.",
+        "valido": true,
+        "predicted_winner": "away",
+        "_analysis": "El panel mayoritario (3 de 4) coincide en que la solidez defensiva de Inglaterra, su momentum y la diferencia de ELO superan la pegada de Noruega, que encaja muchos goles. La probabilidad de empate es baja, por lo que se decide en 90 minutos."
+      },
+      "generated_at": "2026-07-10T18:16:03.685687+00:00"
+    },
+    {
+      "match": "Argentina vs Switzerland",
+      "home": "Argentina",
+      "away": "Switzerland",
+      "round": "Quarter-final",
+      "model": {
+        "favorite": "Argentina",
+        "fav_prob": 0.5535
+      },
+      "panel": [
+        {
+          "agente": "Group Analyst",
+          "especialidad": "campaña y regularidad en el torneo",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "Argentina ha sido superior en el torneo, con pleno de victorias y dominio histórico ante Suiza. Su regularidad ofensiva y defensiva supera a un rival que mostró fisuras ante Qatar. Se impondrá en los 90 minutos.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "Argentina ha demostrado una regularidad implacable en el torneo, liderando su grupo con pleno de victorias y mostrando solidez defensiva (solo 1 gol encajado en fase de grupos) aunque en octavos y cuartos ha sufrido más. Su historial contra Suiza es abrumadoramente favorable y su ELO muy superior. Suiza ha tenido un buen camino pero con momentos de dudas (empate con Qatar). En un partido de eliminación directa, la calidad y experiencia de Argentina debería imponerse dentro de los 90 minutos."
+        },
+        {
+          "agente": "Tactical Scout",
+          "especialidad": "táctica, transiciones y balón parado",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "media",
+          "explicacion": "Argentina gana en 90' por su superioridad en transiciones y balón parado, pese a la resistencia suiza. La profundidad ofensiva y la jerarquía de sus estrellas deciden.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "Argentina impone su calidad en transiciones y balón parado, pero Suiza es letal al contraataque y tiene un bloque defensivo disciplinado. La presión alta argentina puede forzar errores suizos, pero la falta de solidez defensiva reciente (4 goles encajados en últimos 5) da opciones al rival. En duelos aéreos y segundas jugadas, Argentina tiene ventaja, pero Suiza puede aguantar hasta el final. Sin embargo, la pegada individual de Argentina y su profundidad de banca marcan la diferencia en los 90 minutos."
+        },
+        {
+          "agente": "Sentiment Reader",
+          "especialidad": "psicología, momentum y temple",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "alta",
+          "explicacion": "Argentina impone su jerarquía mental y efectividad ofensiva, quebrando la resistencia suiza antes del final, sin necesidad de alargues.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "Argentina domina psicológicamente: llega con racha perfecta, historial invicto frente a Suiza y experiencia en partidos decisivos. Suiza muestra temple y capacidad de reacción, pero su pobre historial en penales y la presión de enfrentar al campeón pesan. El partido se resuelve en los 90' por el control emocional argentino."
+        },
+        {
+          "agente": "Especialista en Definiciones",
+          "especialidad": "prórroga y penales",
+          "marcador_90_minutos": {
+            "equipo_local": 2,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "media",
+          "explicacion": "Argentina impone jerarquía y pegada, pero Suiza compite hasta el final. La diferencia de ELO y el historial pesan para que se resuelva en 90' sin necesidad de alargues.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "Argentina llega con mayor jerarquía histórica y experiencia en penales, pero Suiza ha mostrado capacidad para competir con elites. La solidez defensiva argentina sugiere que no habrá muchas ocasiones, pero Suiza puede forzar un empate. Si el partido se alarga, la banca argentina y su temple en tandas decantarían la balanza. Sin embargo, el favoritismo y la racha indican una resolución en tiempo reglamentario."
+        }
+      ],
+      "consensus": {
+        "agente": "Consenso",
+        "especialidad": "veredicto reconciliado del panel",
+        "marcador_90_minutos": {
+          "equipo_local": 2,
+          "equipo_visitante": 1
+        },
+        "habra_tiempo_extra": false,
+        "marcador_120_minutos": null,
+        "habra_penaltis": false,
+        "resultado_penaltis": null,
+        "equipo_clasificado": "Argentina",
+        "fase_de_definicion": "90_minutos",
+        "conviccion": "alta",
+        "explicacion": "Argentina impone su jerarquía histórica y efectividad ofensiva, superando a Suiza en un partido cerrado pero resuelto en el tiempo reglamentario.",
+        "valido": true,
+        "predicted_winner": "home",
+        "_analysis": "Argentina llega como favorito tras un torneo impecable y un historial directo abrumador. Suiza mostró fisuras defensivas ante rivales débiles, y aunque compite, la profundidad ofensiva argentina y la experiencia en eliminatorias deciden en 90 minutos. Los cuatro analistas coinciden en un 2-1 sin necesidad de alargues."
+      },
+      "generated_at": "2026-07-10T18:16:57.629933+00:00"
+    }
+  ]
+}

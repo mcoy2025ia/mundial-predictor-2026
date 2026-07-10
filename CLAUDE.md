@@ -36,9 +36,12 @@ cd frontend && npx vercel --prod           # Deploy
 python scripts/export_knockout_bracket.py     # → knockout_bracket.json (R32 + R16 feeders, drives Eliminatorias/Octavos tabs)
 python scripts/run_agent_debate.py "Home" "Away" ...   # cross-group debates now work (knockout framing)
 python scripts/run_upset_agent.py                       # Cazador de Sorpresas → upset_predictions.json (4ª voz en el panel)
+python scripts/run_knockout_oracle.py                   # QF/SF/Final ONLY → knockout_oracle_predictions.json (panel de avance real)
 python scripts/export_frontend_data.py                  # publishes agent debate results
 cd frontend && npx vercel --prod
 ```
+
+**Oráculo de Eliminatorias (`src/knockout_oracle.py`, run via `scripts/run_knockout_oracle.py`) — solo QF/SF/Final:** voz premium separada del debate de 3 agentes y del Cazador. Un panel de 4 especialistas independientes (Group Analyst, Tactical Scout, Sentiment Reader, **Especialista en Definiciones**) + Consenso, cada uno con su propia llamada a `deepseek-reasoner` (~5 llamadas/partido, el más caro). A diferencia del debate de 3 agentes (que solo predice marcador a 90'), razona la eliminatoria completa: 90' → prórroga → penaltis → **quién avanza** (nunca deja empate como resultado final). Solo corre en `ORACLE_ROUNDS` (Quarter-final, Semi-final, Final, Match for third place); es forward-only (omite cruces ya jugados para evitar fuga). Salida: `knockout_oracle_predictions.json`.
 
 Frontend in knockout: the **Grupos** tab, best-thirds, and group narratives are hidden; **Eliminatorias** (R32) and **Octavos** (R16) tabs render the resolved bracket with model probs + AgentDebatePanel (which now also shows the Cazador de Sorpresas upset pick).
 
@@ -66,6 +69,7 @@ python scripts/calibrate_ensemble_2026.py --apply   # updates ensemble.py weight
 | **Recalibrate ensemble** | `python scripts/calibrate_ensemble_2026.py --apply` |
 | **Export knockout bracket** | `python scripts/export_knockout_bracket.py` |
 | **Run upset agent (Cazador de Sorpresas)** | `python scripts/run_upset_agent.py` |
+| **Run knockout oracle (QF/SF/Final, avance real)** | `python scripts/run_knockout_oracle.py` |
 | **All tests** | `pytest` |
 | **Single test** | `pytest tests/test_model.py::test_temporal_split_no_leakage` |
 | **Frontend dev** | `cd frontend && npm run dev` (http://localhost:3000) |
@@ -655,6 +659,7 @@ The "Proyecciones" tab has two views:
 | `narrations.json`, `group_narratives.json` | `scripts/precompute_narrations.py` |
 | `agent_debate_results.json` | `scripts/run_agent_debate.py` |
 | `upset_predictions.json` | `scripts/run_upset_agent.py` |
+| `knockout_oracle_predictions.json` | `scripts/run_knockout_oracle.py` |
 | `knockout_bracket.json` | `scripts/export_knockout_bracket.py` |
 | `group_standings.json`, `group_matches.json`, `teams.json`, `matches.json`, `stats.json`, `predictions.json` | `scripts/export_frontend_data.py` |
 
@@ -806,6 +811,8 @@ Separate from the ML ensemble and from the `src/agents/` Orchestrator above. Thr
 - **Forward-only**: by design there is no retroactive backfill of already-played matches (cost/time tradeoff — 3 agents × 3 rounds × deepseek-reasoner per match). The "Modelo" tab's agent accuracy tables only reflect matches that were debated *before* being played.
 - **Frontend wiring**: `frontend/src/app/api/agent-debate/route.ts` serves the exported static JSON (`frontend/public/data/agent_debate_results.json`, 60s in-memory cache — never calls DeepSeek per request). `frontend/src/components/AgentDebatePanel.tsx` renders it: `variant="compact"` is a collapsed `<details>` (just a "Ver consenso completo" arrow) used in `Predictor.tsx` (right after "Marcador más probable" / altitude badge) and in `LiveTournament.tsx`'s "Próximos" tab (under each fixture's forecast badge); it returns `null` silently when no debate exists for that match, so the upcoming-matches list isn't cluttered with "not available" placeholders. `frontend/src/lib/agentDebate.ts` mirrors `lib/live.ts`'s `modelVerdict`/`orientScore` pattern (`agentVerdict`, `computeAgentResults`) so `ModelTab.tsx` can show the same per-matchday/per-group accuracy breakdown for agents side-by-side with the ML model's.
 
+**Oráculo de Eliminatorias (frontend):** when `knockout_oracle_predictions.json` has a verdict for the pair, `AgentDebatePanel` renders a redesigned `.ora` card (styles in `globals.css`, app tokens `--color-arena-*`/`--color-ink-*`/WC brand, light+dark via `color-mix`) that **replaces** the old blue 3-agent panel for that match: a hero verdict (who advances + a 90′→prórroga→penales *timeline* visualization), the 4 specialist voices (SVG monograms, conviction meters, "Discrepa" tag on dissenting voices), and the Cazador. Team flags come from `teams.json`. The old 3-agent debate only shows when no Oracle exists (group stage / R32 / R16). Color semantics: cian/azul = Oracle identity, green (`--color-wc-green`) = advances/decisive/conviction, gold = Cazador/dissent.
+
 ### Pre-computed Narrations (Zero LLM Cost Per User)
 `narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Both `DIALECTS_GROUP` and `DIALECTS_KNOCKOUT` are currently `["bogotano"]` — group stage started this way for flow stability; knockout briefly ran all 5 dialects (`bogotano`, `paisa`, `boyaco`, `costeño`, `en`) via a `match.stage != "group"` branch before being restricted to bogotano-only on 2026-07-09 (too many matches in quick succession for 5x cost/time per match to be worth it).
 
@@ -838,6 +845,7 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── agent_debate.py     # Agent Debate System: 3-round logic-based debate (deepseek-reasoner)
 │   ├── bracket.py          # Resolves knockout fixture placeholders (1A/2B/3X/W##) from live results
 │   ├── upset_agent.py      # Cazador de Sorpresas: 4th independent agent, always argues the underdog
+│   ├── knockout_oracle.py  # Oráculo de Eliminatorias: panel QF/SF/Final (4 voces + consenso, deepseek-reasoner), avance real 90'/prórroga/penales
 │   └── agents/
 │       ├── base.py         # MatchContext (+ MatchIntel fields), AgentResult, BaseAgent ABC
 │       ├── match_intel.py  # Free derived evidence: form, H2H, goal trends, scorers, third-place math
@@ -878,6 +886,7 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── run_agent_debate.py         # Runs Agent Debate System for given matches → agent_debate_results.json (accumulative, idempotent)
 │   ├── export_knockout_bracket.py  # Publishes resolved knockout bracket → knockout_bracket.json (R32 + feeders)
 │   ├── run_upset_agent.py          # Runs Cazador de Sorpresas for knockout crosses → upset_predictions.json
+│   ├── run_knockout_oracle.py      # Runs Oráculo de Eliminatorias for QF/SF/Final → knockout_oracle_predictions.json (--dry-run muestra el contexto sin gastar API)
 │   ├── ablation_features.py        # Ablation test for candidate features vs base FEATURE_COLS
 │   ├── calibrate_ensemble_2026.py  # Recalibrate ensemble weights via mini walk-forward over played WC 2026 matches (--apply writes ensemble.py)
 │   ├── ci_debate_targets.py        # Print upcoming group-stage Home/Away pairs within DEBATE_WINDOW_HOURS (CI agent-debate automation; empty = skip)
@@ -896,7 +905,7 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── src/components/
 │   │   ├── Predictor.tsx   # Match predictor + UnifiedNarration (localLang + dialect selector) + AgentDebatePanel
 │   │   ├── ModelTab.tsx    # Live model accuracy: KPIs, per-matchday bars, per-group J1/J2/J3/FG (ML + Agents side-by-side), surprises
-│   │   ├── AgentDebatePanel.tsx # Collapsed-by-default consensus panel (compact: Predictor/Próximos; full: detailed)
+│   │   ├── AgentDebatePanel.tsx # Consensus panel (compact/full) + Oráculo de Eliminatorias card (QF/SF/Final: verdict + knockout timeline + 4 voices + Cazador; flags from teams.json)
 │   │   ├── StatsTab.tsx    # WC 2026 stats dashboard: goals, top teams, top matches, score dist, upsets
 │   │   ├── KnockoutBracket.tsx # Resolved bracket renderer (Eliminatorias/Octavos tabs) from knockout_bracket.json
 │   │   └── ...             # Groups, Simulator, ChatTab, etc.

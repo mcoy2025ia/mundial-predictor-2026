@@ -598,3 +598,163 @@ details > summary::-webkit-details-marker { display: none; }
   --text-muted:    var(--color-ink-secondary);
 }
 .hero-bg { background: var(--color-arena-void); }
+
+/* ══════════════════════════════════════════════════════════════
+   ORÁCULO DE ELIMINATORIAS — knockout verdict panel (QF/SF/Final)
+   Cian/azul = identidad · verde = avanza/decisivo · oro = discrepa/cazador.
+   Neutros vía color-mix sobre --color-ink-muted → claro/oscuro automáticos.
+══════════════════════════════════════════════════════════════ */
+.ora {
+  background: var(--color-arena-card);
+  border: 1px solid color-mix(in srgb, var(--color-ink-muted) 26%, transparent);
+  border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.03), 0 10px 34px rgba(0,0,0,0.34);
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+.ora[open] > summary .ora-sum-open { transform: rotate(180deg); }
+.ora summary { list-style: none; cursor: pointer; }
+
+.ora-head { display: flex; align-items: center; justify-content: space-between; padding: 15px 18px 13px; }
+.ora-brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.ora-glyph {
+  width: 28px; height: 28px; border-radius: 9px; flex: none; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--color-wc-blue) 18%, transparent); color: var(--color-wc-cyan);
+}
+.ora-brand b { font-size: 13px; font-weight: 650; letter-spacing: -.01em; color: var(--color-ink-primary); display: block; line-height: 1.15; }
+.ora-brand em { font-size: 9.5px; letter-spacing: .11em; text-transform: uppercase; color: var(--color-ink-muted); font-weight: 600; font-style: normal; }
+.ora-chip {
+  font-size: 11px; font-weight: 600; color: var(--color-ink-secondary); white-space: nowrap;
+  background: color-mix(in srgb, var(--color-ink-muted) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink-muted) 22%, transparent);
+  padding: 4px 10px; border-radius: 999px;
+}
+.ora-sum-open { transition: transform .25s var(--ease-smooth); color: var(--color-ink-muted); flex: none; }
+.ora-rule { height: 1px; background: color-mix(in srgb, var(--color-ink-muted) 18%, transparent); }
+
+/* Resumen compacto del veredicto (en <summary>) */
+.ora-sum { display: flex; align-items: center; gap: 10px; padding: 13px 16px; }
+.ora-sum .ora-glyph { width: 26px; height: 26px; }
+.ora-sum-adv { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ora-sum-adv small { font-size: 9px; font-weight: 650; letter-spacing: .1em; text-transform: uppercase; color: var(--color-wc-green); }
+.ora-sum-adv b { font-size: 14px; font-weight: 700; letter-spacing: -.02em; color: var(--color-ink-primary); }
+.ora-sum-phase {
+  margin-left: auto; font-size: 10.5px; font-weight: 600; color: var(--color-ink-secondary); white-space: nowrap;
+  background: color-mix(in srgb, var(--color-ink-muted) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink-muted) 18%, transparent);
+  padding: 3px 8px; border-radius: 999px;
+}
+
+/* Veredicto héroe */
+.ora-verdict { padding: 17px 18px 19px; }
+.ora-vlabel { font-size: 10px; font-weight: 680; letter-spacing: .14em; text-transform: uppercase; color: var(--color-ink-muted); margin-bottom: 12px; }
+.ora-champ { display: flex; align-items: center; gap: 12px; }
+.ora-badge {
+  width: 44px; height: 44px; border-radius: 13px; flex: none; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .02em; color: var(--color-ink-primary);
+  background: color-mix(in srgb, var(--color-wc-green) 13%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-wc-green) 55%, transparent);
+}
+.ora-badge.has-flag { font-family: initial; font-size: 26px; line-height: 1; }
+.ora-who { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ora-adv { font-size: 10px; font-weight: 650; letter-spacing: .05em; text-transform: uppercase; color: var(--color-wc-green); display: inline-flex; align-items: center; gap: 5px; }
+.ora-name { font-size: 23px; font-weight: 720; letter-spacing: -.025em; line-height: 1; color: var(--color-ink-primary); }
+.ora-phase {
+  margin-left: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; font-weight: 600; color: var(--color-ink-secondary); white-space: nowrap;
+  background: color-mix(in srgb, var(--color-ink-muted) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink-muted) 20%, transparent);
+  padding: 5px 10px; border-radius: 999px;
+}
+
+/* Timeline de eliminatoria */
+.ora-tl { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 6px; margin-top: 18px; }
+.ora-seg {
+  border-radius: 11px; padding: 10px 11px 9px; position: relative;
+  border: 1px solid color-mix(in srgb, var(--color-ink-muted) 18%, transparent);
+  background: color-mix(in srgb, var(--color-ink-muted) 6%, transparent);
+}
+.ora-seg .k { font-size: 9.5px; font-weight: 640; letter-spacing: .07em; text-transform: uppercase; color: var(--color-ink-muted); display: flex; align-items: center; gap: 4px; margin-bottom: 7px; }
+.ora-seg .v { font-family: var(--font-mono); font-size: 16px; font-weight: 700; letter-spacing: -.01em; color: var(--color-ink-primary); font-variant-numeric: tabular-nums; }
+.ora-seg.is-reached { background: color-mix(in srgb, var(--color-ink-muted) 13%, transparent); }
+.ora-seg.is-reached .v { color: var(--color-ink-secondary); }
+.ora-seg.is-decisive {
+  background: color-mix(in srgb, var(--color-wc-green) 15%, transparent);
+  border-color: color-mix(in srgb, var(--color-wc-green) 40%, transparent);
+}
+.ora-seg.is-decisive .k { color: color-mix(in srgb, var(--color-wc-green) 78%, var(--color-ink-primary)); }
+.ora-seg.is-decisive .v { color: color-mix(in srgb, var(--color-wc-green) 82%, var(--color-ink-primary)); }
+.ora-seg.is-ghost { opacity: .45; }
+.ora-seg.is-ghost .v { color: var(--color-ink-muted); font-weight: 600; }
+.ora-seg .tick { position: absolute; top: 9px; right: 9px; color: var(--color-wc-green); }
+
+.ora-why { margin-top: 15px; font-size: 13px; line-height: 1.55; color: var(--color-ink-secondary); padding-left: 12px; border-left: 2px solid color-mix(in srgb, var(--color-wc-green) 32%, transparent); }
+
+/* Cinta de metadatos */
+.ora-meta {
+  display: flex; align-items: center; gap: 12px; padding: 11px 18px; font-size: 11.5px; color: var(--color-ink-secondary);
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--color-ink-muted) 7%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color-ink-muted) 15%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-ink-muted) 15%, transparent);
+}
+.ora-meta b { color: var(--color-ink-primary); font-weight: 640; }
+.ora-meta .d { width: 3px; height: 3px; border-radius: 50%; background: var(--color-ink-muted); flex: none; }
+
+/* Panel de especialistas */
+.ora-panel { padding: 2px 18px 4px; }
+.ora-cap { display: flex; align-items: center; justify-content: space-between; font-size: 10px; font-weight: 680; letter-spacing: .13em; text-transform: uppercase; color: var(--color-ink-muted); padding: 13px 0 3px; }
+.ora-cap .agree { letter-spacing: .02em; text-transform: none; font-weight: 600; font-size: 11px; color: var(--color-ink-secondary); }
+.ora-voice { display: flex; gap: 11px; padding: 12px 0; border-top: 1px solid color-mix(in srgb, var(--color-ink-muted) 14%, transparent); }
+.ora-voice:first-of-type { border-top: none; }
+.ora-mono {
+  width: 33px; height: 33px; border-radius: 10px; flex: none; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--vc, var(--color-wc-blue));
+  background: color-mix(in srgb, var(--vc, var(--color-wc-blue)) 14%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vc, var(--color-wc-blue)) 26%, transparent);
+}
+.ora-vbody { flex: 1; min-width: 0; }
+.ora-vr1 { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.ora-aname { font-size: 13px; font-weight: 640; letter-spacing: -.01em; color: var(--color-ink-primary); }
+.ora-aspec { font-size: 10.5px; color: var(--color-ink-muted); }
+.ora-dissent {
+  margin-left: auto; font-size: 9.5px; font-weight: 680; letter-spacing: .05em; text-transform: uppercase; color: var(--color-wc-gold-bright);
+  background: color-mix(in srgb, var(--color-wc-gold-bright) 16%, transparent); padding: 2px 7px; border-radius: 999px;
+}
+.ora-pick { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.ora-padv { font-size: 12px; font-weight: 620; color: var(--color-ink-primary); }
+.ora-padv .arw { color: var(--color-wc-green); font-weight: 700; }
+.ora-padv.is-up .arw { color: var(--color-wc-gold-bright); }
+.ora-pmini {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 600; color: var(--color-ink-secondary); font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--color-ink-muted) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ink-muted) 18%, transparent);
+  padding: 2px 7px; border-radius: 999px;
+}
+.ora-conv { display: inline-flex; gap: 3px; align-items: flex-end; margin-left: auto; flex: none; }
+.ora-conv i { width: 4px; border-radius: 1px; background: color-mix(in srgb, var(--color-ink-muted) 42%, transparent); }
+.ora-conv i:nth-child(1) { height: 6px; } .ora-conv i:nth-child(2) { height: 9px; } .ora-conv i:nth-child(3) { height: 12px; }
+.ora-conv.is-alta i, .ora-conv.is-media i:nth-child(-n+2), .ora-conv.is-baja i:nth-child(1) { background: var(--color-wc-green); }
+.ora-conv.is-up.is-alta i, .ora-conv.is-up.is-media i:nth-child(-n+2), .ora-conv.is-up.is-baja i:nth-child(1) { background: var(--color-wc-gold-bright); }
+.ora-vwhy { font-size: 11.5px; line-height: 1.5; color: var(--color-ink-secondary); margin-top: 7px; }
+
+/* Cazador de Sorpresas */
+.ora-caz {
+  margin: 6px 14px 16px; padding: 13px 14px; border-radius: 14px;
+  background: color-mix(in srgb, var(--color-wc-gold-bright) 11%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-wc-gold-bright) 26%, transparent);
+}
+.ora-caz-h { display: flex; align-items: center; gap: 8px; }
+.ora-caz-ico { color: var(--color-wc-gold-bright); display: grid; place-items: center; flex: none; }
+.ora-caz-t { font-size: 12px; font-weight: 660; color: var(--color-ink-primary); }
+.ora-caz-t span { color: var(--color-ink-muted); font-weight: 500; }
+.ora-caz-p { margin-left: auto; font-size: 11.5px; font-weight: 680; color: var(--color-wc-gold-bright); font-variant-numeric: tabular-nums; }
+.ora-gauge { height: 5px; border-radius: 3px; margin: 10px 0 9px; overflow: hidden; background: color-mix(in srgb, var(--color-wc-gold-bright) 16%, transparent); }
+.ora-gauge i { display: block; height: 100%; border-radius: 3px; background: var(--color-wc-gold-bright); }
+.ora-caz-q { font-size: 12px; line-height: 1.5; color: var(--color-ink-secondary); font-style: italic; }
+.ora-caz-f { font-size: 10.5px; color: var(--color-ink-muted); margin-top: 6px; }
+
+@media (max-width: 640px) {
+  .ora-tl { grid-template-columns: 1fr 1fr 1fr; }
+  .ora-name { font-size: 21px; }
+}

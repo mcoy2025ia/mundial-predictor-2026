@@ -18,6 +18,7 @@ Predictor de resultados del **Mundial FIFA 2026** con Machine Learning: XGBoost 
 - **Stats WC 2026** — dashboard en tiempo real: goles totales, promedio por partido, equipos más goleadores, partidos más goleadores, marcadores frecuentes y mayores sorpresas del torneo
 - **Rendimiento del modelo** — precisión por jornada interna (J1/J2/J3) con flecha de mejora, desglose por grupo con columna FG (total del grupo + conteo + delta vs J1), y top sorpresas donde el modelo erró; incluye la misma vista para el **Agent Debate** lado a lado
 - **Agent Debate** — predicción alternativa sin ML: 3 agentes (analista de grupo, scout táctico, lector de sentimiento) debaten en 3 rondas con DeepSeek Reasoner razonando solo desde presión de clasificación, estado real del grupo y momentum de la jornada anterior; genera **4 predicciones por partido** (3 individuales + 1 consenso) para evaluar cuál razonamiento es más predictivo; aparece en el Predictor y en "En Vivo → Próximos"
+- **Oráculo de Eliminatorias** — panel premium exclusivo de cuartos, semifinales y final: 4 especialistas independientes (analista de campaña, scout táctico, lector de sentimiento y **especialista en definiciones**) + consenso, con DeepSeek Reasoner. A diferencia del Agent Debate (solo 90'), resuelve la **eliminatoria completa** — 90' → prórroga → penaltis → **quién avanza** — con evidencia rica (forma, ELO, camino en el torneo, historial de tandas de penaltis, H2H); se muestra como una tarjeta rediseñada con línea de tiempo de la llave y voces del panel
 - **Fase de grupos** — predicción de los 72 partidos, posiciones finales de cada grupo (5.000 simulaciones Monte Carlo) y previas narrativas por grupo con tabla, presión, localía, resultado anterior, dependencia y lectura por selección
 - **Proyecciones del torneo** — probabilidad de cada selección de llegar a cada ronda y de ser campeona; se actualiza con el ciclo diario (`predict_live.py --export`)
 - **Chat IA** — pregunta sobre partidos del día, tabla de grupos, predicciones; usa contexto real del torneo + DeepSeek, con filtro de temas, caché y límite por IP
@@ -178,6 +179,7 @@ pytest          # 152 tests
 ```
 ├── src/                  # Python: extractor, ELO/features, modelo XGBoost, Poisson, simulador
 │   ├── agent_debate.py          # Agent Debate System: debate de 3 agentes en 3 rondas (DeepSeek Reasoner)
+│   ├── knockout_oracle.py       # Oráculo de Eliminatorias: panel QF/SF/Final (4 voces + consenso), avance real 90'/prórroga/penaltis
 │   └── agents/
 │       ├── match_intel.py       # Evidencia derivada gratis (forma, H2H, goleadores, terceros) para los agentes
 │       ├── orchestrator.py      # Routing (hasta 5 en grupos), blend de deltas
@@ -188,6 +190,8 @@ pytest          # 152 tests
 │   ├── update_third_place_probs.py # Solo recalcula terceros (Monte Carlo ~5s, sin narraciones) — J3 3x/día
 │   ├── precompute_narrations.py # Narraciones diarias + previas de grupo → narrations.json / group_narratives.json
 │   ├── run_agent_debate.py      # Corre el Agent Debate para partidos puntuales (acumulativo, idempotente)
+│   ├── run_knockout_oracle.py   # Corre el Oráculo de Eliminatorias (QF/SF/Final) → knockout_oracle_predictions.json
+│   ├── run_upset_agent.py       # Corre el Cazador de Sorpresas (underdog) → upset_predictions.json
 │   ├── run_pipeline.py          # Pipeline completo desde cero
 │   └── export_frontend_data.py  # Exporta todos los JSONs al frontend
 ├── frontend/             # Next.js 15 + React 19 + Tailwind + Recharts + Framer Motion
