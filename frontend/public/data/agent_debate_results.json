@@ -5980,5 +5980,240 @@
       "predicted_winner": "home",
       "agent": "Group Analyst"
     }
+  },
+  {
+    "match": "France vs Morocco",
+    "home": "France",
+    "away": "Morocco",
+    "context": {
+      "is_knockout": true,
+      "round": "Quarter-final",
+      "group": "Quarter-final: Grupo I vs Grupo C",
+      "home_group": "I",
+      "away_group": "C",
+      "home_table": [
+        {
+          "team": "France",
+          "pos": 1,
+          "pts": 9,
+          "gd": 8,
+          "gf": 10,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Norway",
+          "pos": 2,
+          "pts": 6,
+          "gd": 1,
+          "gf": 8,
+          "ga": 7,
+          "pj": 3
+        },
+        {
+          "team": "Senegal",
+          "pos": 3,
+          "pts": 3,
+          "gd": 2,
+          "gf": 8,
+          "ga": 6,
+          "pj": 3
+        },
+        {
+          "team": "Iraq",
+          "pos": 4,
+          "pts": 0,
+          "gd": -11,
+          "gf": 1,
+          "ga": 12,
+          "pj": 3
+        }
+      ],
+      "away_table": [
+        {
+          "team": "Brazil",
+          "pos": 1,
+          "pts": 7,
+          "gd": 6,
+          "gf": 7,
+          "ga": 1,
+          "pj": 3
+        },
+        {
+          "team": "Morocco",
+          "pos": 2,
+          "pts": 7,
+          "gd": 3,
+          "gf": 6,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Scotland",
+          "pos": 3,
+          "pts": 3,
+          "gd": -3,
+          "gf": 1,
+          "ga": 4,
+          "pj": 3
+        },
+        {
+          "team": "Haiti",
+          "pos": 4,
+          "pts": 0,
+          "gd": -6,
+          "gf": 2,
+          "ga": 8,
+          "pj": 3
+        }
+      ],
+      "home_row": {
+        "team": "France",
+        "pos": 1,
+        "pts": 9,
+        "gd": 8,
+        "gf": 10,
+        "ga": 2,
+        "pj": 3
+      },
+      "away_row": {
+        "team": "Morocco",
+        "pos": 2,
+        "pts": 7,
+        "gd": 3,
+        "gf": 6,
+        "ga": 3,
+        "pj": 3
+      },
+      "home_qual": "1º de grupo (9 pts, GD +8, GF 10)",
+      "away_qual": "2º de grupo (7 pts, GD +3, GF 6)",
+      "home_matches": [
+        "France 3-1 Senegal",
+        "France 3-0 Iraq",
+        "Norway 1-4 France",
+        "France 3-0 Sweden",
+        "Paraguay 0-1 France",
+        "France 2-0 Morocco"
+      ],
+      "away_matches": [
+        "Brazil 1-1 Morocco",
+        "Scotland 0-1 Morocco",
+        "Morocco 4-2 Haiti",
+        "Netherlands 3-4 Morocco",
+        "Canada 0-3 Morocco",
+        "France 2-0 Morocco"
+      ],
+      "table": [
+        {
+          "team": "France",
+          "pos": 1,
+          "pts": 9,
+          "gd": 8,
+          "gf": 10,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Morocco",
+          "pos": 2,
+          "pts": 7,
+          "gd": 3,
+          "gf": 6,
+          "ga": 3,
+          "pj": 3
+        }
+      ],
+      "matches_played": [
+        {
+          "result": "France 3-1 Senegal"
+        },
+        {
+          "result": "France 3-0 Iraq"
+        },
+        {
+          "result": "Norway 1-4 France"
+        },
+        {
+          "result": "France 3-0 Sweden"
+        },
+        {
+          "result": "Paraguay 0-1 France"
+        },
+        {
+          "result": "France 2-0 Morocco"
+        },
+        {
+          "result": "Brazil 1-1 Morocco"
+        },
+        {
+          "result": "Scotland 0-1 Morocco"
+        },
+        {
+          "result": "Morocco 4-2 Haiti"
+        },
+        {
+          "result": "Netherlands 3-4 Morocco"
+        },
+        {
+          "result": "Canada 0-3 Morocco"
+        },
+        {
+          "result": "France 2-0 Morocco"
+        }
+      ],
+      "classification_scenarios": {
+        "if_home_wins": "France avanza a la siguiente ronda; Morocco queda ELIMINADO",
+        "if_draw": "Empate en 90' → tiempo extra y posible tanda de PENALES (no hay reparto de puntos)",
+        "if_away_wins": "Morocco avanza a la siguiente ronda; France queda ELIMINADO"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "## Análisis Táctico: Francia vs Marruecos (Cuartos de Final, Eliminación Directa)\n\n### 1. TÁCTICA DE ELIMINATORIA: ¿Priorizar no encajar o buscar el gol?\n\nEn un partido de mata-mata, la lógica cambia drásticamente respecto a la fase de grupos. **Marruecos** llega como el equipo que probablemente se **cerrará tácticamente**. Su estilo en partidos grandes (como el 1-1 contra Brasil o la victoria ante Países Bajos) demuestra que son capaces de absorber presión y buscar el contragolpe. Espero un bloque bajo, líneas juntas, y una defensa de 5 o 4-4-2 replegado, con el objetivo claro de **forzar la prórroga y los penales**. Su éxito dependerá de la disciplina defensiva y de evitar errores individuales.\n\n**Francia**, por el contrario, **no se conformará con el empate**. Su calidad ofensiva (Mbappé, Griezmann, Dembélé) les permite romper defensas cerradas, especialmente con desbordes por las bandas y llegadas de segunda línea. Sin embargo, en eliminatorias, hasta los equipos dominantes tienden a ser más cautos. Francia priorizará **no encajar primero** , pero buscará el gol temprano para abrir el partido. Si Marruecos logra mantener el 0-0 hasta el minuto 70, Francia podría apretar con más riesgo, dejando espacios al contragolpe marroquí.\n\n**Veredicto:** Marruecos se cerrará deliberadamente; Francia intentará romper el cerrojo sin exponerse demasiado. **El primer gol será decisivo.**\n\n### 2. CHOQUE DE ESTILOS: Explotación y neutralización\n\n| Factor | Francia | Marruecos |\n|--------|---------|-----------|\n| **Ataque** | Velocidad en transición, juego por bandas (Mbappé, Dembélé), llegada de mediocampistas (Rabiot, Griezmann). | Contraataque rápido (Ziyech, Hakimi, En-Nesyri), balones largos a las espaldas, fútbol directo. |\n| **Defensa** | Línea alta, presión tras pérdida, vulnerables a la velocidad en transición (especialmente si Upamecano o Konaté quedan expuestos). | Bloque bajo muy organizado, duelos aéreos fuertes (Saïss, Aguerd), buena lectura de espacios. |\n| **Neutralización** | Francia puede **explotar los espacios detrás de los laterales marroquíes** (Hakimi y Mazraoui son ofensivos). Si Marruecos se cierra, Mbappé buscará diagonales desde la izquierda. | Marruecos puede **castigar la línea alta francesa** con pases filtrados a En-Nesyri o carreras de Hakimi. También pueden usar balones parados (Ziyech) para sorprender. |\n| **Debilidad clave** | Si Marruecos logra **neutralizar a Mbappé** (doblando marca), el ataque francés pierde profundidad. Griezmann entonces debe asociarse en corto. | La **falta de posesión** puede fatigar a su defensa. Además, si Francia marca primero, Marruecos tendrá que atacar, exponiéndose a más goles. |\n\n**Conclusión:** El partido se definirá en los duelos individuales de las bandas. Si Francia consigue que Mbappé reciba en uno contra uno contra Hakimi, tendrá ventaja. Si Marruecos logra que Hakimi y Ziyech combinen en transiciones rápidas, pueden crear peligro.\n\n### 3. DEFENSA vs ATAQUE: Datos en grupo\n\n| Equipo | Goles a favor (GF) en grupo | Goles en contra (GC) en grupo | Diferencia |\n|--------|-----------------------------|-------------------------------|------------|\n| **Francia** | 10 (media 3.33) | 2 (media 0.67) | +8 |\n| **Marruecos** | 6 (media 2.0) | 3 (media 1.0) | +3 |\n\n- **Ataque de Francia vs Defensa de Marruecos:** Francia an",
+      "sentiment_reader": "## Análisis Psicológico y de Momentum: Francia vs. Marruecos (Cuartos de Final)\n\n### 1. Momentum de Cierre\n\n**Francia: Goleada y plenitud.**  \nEl equipo llega con un *momentum* perfecto (6/6 victorias, +8 de diferencia de gol, solo 1 gol en contra). Su último partido, precisamente contra Marruecos, fue una victoria 2-0 sin sobresaltos, lo que refuerza la sensación de control absoluto. La goleada 4-1 a Noruega y el 3-0 a Suecia demuestran que el ataque está afilado y la defensa es una muralla. **No hay dudas, sino certezas.**\n\n**Marruecos: Derrota directa e irregularidad.**  \nCierran con una derrota clara ante el mismo rival. Antes, tuvieron resultados volátiles: un empate (1-1 vs Brasil), victorias ajustadas (1-0 vs Escocia), un 4-2 donde recibieron dos goles de Haití, y un agónico 4-3 vs Países Bajos (donde ganaron pero mostrando fragilidad defensiva). El 3-0 a Canadá fue su mejor actuación, pero la derrota final contra Francia **siembra la semilla de la duda**: “Si no pudimos con ellos hace unos días, ¿cómo lo haremos ahora en un partido de vida o muerte?”\n\n---\n\n### 2. Ventaja Psicológica: ¿Quién llega más “enchufado”?\n\n**Francia: Favorito relajado, pero con riesgo de exceso de confianza.**  \nLa racha invicta y el triunfo reciente les otorgan una superioridad mental. Jugarán sabiendo que ya superaron a Marruecos, lo que puede generar una falsa sensación de que el partido “se gana solo”. Sin embargo, el entrenador deberá trabajar el **respeto al rival** para evitar una relajación que abra la puerta a la sorpresa. En equipos de élite, este perfil suele rendir bien porque la confianza se traduce en fluidez ofensiva.\n\n**Marruecos: “Nada que perder”, pero con un lastre.**  \nEl equipo africano sabe que no es favorito, lo que puede liberarlos de la presión externa. Sin embargo, la derrota reciente **no es un combustible emocional positivo** sino un recordatorio de su inferioridad. Jugarán con la necesidad de demostrar que el 2-0 fue un accidente, pero esa motivación puede convertirse en ansiedad si el partido se les complica. La verdadera ventaja psicológica la tendrían si hubieran llegado con una racha de victorias; aquí, el *momentum* está en su contra.\n\n---\n\n### 3. Peso de la Eliminatoria: Presión vs. Libertad\n\n**Francia: La presión del favoritismo.**  \nSer primeros de grupo invictos y con la etiqueta de candidato al título genera una **carga de expectativa**. El miedo a la eliminación prematura puede generar agarrotamiento, especialmente si Marruecos logra adelantarse en el marcador. El “deber pasar” puede llevar a jugar con más precaución que atrevimiento, o a tomar decisiones forzadas si el resultado no llega.\n\n**Marruecos: Presión interna moderada.**  \nAl no ser favoritos, la presión externa es baja. Sin embargo, **el orgullo propio y el deseo de revancha** puede ser incluso más intenso que la presión externa. El verdadero riesgo es que el equipo sienta que “esta es su oportunidad” y se sobreactive emocionalmente, lo que lleva a errores técnicos o a un desgaste prematuro. Jugar “sin nada que perder” es una ventaja solo si logran canalizar la adrenalina.\n\n---\n\n### 4. Experiencia en Mata-Mata\n\n- **Francia:** Históricamente, es una selección acostumbrada a partidos de eliminación directa (campeona del mundo en 2018, finalista en 2022). La plantilla cuenta con jugadores que han vivido finales de Champions, Mundiales y torneos de presión. **La gestión emocional en partidos únicos es un activo.** Además, suelen ser sólidos en tandas de penaltis (tienen experiencia en victorias y derrotas en ese formato"
+    },
+    "round_2": {
+      "rebate_1": "**Respuesta breve:**\n\n- **¿Estoy en desacuerdo con ellos?** Sí, parcialmente. El experto táctico asume que Marruecos se cerrará, pero su contragolpe es más letal de lo que sugiere (3 goles a Países Bajos). El experto en sentimiento exagera el *momentum* de Francia: su 2-0 contra Marruecos fue engañoso (el partido fue más reñido que el marcador).\n\n- **¿Me convencen?** No del todo. Son válidos: la solidez defensiva de Marruecos y la eficacia ofensiva de Francia. Pero omiten que Marruecos ha remontado en partidos clave y que Francia ha mostrado fragilidad en transiciones defensivas.\n\n- **¿Ajusto mi predicción?** Sí. Originalmente apostaba por un 2-1 para Francia; ahora veo más probable un 1-1 con prórroga, o incluso una sorpresa marroquí (1-0). La confianza excesiva de Francia puede ser su talón de Aquiles.\n\n- **Defiendo mi posición:** Marruecos no es un equipo menor en eliminatorias; ya eliminó a Brasil y empató con Países Bajos. Francia llega como favorito, pero su historial en partidos cerrados (vs. Croacia, vs. Argentina) muestra vulnerabilidad. El factor psicológico (presión de ser local o de la favoritismo) juega a favor de Marruecos, que no tiene nada que perder.",
+      "rebate_2": "No estoy totalmente en desacuerdo con el Expert 3, pero creo que su análisis es demasiado optimista para Francia y subestima la capacidad de Marruecos en eliminatorias. Sus puntos sobre el *momentum* goleador y la solidez defensiva francesa son válidos, pero no consideran el contexto de un partido de cuartos de final contra un equipo que ya demostró saber cerrarse y contragolpear ante rivales superiores (ej. Brasil, Países Bajos). La victoria previa 2-0 de Francia no es garantía: Marruecos analizará errores y ajustará su bloque bajo.\n\nMe convence que Francia tenga un ataque afilado, pero Marruecos ha encajado solo un gol en todo el torneo (ante Brasil). En eliminatorias, la tensión favorece a defensas organizadas. Por eso, **no ajusto mi predicción de marcador**: mantengo un **1-0 para Francia** o incluso un **empate a 0** que lleve a prórroga. Defiendo mi posición táctica: priorizar no encajar es clave en mata-mata, y Marruecos tiene las herramientas (presión, transiciones rápidas) para romper el ritmo francés. El *momentum* no gana partidos; la ejecución táctica sí.",
+      "rebate_3": "En desacuerdo parcial. El análisis de momentum es válido (Francia en racha), pero el experto táctico acierta al señalar que Marruecos se cerrará. Subestimas su capacidad defensiva en eliminatorias (ej. vs Brasil). Su punto fuerte es absorber presión y salir al contragolpe, lo que neutraliza parte del ataque francés.\n\nMe convencen: la clave es la primera mitad. Si Francia no marca temprano, la frustración puede abrir espacios para Marruecos. Tu predicción inicial (¿?) no la dices, pero ajustaría: si esperabas un 2-0 o 3-0, redúcelo a 1-0 o 2-1. Defiendo mi posición porque el momentum no garantiza victoria en partidos únicos; la táctica de Marruecos es más peligrosa de lo que reflejas."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 2-1 (0.18%)\n   Análisis: Marruecos anotará en contragolpe, pero Francia tiene suficiente profundidad para ganar en un partido cerrado.\n\n🟠 **Tactical Scout** (tácticas): 1-1 (0.20%)\n   Análisis: Marruecos prioriza no encajar y su contragolpe es letal; Francia rompe el cero pero no sella la victoria en 90'.\n\n🟡 **Sentiment Reader** (psicología MD1): 2-0 (0.22%)\n   Análisis: El momentum y la confianza de Francia tras golear en grupo inclinan el partido, anulando el ataque marroquí.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones\n1. Francia gana 2-0 (0.22), 2. Francia 2-1 (0.18), 3. Empate 1-1 (0.20). El consenso apuesta por una victoria sólida de Francia sin necesidad de prórroga.\n\nANÁLISIS FINAL (2-3 líneas):\n- Los tres expertos convergen en que Francia es favorita por su potencia ofensiva y momento, aunque el Tactical Scout y Group Analyst ven a Marruecos capaz de golpear al contragolpe.\n- La confianza general es alta (8/10) por la superioridad grupal de Francia, pero el riesgo de un partido reñido (prórroga/penales) no se descarta por completo.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.18}, \"tactical_scout\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.20}, \"sentiment_reader\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.22}, \"consensus\": {\"home_goals\": 2, \"away_goals\": 0, \"probability\": 0.22}}",
+    "predictions": [
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.18,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.2,
+        "predicted_winner": "draw",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.22,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 0,
+        "probability": 0.22,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 2,
+      "away_goals": 1,
+      "probability": 0.18,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
   }
 ]
