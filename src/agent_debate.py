@@ -312,9 +312,6 @@ class AgentDebateSystem:
 
         standings = {}
 
-        if results_df.empty:
-            return standings
-
         # PASO 1: Cargar mapa de grupos desde fixture.json (dinámico)
         team_to_group = self._load_group_mapping()
 
@@ -330,6 +327,9 @@ class AgentDebateSystem:
                 standings[group] = {}
             standings[group][team] = {"points": 0, "gf": 0, "ga": 0, "gd": 0, "played": 0}
             groups_by_team[team] = group
+
+        if results_df.empty:
+            return standings
 
         # PASO 3: Procesar cada resultado
         for _, row in results_df.iterrows():
