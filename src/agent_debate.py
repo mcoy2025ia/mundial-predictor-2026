@@ -33,9 +33,29 @@ def normalize_team_name(name: str) -> str:
 class AgentDebateSystem:
     """Sistema de debate de 3 agentes para predicción de marcadores."""
 
-    def __init__(self):
+    def __init__(self, cutoff_date: Optional[str] = None):
+        """
+        cutoff_date: fecha ISO (YYYY-MM-DD) opcional. Si se pasa, el contexto se
+        arma SOLO con resultados anteriores a esa fecha — permite backfillear un
+        partido ya jugado sin que los agentes vean su resultado ni los de fechas
+        posteriores (mismo principio anti-leakage que predict_live.py). El LLM no
+        conoce los resultados del WC 2026 por entrenamiento; el único canal de
+        fuga es este CSV, así que filtrar aquí es suficiente.
+        """
         self.client = httpx.Client(timeout=60)
         self.conversation_history = []
+        self.cutoff_date = cutoff_date
+
+    def _load_results_df(self):
+        """Carga wc2026_live_results.csv aplicando el cutoff temporal si existe."""
+        import pandas as pd
+        try:
+            df = pd.read_csv(ROOT / "data/external/wc2026_live_results.csv")
+        except Exception:
+            return pd.DataFrame()
+        if self.cutoff_date and "date" in df.columns:
+            df = df[df["date"].astype(str) < self.cutoff_date].copy()
+        return df
 
     def _call_deepseek(self, prompt: str, use_reasoner: bool = True, max_tokens: Optional[int] = None) -> str:
         """Llama a DeepSeek con el prompt dado."""
@@ -62,13 +82,8 @@ class AgentDebateSystem:
 
     def get_group_context(self, home_team: str, away_team: str) -> dict:
         """Obtiene contexto REAL del grupo calculando standings desde resultados reales."""
-        import pandas as pd
-
-        # Cargar resultados reales desde CSV
-        try:
-            results_df = pd.read_csv(ROOT / "data/external/wc2026_live_results.csv")
-        except:
-            results_df = pd.DataFrame()
+        # Cargar resultados reales desde CSV (respeta cutoff_date si está activo)
+        results_df = self._load_results_df()
 
         # Calcular standings reales desde los resultados
         standings = self._calculate_real_standings(results_df)
@@ -130,9 +145,8 @@ class AgentDebateSystem:
         if not hg or not ag or hg == ag:
             return None  # mismo grupo o desconocido → no es cruce de eliminatorias
 
-        try:
-            df = pd.read_csv(ROOT / "data/external/wc2026_live_results.csv")
-        except Exception:
+        df = self._load_results_df()
+        if df.empty:
             df = pd.DataFrame(columns=["home_team", "away_team", "home_score", "away_score"])
 
         standings = final_standings(df, mem)
@@ -212,11 +226,8 @@ class AgentDebateSystem:
         import pandas as pd
         import json
 
-        # Cargar resultados y fixture
-        try:
-            results_df = pd.read_csv(ROOT / "data/external/wc2026_live_results.csv")
-        except:
-            results_df = pd.DataFrame()
+        # Cargar resultados y fixture (respeta cutoff_date si está activo)
+        results_df = self._load_results_df()
 
         # Calcular standings reales
         standings = self._calculate_real_standings(results_df)

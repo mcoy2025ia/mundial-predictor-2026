@@ -9,6 +9,15 @@ Acumula resultados en data/processed/agent_debate_results.json (no sobrescribe):
 Uso:
     python scripts/run_agent_debate.py "Mexico" "South Korea" "Scotland" "Morocco"
     python scripts/run_agent_debate.py --force "Mexico" "South Korea"
+
+Backfill de partidos ya jugados (--cutoff YYYY-MM-DD):
+    python scripts/run_agent_debate.py --force --cutoff 2026-07-04 "Canada" "Morocco"
+
+    El contexto se arma solo con resultados de fecha ANTERIOR al cutoff, así los
+    agentes no ven el resultado del partido debatido ni nada posterior (el LLM no
+    conoce el WC 2026 por entrenamiento; el CSV es el único canal de fuga). El
+    cutoff correcto es la fecha del partido. Cada entrada backfilleada queda
+    marcada con "backfill_cutoff" para auditoría.
 """
 
 import json
@@ -121,6 +130,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("teams", nargs="*", help="Pares de equipos: HOME AWAY HOME AWAY ...")
     parser.add_argument("--force", action="store_true", help="Re-ejecutar aunque ya exista debate guardado")
+    parser.add_argument("--cutoff", metavar="YYYY-MM-DD", default=None,
+                        help="Backfill: armar contexto solo con resultados anteriores a esta fecha (anti-leakage)")
     args = parser.parse_args()
 
     if args.teams:
@@ -134,7 +145,9 @@ def main():
     existing = dedup(load_existing())
     print(f"[INFO] {len(existing)} debate(s) ya guardados (tras dedup) en {OUTPUT_FILE.name}")
 
-    system = AgentDebateSystem()
+    system = AgentDebateSystem(cutoff_date=args.cutoff)
+    if args.cutoff:
+        print(f"[INFO] Modo backfill: contexto limitado a resultados con fecha < {args.cutoff}")
     new_results = []
 
     for home, away in matches:
@@ -144,6 +157,8 @@ def main():
 
         try:
             result = system.predict_match(home, away)
+            if args.cutoff:
+                result["backfill_cutoff"] = args.cutoff
             new_results.append(result)
 
             safe_print("\n" + "=" * 100)
