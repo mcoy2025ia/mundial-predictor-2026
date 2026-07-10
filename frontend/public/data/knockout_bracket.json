@@ -1,0 +1,1195 @@
+{
+  "generated_at": "2026-07-10T02:11:49.869363+00:00",
+  "round_order": [
+    "Round of 32",
+    "Round of 16",
+    "Quarter-final",
+    "Semi-final",
+    "Match for third place",
+    "Final"
+  ],
+  "round_labels": {
+    "Round of 32": "32avos de final",
+    "Round of 16": "Octavos de final",
+    "Quarter-final": "Cuartos de final",
+    "Semi-final": "Semifinal",
+    "Match for third place": "Tercer puesto",
+    "Final": "Final"
+  },
+  "rounds": {
+    "Round of 32": [
+      {
+        "num": 73,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-28",
+        "time": "12:00 UTC-7",
+        "ground": "Los Angeles (Inglewood)",
+        "home": "South Africa",
+        "away": "Canada",
+        "home_label": "South Africa",
+        "away_label": "Canada",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.2964,
+          "p_draw": 0.3344,
+          "p_away": 0.3692,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2728
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1901
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1586
+            }
+          ]
+        },
+        "result": {
+          "home_score": 0,
+          "away_score": 1,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 74,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-29",
+        "time": "16:30 UTC-4",
+        "ground": "Boston (Foxborough)",
+        "home": "Germany",
+        "away": "Paraguay",
+        "home_label": "Germany",
+        "away_label": "Paraguay",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.4835,
+          "p_draw": 0.2734,
+          "p_away": 0.2431,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1767
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1389
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1134
+            }
+          ]
+        },
+        "result": {
+          "home_score": 4,
+          "away_score": 5,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 75,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-29",
+        "time": "19:00 UTC-6",
+        "ground": "Monterrey (Guadalupe)",
+        "home": "Netherlands",
+        "away": "Morocco",
+        "home_label": "Netherlands",
+        "away_label": "Morocco",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.4001,
+          "p_draw": 0.3015,
+          "p_away": 0.2984,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2364
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.2142
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1193
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 4,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 76,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-29",
+        "time": "12:00 UTC-5",
+        "ground": "Houston",
+        "home": "Brazil",
+        "away": "Japan",
+        "home_label": "Brazil",
+        "away_label": "Japan",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.6518,
+          "p_draw": 0.2136,
+          "p_away": 0.1346,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1934
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.1525
+            },
+            {
+              "home": 3,
+              "away": 0,
+              "prob": 0.1322
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 1,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 77,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-30",
+        "time": "17:00 UTC-4",
+        "ground": "New York/New Jersey (East Rutherford)",
+        "home": "France",
+        "away": "Sweden",
+        "home_label": "France",
+        "away_label": "Sweden",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5905,
+          "p_draw": 0.2278,
+          "p_away": 0.1816,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1616
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1526
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1255
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 78,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-30",
+        "time": "12:00 UTC-5",
+        "ground": "Dallas (Arlington)",
+        "home": "Ivory Coast",
+        "away": "Norway",
+        "home_label": "Ivory Coast",
+        "away_label": "Norway",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.2506,
+          "p_draw": 0.2822,
+          "p_away": 0.4672,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1811
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1635
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1395
+            }
+          ]
+        },
+        "result": {
+          "home_score": 1,
+          "away_score": 2,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 79,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-06-30",
+        "time": "19:00 UTC-6",
+        "ground": "Mexico City",
+        "home": "Mexico",
+        "away": "Ecuador",
+        "home_label": "Mexico",
+        "away_label": "Ecuador",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.6117,
+          "p_draw": 0.2433,
+          "p_away": 0.1449,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.2078
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1665
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.1297
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 80,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-01",
+        "time": "12:00 UTC-4",
+        "ground": "Atlanta",
+        "home": "England",
+        "away": "DR Congo",
+        "home_label": "England",
+        "away_label": "DR Congo",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.7731,
+          "p_draw": 0.1568,
+          "p_away": 0.07,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.182
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.1612
+            },
+            {
+              "home": 3,
+              "away": 0,
+              "prob": 0.157
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 1,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 81,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-01",
+        "time": "17:00 UTC-7",
+        "ground": "San Francisco Bay Area (Santa Clara)",
+        "home": "United States",
+        "away": "Bosnia and Herzegovina",
+        "home_label": "United States",
+        "away_label": "Bosnia and Herzegovina",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5819,
+          "p_draw": 0.2509,
+          "p_away": 0.1672,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1902
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1872
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1179
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 82,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-01",
+        "time": "13:00 UTC-7",
+        "ground": "Seattle",
+        "home": "Belgium",
+        "away": "Senegal",
+        "home_label": "Belgium",
+        "away_label": "Senegal",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5511,
+          "p_draw": 0.2571,
+          "p_away": 0.1918,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1949
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1938
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1162
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 2,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 83,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-02",
+        "time": "19:00 UTC-4",
+        "ground": "Toronto",
+        "home": "Portugal",
+        "away": "Croatia",
+        "home_label": "Portugal",
+        "away_label": "Croatia",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.4468,
+          "p_draw": 0.3044,
+          "p_away": 0.2488,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.225
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1771
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1524
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 1,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 84,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-02",
+        "time": "12:00 UTC-7",
+        "ground": "Los Angeles (Inglewood)",
+        "home": "Spain",
+        "away": "Austria",
+        "home_label": "Spain",
+        "away_label": "Austria",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.6641,
+          "p_draw": 0.212,
+          "p_away": 0.1239,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.189
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1461
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.1223
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 85,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-02",
+        "time": "20:00 UTC-7",
+        "ground": "Vancouver",
+        "home": "Switzerland",
+        "away": "Algeria",
+        "home_label": "Switzerland",
+        "away_label": "Algeria",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5705,
+          "p_draw": 0.2477,
+          "p_away": 0.1819,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1851
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1778
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1193
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 86,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-03",
+        "time": "18:00 UTC-4",
+        "ground": "Miami (Miami Gardens)",
+        "home": "Argentina",
+        "away": "Cape Verde",
+        "home_label": "Argentina",
+        "away_label": "Cape Verde",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.7824,
+          "p_draw": 0.1635,
+          "p_away": 0.0541,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.2168
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.1742
+            },
+            {
+              "home": 3,
+              "away": 0,
+              "prob": 0.154
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 2,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 87,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-03",
+        "time": "20:30 UTC-5",
+        "ground": "Kansas City",
+        "home": "Colombia",
+        "away": "Ghana",
+        "home_label": "Colombia",
+        "away_label": "Ghana",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5459,
+          "p_draw": 0.2774,
+          "p_away": 0.1767,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2541
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1988
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.143
+            }
+          ]
+        },
+        "result": {
+          "home_score": 1,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 88,
+        "round": "Round of 32",
+        "round_es": "32avos de final",
+        "date": "2026-07-03",
+        "time": "13:00 UTC-5",
+        "ground": "Dallas (Arlington)",
+        "home": "Australia",
+        "away": "Egypt",
+        "home_label": "Australia",
+        "away_label": "Egypt",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.2859,
+          "p_draw": 0.3096,
+          "p_away": 0.4046,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.236
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1741
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1607
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 5,
+          "winner": "away",
+          "played": true
+        }
+      }
+    ],
+    "Round of 16": [
+      {
+        "num": 89,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-04",
+        "time": "17:00 UTC-4",
+        "ground": "Philadelphia",
+        "home": "Paraguay",
+        "away": "France",
+        "home_label": "Paraguay",
+        "away_label": "France",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.1529,
+          "p_draw": 0.2417,
+          "p_away": 0.6055,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1917
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1734
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.115
+            }
+          ]
+        },
+        "result": {
+          "home_score": 0,
+          "away_score": 1,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 90,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-04",
+        "time": "12:00 UTC-5",
+        "ground": "Houston",
+        "home": "Canada",
+        "away": "Morocco",
+        "home_label": "Canada",
+        "away_label": "Morocco",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.1568,
+          "p_draw": 0.2983,
+          "p_away": 0.5449,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2723
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.2371
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1091
+            }
+          ]
+        },
+        "result": {
+          "home_score": 0,
+          "away_score": 3,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 91,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-05",
+        "time": "16:00 UTC-4",
+        "ground": "New York/New Jersey (East Rutherford)",
+        "home": "Brazil",
+        "away": "Norway",
+        "home_label": "Brazil",
+        "away_label": "Norway",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5227,
+          "p_draw": 0.2668,
+          "p_away": 0.2105,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1813
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1295
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.1268
+            }
+          ]
+        },
+        "result": {
+          "home_score": 1,
+          "away_score": 2,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 92,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-05",
+        "time": "18:00 UTC-6",
+        "ground": "Mexico City",
+        "home": "Mexico",
+        "away": "England",
+        "home_label": "Mexico",
+        "away_label": "England",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.2459,
+          "p_draw": 0.3159,
+          "p_away": 0.4383,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2121
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1928
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1292
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 3,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 93,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-06",
+        "time": "14:00 UTC-5",
+        "ground": "Dallas (Arlington)",
+        "home": "Portugal",
+        "away": "Spain",
+        "home_label": "Portugal",
+        "away_label": "Spain",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.1915,
+          "p_draw": 0.2935,
+          "p_away": 0.515,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2204
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1984
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1279
+            }
+          ]
+        },
+        "result": {
+          "home_score": 0,
+          "away_score": 1,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 94,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-06",
+        "time": "17:00 UTC-7",
+        "ground": "Seattle",
+        "home": "United States",
+        "away": "Belgium",
+        "home_label": "United States",
+        "away_label": "Belgium",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.2276,
+          "p_draw": 0.2714,
+          "p_away": 0.5011,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1706
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1698
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1243
+            }
+          ]
+        },
+        "result": {
+          "home_score": 1,
+          "away_score": 4,
+          "winner": "away",
+          "played": true
+        }
+      },
+      {
+        "num": 95,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-07",
+        "time": "12:00 UTC-4",
+        "ground": "Atlanta",
+        "home": "Argentina",
+        "away": "Egypt",
+        "home_label": "Argentina",
+        "away_label": "Egypt",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.6675,
+          "p_draw": 0.2156,
+          "p_away": 0.1169,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.2144
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1729
+            },
+            {
+              "home": 2,
+              "away": 0,
+              "prob": 0.133
+            }
+          ]
+        },
+        "result": {
+          "home_score": 3,
+          "away_score": 2,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 96,
+        "round": "Round of 16",
+        "round_es": "Octavos de final",
+        "date": "2026-07-07",
+        "time": "13:00 UTC-7",
+        "ground": "Vancouver",
+        "home": "Switzerland",
+        "away": "Colombia",
+        "home_label": "Switzerland",
+        "away_label": "Colombia",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.42,
+          "p_draw": 0.2998,
+          "p_away": 0.2802,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2059
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1682
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.151
+            }
+          ]
+        },
+        "result": {
+          "home_score": 4,
+          "away_score": 3,
+          "winner": "home",
+          "played": true
+        }
+      }
+    ],
+    "Quarter-final": [
+      {
+        "num": 97,
+        "round": "Quarter-final",
+        "round_es": "Cuartos de final",
+        "date": "2026-07-09",
+        "time": "16:00 UTC-4",
+        "ground": "Boston (Foxborough)",
+        "home": "France",
+        "away": "Morocco",
+        "home_label": "France",
+        "away_label": "Morocco",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5386,
+          "p_draw": 0.2844,
+          "p_away": 0.1769,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.2389
+            },
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.2146
+            },
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1199
+            }
+          ]
+        },
+        "result": {
+          "home_score": 2,
+          "away_score": 0,
+          "winner": "home",
+          "played": true
+        }
+      },
+      {
+        "num": 98,
+        "round": "Quarter-final",
+        "round_es": "Cuartos de final",
+        "date": "2026-07-10",
+        "time": "12:00 UTC-7",
+        "ground": "Los Angeles (Inglewood)",
+        "home": "Spain",
+        "away": "Belgium",
+        "home_label": "Spain",
+        "away_label": "Belgium",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5757,
+          "p_draw": 0.2482,
+          "p_away": 0.1761,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1864
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1588
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1145
+            }
+          ]
+        }
+      },
+      {
+        "num": 99,
+        "round": "Quarter-final",
+        "round_es": "Cuartos de final",
+        "date": "2026-07-11",
+        "time": "17:00 UTC-4",
+        "ground": "Miami (Miami Gardens)",
+        "home": "Norway",
+        "away": "England",
+        "home_label": "Norway",
+        "away_label": "England",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.1732,
+          "p_draw": 0.2459,
+          "p_away": 0.581,
+          "top_scorelines": [
+            {
+              "home": 0,
+              "away": 1,
+              "prob": 0.1885
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1348
+            },
+            {
+              "home": 0,
+              "away": 2,
+              "prob": 0.1318
+            }
+          ]
+        }
+      },
+      {
+        "num": 100,
+        "round": "Quarter-final",
+        "round_es": "Cuartos de final",
+        "date": "2026-07-11",
+        "time": "20:00 UTC-5",
+        "ground": "Kansas City",
+        "home": "Argentina",
+        "away": "Switzerland",
+        "home_label": "Argentina",
+        "away_label": "Switzerland",
+        "resolved": true,
+        "pred": {
+          "p_home": 0.5535,
+          "p_draw": 0.2498,
+          "p_away": 0.1968,
+          "top_scorelines": [
+            {
+              "home": 1,
+              "away": 0,
+              "prob": 0.1849
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1553
+            },
+            {
+              "home": 1,
+              "away": 1,
+              "prob": 0.1143
+            }
+          ]
+        }
+      }
+    ],
+    "Semi-final": [
+      {
+        "num": 101,
+        "round": "Semi-final",
+        "round_es": "Semifinal",
+        "date": "2026-07-14",
+        "time": "14:00 UTC-5",
+        "ground": "Dallas (Arlington)",
+        "home": "France",
+        "away": null,
+        "home_label": "France",
+        "away_label": "Spain / Belgium",
+        "resolved": false
+      },
+      {
+        "num": 102,
+        "round": "Semi-final",
+        "round_es": "Semifinal",
+        "date": "2026-07-15",
+        "time": "15:00 UTC-4",
+        "ground": "Atlanta",
+        "home": null,
+        "away": null,
+        "home_label": "Norway / England",
+        "away_label": "Argentina / Switzerland",
+        "resolved": false
+      }
+    ],
+    "Match for third place": [],
+    "Final": []
+  },
+  "counts": {
+    "Round of 32": 16,
+    "Round of 16": 8,
+    "Quarter-final": 4,
+    "Semi-final": 2,
+    "Match for third place": 0,
+    "Final": 0
+  }
+}

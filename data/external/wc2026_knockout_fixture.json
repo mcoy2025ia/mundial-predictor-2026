@@ -1,0 +1,201 @@
+{
+  "fetched_at": "2026-07-10T02:09:11.063856+00:00",
+  "matches": [
+    {
+      "stage": "LAST_32",
+      "home": "South Africa",
+      "away": "Canada",
+      "date": "2026-06-28",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Brazil",
+      "away": "Japan",
+      "date": "2026-06-29",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Germany",
+      "away": "Paraguay",
+      "date": "2026-06-29",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Netherlands",
+      "away": "Morocco",
+      "date": "2026-06-30",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Ivory Coast",
+      "away": "Norway",
+      "date": "2026-06-30",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "France",
+      "away": "Sweden",
+      "date": "2026-06-30",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Mexico",
+      "away": "Ecuador",
+      "date": "2026-07-01",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "England",
+      "away": "DR Congo",
+      "date": "2026-07-01",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Belgium",
+      "away": "Senegal",
+      "date": "2026-07-01",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "United States",
+      "away": "Bosnia and Herzegovina",
+      "date": "2026-07-02",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Spain",
+      "away": "Austria",
+      "date": "2026-07-02",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Portugal",
+      "away": "Croatia",
+      "date": "2026-07-02",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Switzerland",
+      "away": "Algeria",
+      "date": "2026-07-03",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Australia",
+      "away": "Egypt",
+      "date": "2026-07-03",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Argentina",
+      "away": "Cape Verde",
+      "date": "2026-07-03",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_32",
+      "home": "Colombia",
+      "away": "Ghana",
+      "date": "2026-07-04",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Canada",
+      "away": "Morocco",
+      "date": "2026-07-04",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Paraguay",
+      "away": "France",
+      "date": "2026-07-04",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Brazil",
+      "away": "Norway",
+      "date": "2026-07-05",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Mexico",
+      "away": "England",
+      "date": "2026-07-06",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Portugal",
+      "away": "Spain",
+      "date": "2026-07-06",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "United States",
+      "away": "Belgium",
+      "date": "2026-07-07",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Argentina",
+      "away": "Egypt",
+      "date": "2026-07-07",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "LAST_16",
+      "home": "Switzerland",
+      "away": "Colombia",
+      "date": "2026-07-07",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "QUARTER_FINALS",
+      "home": "France",
+      "away": "Morocco",
+      "date": "2026-07-09",
+      "status": "FINISHED"
+    },
+    {
+      "stage": "QUARTER_FINALS",
+      "home": "Spain",
+      "away": "Belgium",
+      "date": "2026-07-10",
+      "status": "TIMED"
+    },
+    {
+      "stage": "QUARTER_FINALS",
+      "home": "Norway",
+      "away": "England",
+      "date": "2026-07-11",
+      "status": "TIMED"
+    },
+    {
+      "stage": "QUARTER_FINALS",
+      "home": "Argentina",
+      "away": "Switzerland",
+      "date": "2026-07-12",
+      "status": "TIMED"
+    }
+  ]
+}

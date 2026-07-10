@@ -1,698 +1,42 @@
 [
   {
-    "home_team": "Egypt",
-    "away_team": "Iran",
-    "p_home": 0.282,
-    "p_draw": 0.3432,
-    "p_away": 0.3747,
+    "home_team": "South Africa",
+    "away_team": "Canada",
+    "p_home": 0.2964,
+    "p_draw": 0.3344,
+    "p_away": 0.3692,
     "is_neutral": true,
-    "kickoff": "2026-06-27T03:00:00",
-    "model": "ensemble_agent_adjusted",
+    "kickoff": "2026-06-28T19:00:00",
+    "model": "ensemble_live",
     "ensemble_weights": {
       "elo": 0.22,
       "poisson": 0.58,
       "xgb": 0.2
     },
     "xgb_home": 0.2526,
-    "xgb_draw": 0.3018,
-    "xgb_away": 0.4456,
-    "elo_home": 0.3206,
-    "elo_draw": 0.2467,
-    "elo_away": 0.4327,
-    "poisson_home": 0.2819,
-    "poisson_draw": 0.3933,
-    "poisson_away": 0.3248,
+    "xgb_draw": 0.3332,
+    "xgb_away": 0.4142,
+    "elo_home": 0.2201,
+    "elo_draw": 0.1756,
+    "elo_away": 0.6043,
+    "poisson_home": 0.3405,
+    "poisson_draw": 0.395,
+    "poisson_away": 0.2645,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2691
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1826
+        "prob": 0.2728
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.165
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.112
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.0619
-      }
-    ],
-    "lambda_home": 0.613,
-    "lambda_away": 0.678,
-    "stage": "group",
-    "group": "Group G",
-    "venue": "Seattle",
-    "round": "Matchday 16",
-    "group_context": {
-      "group_name": "Group G",
-      "matchday": 3,
-      "home_points": 4,
-      "away_points": 2,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Egypt 4pts 2.Iran 2pts 3.Belgium 2pts 4.New Zealand 1pts",
-      "simultaneous_group_matches": "New Zealand vs Belgium",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Egipto lidera y necesita asegurar, Irán empata con opción a tercera plaza; pocos cambios de incentivo.",
-      "IntMatch-Analytics-Pro": "Evidence is genuinely balanced: Egypt's sturdy defense (0.8/g) and spread scoring neutralizes Iran's prolific attack (2.4/g), but Iran's 3 clean sheets in 5 and elite-level draws (0-0 vs Belgium) match Egypt's resilience.",
-      "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.035(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Egypt's recent results include wins over Russia and New Zealand, showing resilience against elite sides, while Iran's form has dipped with two draws after a hot start, suggesting less sharpness.",
-      "FIFA-Regs-Strategist": "home_pressure=comfortable(4pts) d=-0.005; away_pressure=needs_result(2pts) d=+0.015"
-    }
-  },
-  {
-    "home_team": "New Zealand",
-    "away_team": "Belgium",
-    "p_home": 0.0976,
-    "p_draw": 0.1713,
-    "p_away": 0.7311,
-    "is_neutral": true,
-    "kickoff": "2026-06-27T03:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.137,
-    "xgb_draw": 0.2174,
-    "xgb_away": 0.6456,
-    "elo_home": 0.088,
-    "elo_draw": 0.0998,
-    "elo_away": 0.8122,
-    "poisson_home": 0.0775,
-    "poisson_draw": 0.188,
-    "poisson_away": 0.7344,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1701
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.1511
-      },
-      {
-        "home": 0,
-        "away": 3,
-        "prob": 0.1477
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.0957
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.0759
-      }
-    ],
-    "lambda_home": 0.446,
-    "lambda_away": 1.777,
-    "stage": "group",
-    "group": "Group G",
-    "venue": "Vancouver",
-    "round": "Matchday 16",
-    "group_context": {
-      "group_name": "Group G",
-      "matchday": 3,
-      "home_points": 1,
-      "away_points": 2,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Egypt 4pts 2.Iran 2pts 3.Belgium 2pts 4.New Zealand 1pts",
-      "simultaneous_group_matches": "Egypt vs Iran",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Nueva Zelanda necesita ganar y mejorar diferencia de goles para optar a mejor tercero.",
-      "IntMatch-Analytics-Pro": "Belgium's elite-level defense (0.4/g conceded, 3 clean sheets in last 5) starkly contrasts NZ's leaky 2.2/g; NZ's lone win vs Chile[strong] suggests offensive capability but Belgium's form vs elite opponents (undefeated in 5) and NZ's must-win desperation offset prior, favoring slight draw bump.",
-      "Travel-Logistics-Quant": "home_fatigue=0.035(ic=0.000 heat=0.000) away_fatigue=0.000(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "New Zealand's 4-1 win over a strong Chilean side breaks a cold run and injects short-term confidence, while Belgium's unbeaten but goalless tournament form (two 0-0/1-1 draws) suggests slight finishing frustration, reducing the edge for an already heavy favorite.",
-      "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=needs_result(2pts) d=+0.015"
-    }
-  },
-  {
-    "home_team": "Cape Verde",
-    "away_team": "Saudi Arabia",
-    "p_home": 0.2834,
-    "p_draw": 0.3369,
-    "p_away": 0.3796,
-    "is_neutral": true,
-    "kickoff": "2026-06-27T00:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.2796,
-    "xgb_draw": 0.3114,
-    "xgb_away": 0.4091,
-    "elo_home": 0.3046,
-    "elo_draw": 0.2342,
-    "elo_away": 0.4612,
-    "poisson_home": 0.2321,
-    "poisson_draw": 0.4002,
-    "poisson_away": 0.3678,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.2841
+        "prob": 0.1901
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.2049
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1467
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1058
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.0739
-      }
-    ],
-    "lambda_home": 0.516,
-    "lambda_away": 0.721,
-    "stage": "group",
-    "group": "Group H",
-    "venue": "Houston",
-    "round": "Matchday 16",
-    "group_context": {
-      "group_name": "Group H",
-      "matchday": 3,
-      "home_points": 2,
-      "away_points": 1,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Spain 4pts 2.Uruguay 2pts 3.Cape Verde 2pts 4.Saudi Arabia 1pts",
-      "simultaneous_group_matches": "Uruguay vs Spain",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Cabo Verde necesita ganar para aspirar a mejor tercero; Arabia Saudí busca un milagro.",
-      "IntMatch-Analytics-Pro": "Cape Verde's solid defense (2 clean sheets in last 5, incl. vs Spain) exploits Saudi Arabia's poor attack (0 goals vs elite opponents in group stage), while Saudi Arabia leak goals (1.4/g) being vulnerable to counterattacks.",
-      "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.038(ic=0.003 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Cape Verde arrives off a strong win over Serbia and two gritty draws vs elite sides Spain/Uruguay, while Saudi Arabia was thrashed 0-4 by Spain and managed only a draw vs Uruguay, leaving Cape Verde with a clear edge in tournament resilience.",
-      "FIFA-Regs-Strategist": "home_pressure=needs_result(2pts) d=+0.015; away_pressure=needs_result(1pts) d=+0.015"
-    }
-  },
-  {
-    "home_team": "Uruguay",
-    "away_team": "Spain",
-    "p_home": 0.1956,
-    "p_draw": 0.2731,
-    "p_away": 0.5313,
-    "is_neutral": true,
-    "kickoff": "2026-06-27T00:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.1472,
-    "xgb_draw": 0.2646,
-    "xgb_away": 0.5882,
-    "elo_home": 0.1093,
-    "elo_draw": 0.1111,
-    "elo_away": 0.7797,
-    "poisson_home": 0.2281,
-    "poisson_draw": 0.3415,
-    "poisson_away": 0.4304,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.2061
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1929
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1255
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1175
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.0903
-      }
-    ],
-    "lambda_home": 0.609,
-    "lambda_away": 0.936,
-    "stage": "group",
-    "group": "Group H",
-    "venue": "Guadalajara (Zapopan)",
-    "round": "Matchday 16",
-    "group_context": {
-      "group_name": "Group H",
-      "matchday": 3,
-      "home_points": 2,
-      "away_points": 4,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Spain 4pts 2.Uruguay 2pts 3.Cape Verde 2pts 4.Saudi Arabia 1pts",
-      "simultaneous_group_matches": "Cape Verde vs Saudi Arabia",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Uruguay necesita ganar para asegurar el segundo puesto y evitar riesgo de eliminación.",
-      "IntMatch-Analytics-Pro": "Spain's elite defense (0.4/g conceded) and hot form contrasts sharply with Uruguay's winless run and 1.8/g conceded, but Uruguay's 4 draws show resilience; H2H dominance (Uruguay winless in 10) and qualification pressure (Spain needs point to secure top spot, Uruguay must win) slightly raise draw/home chances.",
-      "Travel-Logistics-Quant": "home_fatigue=0.008(ic=0.000 heat=0.008) away_fatigue=0.042(ic=0.034 heat=0.008) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Morale read is flat: Uruguay's 1-5 loss to the US is concerning, but four consecutive draws (vs elite sides) show resilience; Spain's unbeaten run includes a 4-0 win over Saudi Arabia, but their draws vs Egypt and Iraq temper euphoria, and both sides advance regardless.",
-      "FIFA-Regs-Strategist": "home_pressure=needs_result(2pts) d=+0.015; altitude=1566m both_affected"
-    }
-  },
-  {
-    "home_team": "Norway",
-    "away_team": "France",
-    "p_home": 0.19,
-    "p_draw": 0.2786,
-    "p_away": 0.5314,
-    "is_neutral": true,
-    "kickoff": "2026-06-26T19:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.2269,
-    "xgb_draw": 0.2455,
-    "xgb_away": 0.5276,
-    "elo_home": 0.19,
-    "elo_draw": 0.157,
-    "elo_away": 0.653,
-    "poisson_home": 0.1868,
-    "poisson_draw": 0.2819,
-    "poisson_away": 0.5313,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1778
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.1426
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1143
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.1108
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.0917
-      }
-    ],
-    "lambda_home": 0.643,
-    "lambda_away": 1.247,
-    "stage": "group",
-    "group": "Group I",
-    "venue": "Boston (Foxborough)",
-    "round": "Matchday 16",
-    "group_context": {
-      "group_name": "Group I",
-      "matchday": 3,
-      "home_points": 6,
-      "away_points": 6,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.France 6pts 2.Norway 6pts 3.Senegal 0pts 4.Iraq 0pts",
-      "simultaneous_group_matches": "Senegal vs Iraq",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Ambos equipos ya clasificados, incentivos bajos, probable empate.",
-      "IntMatch-Analytics-Pro": "Norway is undefeated in 5 vs elite/strong sides and has scored 2.2/g while conceding 1.0/g, yet France's higher scoring rate (2.6/g) and own results vs same opponents (3-1 vs Senegal, 3-0 vs Iraq) suggest they are the stronger side, but Norway's unbeaten run and momentum warrant a slight home-win adjustment.",
-      "Travel-Logistics-Quant": "Norway faces extreme fatigue from ~8464 km intercity travel despite 4 rest days, slightly dampened by neutral venue and mild altitude.",
-      "Media-Sentiment-Parser": "Both sides are in hot form, but Norway's unbeaten run and two tournament wins over strong/elite opponents provide a slight morale edge, while France's heavy defeat to Ivory Coast introduces a minor fragility, keeping adjustments modest.",
-      "FIFA-Regs-Strategist": "home_pressure=already_through(6pts) d=-0.025; away_pressure=already_through(6pts) d=-0.025; home_MD3_rotation_risk(6pts); away_MD3_rotation_risk(6pts)"
-    }
-  },
-  {
-    "home_team": "Senegal",
-    "away_team": "Iraq",
-    "p_home": 0.5495,
-    "p_draw": 0.2725,
-    "p_away": 0.178,
-    "is_neutral": true,
-    "kickoff": "2026-06-26T19:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.6845,
-    "xgb_draw": 0.1793,
-    "xgb_away": 0.1362,
-    "elo_home": 0.6729,
-    "elo_draw": 0.1496,
-    "elo_away": 0.1776,
-    "poisson_home": 0.4153,
-    "poisson_draw": 0.381,
-    "poisson_away": 0.2036,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.2646
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.2156
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1294
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.1054
-      },
-      {
-        "home": 2,
-        "away": 0,
-        "prob": 0.0878
-      }
-    ],
-    "lambda_home": 0.815,
-    "lambda_away": 0.489,
-    "stage": "group",
-    "group": "Group I",
-    "venue": "Toronto",
-    "round": "Matchday 16",
-    "group_context": {
-      "group_name": "Group I",
-      "matchday": 3,
-      "home_points": 0,
-      "away_points": 0,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.France 6pts 2.Norway 6pts 3.Senegal 0pts 4.Iraq 0pts",
-      "simultaneous_group_matches": "Norway vs France",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Senegal necesita ganar y mejorar diferencial para clasificar como tercero.",
-      "IntMatch-Analytics-Pro": "Despite both sides being winless in the tournament, Senegal has scored 1.6/g in form (vs Iraq's 0.6/g) with a squad-depth goal source, while Iraq managed only 1 goal in their two WC matches; Senegal's attacking edge over Iraq's weak offence justifies a moderate homeward adjustment.",
-      "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.035(ic=0.000 heat=0.000) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Both sides are cold, but Senegal's 3-1 win over Gambia and a more recent competitive showing against elite teams (2-3 losses to USA, France, Norway) offers a slight morale edge over Iraq, who have been outscored 7-0 by top sides in the tournament.",
-      "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=must_win(0pts) d=+0.030"
-    }
-  },
-  {
-    "home_team": "Algeria",
-    "away_team": "Austria",
-    "p_home": 0.2785,
-    "p_draw": 0.2864,
-    "p_away": 0.4351,
-    "is_neutral": true,
-    "kickoff": "2026-06-28T02:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.2838,
-    "xgb_draw": 0.3292,
-    "xgb_away": 0.387,
-    "elo_home": 0.3372,
-    "elo_draw": 0.2602,
-    "elo_away": 0.4027,
-    "poisson_home": 0.2166,
-    "poisson_draw": 0.3123,
-    "poisson_away": 0.4711,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.1838
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.171
-      },
-      {
-        "home": 1,
-        "away": 1,
-        "prob": 0.119
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1107
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.0988
-      }
-    ],
-    "lambda_home": 0.647,
-    "lambda_away": 1.075,
-    "stage": "group",
-    "group": "Group J",
-    "venue": "Kansas City",
-    "round": "Matchday 17",
-    "group_context": {
-      "group_name": "Group J",
-      "matchday": 3,
-      "home_points": 3,
-      "away_points": 3,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Argentina 6pts 2.Austria 3pts 3.Algeria 3pts 4.Jordan 0pts",
-      "simultaneous_group_matches": "Jordan vs Argentina",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Ambos necesitan ganar para asegurar el pase, pero Argelia con mejor diferencia de goles puede arriesgar menos.",
-      "IntMatch-Analytics-Pro": "Algeria's rising momentum and clean-sheet trend (3 in last 5, tough Uruguay/Netherlands) contrast with Austria's leakier away form; H2H Austria won 2-0 but was in 2019, insufficient to override current form; 3pts each creates desperate win-seeking but neutral site and MD3 caution slightly dampens confidence.",
-      "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.012(ic=0.000 heat=0.012) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Algeria's morale is boosted by a 4-0 demolition of Bolivia and a resilient win over Jordan, while heavy losses to Argentina and Uruguay temper the surge; Austria's form is solid but coming off a 0-2 loss to Argentina, creating a slight momentum edge for Algeria in neutral Group J action.",
-      "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020; away_pressure=third_place_watch(3pts) d=+0.020"
-    }
-  },
-  {
-    "home_team": "Jordan",
-    "away_team": "Argentina",
-    "p_home": 0.0498,
-    "p_draw": 0.1488,
-    "p_away": 0.8014,
-    "is_neutral": true,
-    "kickoff": "2026-06-28T02:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.1099,
-    "xgb_draw": 0.1745,
-    "xgb_away": 0.7156,
-    "elo_home": 0.0228,
-    "elo_draw": 0.08,
-    "elo_away": 0.8972,
-    "poisson_home": 0.0495,
-    "poisson_draw": 0.188,
-    "poisson_away": 0.7625,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.2079
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.1762
-      },
-      {
-        "home": 0,
-        "away": 3,
-        "prob": 0.1643
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.1226
-      },
-      {
-        "home": 0,
-        "away": 4,
-        "prob": 0.0697
-      }
-    ],
-    "lambda_home": 0.279,
-    "lambda_away": 1.695,
-    "stage": "group",
-    "group": "Group J",
-    "venue": "Dallas (Arlington)",
-    "round": "Matchday 17",
-    "group_context": {
-      "group_name": "Group J",
-      "matchday": 3,
-      "home_points": 0,
-      "away_points": 6,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Argentina 6pts 2.Austria 3pts 3.Algeria 3pts 4.Jordan 0pts",
-      "simultaneous_group_matches": "Algeria vs Austria",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Jordan necesita ganar con margen para aspirar al tercer puesto, Argentina rota al estar ya clasificada.",
-      "IntMatch-Analytics-Pro": "Jordan faces unbeaten Argentina, who have scored 3.0g/g and kept 5 clean sheets in last 5, while Jordan conceded 2.6g/g in same run, making their defense likely to be overrun.",
-      "Travel-Logistics-Quant": "home_fatigue=0.018(ic=0.000 heat=0.018) away_fatigue=0.018(ic=0.000 heat=0.018) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Jordan's cold form (1-4 loss to Switzerland, 0 W in 5) and heavy defeats in the tournament contrast sharply with Argentina's perfect 5-0 run including 3-0 vs Algeria, creating a clear confidence gap in favor of the favorites.",
-      "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030; away_pressure=already_through(6pts) d=-0.025; away_MD3_rotation_risk(6pts)"
-    }
-  },
-  {
-    "home_team": "Colombia",
-    "away_team": "Portugal",
-    "p_home": 0.2692,
-    "p_draw": 0.3357,
-    "p_away": 0.3951,
-    "is_neutral": true,
-    "kickoff": "2026-06-27T23:30:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.4058,
-    "xgb_draw": 0.2877,
-    "xgb_away": 0.3065,
-    "elo_home": 0.4186,
-    "elo_draw": 0.253,
-    "elo_away": 0.3284,
-    "poisson_home": 0.2046,
-    "poisson_draw": 0.3567,
-    "poisson_away": 0.4387,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.2324
-      },
-      {
-        "home": 0,
-        "away": 1,
-        "prob": 0.209
-      },
-      {
-        "home": 1,
-        "away": 0,
-        "prob": 0.1229
+        "prob": 0.1586
       },
       {
         "home": 1,
@@ -700,287 +44,1555 @@
         "prob": 0.1105
       },
       {
-        "home": 0,
-        "away": 2,
-        "prob": 0.094
+        "home": 2,
+        "away": 0,
+        "prob": 0.0662
       }
     ],
-    "lambda_home": 0.529,
-    "lambda_away": 0.899,
-    "stage": "group",
-    "group": "Group K",
-    "venue": "Miami (Miami Gardens)",
-    "round": "Matchday 17",
-    "group_context": {
-      "group_name": "Group K",
-      "matchday": 3,
-      "home_points": 6,
-      "away_points": 4,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Colombia 6pts 2.Portugal 4pts 3.DR Congo 1pts 4.Uzbekistan 0pts",
-      "simultaneous_group_matches": "DR Congo vs Uzbekistan",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Colombia ya clasificado rota; Portugal necesita ganar para asegurar segundo puesto.",
-      "IntMatch-Analytics-Pro": "Portugal's 2.4/g scored and 0.6/g conceded elite form trumps Colombia's 1.0/g conceded and prior upset loss to France, while Group K standings favor cautious play from Colombia with 6pts already.",
-      "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.039(ic=0.014 heat=0.025) rest_factor=1.0",
-      "Media-Sentiment-Parser": "Both Colombia and Portugal enter with strong hot momentum; Colombia's loss to elite France is offset by a 4-match winning streak against strong sides, while Portugal's unbeaten run includes an elite win over USA and a 5-0 blowout – overall balance suggests no significant morale edge.",
-      "FIFA-Regs-Strategist": "home_pressure=already_through(6pts) d=-0.025; home_MD3_rotation_risk(6pts)"
-    }
+    "lambda_home": 0.697,
+    "lambda_away": 0.581,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Los Angeles (Inglewood)",
+    "round": "Round of 32"
   },
   {
-    "home_team": "DR Congo",
-    "away_team": "Uzbekistan",
-    "p_home": 0.3922,
-    "p_draw": 0.2789,
-    "p_away": 0.3289,
+    "home_team": "Germany",
+    "away_team": "Paraguay",
+    "p_home": 0.4835,
+    "p_draw": 0.2734,
+    "p_away": 0.2431,
     "is_neutral": true,
-    "kickoff": "2026-06-27T23:30:00",
-    "model": "ensemble_agent_adjusted",
+    "kickoff": "2026-06-29T20:30:00",
+    "model": "ensemble_live",
     "ensemble_weights": {
       "elo": 0.22,
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4386,
-    "xgb_draw": 0.2321,
-    "xgb_away": 0.3293,
-    "elo_home": 0.3267,
-    "elo_draw": 0.2516,
-    "elo_away": 0.4217,
-    "poisson_home": 0.3535,
-    "poisson_draw": 0.3323,
-    "poisson_away": 0.3143,
+    "xgb_home": 0.4415,
+    "xgb_draw": 0.2608,
+    "xgb_away": 0.2977,
+    "elo_home": 0.373,
+    "elo_draw": 0.2739,
+    "elo_away": 0.3531,
+    "poisson_home": 0.5399,
+    "poisson_draw": 0.2776,
+    "poisson_away": 0.1825,
     "top_scorelines": [
       {
-        "home": 0,
-        "away": 0,
-        "prob": 0.1818
-      },
-      {
         "home": 1,
         "away": 0,
-        "prob": 0.1577
+        "prob": 0.1767
       },
       {
         "home": 0,
-        "away": 1,
-        "prob": 0.146
+        "away": 0,
+        "prob": 0.1389
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1266
+        "prob": 0.1134
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0684
-      }
-    ],
-    "lambda_home": 0.867,
-    "lambda_away": 0.803,
-    "stage": "group",
-    "group": "Group K",
-    "venue": "Atlanta",
-    "round": "Matchday 17",
-    "group_context": {
-      "group_name": "Group K",
-      "matchday": 3,
-      "home_points": 1,
-      "away_points": 0,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.Colombia 6pts 2.Portugal 4pts 3.DR Congo 1pts 4.Uzbekistan 0pts",
-      "simultaneous_group_matches": "Colombia vs Portugal",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "DR Congo necesita ganar para superar el corte de mejores terceros.",
-      "IntMatch-Analytics-Pro": "DR Congo's solid defense (0.8 conceded/g) faces Uzbekistan's blunt attack (0.4 scored/g, 3 blanks in last 5), while Uzbekistan's leaky defense (2.4 conceded/g) boosts DR Congo's win probability, and DR Congo's tournament desperation (must win to advance) further tilts this.",
-      "Travel-Logistics-Quant": "home_fatigue=0.000(ic=0.000 heat=0.000) away_fatigue=0.018(ic=0.003 heat=0.015) rest_factor=1.0",
-      "Media-Sentiment-Parser": "DR Congo's recent 1-0 win over Jamaica suggests they have found some scoring touch, while Uzbekistan's heavy 0-5 loss to Portugal and four consecutive defeats indicate deeper fragility, giving DR Congo a slight morale edge in this dead rubber.",
-      "FIFA-Regs-Strategist": "home_pressure=needs_result(1pts) d=+0.015; away_pressure=must_win(0pts) d=+0.030"
-    }
-  },
-  {
-    "home_team": "Panama",
-    "away_team": "England",
-    "p_home": 0.0677,
-    "p_draw": 0.1312,
-    "p_away": 0.8011,
-    "is_neutral": true,
-    "kickoff": "2026-06-27T21:00:00",
-    "model": "ensemble_agent_adjusted",
-    "ensemble_weights": {
-      "elo": 0.22,
-      "poisson": 0.58,
-      "xgb": 0.2
-    },
-    "xgb_home": 0.1214,
-    "xgb_draw": 0.2232,
-    "xgb_away": 0.6554,
-    "elo_home": 0.0634,
-    "elo_draw": 0.0871,
-    "elo_away": 0.8495,
-    "poisson_home": 0.0352,
-    "poisson_draw": 0.1342,
-    "poisson_away": 0.8306,
-    "top_scorelines": [
-      {
-        "home": 0,
-        "away": 3,
-        "prob": 0.1943
-      },
-      {
-        "home": 0,
-        "away": 2,
-        "prob": 0.1702
+        "prob": 0.1124
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.164
-      },
-      {
-        "home": 0,
-        "away": 4,
-        "prob": 0.1008
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.079
+        "prob": 0.0891
       }
     ],
-    "lambda_home": 0.29,
-    "lambda_away": 2.075,
-    "stage": "group",
-    "group": "Group L",
-    "venue": "New York/New Jersey (East Rutherford)",
-    "round": "Matchday 17",
-    "group_context": {
-      "group_name": "Group L",
-      "matchday": 3,
-      "home_points": 0,
-      "away_points": 4,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.England 4pts 2.Ghana 4pts 3.Croatia 3pts 4.Panama 0pts",
-      "simultaneous_group_matches": "Croatia vs Ghana",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
-    },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
-    ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Panama necesita ganar con margen para optar al mejor tercer puesto; Inglaterra puede rotar.",
-      "IntMatch-Analytics-Pro": "England's 3 clean sheets and 1.6 G/g in last 5, plus H2H 6-1 win, far outmatch Panama's leaky defense (2.2 conceded/g, 2 blanks) in a must-win scenario for Panama that invites counter-attack.",
-      "Travel-Logistics-Quant": "no significant travel/climate factors",
-      "Media-Sentiment-Parser": "England's hot streak includes a 4-2 win over elite Croatia and three clean sheets in four, while Panama have lost three of five and conceded six to Brazil; however, the prior already heavily favors England, so the morale gap is already priced in, yielding near-zero deltas.",
-      "FIFA-Regs-Strategist": "home_pressure=must_win(0pts) d=+0.030"
-    }
+    "lambda_home": 1.272,
+    "lambda_away": 0.642,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Boston (Foxborough)",
+    "round": "Round of 32"
   },
   {
-    "home_team": "Croatia",
-    "away_team": "Ghana",
-    "p_home": 0.5794,
-    "p_draw": 0.2687,
-    "p_away": 0.1519,
+    "home_team": "Netherlands",
+    "away_team": "Morocco",
+    "p_home": 0.4001,
+    "p_draw": 0.3015,
+    "p_away": 0.2984,
     "is_neutral": true,
-    "kickoff": "2026-06-27T21:00:00",
-    "model": "ensemble_agent_adjusted",
+    "kickoff": "2026-06-30T01:00:00",
+    "model": "ensemble_live",
     "ensemble_weights": {
       "elo": 0.22,
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6105,
-    "xgb_draw": 0.2448,
-    "xgb_away": 0.1447,
-    "elo_home": 0.727,
-    "elo_draw": 0.1297,
-    "elo_away": 0.1432,
-    "poisson_home": 0.4953,
-    "poisson_draw": 0.334,
-    "poisson_away": 0.1706,
+    "xgb_home": 0.3662,
+    "xgb_draw": 0.2141,
+    "xgb_away": 0.4196,
+    "elo_home": 0.3036,
+    "elo_draw": 0.2334,
+    "elo_away": 0.463,
+    "poisson_home": 0.4483,
+    "poisson_draw": 0.3574,
+    "poisson_away": 0.1942,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2364
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.2142
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1193
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1081
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.097
+      }
+    ],
+    "lambda_home": 0.906,
+    "lambda_away": 0.504,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Monterrey (Guadalupe)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Brazil",
+    "away_team": "Japan",
+    "p_home": 0.6518,
+    "p_draw": 0.2136,
+    "p_away": 0.1346,
+    "is_neutral": true,
+    "kickoff": "2026-06-29T17:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.5984,
+    "xgb_draw": 0.2343,
+    "xgb_away": 0.1673,
+    "elo_home": 0.5904,
+    "elo_draw": 0.181,
+    "elo_away": 0.2286,
+    "poisson_home": 0.6935,
+    "poisson_draw": 0.2188,
+    "poisson_away": 0.0877,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2174
+        "prob": 0.1934
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1525
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.1322
       },
       {
         "home": 0,
+        "away": 0,
+        "prob": 0.1227
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.0815
+      }
+    ],
+    "lambda_home": 1.577,
+    "lambda_away": 0.421,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Houston",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "France",
+    "away_team": "Sweden",
+    "p_home": 0.5905,
+    "p_draw": 0.2278,
+    "p_away": 0.1816,
+    "is_neutral": true,
+    "kickoff": "2026-06-30T21:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.7308,
+    "xgb_draw": 0.1623,
+    "xgb_away": 0.1069,
+    "elo_home": 0.8873,
+    "elo_draw": 0.08,
+    "elo_away": 0.0327,
+    "poisson_home": 0.4296,
+    "poisson_draw": 0.3065,
+    "poisson_away": 0.2639,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1616
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1526
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1255
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1186
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0855
+      }
+    ],
+    "lambda_home": 1.059,
+    "lambda_away": 0.777,
+    "stage": "knockout",
+    "group": "",
+    "venue": "New York/New Jersey (East Rutherford)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Ivory Coast",
+    "away_team": "Norway",
+    "p_home": 0.2506,
+    "p_draw": 0.2822,
+    "p_away": 0.4672,
+    "is_neutral": true,
+    "kickoff": "2026-06-30T17:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.2155,
+    "xgb_draw": 0.2938,
+    "xgb_away": 0.4907,
+    "elo_home": 0.1674,
+    "elo_draw": 0.1436,
+    "elo_away": 0.689,
+    "poisson_home": 0.2943,
+    "poisson_draw": 0.3308,
+    "poisson_away": 0.375,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1811
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1635
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1395
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.126
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.0739
+      }
+    ],
+    "lambda_home": 0.77,
+    "lambda_away": 0.903,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Dallas (Arlington)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Mexico",
+    "away_team": "Ecuador",
+    "p_home": 0.6117,
+    "p_draw": 0.2433,
+    "p_away": 0.1449,
+    "is_neutral": false,
+    "kickoff": "2026-07-01T01:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.6525,
+    "xgb_draw": 0.2263,
+    "xgb_away": 0.1212,
+    "elo_home": 0.6608,
+    "elo_draw": 0.1541,
+    "elo_away": 0.1852,
+    "poisson_home": 0.5791,
+    "poisson_draw": 0.2831,
+    "poisson_away": 0.1378,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.2078
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1665
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1297
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1005
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.089
+      }
+    ],
+    "lambda_home": 1.248,
+    "lambda_away": 0.484,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Mexico City",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "England",
+    "away_team": "DR Congo",
+    "p_home": 0.7731,
+    "p_draw": 0.1568,
+    "p_away": 0.07,
+    "is_neutral": true,
+    "kickoff": "2026-07-01T16:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.7259,
+    "xgb_draw": 0.1632,
+    "xgb_away": 0.1109,
+    "elo_home": 0.8721,
+    "elo_draw": 0.08,
+    "elo_away": 0.0479,
+    "poisson_home": 0.7519,
+    "poisson_draw": 0.1838,
+    "poisson_away": 0.0643,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.182
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1612
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.157
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1028
+      },
+      {
+        "home": 4,
+        "away": 0,
+        "prob": 0.0695
+      }
+    ],
+    "lambda_home": 1.771,
+    "lambda_away": 0.377,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Atlanta",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "United States",
+    "away_team": "Bosnia and Herzegovina",
+    "p_home": 0.5819,
+    "p_draw": 0.2509,
+    "p_away": 0.1672,
+    "is_neutral": false,
+    "kickoff": "2026-07-02T00:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.699,
+    "xgb_draw": 0.1988,
+    "xgb_away": 0.1022,
+    "elo_home": 0.8038,
+    "elo_draw": 0.1027,
+    "elo_away": 0.0935,
+    "poisson_home": 0.4574,
+    "poisson_draw": 0.325,
+    "poisson_away": 0.2176,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1902
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1872
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1179
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1161
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0966
+      }
+    ],
+    "lambda_home": 1.016,
+    "lambda_away": 0.62,
+    "stage": "knockout",
+    "group": "",
+    "venue": "San Francisco Bay Area (Santa Clara)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Belgium",
+    "away_team": "Senegal",
+    "p_home": 0.5511,
+    "p_draw": 0.2571,
+    "p_away": 0.1918,
+    "is_neutral": true,
+    "kickoff": "2026-07-01T20:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.6947,
+    "xgb_draw": 0.1627,
+    "xgb_away": 0.1427,
+    "elo_home": 0.6596,
+    "elo_draw": 0.1545,
+    "elo_away": 0.1859,
+    "poisson_home": 0.4604,
+    "poisson_draw": 0.3286,
+    "poisson_away": 0.2109,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1949
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1938
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1162
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1155
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.098
+      }
+    ],
+    "lambda_home": 1.006,
+    "lambda_away": 0.596,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Seattle",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Portugal",
+    "away_team": "Croatia",
+    "p_home": 0.4468,
+    "p_draw": 0.3044,
+    "p_away": 0.2488,
+    "is_neutral": true,
+    "kickoff": "2026-07-02T23:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.5631,
+    "xgb_draw": 0.2714,
+    "xgb_away": 0.1655,
+    "elo_home": 0.5861,
+    "elo_draw": 0.1827,
+    "elo_away": 0.2312,
+    "poisson_home": 0.3539,
+    "poisson_draw": 0.3619,
+    "poisson_away": 0.2842,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.225
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1771
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1524
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.12
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0697
+      }
+    ],
+    "lambda_home": 0.787,
+    "lambda_away": 0.677,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Toronto",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Spain",
+    "away_team": "Austria",
+    "p_home": 0.6641,
+    "p_draw": 0.212,
+    "p_away": 0.1239,
+    "is_neutral": true,
+    "kickoff": "2026-07-02T19:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.7163,
+    "xgb_draw": 0.1753,
+    "xgb_away": 0.1084,
+    "elo_home": 0.867,
+    "elo_draw": 0.0812,
+    "elo_away": 0.0518,
+    "poisson_home": 0.5692,
+    "poisson_draw": 0.2743,
+    "poisson_away": 0.1565,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.189
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1461
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1223
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1069
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.087
+      }
+    ],
+    "lambda_home": 1.294,
+    "lambda_away": 0.566,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Los Angeles (Inglewood)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Switzerland",
+    "away_team": "Algeria",
+    "p_home": 0.5705,
+    "p_draw": 0.2477,
+    "p_away": 0.1819,
+    "is_neutral": true,
+    "kickoff": "2026-07-03T03:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.7027,
+    "xgb_draw": 0.1775,
+    "xgb_away": 0.1198,
+    "elo_home": 0.7421,
+    "elo_draw": 0.1243,
+    "elo_away": 0.1336,
+    "poisson_home": 0.4597,
+    "poisson_draw": 0.3186,
+    "poisson_away": 0.2216,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1851
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1778
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1193
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1146
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0963
+      }
+    ],
+    "lambda_home": 1.041,
+    "lambda_away": 0.644,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Vancouver",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Argentina",
+    "away_team": "Cape Verde",
+    "p_home": 0.7824,
+    "p_draw": 0.1635,
+    "p_away": 0.0541,
+    "is_neutral": true,
+    "kickoff": "2026-07-03T22:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.7647,
+    "xgb_draw": 0.1382,
+    "xgb_away": 0.0971,
+    "elo_home": 0.9078,
+    "elo_draw": 0.08,
+    "elo_away": 0.0122,
+    "poisson_home": 0.741,
+    "poisson_draw": 0.2039,
+    "poisson_away": 0.0551,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.2168
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1742
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.154
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1349
+      },
+      {
+        "home": 4,
+        "away": 0,
+        "prob": 0.0619
+      }
+    ],
+    "lambda_home": 1.607,
+    "lambda_away": 0.284,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Miami (Miami Gardens)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Colombia",
+    "away_team": "Ghana",
+    "p_home": 0.5459,
+    "p_draw": 0.2774,
+    "p_away": 0.1767,
+    "is_neutral": true,
+    "kickoff": "2026-07-04T01:30:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.6967,
+    "xgb_draw": 0.1894,
+    "xgb_away": 0.114,
+    "elo_home": 0.8419,
+    "elo_draw": 0.0897,
+    "elo_away": 0.0684,
+    "poisson_home": 0.3816,
+    "poisson_draw": 0.3789,
+    "poisson_away": 0.2394,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2541
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1988
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.143
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1119
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0778
+      }
+    ],
+    "lambda_home": 0.783,
+    "lambda_away": 0.563,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Kansas City",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Australia",
+    "away_team": "Egypt",
+    "p_home": 0.2859,
+    "p_draw": 0.3096,
+    "p_away": 0.4046,
+    "is_neutral": true,
+    "kickoff": "2026-07-03T18:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.2861,
+    "xgb_draw": 0.2538,
+    "xgb_away": 0.4601,
+    "elo_home": 0.2572,
+    "elo_draw": 0.2001,
+    "elo_away": 0.5427,
+    "poisson_home": 0.2967,
+    "poisson_draw": 0.3703,
+    "poisson_away": 0.333,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.236
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1741
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1607
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1185
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.0642
+      }
+    ],
+    "lambda_home": 0.681,
+    "lambda_away": 0.738,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Dallas (Arlington)",
+    "round": "Round of 32"
+  },
+  {
+    "home_team": "Paraguay",
+    "away_team": "France",
+    "p_home": 0.1529,
+    "p_draw": 0.2417,
+    "p_away": 0.6055,
+    "is_neutral": true,
+    "kickoff": "2026-07-04T21:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.1289,
+    "xgb_draw": 0.2169,
+    "xgb_away": 0.6543,
+    "elo_home": 0.0626,
+    "elo_draw": 0.0867,
+    "elo_away": 0.8507,
+    "poisson_home": 0.1954,
+    "poisson_draw": 0.309,
+    "poisson_away": 0.4956,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1917
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1734
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.115
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.106
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.104
+      }
+    ],
+    "lambda_home": 0.6,
+    "lambda_away": 1.106,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Philadelphia",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "Canada",
+    "away_team": "Morocco",
+    "p_home": 0.1568,
+    "p_draw": 0.2983,
+    "p_away": 0.5449,
+    "is_neutral": true,
+    "kickoff": "2026-07-04T17:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.1668,
+    "xgb_draw": 0.2604,
+    "xgb_away": 0.5728,
+    "elo_home": 0.1405,
+    "elo_draw": 0.1282,
+    "elo_away": 0.7313,
+    "poisson_home": 0.1595,
+    "poisson_draw": 0.3759,
+    "poisson_away": 0.4645,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2723
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.2371
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1091
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.1032
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.095
+      }
+    ],
+    "lambda_home": 0.401,
+    "lambda_away": 0.871,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Houston",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "Brazil",
+    "away_team": "Norway",
+    "p_home": 0.5227,
+    "p_draw": 0.2668,
+    "p_away": 0.2105,
+    "is_neutral": true,
+    "kickoff": "2026-07-05T20:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.4479,
+    "xgb_draw": 0.2982,
+    "xgb_away": 0.2539,
+    "elo_home": 0.3853,
+    "elo_draw": 0.2682,
+    "elo_away": 0.3466,
+    "poisson_home": 0.6006,
+    "poisson_draw": 0.2554,
+    "poisson_away": 0.144,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1813
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1295
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1268
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1033
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.0976
+      }
+    ],
+    "lambda_home": 1.4,
+    "lambda_away": 0.57,
+    "stage": "knockout",
+    "group": "",
+    "venue": "New York/New Jersey (East Rutherford)",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "Mexico",
+    "away_team": "England",
+    "p_home": 0.2459,
+    "p_draw": 0.3159,
+    "p_away": 0.4383,
+    "is_neutral": false,
+    "kickoff": "2026-07-06T00:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.2693,
+    "xgb_draw": 0.3531,
+    "xgb_away": 0.3776,
+    "elo_home": 0.2579,
+    "elo_draw": 0.2005,
+    "elo_away": 0.5415,
+    "poisson_home": 0.2332,
+    "poisson_draw": 0.3468,
+    "poisson_away": 0.42,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2121
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1928
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1292
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1174
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.0876
+      }
+    ],
+    "lambda_home": 0.609,
+    "lambda_away": 0.909,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Mexico City",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "Portugal",
+    "away_team": "Spain",
+    "p_home": 0.1915,
+    "p_draw": 0.2935,
+    "p_away": 0.515,
+    "is_neutral": true,
+    "kickoff": "2026-07-06T19:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.1565,
+    "xgb_draw": 0.3088,
+    "xgb_away": 0.5346,
+    "elo_home": 0.1377,
+    "elo_draw": 0.1266,
+    "elo_away": 0.7357,
+    "poisson_home": 0.224,
+    "poisson_draw": 0.3515,
+    "poisson_away": 0.4245,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2204
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1984
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1279
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1151
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.0893
+      }
+    ],
+    "lambda_home": 0.58,
+    "lambda_away": 0.9,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Dallas (Arlington)",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "United States",
+    "away_team": "Belgium",
+    "p_home": 0.2276,
+    "p_draw": 0.2714,
+    "p_away": 0.5011,
+    "is_neutral": false,
+    "kickoff": "2026-07-07T00:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.1947,
+    "xgb_draw": 0.268,
+    "xgb_away": 0.5373,
+    "elo_home": 0.1774,
+    "elo_draw": 0.1494,
+    "elo_away": 0.6732,
+    "poisson_home": 0.2579,
+    "poisson_draw": 0.3188,
+    "poisson_away": 0.4233,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1706
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1698
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1243
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1237
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.0857
+      }
+    ],
+    "lambda_home": 0.728,
+    "lambda_away": 1.005,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Seattle",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "Argentina",
+    "away_team": "Egypt",
+    "p_home": 0.6675,
+    "p_draw": 0.2156,
+    "p_away": 0.1169,
+    "is_neutral": true,
+    "kickoff": "2026-07-07T16:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.7484,
+    "xgb_draw": 0.1416,
+    "xgb_away": 0.1101,
+    "elo_home": 0.81,
+    "elo_draw": 0.1006,
+    "elo_away": 0.0895,
+    "poisson_home": 0.5855,
+    "poisson_draw": 0.2847,
+    "poisson_away": 0.1297,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.2144
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1729
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.133
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.0973
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "prob": 0.0907
+      }
+    ],
+    "lambda_home": 1.24,
+    "lambda_away": 0.454,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Atlanta",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "Switzerland",
+    "away_team": "Colombia",
+    "p_home": 0.42,
+    "p_draw": 0.2998,
+    "p_away": 0.2802,
+    "is_neutral": true,
+    "kickoff": "2026-07-07T20:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.5529,
+    "xgb_draw": 0.2377,
+    "xgb_away": 0.2093,
+    "elo_home": 0.4796,
+    "elo_draw": 0.2263,
+    "elo_away": 0.2941,
+    "poisson_home": 0.3516,
+    "poisson_draw": 0.349,
+    "poisson_away": 0.2994,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2059
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1682
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.151
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1233
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0687
+      }
+    ],
+    "lambda_home": 0.817,
+    "lambda_away": 0.733,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Vancouver",
+    "round": "Round of 16"
+  },
+  {
+    "home_team": "France",
+    "away_team": "Morocco",
+    "p_home": 0.5386,
+    "p_draw": 0.2844,
+    "p_away": 0.1769,
+    "is_neutral": true,
+    "kickoff": "2026-07-09T20:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.6333,
+    "xgb_draw": 0.225,
+    "xgb_away": 0.1416,
+    "elo_home": 0.6967,
+    "elo_draw": 0.1408,
+    "elo_away": 0.1626,
+    "poisson_home": 0.446,
+    "poisson_draw": 0.3594,
+    "poisson_away": 0.1945,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.2389
+      },
+      {
+        "home": 1,
         "away": 0,
         "prob": 0.2146
       },
       {
-        "home": 2,
-        "away": 0,
-        "prob": 0.1101
+        "home": 0,
+        "away": 1,
+        "prob": 0.1199
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1057
+        "prob": 0.1078
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.0964
+      }
+    ],
+    "lambda_home": 0.899,
+    "lambda_away": 0.502,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Boston (Foxborough)",
+    "round": "Quarter-final"
+  },
+  {
+    "home_team": "Spain",
+    "away_team": "Belgium",
+    "p_home": 0.5757,
+    "p_draw": 0.2482,
+    "p_away": 0.1761,
+    "is_neutral": true,
+    "kickoff": "2026-07-10T19:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.6206,
+    "xgb_draw": 0.2277,
+    "xgb_away": 0.1517,
+    "elo_home": 0.6948,
+    "elo_draw": 0.1414,
+    "elo_away": 0.1637,
+    "poisson_home": 0.515,
+    "poisson_draw": 0.2957,
+    "poisson_away": 0.1893,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1864
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1588
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1145
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.1093
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1043
+        "prob": 0.0976
       }
     ],
-    "lambda_home": 1.013,
-    "lambda_away": 0.486,
-    "stage": "group",
-    "group": "Group L",
-    "venue": "Philadelphia",
-    "round": "Matchday 17",
-    "group_context": {
-      "group_name": "Group L",
-      "matchday": 3,
-      "home_points": 3,
-      "away_points": 4,
-      "home_games_played": 2,
-      "away_games_played": 2,
-      "group_standings": "1.England 4pts 2.Ghana 4pts 3.Croatia 3pts 4.Panama 0pts",
-      "simultaneous_group_matches": "Panama vs England",
-      "third_place_context": "best_third_cutline=C:Scotland 3pts GD-3 GF1; 1.F:Sweden 4pts GD+0 GF7 2.E:Ecuador 4pts GD+0 GF2 3.B:Bosnia and Herzegovina 4pts GD-1 GF5 4.D:Paraguay 4pts GD-2 GF2 5.L:Croatia 3pts GD-1 GF3 6.A:South Korea 3pts GD-1 GF2 7.J:Algeria 3pts GD-2 GF2 8.C:Scotland 3pts GD-3 GF1 9.H:Cape Verde 2pts GD+0 GF2 10.G:Belgium 2pts GD+0 GF1 11.K:DR Congo 1pts GD-1 GF1 12.I:Senegal 0pts GD-3 GF3"
+    "lambda_home": 1.173,
+    "lambda_away": 0.615,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Los Angeles (Inglewood)",
+    "round": "Quarter-final"
+  },
+  {
+    "home_team": "Norway",
+    "away_team": "England",
+    "p_home": 0.1732,
+    "p_draw": 0.2459,
+    "p_away": 0.581,
+    "is_neutral": true,
+    "kickoff": "2026-07-11T21:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
     },
-    "agents": [
-      "GroupScenario-Reasoner",
-      "IntMatch-Analytics-Pro",
-      "Travel-Logistics-Quant",
-      "Media-Sentiment-Parser",
-      "FIFA-Regs-Strategist"
+    "xgb_home": 0.2216,
+    "xgb_draw": 0.2868,
+    "xgb_away": 0.4916,
+    "elo_home": 0.2344,
+    "elo_draw": 0.1848,
+    "elo_away": 0.5807,
+    "poisson_home": 0.1332,
+    "poisson_draw": 0.2549,
+    "poisson_away": 0.6119,
+    "top_scorelines": [
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.1885
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1348
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "prob": 0.1318
+      },
+      {
+        "home": 0,
+        "away": 3,
+        "prob": 0.1013
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1
+      }
     ],
-    "agent_notes": {
-      "GroupScenario-Reasoner": "Croatia (3pts/GD-1) ya clasificaría como mejor tercero, pero ganar asegura; Ghana busca al menos empate.",
-      "IntMatch-Analytics-Pro": "Croatia's rising momentum and higher scoring rate (1.2/g vs 0.6/g) outmatch Ghana's blunt attack, while Ghana's 2 clean sheets in last 5 but 2 blanks suggest they can contain but not threaten; Croatia's wins over Slovenia and Panama show they exploit mid/strong opposition, and qualification pressure favors them to push for victory in a must-win MD3.",
-      "Travel-Logistics-Quant": "Away team's extreme travel from Boston to Philadelphia (9k km) outweighs home team's moderate Toronto trip, slightly boosting Croatia in neutral venue.",
-      "Media-Sentiment-Parser": "Croatia's form is fragile (3 losses to elites, only beating mid/weak sides), while Ghana drew with England and beat Panama — both teams are rising but Croatia's recent heavy defeats suggest vulnerability, so slight shift away from home advantage.",
-      "FIFA-Regs-Strategist": "home_pressure=third_place_watch(3pts) d=+0.020"
-    }
+    "lambda_home": 0.53,
+    "lambda_away": 1.398,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Miami (Miami Gardens)",
+    "round": "Quarter-final"
+  },
+  {
+    "home_team": "Argentina",
+    "away_team": "Switzerland",
+    "p_home": 0.5535,
+    "p_draw": 0.2498,
+    "p_away": 0.1968,
+    "is_neutral": true,
+    "kickoff": "2026-07-12T01:00:00",
+    "model": "ensemble_live",
+    "ensemble_weights": {
+      "elo": 0.22,
+      "poisson": 0.58,
+      "xgb": 0.2
+    },
+    "xgb_home": 0.6283,
+    "xgb_draw": 0.1945,
+    "xgb_away": 0.1772,
+    "elo_home": 0.5745,
+    "elo_draw": 0.1873,
+    "elo_away": 0.2382,
+    "poisson_home": 0.5197,
+    "poisson_draw": 0.2925,
+    "poisson_away": 0.1878,
+    "top_scorelines": [
+      {
+        "home": 1,
+        "away": 0,
+        "prob": 0.1849
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1553
+      },
+      {
+        "home": 1,
+        "away": 1,
+        "prob": 0.1143
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "prob": 0.11
+      },
+      {
+        "home": 0,
+        "away": 1,
+        "prob": 0.0961
+      }
+    ],
+    "lambda_home": 1.19,
+    "lambda_away": 0.618,
+    "stage": "knockout",
+    "group": "",
+    "venue": "Kansas City",
+    "round": "Quarter-final"
   }
 ]

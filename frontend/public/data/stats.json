@@ -1,7 +1,7 @@
 {
-  "total_matches": 1033,
-  "total_goals": 2924,
-  "avg_goals_all": 2.831,
+  "total_matches": 1061,
+  "total_goals": 3027,
+  "avg_goals_all": 2.853,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 204,
-      "matches": 69,
-      "avg": 2.957
+      "total": 307,
+      "matches": 97,
+      "avg": 3.165
     }
   ],
   "best_avg_edition": {
@@ -175,37 +175,37 @@
     {
       "team": "Brazil",
       "flag": "🇧🇷",
-      "matches": 117,
-      "goals_for": 244,
-      "goals_against": 109,
+      "matches": 119,
+      "goals_for": 247,
+      "goals_against": 112,
       "goal_diff": 135,
-      "avg": 2.09
+      "avg": 2.08
     },
     {
       "team": "Germany",
       "flag": "🇩🇪",
-      "matches": 115,
-      "goals_for": 242,
-      "goals_against": 134,
-      "goal_diff": 108,
-      "avg": 2.1
+      "matches": 116,
+      "goals_for": 246,
+      "goals_against": 139,
+      "goal_diff": 107,
+      "avg": 2.12
     },
     {
       "team": "Argentina",
       "flag": "🇦🇷",
-      "matches": 91,
-      "goals_for": 160,
-      "goals_against": 102,
-      "goal_diff": 58,
-      "avg": 1.76
+      "matches": 93,
+      "goals_for": 166,
+      "goals_against": 106,
+      "goal_diff": 60,
+      "avg": 1.78
     },
     {
       "team": "France",
       "flag": "🇫🇷",
-      "matches": 76,
-      "goals_for": 146,
+      "matches": 79,
+      "goals_for": 152,
       "goals_against": 87,
-      "goal_diff": 59,
+      "goal_diff": 65,
       "avg": 1.92
     },
     {
@@ -220,29 +220,29 @@
     {
       "team": "Spain",
       "flag": "🇪🇸",
-      "matches": 70,
-      "goals_for": 113,
+      "matches": 72,
+      "goals_for": 117,
       "goals_against": 75,
-      "goal_diff": 38,
-      "avg": 1.61
+      "goal_diff": 42,
+      "avg": 1.62
     },
     {
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "matches": 77,
-      "goals_for": 110,
-      "goals_against": 70,
-      "goal_diff": 40,
-      "avg": 1.43
+      "matches": 79,
+      "goals_for": 115,
+      "goals_against": 73,
+      "goal_diff": 42,
+      "avg": 1.46
     },
     {
       "team": "Netherlands",
       "flag": "🇳🇱",
-      "matches": 58,
-      "goals_for": 106,
-      "goals_against": 56,
-      "goal_diff": 50,
-      "avg": 1.83
+      "matches": 59,
+      "goals_for": 109,
+      "goals_against": 60,
+      "goal_diff": 49,
+      "avg": 1.85
     },
     {
       "team": "Uruguay",
@@ -254,15 +254,6 @@
       "avg": 1.48
     },
     {
-      "team": "Sweden",
-      "flag": "🇸🇪",
-      "matches": 54,
-      "goals_for": 87,
-      "goals_against": 80,
-      "goal_diff": 7,
-      "avg": 1.61
-    },
-    {
       "team": "Hungary",
       "flag": "🏳️",
       "matches": 32,
@@ -270,6 +261,24 @@
       "goals_against": 57,
       "goal_diff": 30,
       "avg": 2.72
+    },
+    {
+      "team": "Sweden",
+      "flag": "🇸🇪",
+      "matches": 55,
+      "goals_for": 87,
+      "goals_against": 83,
+      "goal_diff": 4,
+      "avg": 1.58
+    },
+    {
+      "team": "Belgium",
+      "flag": "🇧🇪",
+      "matches": 56,
+      "goals_for": 82,
+      "goals_against": 79,
+      "goal_diff": 3,
+      "avg": 1.46
     },
     {
       "team": "Russia",
@@ -281,13 +290,13 @@
       "avg": 1.71
     },
     {
-      "team": "Belgium",
-      "flag": "🇧🇪",
-      "matches": 54,
-      "goals_for": 75,
-      "goals_against": 76,
-      "goal_diff": -1,
-      "avg": 1.39
+      "team": "Mexico",
+      "flag": "🇲🇽",
+      "matches": 65,
+      "goals_for": 72,
+      "goals_against": 104,
+      "goal_diff": -32,
+      "avg": 1.11
     },
     {
       "team": "Serbia",
@@ -297,15 +306,6 @@
       "goals_against": 71,
       "goal_diff": 0,
       "avg": 1.45
-    },
-    {
-      "team": "Portugal",
-      "flag": "🇵🇹",
-      "matches": 38,
-      "goals_for": 67,
-      "goals_against": 42,
-      "goal_diff": 25,
-      "avg": 1.76
     }
   ],
   "top_upsets": [
@@ -451,14 +451,14 @@
     }
   ],
   "colombia": {
-    "total_matches": 25,
-    "wins": 11,
+    "total_matches": 27,
+    "wins": 12,
     "draws": 4,
-    "losses": 10,
-    "goals_for": 36,
-    "goals_against": 31,
-    "win_pct": 44.0,
-    "elo_current": 2212.1,
-    "elo_rank": 6
+    "losses": 11,
+    "goals_for": 40,
+    "goals_against": 35,
+    "win_pct": 44.4,
+    "elo_current": 2179.9,
+    "elo_rank": 9
   }
 }
