@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T04:44:31.768861+00:00",
+  "generated_at": "2026-07-10T05:05:20.810797+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -31,9 +31,9 @@
         "away_label": "Canada",
         "resolved": true,
         "pred": {
-          "p_home": 0.2952,
-          "p_draw": 0.3319,
-          "p_away": 0.3729,
+          "p_home": 0.2963,
+          "p_draw": 0.3322,
+          "p_away": 0.3715,
           "top_scorelines": [
             {
               "home": 0,
@@ -72,9 +72,9 @@
         "away_label": "Paraguay",
         "resolved": true,
         "pred": {
-          "p_home": 0.4857,
-          "p_draw": 0.2716,
-          "p_away": 0.2427,
+          "p_home": 0.4869,
+          "p_draw": 0.2702,
+          "p_away": 0.243,
           "top_scorelines": [
             {
               "home": 1,
@@ -113,9 +113,9 @@
         "away_label": "Morocco",
         "resolved": true,
         "pred": {
-          "p_home": 0.4021,
-          "p_draw": 0.2965,
-          "p_away": 0.3013,
+          "p_home": 0.4008,
+          "p_draw": 0.298,
+          "p_away": 0.3012,
           "top_scorelines": [
             {
               "home": 0,
@@ -154,9 +154,9 @@
         "away_label": "Japan",
         "resolved": true,
         "pred": {
-          "p_home": 0.656,
-          "p_draw": 0.21,
-          "p_away": 0.1339,
+          "p_home": 0.6557,
+          "p_draw": 0.2101,
+          "p_away": 0.1342,
           "top_scorelines": [
             {
               "home": 1,
@@ -195,9 +195,9 @@
         "away_label": "Sweden",
         "resolved": true,
         "pred": {
-          "p_home": 0.5934,
-          "p_draw": 0.2241,
-          "p_away": 0.1825,
+          "p_home": 0.5933,
+          "p_draw": 0.2243,
+          "p_away": 0.1823,
           "top_scorelines": [
             {
               "home": 1,
@@ -236,9 +236,9 @@
         "away_label": "Norway",
         "resolved": true,
         "pred": {
-          "p_home": 0.2558,
-          "p_draw": 0.2797,
-          "p_away": 0.4645,
+          "p_home": 0.2553,
+          "p_draw": 0.2802,
+          "p_away": 0.4644,
           "top_scorelines": [
             {
               "home": 0,
@@ -277,9 +277,9 @@
         "away_label": "Ecuador",
         "resolved": true,
         "pred": {
-          "p_home": 0.6162,
-          "p_draw": 0.2407,
-          "p_away": 0.1431,
+          "p_home": 0.6166,
+          "p_draw": 0.2406,
+          "p_away": 0.1428,
           "top_scorelines": [
             {
               "home": 1,
@@ -318,9 +318,9 @@
         "away_label": "DR Congo",
         "resolved": true,
         "pred": {
-          "p_home": 0.7749,
-          "p_draw": 0.1551,
-          "p_away": 0.07,
+          "p_home": 0.7734,
+          "p_draw": 0.156,
+          "p_away": 0.0706,
           "top_scorelines": [
             {
               "home": 1,
@@ -359,8 +359,8 @@
         "away_label": "Bosnia and Herzegovina",
         "resolved": true,
         "pred": {
-          "p_home": 0.592,
-          "p_draw": 0.2454,
+          "p_home": 0.5927,
+          "p_draw": 0.2446,
           "p_away": 0.1627,
           "top_scorelines": [
             {
@@ -400,9 +400,9 @@
         "away_label": "Senegal",
         "resolved": true,
         "pred": {
-          "p_home": 0.5515,
-          "p_draw": 0.2549,
-          "p_away": 0.1935,
+          "p_home": 0.5497,
+          "p_draw": 0.2559,
+          "p_away": 0.1944,
           "top_scorelines": [
             {
               "home": 1,
@@ -441,9 +441,9 @@
         "away_label": "Croatia",
         "resolved": true,
         "pred": {
-          "p_home": 0.4494,
-          "p_draw": 0.3012,
-          "p_away": 0.2494,
+          "p_home": 0.4493,
+          "p_draw": 0.3011,
+          "p_away": 0.2496,
           "top_scorelines": [
             {
               "home": 0,
@@ -482,9 +482,9 @@
         "away_label": "Austria",
         "resolved": true,
         "pred": {
-          "p_home": 0.667,
-          "p_draw": 0.2091,
-          "p_away": 0.1239,
+          "p_home": 0.6671,
+          "p_draw": 0.2088,
+          "p_away": 0.1241,
           "top_scorelines": [
             {
               "home": 1,
@@ -524,7 +524,7 @@
         "resolved": true,
         "pred": {
           "p_home": 0.574,
-          "p_draw": 0.2446,
+          "p_draw": 0.2445,
           "p_away": 0.1815,
           "top_scorelines": [
             {
@@ -564,9 +564,9 @@
         "away_label": "Cape Verde",
         "resolved": true,
         "pred": {
-          "p_home": 0.7795,
-          "p_draw": 0.1657,
-          "p_away": 0.0548,
+          "p_home": 0.7787,
+          "p_draw": 0.1662,
+          "p_away": 0.0551,
           "top_scorelines": [
             {
               "home": 1,
@@ -605,9 +605,9 @@
         "away_label": "Ghana",
         "resolved": true,
         "pred": {
-          "p_home": 0.5461,
-          "p_draw": 0.2769,
-          "p_away": 0.1771,
+          "p_home": 0.5454,
+          "p_draw": 0.2774,
+          "p_away": 0.1773,
           "top_scorelines": [
             {
               "home": 0,
@@ -646,9 +646,9 @@
         "away_label": "Egypt",
         "resolved": true,
         "pred": {
-          "p_home": 0.2876,
-          "p_draw": 0.3111,
-          "p_away": 0.4013,
+          "p_home": 0.2867,
+          "p_draw": 0.3115,
+          "p_away": 0.4017,
           "top_scorelines": [
             {
               "home": 0,
@@ -689,9 +689,9 @@
         "away_label": "France",
         "resolved": true,
         "pred": {
-          "p_home": 0.154,
-          "p_draw": 0.2381,
-          "p_away": 0.6078,
+          "p_home": 0.1542,
+          "p_draw": 0.2379,
+          "p_away": 0.6079,
           "top_scorelines": [
             {
               "home": 0,
@@ -730,9 +730,9 @@
         "away_label": "Morocco",
         "resolved": true,
         "pred": {
-          "p_home": 0.16,
-          "p_draw": 0.2955,
-          "p_away": 0.5445,
+          "p_home": 0.1603,
+          "p_draw": 0.2947,
+          "p_away": 0.5449,
           "top_scorelines": [
             {
               "home": 0,
@@ -771,9 +771,9 @@
         "away_label": "Norway",
         "resolved": true,
         "pred": {
-          "p_home": 0.5297,
-          "p_draw": 0.2617,
-          "p_away": 0.2086,
+          "p_home": 0.5285,
+          "p_draw": 0.2614,
+          "p_away": 0.2102,
           "top_scorelines": [
             {
               "home": 1,
@@ -812,8 +812,8 @@
         "away_label": "England",
         "resolved": true,
         "pred": {
-          "p_home": 0.2491,
-          "p_draw": 0.3136,
+          "p_home": 0.2486,
+          "p_draw": 0.3141,
           "p_away": 0.4374,
           "top_scorelines": [
             {
@@ -853,9 +853,9 @@
         "away_label": "Spain",
         "resolved": true,
         "pred": {
-          "p_home": 0.1917,
-          "p_draw": 0.2913,
-          "p_away": 0.517,
+          "p_home": 0.1931,
+          "p_draw": 0.2895,
+          "p_away": 0.5174,
           "top_scorelines": [
             {
               "home": 0,
@@ -894,9 +894,9 @@
         "away_label": "Belgium",
         "resolved": true,
         "pred": {
-          "p_home": 0.2285,
-          "p_draw": 0.2677,
-          "p_away": 0.5039,
+          "p_home": 0.2294,
+          "p_draw": 0.2671,
+          "p_away": 0.5035,
           "top_scorelines": [
             {
               "home": 0,
@@ -935,9 +935,9 @@
         "away_label": "Egypt",
         "resolved": true,
         "pred": {
-          "p_home": 0.6679,
-          "p_draw": 0.2134,
-          "p_away": 0.1187,
+          "p_home": 0.6666,
+          "p_draw": 0.214,
+          "p_away": 0.1194,
           "top_scorelines": [
             {
               "home": 1,
@@ -976,9 +976,9 @@
         "away_label": "Colombia",
         "resolved": true,
         "pred": {
-          "p_home": 0.4195,
-          "p_draw": 0.299,
-          "p_away": 0.2815,
+          "p_home": 0.4198,
+          "p_draw": 0.2986,
+          "p_away": 0.2816,
           "top_scorelines": [
             {
               "home": 0,
@@ -1019,9 +1019,9 @@
         "away_label": "Morocco",
         "resolved": true,
         "pred": {
-          "p_home": 0.5376,
-          "p_draw": 0.2814,
-          "p_away": 0.181,
+          "p_home": 0.5366,
+          "p_draw": 0.2813,
+          "p_away": 0.1821,
           "top_scorelines": [
             {
               "home": 0,
@@ -1060,9 +1060,9 @@
         "away_label": "Belgium",
         "resolved": true,
         "pred": {
-          "p_home": 0.5757,
-          "p_draw": 0.2482,
-          "p_away": 0.1761,
+          "p_home": 0.5743,
+          "p_draw": 0.2478,
+          "p_away": 0.1778,
           "top_scorelines": [
             {
               "home": 1,
@@ -1095,9 +1095,9 @@
         "away_label": "England",
         "resolved": true,
         "pred": {
-          "p_home": 0.1732,
-          "p_draw": 0.2459,
-          "p_away": 0.581,
+          "p_home": 0.1731,
+          "p_draw": 0.2471,
+          "p_away": 0.5797,
           "top_scorelines": [
             {
               "home": 0,
@@ -1130,9 +1130,9 @@
         "away_label": "Switzerland",
         "resolved": true,
         "pred": {
-          "p_home": 0.5535,
-          "p_draw": 0.2498,
-          "p_away": 0.1968,
+          "p_home": 0.5521,
+          "p_draw": 0.25,
+          "p_away": 0.198,
           "top_scorelines": [
             {
               "home": 1,
