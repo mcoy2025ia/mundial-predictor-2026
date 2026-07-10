@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T21:22:29.105321+00:00",
+  "generated_at": "2026-07-10T23:12:18.689735+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -482,7 +482,7 @@
         "away_label": "Austria",
         "resolved": true,
         "pred": {
-          "p_home": 0.6697,
+          "p_home": 0.6696,
           "p_draw": 0.2072,
           "p_away": 0.1232,
           "top_scorelines": [
@@ -606,7 +606,7 @@
         "resolved": true,
         "pred": {
           "p_home": 0.5453,
-          "p_draw": 0.2775,
+          "p_draw": 0.2774,
           "p_away": 0.1772,
           "top_scorelines": [
             {
