@@ -1,6 +1,12 @@
-"""Print upcoming group-stage Home/Away pairs (quoted, space-separated) kicking
-off within the next WINDOW_HOURS, for the Agent Debate CI automation.
+"""Print upcoming Home/Away pairs (quoted, space-separated) kicking off within
+the next WINDOW_HOURS, for the Agent Debate CI automation.
 Empty output means nothing to debate yet -- the caller should skip the step.
+
+Incluye TODOS los stages: en grupos venía filtrando stage=="group", lo que
+significaba que ningún partido de eliminatorias se debatía automáticamente
+(los QF de 2026-07 se corrieron a mano por esto). Los cruces de knockout solo
+aparecen en live_predictions.json cuando el bracket ya los resolvió a equipos
+reales, así que no hay riesgo de emitir placeholders tipo "W97".
 """
 import csv
 import json
@@ -41,8 +47,6 @@ def main() -> None:
 
     teams: list[str] = []
     for m in preds:
-        if m.get("stage") != "group":
-            continue
         home, away = m.get("home_team"), m.get("away_team")
         if not home or not away or (home, away) in played:
             continue
