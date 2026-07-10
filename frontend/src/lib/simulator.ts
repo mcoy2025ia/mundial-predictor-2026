@@ -81,7 +81,7 @@ function simulateGroup(
 }
 
 // ── Bracket oficial 2026 ──────────────────────────────────────────────────────
-// Cruces reales de la Ronda de 32 según el fixture oficial (partidos 73–88).
+// Cruces reales de 16avos según el fixture oficial (partidos 73–88).
 // "1A"/"2A" = primero/segundo del grupo A; "3:ABCDF" = mejor tercero de A/B/C/D/F.
 const R32_SLOTS = [
   ["2A", "2B"],      // 73
@@ -196,7 +196,7 @@ export function runMonteCarlo(
     for (const t of qualifiedThirds.values()) counts[t].bestThird++;
     const thirdByR32 = assignThirds(qualifiedThirds);
 
-    // ── Ronda de 32 según el bracket oficial ──
+    // ── 16avos según el bracket oficial ──
     const r32Matches: Array<[string, string]> = R32_SLOTS.map(([home, away], i) => {
       const resolve = (slot: string): string =>
         slot.startsWith("3:") ? thirdByR32[i] : slot[0] === "1" ? firsts[slot[1]] : seconds[slot[1]];

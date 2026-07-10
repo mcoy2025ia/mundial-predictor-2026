@@ -703,7 +703,7 @@ Por cada simulación (×5.000):
                          ▼
   CONTADOR:
     Por cada simulación, registrar cuántas veces llegó
-    cada equipo a: Grupos → R32 → R16 → QF → SF → Final → Campeón
+    cada equipo a: Grupos → 16avos → Octavos → QF → SF → Final → Campeón
 
 RESULTADO (5.000 simulaciones):
   Argentina campeón:  18.3% (918 de 5.000 simulaciones)

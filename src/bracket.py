@@ -402,7 +402,7 @@ def resolve_bracket(
         # Token desconocido o ya es nombre real
         return _norm(token) if token else None
 
-    # 2) Resolver en orden de número de partido (R32 → Final),
+    # 2) Resolver en orden de número de partido (16avos → Final),
     #    para que W/L puedan apoyarse en cruces ya resueltos.
     resolved: dict[int, dict] = {}
     for m in sorted(ko_matches, key=lambda x: x.get("num", 0)):

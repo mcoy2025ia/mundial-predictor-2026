@@ -167,6 +167,11 @@ function Pill({ value, label, color }: { value: string; label: string; color: st
 
 interface PhaseInfo { key: string; label: string }
 
+function displayPhaseLabel(key: string, label: string): string {
+  if (key === "Round of 32") return "16avos de final";
+  return label.replace(/32avos(?: de final)?/gi, "16avos de final");
+}
+
 /* ── Bloque reutilizable: precisión por fase, grupos + eliminatorias en una sola secuencia ── */
 function PhaseAccuracy({
   title,
@@ -508,7 +513,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
     ];
     const knockoutPhases: PhaseInfo[] = (bracket?.round_order ?? []).map((rk) => ({
       key: rk,
-      label: bracket?.round_labels?.[rk] ?? rk,
+      label: displayPhaseLabel(rk, bracket?.round_labels?.[rk] ?? rk),
     }));
     return [...groupPhases, ...knockoutPhases];
   }, [bracket]);

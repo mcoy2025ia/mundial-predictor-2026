@@ -35,7 +35,7 @@ LIVE_RESULTS = ROOT / "data" / "external" / "wc2026_live_results.csv"
 
 # Nombre de ronda (fixture) → etiqueta UI en español
 ROUND_ES = {
-    "Round of 32": "32avos de final",
+    "Round of 32": "16avos de final",
     "Round of 16": "Octavos de final",
     "Quarter-final": "Cuartos de final",
     "Semi-final": "Semifinal",

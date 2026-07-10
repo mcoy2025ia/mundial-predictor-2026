@@ -187,6 +187,8 @@ class AgentDebateSystem:
                     break
         except Exception:
             pass
+        if round_label == "Round of 32":
+            round_label = "16avos de final"
 
         def _qual(row: dict) -> str:
             pos = row["pos"]

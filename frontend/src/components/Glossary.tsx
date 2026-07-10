@@ -32,7 +32,7 @@ const TERMS: Term[] = [
     definition:
       "Técnica de simulación que repite el torneo completo miles de veces con resultados aleatorios ponderados por las probabilidades del modelo para estimar la probabilidad de cada resultado posible.",
     detail:
-      "Cada simulación: simula los 72 partidos de grupos, clasifica top-2 + 8 mejores terceros, luego simula R32 → R16 → QF → SF → Final. Con 5 000 simulaciones, el error estándar es < 0.7% por equipo.",
+      "Cada simulación: simula los 72 partidos de grupos, clasifica top-2 + 8 mejores terceros, luego simula 16avos → octavos → cuartos → semis → final. Con 5 000 simulaciones, el error estándar es < 0.7% por equipo.",
   },
   {
     term: "Log-loss",
@@ -78,9 +78,9 @@ const TERMS: Term[] = [
     term: "Formato Mundial 2026",
     icon: "📋",
     definition:
-      "48 equipos en 12 grupos de 4. Los 2 primeros de cada grupo + los 8 mejores terceros clasifican a la Ronda de 32 (R32). Luego knockout puro hasta la final.",
+      "48 equipos en 12 grupos de 4. Los 2 primeros de cada grupo + los 8 mejores terceros clasifican a 16avos de final. Luego knockout puro hasta la final.",
     detail:
-      "Total: 72 partidos de grupos + 32 de R32 + 16 de octavos (R16) + 8 de cuartos (QF) + 4 de semis (SF) + 2 de tercer lugar + 1 final = 104 partidos totales en 3 países.",
+      "Total: 72 partidos de grupos + 16 de 16avos + 8 de octavos + 4 de cuartos + 2 de semis + tercer lugar + final = 104 partidos totales en 3 países.",
   },
   {
     term: "Split temporal",

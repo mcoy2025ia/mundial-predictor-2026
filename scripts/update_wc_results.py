@@ -116,7 +116,7 @@ def _write_knockout_cache(all_matches: list[dict]) -> int:
         home = (m.get("homeTeam") or {}).get("name")
         away = (m.get("awayTeam") or {}).get("name")
         if not home or not away:
-            continue  # cruce aún sin definir (p.ej. octavos antes de jugarse 32avos)
+            continue  # cruce aún sin definir (p.ej. octavos antes de jugarse 16avos)
         ko.append({
             "stage": stage,
             "home": _normalize(home),

@@ -48,7 +48,7 @@ WC2026_HOSTS: set = {"Mexico", "United States", "Canada"}
 
 ROUND_ORDER = [
     "Fase de Grupos",
-    "Ronda de 32",
+    "16avos de final",
     "Octavos de final",
     "Cuartos de final",
     "Semifinal",
@@ -536,7 +536,7 @@ def simulate_tournament(
     official_bracket = set(groups.keys()) == set("ABCDEFGHIJKL")
 
     if official_bracket:
-        # ── Ronda de 32 según el bracket oficial del fixture ────────────────
+        # ── 16avos de final según el bracket oficial del fixture ────────────────
         qualified_thirds = {g: t for g, t, _ in third_candidates[:8]}
         third_by_r32 = assign_thirds(qualified_thirds)
 
@@ -592,11 +592,11 @@ def simulate_tournament(
 
     round_of_32 = top2 + best_thirds
     for t in round_of_32:
-        results[t] = ROUND_ORDER[1]  # "Ronda de 32"
+        results[t] = ROUND_ORDER[1]  # "16avos de final"
 
     current = round_of_32.copy()
     random.shuffle(current)
-    round_idx = 2  # ganadores de R32 → ROUND_ORDER[2] = "Octavos de final"
+    round_idx = 2  # ganadores de 16avos → ROUND_ORDER[2] = "Octavos de final"
 
     while len(current) > 1:
         next_round_name = ROUND_ORDER[round_idx] if round_idx < len(ROUND_ORDER) else ROUND_ORDER[-1]
@@ -714,7 +714,7 @@ def simulate_deterministic_tournament(
     best_thirds = [t for t, _ in third_candidates[:8]]
     current = top2 + best_thirds
 
-    round_names = ["Ronda de 32", "Octavos de final", "Cuartos de final", "Semifinal", "Final"]
+    round_names = ["16avos de final", "Octavos de final", "Cuartos de final", "Semifinal", "Final"]
     bracket_rounds: Dict[str, List[Dict]] = {}
 
     for round_name in round_names:

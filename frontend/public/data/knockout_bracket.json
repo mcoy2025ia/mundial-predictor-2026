@@ -9,7 +9,7 @@
     "Final"
   ],
   "round_labels": {
-    "Round of 32": "32avos de final",
+    "Round of 32": "16avos de final",
     "Round of 16": "Octavos de final",
     "Quarter-final": "Cuartos de final",
     "Semi-final": "Semifinal",
@@ -21,7 +21,7 @@
       {
         "num": 73,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-28",
         "time": "12:00 UTC-7",
         "ground": "Los Angeles (Inglewood)",
@@ -62,7 +62,7 @@
       {
         "num": 74,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-29",
         "time": "16:30 UTC-4",
         "ground": "Boston (Foxborough)",
@@ -103,7 +103,7 @@
       {
         "num": 75,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-29",
         "time": "19:00 UTC-6",
         "ground": "Monterrey (Guadalupe)",
@@ -144,7 +144,7 @@
       {
         "num": 76,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-29",
         "time": "12:00 UTC-5",
         "ground": "Houston",
@@ -185,7 +185,7 @@
       {
         "num": 77,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-30",
         "time": "17:00 UTC-4",
         "ground": "New York/New Jersey (East Rutherford)",
@@ -226,7 +226,7 @@
       {
         "num": 78,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-30",
         "time": "12:00 UTC-5",
         "ground": "Dallas (Arlington)",
@@ -267,7 +267,7 @@
       {
         "num": 79,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-06-30",
         "time": "19:00 UTC-6",
         "ground": "Mexico City",
@@ -308,7 +308,7 @@
       {
         "num": 80,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-01",
         "time": "12:00 UTC-4",
         "ground": "Atlanta",
@@ -349,7 +349,7 @@
       {
         "num": 81,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-01",
         "time": "17:00 UTC-7",
         "ground": "San Francisco Bay Area (Santa Clara)",
@@ -390,7 +390,7 @@
       {
         "num": 82,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-01",
         "time": "13:00 UTC-7",
         "ground": "Seattle",
@@ -431,7 +431,7 @@
       {
         "num": 83,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-02",
         "time": "19:00 UTC-4",
         "ground": "Toronto",
@@ -472,7 +472,7 @@
       {
         "num": 84,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-02",
         "time": "12:00 UTC-7",
         "ground": "Los Angeles (Inglewood)",
@@ -513,7 +513,7 @@
       {
         "num": 85,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-02",
         "time": "20:00 UTC-7",
         "ground": "Vancouver",
@@ -554,7 +554,7 @@
       {
         "num": 86,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-03",
         "time": "18:00 UTC-4",
         "ground": "Miami (Miami Gardens)",
@@ -595,7 +595,7 @@
       {
         "num": 87,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-03",
         "time": "20:30 UTC-5",
         "ground": "Kansas City",
@@ -636,7 +636,7 @@
       {
         "num": 88,
         "round": "Round of 32",
-        "round_es": "32avos de final",
+        "round_es": "16avos de final",
         "date": "2026-07-03",
         "time": "13:00 UTC-5",
         "ground": "Dallas (Arlington)",

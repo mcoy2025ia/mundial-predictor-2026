@@ -186,7 +186,7 @@ def chunks_groups(groups: dict, standings: dict, teams: dict) -> list[dict]:
             f"Grupo {grp}: {flags}\n"
             f"Equipos: {', '.join(team_list)}"
             f"{st_text}\n"
-            f"Clasifican: top 2 directo + mejores 8 terceros van a Ronda de 32"
+            f"Clasifican: top 2 directo + mejores 8 terceros van a 16avos de final"
         )
         out.append({"id": f"group_{grp.lower()}", "type": "group",
                     "group": grp, "text": text})
@@ -248,7 +248,7 @@ def chunks_history() -> list[dict]:
          "7. Sándor Kocsis (Hungría) 11 · 8. Jürgen Klinsmann (Alemania) 11\n"
          "Goleador de Qatar 2022: Kylian Mbappé (Francia) 8 goles"),
         ("wc_2026_format", "Formato del Mundial 2026:\n"
-         "48 equipos divididos en 12 grupos de 4. Clasifican top 2 + mejores 8 terceros = 32 equipos a Ronda de 32 (R32). "
+         "48 equipos divididos en 12 grupos de 4. Clasifican top 2 + mejores 8 terceros = 32 equipos a 16avos de final. "
          "Luego R16 (Octavos), Cuartos de final, Semifinales, Final.\n"
          "Sedes: 11 ciudades en USA + 3 en México + 2 en Canadá = 16 estadios.\n"
          "Primer partido: México vs Sudáfrica (11 Jun, Estadio Azteca).\n"

@@ -147,7 +147,7 @@ STRINGS: dict = {
         "group_section": "Grupos y predicciones",
         "group_lbl": "Grupo",
         "champion_col": "Campeón",
-        "qualify_col": "Clasifica (R32)",
+        "qualify_col": "16avos",
         "r16_col": "Octavos",
         "qf_col": "Cuartos",
         "sf_col": "Semi",
@@ -221,7 +221,7 @@ STRINGS: dict = {
         "group_section": "Groups & predictions",
         "group_lbl": "Group",
         "champion_col": "Champion",
-        "qualify_col": "Qualify (R32)",
+        "qualify_col": "Last 32",
         "r16_col": "Round of 16",
         "qf_col": "Quarter-final",
         "sf_col": "Semi-final",
@@ -295,7 +295,7 @@ STRINGS: dict = {
         "group_section": "Grupos e previsões",
         "group_lbl": "Grupo",
         "champion_col": "Campeão",
-        "qualify_col": "Classifica (R32)",
+        "qualify_col": "16avos",
         "r16_col": "Oitavas",
         "qf_col": "Quartas",
         "sf_col": "Semi",
@@ -801,7 +801,7 @@ def tab_simulator(model, df_features, elo_ratings, T, probs_cache=None):
 
         # Rondas de knockout
         round_icons = {
-            "Ronda de 32": "⚡ Ronda de 32 (32 → 16)",
+            "16avos de final": "16avos de final (32 -> 16)",
             "Octavos de final": "🔥 Octavos de final (16 → 8)",
             "Cuartos de final": "💥 Cuartos de final (8 → 4)",
             "Semifinal": "⭐ Semifinales (4 → 2)",
@@ -846,7 +846,7 @@ def tab_simulator(model, df_features, elo_ratings, T, probs_cache=None):
         # Tabla completa
         cols_map = {
             "equipo": "Equipo", "grupo": T["group_lbl"], "elo": T["elo"],
-            "Ronda de 32": T["qualify_col"], "Octavos de final": T["r16_col"],
+            "16avos de final": T["qualify_col"], "Octavos de final": T["r16_col"],
             "Cuartos de final": T["qf_col"], "Semifinal": T["sf_col"],
             "Final": T["final_col"], "Campeón": T["champion_col"],
         }
@@ -883,7 +883,7 @@ def tab_simulator(model, df_features, elo_ratings, T, probs_cache=None):
             pos = df_mc.index[df_mc["equipo"] == "Colombia"][0] + 1
             st.markdown(f"""<div class="info-box">
             🇨🇴 <b>Colombia</b> — #{pos} en probabilidad de título &nbsp;·&nbsp; ELO {cr['elo']:.0f}<br>
-            Clasifica: <b>{cr.get('Ronda de 32', 0):.1%}</b> &nbsp;·&nbsp;
+            Clasifica: <b>{cr.get('16avos de final', 0):.1%}</b> &nbsp;·&nbsp;
             Octavos: <b>{cr.get('Octavos de final', 0):.1%}</b> &nbsp;·&nbsp;
             Final: <b>{cr.get('Final', 0):.1%}</b> &nbsp;·&nbsp;
             Campeón: <b>{cr.get('Campeón', 0):.1%}</b>
@@ -1216,7 +1216,7 @@ Partido 6: Equipo 2 vs Equipo 3
         st.markdown("""
 | Ronda | Equipos | Partidos |
 |-------|---------|---------|
-| **Ronda de 32** (Round of 32) | 32 → 16 | 16 partidos |
+| **16avos de final**  | 32 → 16 | 16 partidos |
 | **Octavos de final** (Round of 16) | 16 → 8 | 8 partidos |
 | **Cuartos de final** (Quarter-finals) | 8 → 4 | 4 partidos |
 | **Semifinal** | 4 → 2 | 2 partidos |

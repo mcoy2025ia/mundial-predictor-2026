@@ -350,8 +350,8 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
         <div className="bracket-map">
           <div className="center-title">
             <div className="cup-pill">World Cup</div>
-            <h3>Round of 32<br />Bracket</h3>
-            <div className="center-note">R32 → Octavos → Cuartos → Semis → Final</div>
+            <h3>16avos<br />Bracket</h3>
+            <div className="center-note">16avos → Octavos → Cuartos → Semis → Final</div>
           </div>
 
           {finalMatch && (
