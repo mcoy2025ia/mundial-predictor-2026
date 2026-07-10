@@ -72,3 +72,7 @@ frontend/tsconfig.tsbuildinfo
 
 # Logs (JSONL observability — regenerable, no va en el repo)
 logs/*.jsonl
+
+# Artefactos de sesion / borradores personales (no versionar)
+frontend/.codex-*.png
+dialogo_linkedin
