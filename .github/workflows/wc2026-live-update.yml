@@ -81,6 +81,17 @@ on:
     - cron: "30 0 28 6 *"
     - cron: "0 3 28 6 *"
     - cron: "30 5 28 6 *"
+    # Knockout (Jun 28 – Jul 21): the group-stage schedule above was hand-built
+    # per exact kickoff, one cron line per match. That doesn't scale to R32
+    # through the Final (28 more matches over 3 weeks) and it silently expired
+    # after Jun 28 — nobody added knockout entries, so the pipeline didn't run
+    # ONCE for the entire knockout phase (discovered 2026-07-09, ~11 days
+    # stale). Fixed with a simple periodic schedule instead: every 2h, bounded
+    # to the knockout window. live_update.py is a cheap no-op when a match's
+    # result isn't in the feed yet (see the timing note at the top of this
+    # file), so over-triggering costs ~nothing.
+    - cron: "0 */2 28-30 6 *"
+    - cron: "0 */2 1-21 7 *"
 
 permissions:
   contents: write

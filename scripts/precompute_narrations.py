@@ -31,7 +31,11 @@ FRONTEND_DATA = ROOT / "frontend" / "public" / "data"
 # grupos, lo que dejaba paisa/boyaco/costeño/en con el contexto congelado de
 # cuando se generaron por primera vez (ver fix de narraciones stale).
 DIALECTS_GROUP    = ["bogotano", "paisa", "boyaco", "costeño", "en"]
-DIALECTS_KNOCKOUT = ["bogotano", "paisa", "boyaco", "costeño", "en"]
+# Knockout tiene muchos partidos seguidos (R32→Final) sin la holgura de tiempo
+# del group stage; generar 5 dialectos por partido es 5x el costo/tiempo sin
+# beneficio proporcional. Restringido a bogotano por decisión explícita del
+# usuario (2026-07-09) mientras dure el resto del torneo.
+DIALECTS_KNOCKOUT = ["bogotano"]
 
 # ── Replica exacta del FULL_SYSTEM del narrator endpoint ─────────────────────
 FULL_SYSTEM = """Actúa como **Narrator AI futbolero colombiano** para una app de predicción del Mundial 2026.
@@ -844,8 +848,14 @@ def main() -> None:
         except Exception:
             return None
 
-    all_group = [m for m in live_preds if m.get("stage") == "group"]
-    logger.info("%d partidos de grupo en live_predictions.json", len(all_group))
+    # A pesar del nombre (histórico, de la era solo-grupos), esta lista incluye
+    # TODOS los partidos candidatos a narrar, de cualquier stage — el filtro por
+    # stage=="group" se quitó porque dejaba a los partidos de knockout siempre
+    # fuera de la ventana (live_predictions.json solo trae stage="knockout" una
+    # vez terminada la fase de grupos, y la selección de dialectos más abajo ya
+    # discrimina group vs knockout vía is_group).
+    all_group = list(live_preds)
+    logger.info("%d partidos candidatos en live_predictions.json (todos los stages)", len(all_group))
 
     # Cargar resultados ya jugados para filtrar partidos pendientes
     played_set = set()

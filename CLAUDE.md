@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **WC 2026 KNOCKOUT PHASE IN PROGRESS** (Group Stage completed Jun 27; Round of 32 began Jun 28; Final is Jul 19, 2026)
 - **Bracket resolution:** The knockout fixture (`data/external/wc2026_fixture.json`) ships with placeholders (`1A`, `2B`, `3A/B/C/D/F`, `W73`) instead of real teams. `src/bracket.py` resolves them progressively from `wc2026_live_results.csv` as each round is played — `predict_live.py` and `agent_debate.py` consume the resolved bracket automatically. See [Knockout Bracket Resolution](#knockout-bracket-resolution) under Architecture.
 - **Current ops:** Full matchday cycle applies for every knockout round (no more `update_third_place_probs.py` 3×/day — that was group-stage-only). After `predict_live.py --export`, also run `export_knockout_bracket.py` and `run_upset_agent.py` (see Quick Reference below).
-- **Knockout dialects:** All 5 dialects auto-activated (`bogotano`, `paisa`, `boyaco`, `costeño`, `en`) — `precompute_narrations.py` handles this automatically when `match.stage != "group"`
+- **Knockout dialects:** Restricted to `bogotano` only (`DIALECTS_KNOCKOUT` in `precompute_narrations.py`) — changed 2026-07-09 by explicit user decision. Knockout has many matches in quick succession (R32→Final) without the group stage's slack; 5 dialects/match was 5x the cost/time for no proportional benefit.
 - **Agent Debate:** High-priority for knockout matches (budget 0.08–0.10 USD/match); run before each R32/R16/QF/SF/Final. A 4th voice, **Cazador de Sorpresas** (`src/upset_agent.py`), always argues the underdog's case — separate from the 3-agent debate/consensus.
 - **Frontend:** **Grupos** tab, best-thirds, and group narratives are hidden during knockout. **Eliminatorias** (R32) and **Octavos** (R16) tabs render `KnockoutBracket.tsx` from `knockout_bracket.json`.
 - **Memory System:** Auto-memory at `~/.claude/projects/mundial-predictor-master/memory/` tracks roadmap phases, UI changes, and model improvements across conversations — check it for the latest known match/round status, since this file is not re-verified against live data on every edit.
@@ -106,6 +106,9 @@ Agent Debate runs *before* a match is played and accumulates results into `data/
 
 ### Frontend Data Flow
 Pre-computed data (narrations, group previews, predictions) must be exported to `frontend/public/data/` and deployed. Local `frontend/src/lib/live.ts` fetches live results from `/api/live` (server-side proxy to football-data.org). The simulator uses client-side Monte Carlo — no backend call needed.
+
+### Knockout Result Fetching Needs Multiple Passes
+`update_wc_results.py` only resolves and appends a knockout cross to `results.csv` once its feeder round is already filled (R32 unlocks R16, R16 unlocks QF, etc.). If you're catching up after a gap of more than one round, **a single run will not converge** — it fetches one round's worth, appends the newly-unlocked next round's crosses, but doesn't loop within the same run. Run it repeatedly (`for i in 1 2 3 4; do python scripts/update_wc_results.py; done` or similar) until it reports "Sin cambios — todos los partidos ya están al día." `live_update.py`'s single internal call has this same limitation.
 
 ---
 
@@ -230,7 +233,7 @@ Matchday 3 has group matches kicking off simultaneously. Narratives must emphasi
 
 ### Cost & Agent Debate
 - **Group stage:** Narrator in Bogotá/neutral Spanish only (budget stability)
-- **Knockout stage:** All 5 dialects auto-activated
+- **Knockout stage:** Bogotano only (changed 2026-07-09 — too many matches in quick succession to justify 5x cost/time per match)
 - **Agent Debate:** Reserve for high-context matches; costs 0.08–0.10 USD per match (5–6× more than narration)
 
 See `docs/finops.md` for current spend snapshot and projections.
@@ -694,7 +697,7 @@ Budget controls are enforced at 3 levels:
 If budget is exceeded, deterministic predictions fall back to EnsembleModel (no LLM).
 
 **Decision points before running an expensive operation:**
-- Narrations run once/day per active dialect set — group stage = bogotano only (~$0.01–0.02/match); knockout = all 5 dialects (~$0.015–0.05/match). No manual budgeting needed, it's automatic via `DIALECTS_GROUP`/`DIALECTS_KNOCKOUT`.
+- Narrations run once/day per active dialect set — both group and knockout are `DIALECTS_* = ["bogotano"]` (~$0.01–0.02/match). Group stage started this way for flow stability; knockout was switched to it 2026-07-09 after briefly running all 5 dialects proved too costly for the pace of knockout matches.
 - Agent Debate (~$0.08–0.10/match) and the Cazador de Sorpresas upset agent are the two calls worth thinking about before running in bulk — check `logs/llm_costs.jsonl` for the day's spend if debating many matches at once.
 - Orchestrator enrichment (inside `predict_live.py`) is already budget-gated automatically; it degrades to delta=0 per agent rather than failing the run.
 
@@ -802,7 +805,9 @@ Separate from the ML ensemble and from the `src/agents/` Orchestrator above. Thr
 - **Frontend wiring**: `frontend/src/app/api/agent-debate/route.ts` serves the exported static JSON (`frontend/public/data/agent_debate_results.json`, 60s in-memory cache — never calls DeepSeek per request). `frontend/src/components/AgentDebatePanel.tsx` renders it: `variant="compact"` is a collapsed `<details>` (just a "Ver consenso completo" arrow) used in `Predictor.tsx` (right after "Marcador más probable" / altitude badge) and in `LiveTournament.tsx`'s "Próximos" tab (under each fixture's forecast badge); it returns `null` silently when no debate exists for that match, so the upcoming-matches list isn't cluttered with "not available" placeholders. `frontend/src/lib/agentDebate.ts` mirrors `lib/live.ts`'s `modelVerdict`/`orientScore` pattern (`agentVerdict`, `computeAgentResults`) so `ModelTab.tsx` can show the same per-matchday/per-group accuracy breakdown for agents side-by-side with the ML model's.
 
 ### Pre-computed Narrations (Zero LLM Cost Per User)
-`narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Group-stage dialect strategy is intentionally restrained: keep `DIALECTS_GROUP = ["bogotano"]` until the prediction/narration flow is stable; `DIALECTS_KNOCKOUT = ["bogotano","paisa","boyaco","costeño","en"]` activates automatically when `match.stage != "group"`.
+`narrations.json` is built once per day by `scripts/precompute_narrations.py` (DeepSeek, 1 call per match × dialects). Key format: `"home|away|dialect"`. The frontend loads the full JSON at page load and passes it as a prop to `Predictor → UnifiedNarration`. The narrator endpoint serves static keys and only falls back to a live LLM call when a key is missing (e.g., knockout matches before their narration is generated). Both `DIALECTS_GROUP` and `DIALECTS_KNOCKOUT` are currently `["bogotano"]` — group stage started this way for flow stability; knockout briefly ran all 5 dialects (`bogotano`, `paisa`, `boyaco`, `costeño`, `en`) via a `match.stage != "group"` branch before being restricted to bogotano-only on 2026-07-09 (too many matches in quick succession for 5x cost/time per match to be worth it).
+
+**Important — the match-selection filter had a real bug until 2026-07-09:** the code that builds the candidate list for the date-window check filtered `live_preds` to `stage == "group"` only. Once the group stage ended, `live_predictions.json` stopped containing any `stage: "group"` entries at all (only `stage: "knockout"`), so every run silently reported "0 partidos a narrar" — even with matches correctly inside the `--days` window — despite the downstream dialect-selection logic already branching correctly on `is_group`. Fixed by removing the stage filter from the candidate list (dialect selection still branches per-match on `is_group`).
 
 ### Isotonic Calibration
 Probabilities matter more than accuracy in a tournament simulator. Isotonic calibration ensures the model's predicted probabilities match observed win rates.

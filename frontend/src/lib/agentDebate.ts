@@ -125,6 +125,10 @@ export function agentScoreHit(
 export interface AgentMatchResult {
   group: string;
   groupMd: number;
+  /** "group" para fase de grupos, "knockout" para eliminatorias. */
+  phase: "group" | "knockout";
+  /** Clave de ronda de eliminatorias (round_order del bracket, ej. "Round of 32"). Solo en knockout. */
+  roundKey?: string;
   team1: string;
   team2: string;
   score1: number;
@@ -181,6 +185,7 @@ export function computeAgentResults(
       out.push({
         group,
         groupMd: roundToJor(m.round ?? "Matchday 1"),
+        phase: "group",
         team1: m.team1,
         team2: m.team2,
         score1: score.s1,
@@ -223,6 +228,19 @@ export function flattenAgentResults(
       groupMd: r.groupMd,
       hit: consensusHit,
     });
+  }
+  return out;
+}
+
+/** Resultados de knockout con su roundKey, para agrupar por fase (R32/R16/QF/...). */
+export function flattenAgentResultsByRound(
+  agentResults: AgentMatchResult[]
+): { roundKey: string; hit: boolean }[] {
+  const out: { roundKey: string; hit: boolean }[] = [];
+  for (const r of agentResults) {
+    if (r.phase !== "knockout" || !r.roundKey) continue;
+    const consensusHit = r.hits["Consensus"] ?? false;
+    out.push({ roundKey: r.roundKey, hit: consensusHit });
   }
   return out;
 }

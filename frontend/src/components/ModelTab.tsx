@@ -4,15 +4,18 @@ import { useEffect, useMemo, useState } from "react";
 import type { GroupMatch, TeamInfo } from "@/types";
 import type { ScoreMap } from "@/lib/live";
 import { orientScore, modelVerdict } from "@/lib/live";
-import { computeAgentResults, computeAgentStatsByAgent, flattenAgentResults, type AgentDebateMatch, type AgentMatchResult } from "@/lib/agentDebate";
+import { computeAgentResults, computeAgentStatsByAgent, findAgentMatch, flattenAgentResults, flattenAgentResultsByRound, type AgentDebateMatch, type AgentMatchResult, type AgentTopPrediction } from "@/lib/agentDebate";
+import type { BracketData, KnockoutMatch } from "@/components/KnockoutBracket";
 
 interface Props {
   groupMatches: Record<string, GroupMatch[]>;
   liveScores: ScoreMap;
   teams: Record<string, TeamInfo>;
+  bracket?: BracketData | null;
 }
 
 type MdMap = Record<number, { hits: number; played: number }>;
+type RoundMap = Record<string, { hits: number; played: number }>;
 
 function buildByMd(results: { groupMd: number; hit: boolean }[]): MdMap {
   const map: MdMap = {};
@@ -24,9 +27,23 @@ function buildByMd(results: { groupMd: number; hit: boolean }[]): MdMap {
   return map;
 }
 
+function buildByRound(results: { roundKey: string; hit: boolean }[]): RoundMap {
+  const map: RoundMap = {};
+  for (const r of results) {
+    if (!map[r.roundKey]) map[r.roundKey] = { hits: 0, played: 0 };
+    map[r.roundKey].played++;
+    if (r.hit) map[r.roundKey].hits++;
+  }
+  return map;
+}
+
 interface MatchResult {
   group: string;
   groupMd: number;   // 1, 2 or 3 (internal group matchday)
+  phase: "group" | "knockout";
+  /** Clave de ronda del bracket (round_order), ej. "Round of 32". Solo en knockout. */
+  roundKey?: string;
+  round: string;
   team1: string;
   team2: string;
   t1_flag: string;
@@ -68,6 +85,8 @@ function computeResults(
       out.push({
         group,
         groupMd: roundToJor(m.round ?? "Matchday 1"),
+        phase: "group",
+        round: m.round ?? "Fase de grupos",
         team1: m.team1,
         team2: m.team2,
         t1_flag: m.team1_flag,
@@ -79,6 +98,68 @@ function computeResults(
         prob: v.prob,
         hit: v.hit,
       });
+    }
+  }
+  return out;
+}
+
+function predictionSide(pred?: KnockoutMatch["pred"]): { side: "home" | "draw" | "away"; prob: number } | null {
+  if (!pred) return null;
+  const entries: Array<["home" | "draw" | "away", number]> = [
+    ["home", pred.p_home],
+    ["draw", pred.p_draw],
+    ["away", pred.p_away],
+  ];
+  const [side, prob] = entries.sort((a, b) => b[1] - a[1])[0];
+  return { side, prob };
+}
+
+function computeKnockoutResults(
+  bracket: BracketData | null | undefined,
+  teams: Record<string, TeamInfo>
+): MatchResult[] {
+  const out: MatchResult[] = [];
+  const matches = Object.values(bracket?.rounds ?? {}).flat();
+  for (const m of matches) {
+    if (!m.home || !m.away || !m.pred || !m.result?.played) continue;
+    const pick = predictionSide(m.pred);
+    if (!pick) continue;
+    const predicted = pick.side === "home" ? "t1" : pick.side === "away" ? "t2" : "draw";
+    const actual = m.result.home_score > m.result.away_score ? "t1" : m.result.home_score < m.result.away_score ? "t2" : "draw";
+    out.push({
+      group: m.round,
+      groupMd: 4,
+      phase: "knockout",
+      roundKey: m.round,
+      round: m.round_es || m.round,
+      team1: m.home,
+      team2: m.away,
+      t1_flag: teams[m.home]?.flag ?? "",
+      t2_flag: teams[m.away]?.flag ?? "",
+      score1: m.result.home_score,
+      score2: m.result.away_score,
+      predicted,
+      actual,
+      prob: pick.prob,
+      hit: predicted === actual,
+    });
+  }
+  return out;
+}
+
+/** Rondas de knockout con al menos un cruce resuelto y con predicción, en orden de bracket. */
+function resolvedRoundFixtures(
+  bracket: BracketData | null | undefined
+): { roundKey: string; label: string; fixtures: KnockoutMatch[] }[] {
+  const order = bracket?.round_order ?? [];
+  const labels = bracket?.round_labels ?? {};
+  const out: { roundKey: string; label: string; fixtures: KnockoutMatch[] }[] = [];
+  for (const roundKey of order) {
+    const fixtures = (bracket?.rounds?.[roundKey] ?? [])
+      .filter((m) => m.home && m.away && m.pred)
+      .sort((a, b) => a.num - b.num);
+    if (fixtures.length > 0) {
+      out.push({ roundKey, label: labels[roundKey] ?? roundKey, fixtures });
     }
   }
   return out;
@@ -142,6 +223,64 @@ function MatchdayAccuracy({ title, byMd }: { title: string; byMd: MdMap }) {
   );
 }
 
+/* ── Bloque reutilizable: precisión por fase de eliminatorias (ML o Agentes) ── */
+function KnockoutPhaseAccuracy({
+  title,
+  roundOrder,
+  roundLabels,
+  byRound,
+}: {
+  title: string;
+  roundOrder: string[];
+  roundLabels: Record<string, string>;
+  byRound: RoundMap;
+}) {
+  const activeRounds = roundOrder.filter((rk) => byRound[rk]);
+  return (
+    <div className="rounded-xl p-5 space-y-3" style={cardBg}>
+      <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>{title}</h3>
+      {activeRounds.length === 0 ? (
+        <p className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
+          Sin partidos de eliminatorias evaluados todavía.
+        </p>
+      ) : (
+        <div className="space-y-2">
+          {activeRounds.map((rk, i) => {
+            const data = byRound[rk];
+            const p = Math.round((data.hits / data.played) * 100);
+            const prevKey = i > 0 ? activeRounds[i - 1] : null;
+            const prev = prevKey ? byRound[prevKey] : null;
+            const delta = prev ? p - Math.round((prev.hits / prev.played) * 100) : null;
+            const label = roundLabels[rk] ?? rk;
+            return (
+              <div key={rk} className="flex items-center gap-3">
+                <span className="shrink-0 font-mono text-[0.62rem] truncate" style={{ color: "var(--color-ink-muted)", width: 76 }}>
+                  {label}
+                </span>
+                <div className="flex-1 rounded-full overflow-hidden" style={{ height: 6, background: "rgba(255,255,255,0.06)" }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ width: `${p}%`, background: p >= 50 ? "var(--color-wc-gold)" : "var(--color-wc-red)" }}
+                  />
+                </div>
+                <span className="shrink-0 font-mono font-bold text-xs" style={{ color: "var(--color-ink)", width: 34, textAlign: "right" }}>
+                  {p}%
+                </span>
+                <span className="shrink-0 text-[0.6rem]" style={{ color: "var(--color-ink-muted)", width: 52 }}>
+                  {data.hits}/{data.played}
+                </span>
+                <div className="shrink-0 w-16 text-right">
+                  <Arrow delta={delta} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Arrow({ delta }: { delta: number | null }) {
   if (delta === null) return <span style={{ color: "var(--color-ink-muted)", fontSize: "0.7rem" }}>—</span>;
   if (delta > 0)  return <span style={{ color: "#34d399", fontSize: "0.7rem" }}>▲ +{delta}pp</span>;
@@ -149,10 +288,184 @@ function Arrow({ delta }: { delta: number | null }) {
   return <span style={{ color: "var(--color-ink-muted)", fontSize: "0.7rem" }}>= 0pp</span>;
 }
 
-export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
-  const results = useMemo(
+function labelForOutcome(outcome: "t1" | "draw" | "t2", team1: string, team2: string) {
+  if (outcome === "t1") return team1;
+  if (outcome === "t2") return team2;
+  return "Empate";
+}
+
+function KnockoutRoundSection({
+  roundKey,
+  label,
+  fixtures,
+  allKnockoutResults,
+  teams,
+}: {
+  roundKey: string;
+  label: string;
+  fixtures: KnockoutMatch[];
+  allKnockoutResults: MatchResult[];
+  teams: Record<string, TeamInfo>;
+}) {
+  const results = allKnockoutResults.filter((r) => r.roundKey === roundKey);
+  const played = results.length;
+  const hits = results.filter((r) => r.hit).length;
+  const pct = played ? Math.round((hits / played) * 100) : null;
+
+  return (
+    <div className="rounded-xl p-5 space-y-4" style={{ ...cardBg, borderColor: "rgba(201,152,31,0.22)" }}>
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+            {label} · Evaluación de eliminatorias
+          </h3>
+          <p className="text-[0.6rem] mt-1" style={{ color: "var(--color-ink-muted)" }}>
+            El modelo ya cuenta los partidos de esta ronda con resultado oficial del bracket.
+          </p>
+        </div>
+        <div className="rounded-lg px-3 py-2 text-right" style={{ background: "rgba(201,152,31,0.08)", border: "1px solid rgba(201,152,31,0.25)" }}>
+          <div className="font-mono font-black text-base" style={{ color: "var(--color-wc-gold)" }}>
+            {pct !== null ? `${pct}%` : "-"}
+          </div>
+          <div className="text-[0.58rem]" style={{ color: "var(--color-ink-muted)" }}>
+            {hits}/{played} aciertos
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {fixtures.map((m) => {
+          const result = results.find((r) => r.team1 === m.home && r.team2 === m.away);
+          const pick = predictionSide(m.pred);
+          const predicted =
+            pick?.side === "home" ? m.home :
+            pick?.side === "away" ? m.away :
+            pick?.side === "draw" ? "Empate" : "-";
+          const playedLabel = result
+            ? `${result.score1}-${result.score2}`
+            : "Pendiente";
+          const hitColor = result?.hit ? "#34d399" : "var(--color-wc-red)";
+
+          return (
+            <div
+              key={m.num}
+              className="rounded-lg p-3 space-y-2"
+              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
+                  #{m.num} · {m.date}
+                </span>
+                <span className="font-mono text-[0.58rem] font-bold" style={{ color: result ? hitColor : "var(--color-ink-muted)" }}>
+                  {result ? (result.hit ? "ACIERTO" : "FALLO") : "POR JUGAR"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-2 text-xs font-bold" style={{ color: "var(--color-ink)" }}>
+                <span>{teams[m.home ?? ""]?.flag} {m.home}</span>
+                <span className="font-mono" style={{ color: result ? "var(--color-ink)" : "var(--color-ink-muted)" }}>{playedLabel}</span>
+                <span>{m.away} {teams[m.away ?? ""]?.flag}</span>
+              </div>
+              <div className="flex items-center justify-between gap-2 text-[0.62rem]" style={{ color: "var(--color-ink-muted)" }}>
+                <span>Predicción: <strong style={{ color: "var(--color-ink)" }}>{predicted}</strong></span>
+                <span className="font-mono">{pick ? `${Math.round(pick.prob * 100)}%` : "-"}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function debateTeams(r: AgentDebateMatch): { home: string; away: string } | null {
+  const home = r.home ?? r.context?.home_team?.name;
+  const away = r.away ?? r.context?.away_team?.name;
+  if (home && away) return { home, away };
+  if (r.match?.includes(" vs ")) {
+    const [matchHome, matchAway] = r.match.split(" vs ", 2).map((part) => part.trim());
+    if (matchHome && matchAway) return { home: matchHome, away: matchAway };
+  }
+  return null;
+}
+
+function orientAgentPrediction(
+  debateMatch: AgentDebateMatch,
+  team1: string,
+  pred: AgentTopPrediction
+): { g1: number; g2: number; winner: "t1" | "draw" | "t2" } {
+  const teams = debateTeams(debateMatch);
+  const debateHome = teams?.home ?? team1;
+  const sameOrder = debateHome === team1;
+  const g1 = sameOrder ? pred.home_goals : pred.away_goals;
+  const g2 = sameOrder ? pred.away_goals : pred.home_goals;
+  const winner = g1 > g2 ? "t1" : g1 < g2 ? "t2" : "draw";
+  return { g1, g2, winner };
+}
+
+function computeKnockoutAgentResults(
+  bracket: BracketData | null | undefined,
+  agentDebateResults: AgentDebateMatch[]
+): AgentMatchResult[] {
+  const out: AgentMatchResult[] = [];
+  for (const m of Object.values(bracket?.rounds ?? {}).flat()) {
+    if (!m.home || !m.away || !m.result?.played) continue;
+    const debateMatch = findAgentMatch(agentDebateResults, m.home, m.away);
+    if (!debateMatch?.predictions?.length) continue;
+
+    const actual = m.result.home_score > m.result.away_score ? "t1" : m.result.home_score < m.result.away_score ? "t2" : "draw";
+    const hits: Record<string, boolean> = {};
+    const scoreHits: Record<string, boolean | null> = {};
+    const goals: Record<string, { g1: number; g2: number }> = {};
+
+    for (const pred of debateMatch.predictions) {
+      const agentName = pred.agent ?? "Unknown";
+      const { g1, g2, winner } = orientAgentPrediction(debateMatch, m.home, pred);
+      hits[agentName] = winner === actual;
+      scoreHits[agentName] = g1 === m.result.home_score && g2 === m.result.away_score;
+      goals[agentName] = { g1, g2 };
+    }
+
+    out.push({
+      group: m.round,
+      groupMd: 4,
+      phase: "knockout",
+      roundKey: m.round,
+      team1: m.home,
+      team2: m.away,
+      score1: m.result.home_score,
+      score2: m.result.away_score,
+      hits,
+      scoreHits,
+      goals,
+    });
+  }
+  return out;
+}
+
+export default function ModelTab({ groupMatches, liveScores, teams, bracket }: Props) {
+  const groupResults = useMemo(
     () => computeResults(groupMatches, liveScores, teams),
     [groupMatches, liveScores, teams]
+  );
+  const knockoutResults = useMemo(
+    () => computeKnockoutResults(bracket, teams),
+    [bracket, teams]
+  );
+  const results = useMemo(
+    () => [...groupResults, ...knockoutResults],
+    [groupResults, knockoutResults]
+  );
+  const roundFixtures = useMemo(() => resolvedRoundFixtures(bracket), [bracket]);
+
+  // ── Precisión por fase de eliminatorias (R32/R16/QF/SF/Final) ──────────────
+  const mlByRound = useMemo(
+    () =>
+      buildByRound(
+        knockoutResults
+          .filter((r): r is MatchResult & { roundKey: string } => !!r.roundKey)
+          .map((r) => ({ roundKey: r.roundKey, hit: r.hit }))
+      ),
+    [knockoutResults]
   );
 
   // ── Global KPIs ────────────────────────────────────────────────────────────
@@ -185,11 +498,20 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
     return () => { active = false; };
   }, []);
 
-  const agentResults: AgentMatchResult[] = useMemo(
+  const groupAgentResults: AgentMatchResult[] = useMemo(
     () => computeAgentResults(groupMatches, liveScores, agentDebateResults),
     [groupMatches, liveScores, agentDebateResults]
   );
+  const knockoutAgentResults: AgentMatchResult[] = useMemo(
+    () => computeKnockoutAgentResults(bracket, agentDebateResults),
+    [bracket, agentDebateResults]
+  );
+  const agentResults: AgentMatchResult[] = useMemo(
+    () => [...groupAgentResults, ...knockoutAgentResults],
+    [groupAgentResults, knockoutAgentResults]
+  );
   const agentByMd = useMemo(() => buildByMd(flattenAgentResults(agentResults)), [agentResults]);
+  const agentByRound = useMemo(() => buildByRound(flattenAgentResultsByRound(agentResults)), [agentResults]);
 
   // ── Desempeño por agente individual ─────────────────────────────────────
   const agentStatsByAgent = useMemo(() => computeAgentStatsByAgent(agentResults), [agentResults]);
@@ -209,7 +531,7 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
 
   // ── Marcadores por partido: qué predijo cada agente, partido por partido ──
   const agentMatchRows = useMemo(
-    () => [...agentResults].sort((a, b) => b.groupMd - a.groupMd || a.group.localeCompare(b.group)),
+    () => [...agentResults].sort((a, b) => b.groupMd - a.groupMd || a.group.localeCompare(b.group) || a.team1.localeCompare(b.team1)),
     [agentResults]
   );
 
@@ -255,7 +577,37 @@ export default function ModelTab({ groupMatches, liveScores, teams }: Props) {
         />
       </div>
 
-      {/* Progresión por jornada: Modelo ML vs Agentes */}
+      {/* Precisión por fase de eliminatorias: Modelo ML vs Agentes */}
+      {bracket && Object.keys(mlByRound).length > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <KnockoutPhaseAccuracy
+            title="🏆 Precisión por fase · Eliminatorias (Modelo ML)"
+            roundOrder={bracket.round_order}
+            roundLabels={bracket.round_labels}
+            byRound={mlByRound}
+          />
+          <KnockoutPhaseAccuracy
+            title="🤖 Precisión por fase · Eliminatorias (Agentes)"
+            roundOrder={bracket.round_order}
+            roundLabels={bracket.round_labels}
+            byRound={agentByRound}
+          />
+        </div>
+      )}
+
+      {/* Detalle partido a partido por ronda de eliminatorias */}
+      {roundFixtures.map(({ roundKey, label, fixtures }) => (
+        <KnockoutRoundSection
+          key={roundKey}
+          roundKey={roundKey}
+          label={label}
+          fixtures={fixtures}
+          allKnockoutResults={knockoutResults}
+          teams={teams}
+        />
+      ))}
+
+      {/* Progresión por jornada de grupos: Modelo ML vs Agentes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <MatchdayAccuracy title="📈 Precisión por jornada · Modelo ML" byMd={byMd} />
         <MatchdayAccuracy title="🤖 Precisión por jornada · Agentes" byMd={agentByMd} />
