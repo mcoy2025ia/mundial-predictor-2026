@@ -25,6 +25,7 @@ import sys
 import os
 import argparse
 from pathlib import Path
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -53,6 +54,11 @@ OUTPUT_FILE = ROOT / "data/processed/agent_debate_results.json"
 # SI esta en git y refleja el historial acumulado real entre corridas, asi
 # que sirve de semilla cuando no hay copia local en data/processed/.
 PUBLISHED_FILE = ROOT / "frontend/public/data/agent_debate_results.json"
+LIVE_PREDS_CANDIDATES = [
+    ROOT / "data/processed/live_predictions.json",
+    ROOT / "frontend/public/data/live_predictions.json",
+]
+GROUP_MATCHES_FILE = ROOT / "frontend/public/data/group_matches.json"
 
 DEFAULT_MATCHES = [
     ("Mexico", "South Korea"),
@@ -85,6 +91,9 @@ def pair_key(home: str, away: str) -> str:
 
 def pair_key_from_entry(r: dict) -> str:
     """Deriva la clave del partido desde 'context' (si existe) o desde el string 'match'."""
+    h_top, a_top = r.get("home"), r.get("away")
+    if h_top and a_top:
+        return pair_key(h_top, a_top)
     ctx = r.get("context", {})
     h = ctx.get("home_team", {}).get("name", "")
     a = ctx.get("away_team", {}).get("name", "")
@@ -126,6 +135,89 @@ def already_debated(existing: list[dict], home: str, away: str) -> bool:
     return False
 
 
+def _load_live_predictions() -> list[dict]:
+    for path in LIVE_PREDS_CANDIDATES:
+        if not path.exists():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(data, dict):
+            preds = data.get("predictions", [])
+        else:
+            preds = data
+        if isinstance(preds, list):
+            return [p for p in preds if isinstance(p, dict)]
+    return []
+
+
+def _find_fixture_prediction(home: str, away: str, live_predictions: list[dict]) -> dict | None:
+    target = pair_key(home, away)
+    for pred in live_predictions:
+        pred_home = pred.get("home_team")
+        pred_away = pred.get("away_team")
+        if pred_home and pred_away and pair_key(pred_home, pred_away) == target:
+            return pred
+    if GROUP_MATCHES_FILE.exists():
+        try:
+            group_matches = json.loads(GROUP_MATCHES_FILE.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            group_matches = {}
+        for group, matches in group_matches.items():
+            for match in matches:
+                team1 = match.get("team1")
+                team2 = match.get("team2")
+                if team1 and team2 and pair_key(team1, team2) == target:
+                    return {
+                        "home_team": team1,
+                        "away_team": team2,
+                        "kickoff": match.get("date"),
+                        "stage": "group",
+                        "round": match.get("round"),
+                        "group": group,
+                    }
+    return None
+
+
+def _parse_dt(value: str | None):
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def annotate_audit(result: dict, home: str, away: str, cutoff: str | None, live_predictions: list[dict]) -> dict:
+    """Agrega metadata para distinguir predicciones forward-only de backfills."""
+    generated_at = datetime.now(timezone.utc)
+    pred = _find_fixture_prediction(home, away, live_predictions)
+    kickoff_raw = pred.get("kickoff") if pred else None
+    kickoff_at = _parse_dt(kickoff_raw)
+    was_pre_match = bool(kickoff_at and generated_at < kickoff_at)
+
+    result["generated_at"] = generated_at.isoformat()
+    result["audit"] = {
+        "generated_at": result["generated_at"],
+        "execution_mode": "backfill" if cutoff else "forward",
+        "backfill_cutoff": cutoff,
+        "kickoff": kickoff_raw,
+        "stage": pred.get("stage") if pred else None,
+        "round": pred.get("round") if pred else result.get("context", {}).get("round"),
+        "group": pred.get("group") if pred else result.get("context", {}).get("group"),
+        "was_pre_match": was_pre_match,
+        "source": "scripts/run_agent_debate.py",
+    }
+    if cutoff:
+        # Campo historico conservado para compatibilidad con reportes/manuales.
+        result["backfill_cutoff"] = cutoff
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("teams", nargs="*", help="Pares de equipos: HOME AWAY HOME AWAY ...")
@@ -146,6 +238,7 @@ def main():
     print(f"[INFO] {len(existing)} debate(s) ya guardados (tras dedup) en {OUTPUT_FILE.name}")
 
     system = AgentDebateSystem(cutoff_date=args.cutoff)
+    live_predictions = _load_live_predictions()
     if args.cutoff:
         print(f"[INFO] Modo backfill: contexto limitado a resultados con fecha < {args.cutoff}")
     new_results = []
@@ -157,8 +250,7 @@ def main():
 
         try:
             result = system.predict_match(home, away)
-            if args.cutoff:
-                result["backfill_cutoff"] = args.cutoff
+            result = annotate_audit(result, home, away, args.cutoff, live_predictions)
             new_results.append(result)
 
             safe_print("\n" + "=" * 100)

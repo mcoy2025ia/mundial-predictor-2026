@@ -23,6 +23,10 @@ DEEPSEEK_URL = "https://api.deepseek.com/chat/completions"
 TEAM_NAME_MAPPING = {
     "USA": "United States",
     "United States": "United States",
+    "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+    "Bosnia and Herzegovina": "Bosnia and Herzegovina",
+    "Curaçao": "Curacao",
+    "Curacao": "Curacao",
 }
 
 def normalize_team_name(name: str) -> str:

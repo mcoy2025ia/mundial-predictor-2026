@@ -74,6 +74,7 @@ Before deploy:
 - Chat answers do not invent matches for today.
 - Model tab separates ML metrics from agent metrics, and (knockout) shows a per-round phase breakdown, not just JOR 1/2/3.
 - Agent Debate accuracy is forward-only: matches played without a prior debate (e.g. during a CI gap) will permanently show no agent data for that round — this is expected, not a bug to chase.
+- Run `python scripts/analyze_agent_validation.py` before presenting agent metrics; treat any `unknown provenance` rows as scored-but-not-auditable unless external logs prove the debate happened before kickoff.
 
 ## Emergency Fallback
 
