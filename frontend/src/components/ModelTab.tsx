@@ -234,12 +234,18 @@ function AgentPhaseTable({
   phaseOrder,
   agentNames,
   statsByPhase,
+  playedPhaseKeys,
 }: {
   phaseOrder: PhaseInfo[];
   agentNames: string[];
   statsByPhase: Record<string, Record<string, AgentStats>>;
+  /** Fases donde el torneo ya tiene partidos jugados (aunque no haya debates). */
+  playedPhaseKeys: Set<string>;
 }) {
-  const active = phaseOrder.filter((p) => statsByPhase[p.key]);
+  // Mostrar toda fase ya jugada, tenga o no debates: una fila de "—" con nota
+  // es honesta; ocultar la fila hace parecer que la tabla está rota.
+  const active = phaseOrder.filter((p) => statsByPhase[p.key] || playedPhaseKeys.has(p.key));
+  const missingDebates = active.filter((p) => !statsByPhase[p.key]);
   return (
     <div className="rounded-xl p-5 space-y-3" style={cardBg}>
       <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
@@ -260,7 +266,7 @@ function AgentPhaseTable({
             ))}
           </div>
           {active.map((phase) => {
-            const row = statsByPhase[phase.key];
+            const row = statsByPhase[phase.key] ?? {};
             let bestName: string | null = null;
             let bestPct = -1;
             for (const name of agentNames) {
@@ -304,6 +310,11 @@ function AgentPhaseTable({
               <span key={name}>{AGENT_EMOJI[name]} {name}</span>
             ))}
           </div>
+          {missingDebates.length > 0 && (
+            <p className="text-[0.55rem] pt-1" style={{ color: "var(--color-ink-muted)" }}>
+              — {missingDebates.map((p) => p.label).join(", ")}: sin debates de agentes. El Agent Debate arrancó en la Jornada 3 y solo evalúa partidos debatidos <em>antes</em> de jugarse (no hay backfill retroactivo).
+            </p>
+          )}
         </div>
       )}
     </div>
@@ -581,15 +592,26 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
     return best;
   }, [agentStatsByAgent, agentNames]);
 
-  // ── Marcadores por partido: qué predijo cada agente, partido por partido ──
-  const agentMatchRows = useMemo(
-    () => [...agentResults].sort((a, b) => b.groupMd - a.groupMd || a.group.localeCompare(b.group) || a.team1.localeCompare(b.team1)),
-    [agentResults]
+  // ── Marcadores por partido, agrupados por fase (desplegables, la más reciente abierta) ──
+  const agentRowsByPhase = useMemo(() => {
+    const map: Record<string, AgentMatchResult[]> = {};
+    for (const r of agentResults) {
+      const k = phaseKeyOf(r);
+      if (!map[k]) map[k] = [];
+      map[k].push(r);
+    }
+    for (const rows of Object.values(map)) {
+      rows.sort((a, b) => a.group.localeCompare(b.group) || a.team1.localeCompare(b.team1));
+    }
+    return map;
+  }, [agentResults]);
+  // Orden inverso al torneo: la fase más reciente primero.
+  const agentPhaseSections = useMemo(
+    () => [...phaseOrder].reverse().filter((p) => agentRowsByPhase[p.key]?.length),
+    [phaseOrder, agentRowsByPhase]
   );
-  const phaseLabelByKey = useMemo(
-    () => Object.fromEntries(phaseOrder.map((p) => [p.key, p.label])),
-    [phaseOrder]
-  );
+  // Fases del torneo con partidos ya jugados (el modelo ML cubre todas ellas).
+  const playedPhaseKeys = useMemo(() => new Set(Object.keys(mlByPhase)), [mlByPhase]);
 
   if (played === 0) {
     return (
@@ -644,6 +666,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
           phaseOrder={phaseOrder}
           agentNames={agentNames}
           statsByPhase={agentStatsByPhase}
+          playedPhaseKeys={playedPhaseKeys}
         />
       </div>
 
@@ -719,58 +742,81 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
             })}
           </div>
 
-          {/* Marcadores por partido: qué predijo cada agente vs el resultado real */}
-          {agentMatchRows.length > 0 && (
+          {/* Marcadores por partido, agrupados por fase (la más reciente abierta) */}
+          {agentPhaseSections.length > 0 && (
             <div className="space-y-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <h4 className="text-xs font-bold" style={{ color: "var(--color-ink)" }}>
                 🎯 Marcadores por partido
               </h4>
-              <div className="space-y-2">
-                {agentMatchRows.map((r) => (
-                  <div
-                    key={`${r.team1}|${r.team2}`}
-                    className="rounded-lg p-3 space-y-1.5"
-                    style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+              {agentPhaseSections.map((phase, sectionIdx) => {
+                const rows = agentRowsByPhase[phase.key];
+                const consensusHits = rows.filter((r) => r.hits["Consensus"]).length;
+                return (
+                  <details
+                    key={phase.key}
+                    open={sectionIdx === 0}
+                    className="rounded-lg"
+                    style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.06)" }}
                   >
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className="text-[0.7rem] font-bold" style={{ color: "var(--color-ink)" }}>
-                        {teams[r.team1]?.flag} {r.team1} {r.score1}–{r.score2} {r.team2} {teams[r.team2]?.flag}
+                    <summary className="flex items-center justify-between gap-2 px-3 py-2 cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
+                      <span className="text-xs font-bold" style={{ color: "var(--color-ink)" }}>
+                        {phase.label}
+                        <span className="ml-2 text-[0.58rem] font-normal" style={{ color: "var(--color-ink-muted)" }}>▾</span>
                       </span>
-                      <span className="font-mono text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
-                        {r.phase === "knockout" ? (phaseLabelByKey[phaseKeyOf(r)] ?? r.group) : `GRP ${r.group} · ${phaseLabelByKey[phaseKeyOf(r)] ?? `J${r.groupMd}`}`}
+                      <span className="font-mono text-[0.58rem]" style={{ color: "var(--color-ink-muted)" }}>
+                        {rows.length} partido{rows.length === 1 ? "" : "s"} · consenso {consensusHits}/{rows.length}
                       </span>
-                    </div>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5">
-                      {agentNames.map((agentName) => {
-                        const g = r.goals[agentName];
-                        const hit = r.hits[agentName];
-                        if (!g) return null;
-                        const emoji = agentName === "Group Analyst" ? "🔵" : agentName === "Tactical Scout" ? "🟠" : agentName === "Sentiment Reader" ? "🟡" : "🏆";
-                        return (
-                          <div
-                            key={agentName}
-                            className="flex items-center justify-between gap-1 rounded px-2 py-1"
-                            style={{
-                              background: hit ? "rgba(52,211,153,0.08)" : "rgba(207,10,44,0.08)",
-                              border: `1px solid ${hit ? "rgba(52,211,153,0.25)" : "rgba(207,10,44,0.2)"}`,
-                            }}
-                          >
-                            <span className="text-[0.58rem] truncate" style={{ color: "var(--color-ink-muted)" }}>
-                              {emoji} {agentName}
+                    </summary>
+                    <div className="space-y-2 px-3 pb-3">
+                      {rows.map((r) => (
+                        <div
+                          key={`${r.team1}|${r.team2}`}
+                          className="rounded-lg p-3 space-y-1.5"
+                          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)" }}
+                        >
+                          <div className="flex items-center justify-between gap-2 flex-wrap">
+                            <span className="text-[0.7rem] font-bold" style={{ color: "var(--color-ink)" }}>
+                              {teams[r.team1]?.flag} {r.team1} {r.score1}–{r.score2} {r.team2} {teams[r.team2]?.flag}
                             </span>
-                            <span
-                              className="font-mono text-[0.62rem] font-bold shrink-0"
-                              style={{ color: hit ? "#34d399" : "var(--color-wc-red)" }}
-                            >
-                              {hit ? "✅" : "❌"} {g.g1}-{g.g2}
-                            </span>
+                            {r.phase === "group" && (
+                              <span className="font-mono text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
+                                GRP {r.group}
+                              </span>
+                            )}
                           </div>
-                        );
-                      })}
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5">
+                            {agentNames.map((agentName) => {
+                              const g = r.goals[agentName];
+                              const hit = r.hits[agentName];
+                              if (!g) return null;
+                              return (
+                                <div
+                                  key={agentName}
+                                  className="flex items-center justify-between gap-1 rounded px-2 py-1"
+                                  style={{
+                                    background: hit ? "rgba(52,211,153,0.08)" : "rgba(207,10,44,0.08)",
+                                    border: `1px solid ${hit ? "rgba(52,211,153,0.25)" : "rgba(207,10,44,0.2)"}`,
+                                  }}
+                                >
+                                  <span className="text-[0.58rem] truncate" style={{ color: "var(--color-ink-muted)" }}>
+                                    {AGENT_EMOJI[agentName] ?? "⚪"} {agentName}
+                                  </span>
+                                  <span
+                                    className="font-mono text-[0.62rem] font-bold shrink-0"
+                                    style={{ color: hit ? "#34d399" : "var(--color-wc-red)" }}
+                                  >
+                                    {hit ? "✅" : "❌"} {g.g1}-{g.g2}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
-              </div>
+                  </details>
+                );
+              })}
             </div>
           )}
         </div>
