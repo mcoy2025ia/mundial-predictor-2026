@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { GroupMatch, TeamInfo } from "@/types";
 import type { ScoreMap } from "@/lib/live";
 import { orientScore, modelVerdict } from "@/lib/live";
-import { computeAgentResults, computeAgentStatsByAgent, findAgentMatch, flattenAgentResults, flattenAgentResultsByRound, type AgentDebateMatch, type AgentMatchResult, type AgentTopPrediction } from "@/lib/agentDebate";
+import { computeAgentResults, computeAgentStatsByAgent, computeAgentStatsByPhase, findAgentMatch, phaseKeyOf, type AgentDebateMatch, type AgentMatchResult, type AgentStats, type AgentTopPrediction } from "@/lib/agentDebate";
 import type { BracketData, KnockoutMatch } from "@/components/KnockoutBracket";
 
 interface Props {
@@ -14,18 +14,7 @@ interface Props {
   bracket?: BracketData | null;
 }
 
-type MdMap = Record<number, { hits: number; played: number }>;
 type RoundMap = Record<string, { hits: number; played: number }>;
-
-function buildByMd(results: { groupMd: number; hit: boolean }[]): MdMap {
-  const map: MdMap = {};
-  for (const r of results) {
-    if (!map[r.groupMd]) map[r.groupMd] = { hits: 0, played: 0 };
-    map[r.groupMd].played++;
-    if (r.hit) map[r.groupMd].hits++;
-  }
-  return map;
-}
 
 function buildByRound(results: { roundKey: string; hit: boolean }[]): RoundMap {
   const map: RoundMap = {};
@@ -176,28 +165,38 @@ function Pill({ value, label, color }: { value: string; label: string; color: st
   );
 }
 
-/* ── Bloque reutilizable: precisión por jornada (ML o Agentes) ── */
-function MatchdayAccuracy({ title, byMd }: { title: string; byMd: MdMap }) {
-  const hasAny = [1, 2, 3].some((md) => byMd[md]);
+interface PhaseInfo { key: string; label: string }
+
+/* ── Bloque reutilizable: precisión por fase, grupos + eliminatorias en una sola secuencia ── */
+function PhaseAccuracy({
+  title,
+  phaseOrder,
+  byPhase,
+}: {
+  title: string;
+  phaseOrder: PhaseInfo[];
+  byPhase: RoundMap;
+}) {
+  const active = phaseOrder.filter((p) => byPhase[p.key]);
   return (
     <div className="rounded-xl p-5 space-y-3" style={cardBg}>
       <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>{title}</h3>
-      {!hasAny ? (
+      {active.length === 0 ? (
         <p className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
           Sin partidos evaluados todavía.
         </p>
       ) : (
         <div className="space-y-2">
-          {[1, 2, 3].map((md) => {
-            const data = byMd[md];
-            if (!data) return null;
+          {active.map((phase, i) => {
+            const data = byPhase[phase.key];
             const p = Math.round((data.hits / data.played) * 100);
-            const prev = byMd[md - 1];
+            const prevPhase = i > 0 ? active[i - 1] : null;
+            const prev = prevPhase ? byPhase[prevPhase.key] : null;
             const delta = prev ? p - Math.round((prev.hits / prev.played) * 100) : null;
             return (
-              <div key={md} className="flex items-center gap-3">
-                <span className="shrink-0 font-mono text-[0.65rem]" style={{ color: "var(--color-ink-muted)", width: 40 }}>
-                  JOR {md}
+              <div key={phase.key} className="flex items-center gap-3">
+                <span className="shrink-0 font-mono text-[0.62rem] truncate" style={{ color: "var(--color-ink-muted)", width: 76 }}>
+                  {phase.label}
                 </span>
                 <div className="flex-1 rounded-full overflow-hidden" style={{ height: 6, background: "rgba(255,255,255,0.06)" }}>
                   <div
@@ -223,58 +222,88 @@ function MatchdayAccuracy({ title, byMd }: { title: string; byMd: MdMap }) {
   );
 }
 
-/* ── Bloque reutilizable: precisión por fase de eliminatorias (ML o Agentes) ── */
-function KnockoutPhaseAccuracy({
-  title,
-  roundOrder,
-  roundLabels,
-  byRound,
+const AGENT_EMOJI: Record<string, string> = {
+  "Group Analyst": "🔵",
+  "Tactical Scout": "🟠",
+  "Sentiment Reader": "🟡",
+  Consensus: "🏆",
+};
+
+/* ── Tabla: qué agente acertó más en cada fase del torneo ── */
+function AgentPhaseTable({
+  phaseOrder,
+  agentNames,
+  statsByPhase,
 }: {
-  title: string;
-  roundOrder: string[];
-  roundLabels: Record<string, string>;
-  byRound: RoundMap;
+  phaseOrder: PhaseInfo[];
+  agentNames: string[];
+  statsByPhase: Record<string, Record<string, AgentStats>>;
 }) {
-  const activeRounds = roundOrder.filter((rk) => byRound[rk]);
+  const active = phaseOrder.filter((p) => statsByPhase[p.key]);
   return (
     <div className="rounded-xl p-5 space-y-3" style={cardBg}>
-      <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>{title}</h3>
-      {activeRounds.length === 0 ? (
+      <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
+        🤖 Precisión por fase · Agentes
+      </h3>
+      {active.length === 0 ? (
         <p className="text-xs" style={{ color: "var(--color-ink-muted)" }}>
-          Sin partidos de eliminatorias evaluados todavía.
+          Sin partidos evaluados todavía.
         </p>
       ) : (
-        <div className="space-y-2">
-          {activeRounds.map((rk, i) => {
-            const data = byRound[rk];
-            const p = Math.round((data.hits / data.played) * 100);
-            const prevKey = i > 0 ? activeRounds[i - 1] : null;
-            const prev = prevKey ? byRound[prevKey] : null;
-            const delta = prev ? p - Math.round((prev.hits / prev.played) * 100) : null;
-            const label = roundLabels[rk] ?? rk;
+        <div className="space-y-1.5">
+          <div className="grid gap-1 items-center" style={{ gridTemplateColumns: "56px repeat(4, 1fr)" }}>
+            <span />
+            {agentNames.map((name) => (
+              <span key={name} className="text-center text-[0.55rem] truncate" style={{ color: "var(--color-ink-muted)" }} title={name}>
+                {AGENT_EMOJI[name] ?? ""}
+              </span>
+            ))}
+          </div>
+          {active.map((phase) => {
+            const row = statsByPhase[phase.key];
+            let bestName: string | null = null;
+            let bestPct = -1;
+            for (const name of agentNames) {
+              const s = row[name];
+              if (!s || s.played === 0) continue;
+              const pct = Math.round((s.hits / s.played) * 100);
+              if (pct > bestPct) { bestPct = pct; bestName = name; }
+            }
             return (
-              <div key={rk} className="flex items-center gap-3">
-                <span className="shrink-0 font-mono text-[0.62rem] truncate" style={{ color: "var(--color-ink-muted)", width: 76 }}>
-                  {label}
+              <div key={phase.key} className="grid gap-1 items-center" style={{ gridTemplateColumns: "56px repeat(4, 1fr)" }}>
+                <span className="font-mono text-[0.58rem] truncate" style={{ color: "var(--color-ink-muted)" }}>
+                  {phase.label}
                 </span>
-                <div className="flex-1 rounded-full overflow-hidden" style={{ height: 6, background: "rgba(255,255,255,0.06)" }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{ width: `${p}%`, background: p >= 50 ? "var(--color-wc-gold)" : "var(--color-wc-red)" }}
-                  />
-                </div>
-                <span className="shrink-0 font-mono font-bold text-xs" style={{ color: "var(--color-ink)", width: 34, textAlign: "right" }}>
-                  {p}%
-                </span>
-                <span className="shrink-0 text-[0.6rem]" style={{ color: "var(--color-ink-muted)", width: 52 }}>
-                  {data.hits}/{data.played}
-                </span>
-                <div className="shrink-0 w-16 text-right">
-                  <Arrow delta={delta} />
-                </div>
+                {agentNames.map((name) => {
+                  const s = row[name];
+                  const pct = s && s.played > 0 ? Math.round((s.hits / s.played) * 100) : null;
+                  const isBest = name === bestName && pct !== null;
+                  return (
+                    <div
+                      key={name}
+                      className="rounded text-center py-1"
+                      style={{
+                        background: isBest ? "rgba(201,152,31,0.15)" : "rgba(255,255,255,0.03)",
+                        border: isBest ? "1px solid rgba(201,152,31,0.4)" : "1px solid transparent",
+                      }}
+                    >
+                      <span
+                        className="font-mono text-[0.6rem] font-bold"
+                        style={{ color: pct === null ? "var(--color-ink-muted)" : isBest ? "var(--color-wc-gold)" : "var(--color-ink)" }}
+                      >
+                        {pct !== null ? `${pct}%` : "—"}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
+          <div className="flex items-center gap-3 pt-1 text-[0.55rem] flex-wrap" style={{ color: "var(--color-ink-muted)" }}>
+            {agentNames.map((name) => (
+              <span key={name}>{AGENT_EMOJI[name]} {name}</span>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -313,11 +342,12 @@ function KnockoutRoundSection({
   const pct = played ? Math.round((hits / played) * 100) : null;
 
   return (
-    <div className="rounded-xl p-5 space-y-4" style={{ ...cardBg, borderColor: "rgba(201,152,31,0.22)" }}>
-      <div className="flex items-start justify-between gap-3 flex-wrap">
+    <details className="rounded-xl p-5" style={{ ...cardBg, borderColor: "rgba(201,152,31,0.22)" }}>
+      <summary className="flex items-start justify-between gap-3 flex-wrap cursor-pointer select-none list-none [&::-webkit-details-marker]:hidden">
         <div>
           <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
             {label} · Evaluación de eliminatorias
+            <span className="ml-2 text-[0.6rem] font-normal" style={{ color: "var(--color-ink-muted)" }}>▾ ver partidos</span>
           </h3>
           <p className="text-[0.6rem] mt-1" style={{ color: "var(--color-ink-muted)" }}>
             El modelo ya cuenta los partidos de esta ronda con resultado oficial del bracket.
@@ -331,9 +361,9 @@ function KnockoutRoundSection({
             {hits}/{played} aciertos
           </div>
         </div>
-      </div>
+      </summary>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
         {fixtures.map((m) => {
           const result = results.find((r) => r.team1 === m.home && r.team2 === m.away);
           const pick = predictionSide(m.pred);
@@ -373,7 +403,7 @@ function KnockoutRoundSection({
           );
         })}
       </div>
-    </div>
+    </details>
   );
 }
 
@@ -457,7 +487,22 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
   );
   const roundFixtures = useMemo(() => resolvedRoundFixtures(bracket), [bracket]);
 
-  // ── Precisión por fase de eliminatorias (R32/R16/QF/SF/Final) ──────────────
+  // ── Fases unificadas: JOR 1/2/3 (grupos) + R32/R16/QF/SF/Final (eliminatorias),
+  // en una sola secuencia continua para poder ver la progresión completa. ──
+  const phaseOrder: PhaseInfo[] = useMemo(() => {
+    const groupPhases: PhaseInfo[] = [
+      { key: "jor1", label: "JOR 1" },
+      { key: "jor2", label: "JOR 2" },
+      { key: "jor3", label: "JOR 3" },
+    ];
+    const knockoutPhases: PhaseInfo[] = (bracket?.round_order ?? []).map((rk) => ({
+      key: rk,
+      label: bracket?.round_labels?.[rk] ?? rk,
+    }));
+    return [...groupPhases, ...knockoutPhases];
+  }, [bracket]);
+
+  // ── Precisión por fase (Modelo ML): grupos (JOR) + eliminatorias, combinadas ──
   const mlByRound = useMemo(
     () =>
       buildByRound(
@@ -483,6 +528,15 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
     }
     return map;
   }, [results]);
+
+  const mlByPhase: RoundMap = useMemo(() => {
+    const map: RoundMap = {};
+    for (const md of [1, 2, 3]) {
+      if (byMd[md]) map[`jor${md}`] = byMd[md];
+    }
+    Object.assign(map, mlByRound);
+    return map;
+  }, [byMd, mlByRound]);
 
   // ── Agent Debate: precisión por jornada ───────────────────────────────────
   const [agentDebateResults, setAgentDebateResults] = useState<AgentDebateMatch[]>([]);
@@ -510,11 +564,9 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
     () => [...groupAgentResults, ...knockoutAgentResults],
     [groupAgentResults, knockoutAgentResults]
   );
-  const agentByMd = useMemo(() => buildByMd(flattenAgentResults(agentResults)), [agentResults]);
-  const agentByRound = useMemo(() => buildByRound(flattenAgentResultsByRound(agentResults)), [agentResults]);
-
-  // ── Desempeño por agente individual ─────────────────────────────────────
+  // ── Desempeño por agente individual, global y por fase ───────────────────
   const agentStatsByAgent = useMemo(() => computeAgentStatsByAgent(agentResults), [agentResults]);
+  const agentStatsByPhase = useMemo(() => computeAgentStatsByPhase(agentResults), [agentResults]);
   const agentNames = useMemo(() => ["Group Analyst", "Tactical Scout", "Sentiment Reader", "Consensus"], []);
 
   // ── Agente que más acierta (mínimo 1 partido evaluado) ──────────────────
@@ -533,6 +585,10 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
   const agentMatchRows = useMemo(
     () => [...agentResults].sort((a, b) => b.groupMd - a.groupMd || a.group.localeCompare(b.group) || a.team1.localeCompare(b.team1)),
     [agentResults]
+  );
+  const phaseLabelByKey = useMemo(
+    () => Object.fromEntries(phaseOrder.map((p) => [p.key, p.label])),
+    [phaseOrder]
   );
 
   if (played === 0) {
@@ -577,25 +633,21 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
         />
       </div>
 
-      {/* Precisión por fase de eliminatorias: Modelo ML vs Agentes */}
-      {bracket && Object.keys(mlByRound).length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-          <KnockoutPhaseAccuracy
-            title="🏆 Precisión por fase · Eliminatorias (Modelo ML)"
-            roundOrder={bracket.round_order}
-            roundLabels={bracket.round_labels}
-            byRound={mlByRound}
-          />
-          <KnockoutPhaseAccuracy
-            title="🤖 Precisión por fase · Eliminatorias (Agentes)"
-            roundOrder={bracket.round_order}
-            roundLabels={bracket.round_labels}
-            byRound={agentByRound}
-          />
-        </div>
-      )}
+      {/* Precisión por fase, de punta a punta del torneo: JOR 1/2/3 + eliminatorias */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+        <PhaseAccuracy
+          title="📈 Precisión por fase · Modelo ML"
+          phaseOrder={phaseOrder}
+          byPhase={mlByPhase}
+        />
+        <AgentPhaseTable
+          phaseOrder={phaseOrder}
+          agentNames={agentNames}
+          statsByPhase={agentStatsByPhase}
+        />
+      </div>
 
-      {/* Detalle partido a partido por ronda de eliminatorias */}
+      {/* Detalle partido a partido por ronda de eliminatorias (colapsable) */}
       {roundFixtures.map(({ roundKey, label, fixtures }) => (
         <KnockoutRoundSection
           key={roundKey}
@@ -606,12 +658,6 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
           teams={teams}
         />
       ))}
-
-      {/* Progresión por jornada de grupos: Modelo ML vs Agentes */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        <MatchdayAccuracy title="📈 Precisión por jornada · Modelo ML" byMd={byMd} />
-        <MatchdayAccuracy title="🤖 Precisión por jornada · Agentes" byMd={agentByMd} />
-      </div>
 
       {/* Desempeño por agente: 4 predicciones (3 agentes + consenso) */}
       {agentStatsByAgent && Object.keys(agentStatsByAgent).length > 0 && (
@@ -691,7 +737,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
                         {teams[r.team1]?.flag} {r.team1} {r.score1}–{r.score2} {r.team2} {teams[r.team2]?.flag}
                       </span>
                       <span className="font-mono text-[0.55rem]" style={{ color: "var(--color-ink-muted)" }}>
-                        GRP {r.group} · J{r.groupMd}
+                        {r.phase === "knockout" ? (phaseLabelByKey[phaseKeyOf(r)] ?? r.group) : `GRP ${r.group} · ${phaseLabelByKey[phaseKeyOf(r)] ?? `J${r.groupMd}`}`}
                       </span>
                     </div>
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-1.5">

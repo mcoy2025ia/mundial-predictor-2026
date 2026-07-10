@@ -232,6 +232,30 @@ export function flattenAgentResults(
   return out;
 }
 
+/** Clave de fase unificada: "jor1"/"jor2"/"jor3" en grupos, roundKey del bracket en knockout. */
+export function phaseKeyOf(r: AgentMatchResult): string {
+  return r.phase === "knockout" && r.roundKey ? r.roundKey : `jor${r.groupMd}`;
+}
+
+/** Desempeño de cada agente (Group Analyst/Tactical Scout/Sentiment Reader/Consensus)
+ * desglosado por fase (JOR 1/2/3 + cada ronda de eliminatorias), para ver quién
+ * acertó más en cada momento del torneo, no solo en el acumulado. */
+export function computeAgentStatsByPhase(
+  agentResults: AgentMatchResult[]
+): Record<string, Record<string, AgentStats>> {
+  const map: Record<string, Record<string, AgentStats>> = {};
+  for (const r of agentResults) {
+    const phaseKey = phaseKeyOf(r);
+    if (!map[phaseKey]) map[phaseKey] = {};
+    for (const [agent, hit] of Object.entries(r.hits)) {
+      if (!map[phaseKey][agent]) map[phaseKey][agent] = { hits: 0, played: 0 };
+      map[phaseKey][agent].played++;
+      if (hit) map[phaseKey][agent].hits++;
+    }
+  }
+  return map;
+}
+
 /** Resultados de knockout con su roundKey, para agrupar por fase (R32/R16/QF/...). */
 export function flattenAgentResultsByRound(
   agentResults: AgentMatchResult[]
