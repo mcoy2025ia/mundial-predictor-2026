@@ -5299,5 +5299,686 @@
       "predicted_winner": "home",
       "agent": "Group Analyst"
     }
+  },
+  {
+    "match": "Spain vs Belgium",
+    "home": "Spain",
+    "away": "Belgium",
+    "context": {
+      "is_knockout": true,
+      "round": "Quarter-final",
+      "group": "Quarter-final: Grupo H vs Grupo G",
+      "home_group": "H",
+      "away_group": "G",
+      "home_table": [
+        {
+          "team": "Spain",
+          "pos": 1,
+          "pts": 7,
+          "gd": 5,
+          "gf": 5,
+          "ga": 0,
+          "pj": 3
+        },
+        {
+          "team": "Cape Verde",
+          "pos": 2,
+          "pts": 3,
+          "gd": 0,
+          "gf": 2,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Uruguay",
+          "pos": 3,
+          "pts": 2,
+          "gd": -1,
+          "gf": 3,
+          "ga": 4,
+          "pj": 3
+        },
+        {
+          "team": "Saudi Arabia",
+          "pos": 4,
+          "pts": 2,
+          "gd": -4,
+          "gf": 1,
+          "ga": 5,
+          "pj": 3
+        }
+      ],
+      "away_table": [
+        {
+          "team": "Belgium",
+          "pos": 1,
+          "pts": 5,
+          "gd": 4,
+          "gf": 6,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Egypt",
+          "pos": 2,
+          "pts": 5,
+          "gd": 2,
+          "gf": 5,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Iran",
+          "pos": 3,
+          "pts": 3,
+          "gd": 0,
+          "gf": 3,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "New Zealand",
+          "pos": 4,
+          "pts": 1,
+          "gd": -6,
+          "gf": 4,
+          "ga": 10,
+          "pj": 3
+        }
+      ],
+      "home_row": {
+        "team": "Spain",
+        "pos": 1,
+        "pts": 7,
+        "gd": 5,
+        "gf": 5,
+        "ga": 0,
+        "pj": 3
+      },
+      "away_row": {
+        "team": "Belgium",
+        "pos": 1,
+        "pts": 5,
+        "gd": 4,
+        "gf": 6,
+        "ga": 2,
+        "pj": 3
+      },
+      "home_qual": "1º de grupo (7 pts, GD +5, GF 5)",
+      "away_qual": "1º de grupo (5 pts, GD +4, GF 6)",
+      "home_matches": [
+        "Spain 0-0 Cape Verde",
+        "Spain 4-0 Saudi Arabia",
+        "Uruguay 0-1 Spain",
+        "Spain 3-0 Austria",
+        "Portugal 0-1 Spain"
+      ],
+      "away_matches": [
+        "Belgium 1-1 Egypt",
+        "Belgium 0-0 Iran",
+        "New Zealand 1-5 Belgium",
+        "Belgium 3-2 Senegal",
+        "United States 1-4 Belgium"
+      ],
+      "table": [
+        {
+          "team": "Spain",
+          "pos": 1,
+          "pts": 7,
+          "gd": 5,
+          "gf": 5,
+          "ga": 0,
+          "pj": 3
+        },
+        {
+          "team": "Belgium",
+          "pos": 1,
+          "pts": 5,
+          "gd": 4,
+          "gf": 6,
+          "ga": 2,
+          "pj": 3
+        }
+      ],
+      "matches_played": [
+        {
+          "result": "Spain 0-0 Cape Verde"
+        },
+        {
+          "result": "Spain 4-0 Saudi Arabia"
+        },
+        {
+          "result": "Uruguay 0-1 Spain"
+        },
+        {
+          "result": "Spain 3-0 Austria"
+        },
+        {
+          "result": "Portugal 0-1 Spain"
+        },
+        {
+          "result": "Belgium 1-1 Egypt"
+        },
+        {
+          "result": "Belgium 0-0 Iran"
+        },
+        {
+          "result": "New Zealand 1-5 Belgium"
+        },
+        {
+          "result": "Belgium 3-2 Senegal"
+        },
+        {
+          "result": "United States 1-4 Belgium"
+        }
+      ],
+      "classification_scenarios": {
+        "if_home_wins": "Spain avanza a la siguiente ronda; Belgium queda ELIMINADO",
+        "if_draw": "Empate en 90' → tiempo extra y posible tanda de PENALES (no hay reparto de puntos)",
+        "if_away_wins": "Belgium avanza a la siguiente ronda; Spain queda ELIMINADO"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "**Análisis Táctico Exhaustivo: España vs Bélgica (Cuartos de Final - Eliminación Directa)**  \n\n---\n\n### 1. **Táctica de Eliminatoria: Prioridad Defensiva y Estrategia de Riesgo**  \nEn partidos a vida o muerte, ambos equipos tenderán a **evitar errores** antes que a buscar el gol de manera imprudente. Sin embargo, el perfil de cada selección marca diferencias:  \n\n- **España** llega con una **defensa perfecta en fase de grupos (0 goles encajados)**. Esto le da una base psicológica sólida para plantear un partido de **control y paciencia**. Su estilo de posesión no es defensivo, sino de **desgaste al rival**: mantener el balón para evitar que el contrario ataque y esperar el error o el espacio.  \n- **Bélgica** ha mostrado **vulnerabilidad defensiva (2 goles recibidos vs rivales de menor entidad)**. En eliminatoria, su tendencia será **no arriesgar en salida**, priorizando la solidez colectiva. Sin embargo, su talento individual (De Bruyne, Lukaku, Hazard) invita a **transiciones rápidas** si España pierde el balón en zonas avanzadas.  \n\n**Conclusión**: Nadie se cerrará completamente desde el inicio, pero **España tiene más motivos para creer en su defensa** y Bélgica podría **replegarse si el partido se empantana**, buscando la prórroga como escenario favorable para su potencia física en espacios reducidos.\n\n---\n\n### 2. **Choque de Estilos: Posesión vs Transición**  \n- **España**: **Posesión horizontal**, triangulaciones en mediocampo, laterales profundos (Carvajal, Gayà) y movilidad ofensiva (Morata como referencia, con llegada de segundos). Su debilidad: **exposición a contragolpes si pierden el balón en campo rival**.  \n- **Bélgica**: **Transición vertical** gracias a De Bruyne (conexión con Lukaku) y Hazard (desborde). Su debilidad: **dificultad para sostener la posesión frente a presión alta** (visto ante Egipto e Irán).  \n\n**Neutralizaciones:**  \n- España **anulará el circuito** de pase hacia De Bruyne mediante una presión alta con Busquets o Rodri como escudo.  \n- Bélgica buscará **atajar la salida de balón española** con un bloque medio (no muy alto para evitar espacios) y **saltar en transición** cuando España pierda el balón en su propio campo.  \n\n**Explotaciones:**  \n- España puede **castigar la defensa belga con centros laterales y segundas jugadas** (Lukaku no es buen defensor aéreo).  \n- Bélgica puede **atacar el espacio a la espalda de los laterales españoles** si estos se adelantan en exceso.\n\n---\n\n### 3. **Cruce Defensa vs Ataque: Ventaja Española**  \n- **Ataque español (5 GF)** vs **Defensa belga (2 GA)**: El ataque español es **eficiente pero no demoledor** (1.67 goles/partido). La defensa belga permitió goles ante Egipto (1) y Senegal (2), lo que sugiere **vulnerabilidad ante equipos que combinan velocidad y desmarques**. España carece de velocidad punta p",
+      "sentiment_reader": "Excelente pregunta. Como psicólogo deportivo, analizar el **momentum** y la **presión emocional** en un partido de eliminación directa es casi más importante que el análisis táctico. En un \"Gana o a Casa\", la mente es el músculo más importante. Vamos a desglosar el caso Spain vs Belgium.\n\n---\n\n### 1. MOMENTUM DE CIERRE (Último partido de grupo)\n\n**Spain: Victoria Sólida y Controlada (1-0 vs Portugal)**\nEspaña no solo ganó, sino que lo hizo cerrando la fase de grupos con un **clean sheet** (portería a cero) frente a un rival directo. Son 4 victorias consecutivas, 3 de ellas sin recibir gol.\n- **Efecto Psicológico:** **Confianza en el sistema**. El equipo sabe que no necesita golear para ganar. La victoria ajustada contra Portugal refuerza la idea de que son un equipo \"de torneo\": capaces de sufrir y gestionar momentos de igualdad. Terminan con un **pico de confianza** alto y sostenido. No hay dudas.\n\n**Belgium: Goleada Catártica pero con \"Resaca Psicológica\" (4-1 vs USA)**\nMatemáticamente, una goleada es ideal. Pero viendo la trayectoria: empezaron con dos empates (1-1 vs Egypt, 0-0 vs Iran) que generaron ruido y críticas. Luego una goleada a Nueva Zelanda (5-1) y un sufrido 3-2 vs Senegal. El 4-1 a USA fue un baño de realidad positivo, pero...\n- **Efecto Psicológico:** **Montaña rusa emocional**. El equipo deja atrás la incertidumbre, pero la memoria reciente de los tropiezos iniciales puede generar un \"síndrome de fragilidad\". Es una confianza más volátil: si el partido se pone cuesta arriba temprano, el fantasma de esos empates puede regresar. La goleada es un buen chute de adrenalina, pero no la misma consistencia que España.\n\n**Conclusión de Momentum:** **Spain llega con un momentum lineal y creciente (↑↑↑)**. Belgium llega con un momentum en \"V\" (↓↓↑↑): empezó mal, mejoró, pero la pregunta es si la base es sólida.\n\n---\n\n### 2. VENTAJA PSICOLÓGICA (¿Quién llega más \"enchufado\"?)\n\nAquí hay un matiz clave. El \"favorito relajado\" vs el \"equipo que sufrió y va suelto\".\n\n- **Spain (Favorito con una presión controlada):** España ha sido dominante. Viene de una fase de grupos casi perfecta. El riesgo es **el exceso de confianza o la complacencia**. Si piensan \"somos superiores y esto está controlado\", pueden perder la intensidad inicial. Sin embargo, el hecho de que su último rival fuera Portugal (un clásico) les mantiene en un estado de alerta competitiva, no de relajación total.\n- **Belgium (El superviviente que va \"suelto\"):** Este es un arma de doble filo psicológica. Tras dos empates, el equipo ya ha estado contra las cuerdas y sobrevivió. Eso genera **resiliencia**. La narrativa interna puede ser: \"Ya nos dieron por muertos, jugamos sin presión\". Estar \"sueltos\" les permite tomar riesgos y no temer al error. Son más peligrosos desde ese estado mental que si hubieran sido favoritos de grupo.\n\n**Veredicto:** **La ventaja es ligeramente para Belgium en \"libertad emocional\"**, pero con un riesgo de sobreactivación (nerviosismo) si el partido se les escapa. Spain tiene la ventaja de la **estabilidad emocional** y la certeza de su plan de juego.\n\n---\n\n### 3. PESO DE LA ELIMINATORIA (Presión vs. Nada que perder)\n\nEste es el factor más diferencial.\n\n- **Spain (Presión del \"Debe pasar\"):** España es una potencia histórica. No clasificar a semifinales sería un fracaso. La expectativa externa es alta. Internamente, saben que tienen el mejor equipo del grupo. **El miedo al fracaso es real**. Esto puede generar agarrotamiento en los pasillos finales del partido si el marcador está igualado. Un 0-0 al minuto 70 les pesa más a ellos que a Bélgica.\n- **Belgium (La oportunidad sin presión):** Si bien Bélgica tiene nombre, su trayectoria reciente (dos empates) les quita el cartel de \"candidato al título\". La presión mediática es menor. Su pensamiento clave es: \"Nadie espera que ganemos. Si perdemos, fue contra el favorito. Si"
+    },
+    "round_2": {
+      "rebate_1": "**Respuesta breve:**\n\nNo estoy completamente en desacuerdo, pero sí matizo. Los puntos de ambos expertos son válidos: la defensa perfecta de España (0 goles encajados) y el momentum psicológico tras vencer a Portugal son fortalezas reales. Sin embargo, subestiman el talento individual belga (De Bruyne, Lukaku) y su experiencia en eliminatorias. Un partido de vida o muerte no se gana solo con solidez defensiva o inercia emocional; Bélgica tiene armas para romper cualquier bloque bajo (transiciones, juego aéreo). \n\nMe convencen parcialmente: la táctica defensiva de España es sólida, y el factor mental (ganar con portería a cero) da confianza. Pero el \"clean sheet\" de fase de grupos no garantiza nada ante un ataque como el belga. Mi predicción inicial era 1-1 y penaltis, pero ajusto: España 1-0 (con mucho sufrimiento) o Bélgica 2-1 si llegan a la prórroga. Defiendo mi posición porque en cuartos de final, la jerarquía individual y la capacidad de improvisación pesan tanto como la estrategia colectiva. Ambos equipos tienen opciones, pero no veo favorito claro.",
+      "rebate_2": "**¿Estoy en desacuerdo con ellos?** Parcialmente. El enfoque psicológico (Expert 3) es válido, pero no invalida mi análisis táctico. El momentum emocional importa, pero la solidez defensiva de España (0 goles encajados) y su control táctico son hechos objetivos que reducen el impacto de la presión.\n\n**¿Me convencen?** Sí, en parte. El punto sobre la “presión de eliminatoria” y la gestión del último partido de grupo es relevante: Bélgica podría tener más ansiedad si cerró con dudas. Sin embargo, la falta de datos concretos del Expert 1 (no mostrados) impide evaluarlo.\n\n**¿Ajusto mi predicción de marcador?** No drásticamente. Mantengo un marcador ajustado (ej. 1-0 o 2-1 para España), pero puedo considerar que el partido llegue a prórroga si la presión iguala el juego.\n\n**Defiendo mi posición:** La táctica prevalece sobre la emoción en partidos de alto riesgo. La defensa perfecta de España y su capacidad para anular ataques son más fiables que el momentum subjetivo. Bélgica tendrá que arriesgar, lo que favorece a la contra española. Mi predicción se sostiene.",
+      "rebate_3": "No estoy en desacuerdo con ellos, pero mi enfoque es distinto. El análisis táctico (Expert 2) es válido: la solidez defensiva de España (0 goles encajados) es clave. Sin embargo, en eliminación directa, el *momentum* psicológico pesa tanto como la táctica. La victoria controlada de España ante Portugal refuerza su confianza, mientras que Bélgica arrastra incertidumbre por su irregularidad ofensiva.\n\nMe convencen los puntos sobre la prioridad defensiva de España, pero no cambian mi valoración emocional. El equipo que maneje mejor la presión —y España mostró más equilibrio— tendrá ventaja.\n\nAjusto mi predicción: mantengo un marcador ajustado (1-0 o 2-1 para España), porque el factor mental puede decantar un partido cerrado. Defiendo que la cabeza define estos duelos, y España llega con más claridad emocional."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 1-0 España (20.0%)  \n   Análisis: La defensa perfecta de España (0 goles encajados) y su solidez grupal serán clave en un partido cerrado donde Bélgica no encontrará espacios.\n\n🟠 **Tactical Scout** (tácticas): 1-0 España (22.0%)  \n   Análisis: El duelo táctico favorece a España por su prioridad defensiva y control del ritmo, con Bélgica limitada a ocasiones aisladas.\n\n🟡 **Sentiment Reader** (psicología MD1): 1-0 España (18.0%)  \n   Análisis: El momentum de cierre de España (victoria ante Portugal) y la presión de Bélgica por su irregularidad en grupo generan un margen psicológico favorable.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones  \n1. España 1-0 (20%)  \n2. Empate 0-0 (15%)  \n3. Bélgica 1-0 (12%)\n\n**ANÁLISIS FINAL (2-3 líneas):**  \n- Los tres expertos convergen en un partido de bajo riesgo y alta tensión, con la defensa imbatida de España como factor determinante y un posible gol solitario decidiendo.  \n- Confianza general en la predicción: 7/10, debido a que la igualdad táctica y la posibilidad de penales mantienen cierto margen de incertidumbre.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.20}, \"tactical_scout\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.22}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.18}, \"consensus\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.20}}",
+    "predictions": [
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.2,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.22,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.18,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.2,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 1,
+      "away_goals": 0,
+      "probability": 0.2,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Norway vs England",
+    "home": "Norway",
+    "away": "England",
+    "context": {
+      "is_knockout": true,
+      "round": "Quarter-final",
+      "group": "Quarter-final: Grupo I vs Grupo L",
+      "home_group": "I",
+      "away_group": "L",
+      "home_table": [
+        {
+          "team": "France",
+          "pos": 1,
+          "pts": 9,
+          "gd": 8,
+          "gf": 10,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Norway",
+          "pos": 2,
+          "pts": 6,
+          "gd": 1,
+          "gf": 8,
+          "ga": 7,
+          "pj": 3
+        },
+        {
+          "team": "Senegal",
+          "pos": 3,
+          "pts": 3,
+          "gd": 2,
+          "gf": 8,
+          "ga": 6,
+          "pj": 3
+        },
+        {
+          "team": "Iraq",
+          "pos": 4,
+          "pts": 0,
+          "gd": -11,
+          "gf": 1,
+          "ga": 12,
+          "pj": 3
+        }
+      ],
+      "away_table": [
+        {
+          "team": "England",
+          "pos": 1,
+          "pts": 7,
+          "gd": 4,
+          "gf": 6,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Croatia",
+          "pos": 2,
+          "pts": 6,
+          "gd": 0,
+          "gf": 5,
+          "ga": 5,
+          "pj": 3
+        },
+        {
+          "team": "Ghana",
+          "pos": 3,
+          "pts": 4,
+          "gd": 0,
+          "gf": 2,
+          "ga": 2,
+          "pj": 3
+        },
+        {
+          "team": "Panama",
+          "pos": 4,
+          "pts": 0,
+          "gd": -4,
+          "gf": 0,
+          "ga": 4,
+          "pj": 3
+        }
+      ],
+      "home_row": {
+        "team": "Norway",
+        "pos": 2,
+        "pts": 6,
+        "gd": 1,
+        "gf": 8,
+        "ga": 7,
+        "pj": 3
+      },
+      "away_row": {
+        "team": "England",
+        "pos": 1,
+        "pts": 7,
+        "gd": 4,
+        "gf": 6,
+        "ga": 2,
+        "pj": 3
+      },
+      "home_qual": "2º de grupo (6 pts, GD +1, GF 8)",
+      "away_qual": "1º de grupo (7 pts, GD +4, GF 6)",
+      "home_matches": [
+        "Iraq 1-4 Norway",
+        "Norway 3-2 Senegal",
+        "Norway 1-4 France",
+        "Ivory Coast 1-2 Norway",
+        "Brazil 1-2 Norway"
+      ],
+      "away_matches": [
+        "England 4-2 Croatia",
+        "England 0-0 Ghana",
+        "Panama 0-2 England",
+        "England 2-1 DR Congo",
+        "Mexico 2-3 England"
+      ],
+      "table": [
+        {
+          "team": "Norway",
+          "pos": 2,
+          "pts": 6,
+          "gd": 1,
+          "gf": 8,
+          "ga": 7,
+          "pj": 3
+        },
+        {
+          "team": "England",
+          "pos": 1,
+          "pts": 7,
+          "gd": 4,
+          "gf": 6,
+          "ga": 2,
+          "pj": 3
+        }
+      ],
+      "matches_played": [
+        {
+          "result": "Iraq 1-4 Norway"
+        },
+        {
+          "result": "Norway 3-2 Senegal"
+        },
+        {
+          "result": "Norway 1-4 France"
+        },
+        {
+          "result": "Ivory Coast 1-2 Norway"
+        },
+        {
+          "result": "Brazil 1-2 Norway"
+        },
+        {
+          "result": "England 4-2 Croatia"
+        },
+        {
+          "result": "England 0-0 Ghana"
+        },
+        {
+          "result": "Panama 0-2 England"
+        },
+        {
+          "result": "England 2-1 DR Congo"
+        },
+        {
+          "result": "Mexico 2-3 England"
+        }
+      ],
+      "classification_scenarios": {
+        "if_home_wins": "Norway avanza a la siguiente ronda; England queda ELIMINADO",
+        "if_draw": "Empate en 90' → tiempo extra y posible tanda de PENALES (no hay reparto de puntos)",
+        "if_away_wins": "England avanza a la siguiente ronda; Norway queda ELIMINADO"
+      }
+    },
+    "round_1": {
+      "group_analyst": "",
+      "tactical_scout": "## ANÁLISIS TÁCTICO: NORUEGA vs INGLATERRA (CUARTOS DE FINAL – ELIMINACIÓN DIRECTA)\n\n### 1. TÁCTICA DE ELIMINATORIA: ¿Cerrarse o arriesgar?\n\nEn partidos de mata-mata, el miedo a perder pesa más que la ambición de ganar. Ambos equipos buscarán no cometer errores, pero con enfoques distintos:\n\n- **Inglaterra** priorizará **no encajar**. Su defensa sólida (2 goles encajados en fase de grupos) y su capacidad para controlar el ritmo le permiten jugar con posesión paciente, esperando el error rival. No se cerrarán completamente, pero sí evitarán exposiciones innecesarias. Buscarán la prórroga/penales si es necesario, confiando en su fondo físico y experiencia.\n\n- **Noruega** tiene **más urgencia ofensiva**. Su defensa frágil (7 goles en contra) hace que encerrarse sea un riesgo alto: tarde o temprano encajarán. Por eso, su mejor defensa será el ataque: presionar alto, buscar goles tempranos y obligar a Inglaterra a salir de su zona de confort. Un empate a cero les conviene menos porque en penales la presión es alta y su defensa no inspira confianza.\n\n**Conclusión**: Partido abierto en los primeros 30', luego más táctico. Nadie busca deliberadamente la prórroga, pero Inglaterra la gestiona mejor.\n\n### 2. CHOQUE DE ESTILOS\n\n- **Noruega**: Equipo **vertical y agresivo**. Genera muchas ocasiones (8 goles en 3 partidos) pero deja espacios atrás. Su estilo se basa en transiciones rápidas y presión alta. Ideal para romper defensas estáticas, pero vulnerable a contragolpes.\n\n- **Inglaterra**: Equipo **sólido y paciente**. Defensa ordenada, mediocampo de control (posesión media-alta) y ataque letal en momentos precisos (6 goles, solo 2 en contra). Explota la velocidad de sus extremos y la inteligencia de sus centrocampistas para encontrar huecos.\n\n**Neutralización**: \n- Noruega intentará **imponer ritmo frenético** para desordenar a Inglaterra. \n- Inglaterra buscará **enlentecer el juego**, cortar líneas de pase y salir en contragolpe cuando Noruega se estire. \n\nLa clave estará en el mediocampo: si Inglaterra gana la posesión, Noruega se desgastará; si Noruega recupera rápido, puede pillar desprevenida a la defensa inglesa.\n\n### 3. DEFENSA vs ATAQUE: VENTAJAS CRUZADAS\n\n| Indicador | Noruega | Inglaterra |\n|-----------|---------|------------|\n| **",
+      "sentiment_reader": "## Análisis Psicológico del Mata-Mata: Norway vs England\n\n### 1. Momentum de Cierre\n\n**Norway** cerró la fase de grupos con una victoria ajustada pero significativa ante **Brasil (2-1)**. Este resultado no solo les otorgó la clasificación, sino que representó un **golpe de autoridad** tras haber sufrido una goleada humillante contra Francia (1-4) en su tercer partido. La victoria sobre Brasil funciona como un **reforzador emocional**: demuestra que pueden competir y vencer a una potencia, lo que disipa las dudas generadas por la derrota previa. El equipo llega con una **curva ascendente de confianza**, habiendo superado un bache anímico.\n\n**England** terminó invicto (4V, 1E), pero su último partido fue un **sufrido 3-2 ante México**, donde recibió dos goles y no logró cerrar el partido con solvencia. Además, arrastra un empate sin goles contra Ghana (equipo débil) y una producción ofensiva baja (6 goles en 5 partidos). El cierre no fue una goleada que afiance la confianza, sino una **victoria con dudas defensivas**. Esto puede generar una sensación de **falsa seguridad** o, peor aún, de **vulnerabilidad latente**.\n\n**Conclusión**: Norway tiene mejor momentum psicológico por la **calidad del rival vencido** y la **superación de una adversidad** (derrota anterior). England, pese a no perder, arrastra **fisuras anímicas** por actuaciones poco convincentes.\n\n### 2. Ventaja Psicológica: \"El Chico Bueno vs El Favorito Relajado\"\n\n**Norway** llega como **segundo de grupo**, con el **rol de underdog** que le permite jugar sin presión externa. Su mentalidad es de \"no tenemos nada que perder\" y, tras vencer a Brasil, creen en sus posibilidades. Esto genera un **estado de flujo** donde la motivación es alta y la ansiedad baja.\n\n**England** es el **primer clasificado**, lo que lo convierte en **favorito**. Históricamente, los favoritos en eliminatorias suelen cargar con el peso de la expectativa. Si el equipo siente que **debe ganar**, puede caer en un exceso de precaución o en un **bloqueo por miedo al error**. La falta de una goleada reciente no les da la **confianza expansiva** que sí tiene Norway.\n\nAdemás, Norway ha demostrado **resiliencia** (perder 1-4 con Francia y luego ganar a Brasil), mientras que England no ha enfrentado una derrota que ponga a prueba su fortaleza mental. En un partido de eliminación directa, el equipo que **ha sabido levantarse** tiene ventaja psicológica.\n\n**Veredicto**: Norway está **más enchufado emocionalmente**. England podría caer en una **relajación peligrosa** o, por el contrario, en una **tensión excesiva**.\n\n### 3. Peso de la Eliminatoria: Presión vs Libertad\n\n**"
+    },
+    "round_2": {
+      "rebate_1": "**¿Estoy en desacuerdo con ellos?**  \nSí, en parte. Ambos expertos subestiman la capacidad de **Norway** para imponer su estilo ofensivo. Expert 2 se centra en la solidez defensiva de Inglaterra, pero ignora que Noruega ya rompió una defensa (Brasil) y tiene recursos para desordenar líneas. Expert 3 destaca el *momentum* emocional noruego, pero omite que Inglaterra también sabe gestionar la presión en eliminatorias.\n\n**¿Me convencen?**  \nPuntos válidos:  \n- La defensa de Inglaterra es consistente (2 goles encajados).  \n- La victoria noruega ante Brasil genera confianza real.  \n\nSin embargo, **no me convencen** de que Inglaterra sea favorita clara. El formato mata-mata nivela jerarquías, y Noruega mostró capacidad de reacción tras la goleada con Francia.\n\n**¿Ajusto mi predicción de marcador?**  \nMantengo un **1-1 en tiempo reglamentario** y posible definición por penales. Inglaterra no encaja muchos, pero Noruega anota en partidos clave. No veo dominio absoluto de ningún bando.\n\n**Defiendo mi posición**:  \nEl debate infravalora el factor **imprevisibilidad**. Noruega tiene pegada (Haaland, Ødegaard) y ya venció a una potencia. Inglaterra, aunque sólida, no es infalible en ataques organizados. Cerrarse demasiado podría costarle caro si Noruega acierta en transiciones. La balanza es más equilibrada de lo que sugieren.",
+      "rebate_2": "**Desacuerdo parcial**: El análisis emocional de Expert 3 es válido – la victoria de Noruega sobre Brasil genera confianza. Sin embargo, subestima el temple de Inglaterra en eliminatorias (penaltis contra Nigeria en 2023, experiencia en torneos). El \"momentum\" no anula la solidez defensiva inglesa.\n\n**¿Me convencen?** El punto sobre el refuerzo emocional noruego es realista, pero no suficiente para cambiar mi visión táctica. Inglaterra controla mejor los partidos cerrados.\n\n**Ajuste de marcador**: No. Sostengo mi predicción de **1-0 o 2-0 para Inglaterra**. Noruega puede competir, pero la defensa inglesa y su capacidad de gestionar la presión son superiores en partidos de mata-mata.\n\n**Defensa**: La eliminatoria se gana desde la estructura, no desde la euforia. Inglaterra encajó solo 2 goles en grupos; Noruega recibió 4 contra Francia. La diferencia defensiva pesa más que un triunfo moral ante Brasil.",
+      "rebate_3": "No estoy en desacuerdo total con los expertos, pero sí matizo: su enfoque táctico es válido, pero ignora el factor psicológico que planteé. Inglaterra tiene una defensa sólida, sí, pero Noruega llega con un boost emocional tras vencer a Brasil. Ese momentum puede romper la paciencia inglesa si el partido se alarga sin goles. Me convence que Inglaterra priorizará no encajar, pero eso también puede generar ansiedad si no logran marcar. No ajusto mi predicción de marcador (Noruega 2-1, o quizás 1-1 y penaltis). Defiendo mi posición: en mata-mata, la confianza pesa tanto como la táctica."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): 2-1 (Norway) (0.18%)\n   Análisis: Noruega impondrá su estilo ofensivo y superará a la defensa inglesa, aprovechando su momento ofensivo.\n\n🟠 **Tactical Scout** (tácticas): 0-1 (England) (0.20%)\n   Análisis: Inglaterra priorizará no encajar y buscará un gol en transición, apoyada en su solidez defensiva y experiencia en eliminatorias.\n\n🟡 **Sentiment Reader** (psicología MD1): 1-1 (0.22%)\n   Análisis: La confianza de Noruega tras vencer a Brasil chocará con el temple inglés; partido igualado que se decidirá en prórroga o penaltis.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones: Empate 1-1 (0.20%), seguido de victoria inglesa 1-0 (0.18%) y victoria noruega 2-1 (0.15%).\n\nANÁLISIS FINAL (2-3 líneas):\n- Los expertos convergieron en la importancia del duelo entre el ataque noruego (8 goles en grupos) y la defensa inglesa (solo 2 goles encajados), así como en el peso psicológico del triunfo de Noruega sobre Brasil frente a la experiencia de Inglaterra en eliminatorias. El partido se perfila como un choque cerrado con baja probabilidad de muchos goles.\n- Confianza general en la predicción: 7/10.\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.18}, \"tactical_scout\": {\"home_goals\": 0, \"away_goals\": 1, \"probability\": 0.20}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.22}, \"consensus\": {\"home_goals\": 1, \"away_goals\": 1, \"probability\": 0.20}}",
+    "predictions": [
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.18,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 0,
+        "away_goals": 1,
+        "probability": 0.2,
+        "predicted_winner": "away",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.22,
+        "predicted_winner": "draw",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 1,
+        "probability": 0.2,
+        "predicted_winner": "draw",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 2,
+      "away_goals": 1,
+      "probability": 0.18,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
+  },
+  {
+    "match": "Argentina vs Switzerland",
+    "home": "Argentina",
+    "away": "Switzerland",
+    "context": {
+      "is_knockout": true,
+      "round": "Quarter-final",
+      "group": "Quarter-final: Grupo J vs Grupo B",
+      "home_group": "J",
+      "away_group": "B",
+      "home_table": [
+        {
+          "team": "Argentina",
+          "pos": 1,
+          "pts": 9,
+          "gd": 7,
+          "gf": 8,
+          "ga": 1,
+          "pj": 3
+        },
+        {
+          "team": "Austria",
+          "pos": 2,
+          "pts": 4,
+          "gd": 0,
+          "gf": 6,
+          "ga": 6,
+          "pj": 3
+        },
+        {
+          "team": "Algeria",
+          "pos": 3,
+          "pts": 4,
+          "gd": -2,
+          "gf": 5,
+          "ga": 7,
+          "pj": 3
+        },
+        {
+          "team": "Jordan",
+          "pos": 4,
+          "pts": 0,
+          "gd": -5,
+          "gf": 3,
+          "ga": 8,
+          "pj": 3
+        }
+      ],
+      "away_table": [
+        {
+          "team": "Switzerland",
+          "pos": 1,
+          "pts": 7,
+          "gd": 4,
+          "gf": 7,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Canada",
+          "pos": 2,
+          "pts": 4,
+          "gd": 5,
+          "gf": 8,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Bosnia and Herzegovina",
+          "pos": 3,
+          "pts": 4,
+          "gd": -1,
+          "gf": 5,
+          "ga": 6,
+          "pj": 3
+        },
+        {
+          "team": "Qatar",
+          "pos": 4,
+          "pts": 1,
+          "gd": -8,
+          "gf": 2,
+          "ga": 10,
+          "pj": 3
+        }
+      ],
+      "home_row": {
+        "team": "Argentina",
+        "pos": 1,
+        "pts": 9,
+        "gd": 7,
+        "gf": 8,
+        "ga": 1,
+        "pj": 3
+      },
+      "away_row": {
+        "team": "Switzerland",
+        "pos": 1,
+        "pts": 7,
+        "gd": 4,
+        "gf": 7,
+        "ga": 3,
+        "pj": 3
+      },
+      "home_qual": "1º de grupo (9 pts, GD +7, GF 8)",
+      "away_qual": "1º de grupo (7 pts, GD +4, GF 7)",
+      "home_matches": [
+        "Argentina 3-0 Algeria",
+        "Argentina 2-0 Austria",
+        "Jordan 1-3 Argentina",
+        "Argentina 3-2 Cape Verde",
+        "Argentina 3-2 Egypt"
+      ],
+      "away_matches": [
+        "Qatar 1-1 Switzerland",
+        "Switzerland 4-1 Bosnia and Herzegovina",
+        "Canada 1-2 Switzerland",
+        "Switzerland 2-0 Algeria",
+        "Switzerland 4-3 Colombia"
+      ],
+      "table": [
+        {
+          "team": "Argentina",
+          "pos": 1,
+          "pts": 9,
+          "gd": 7,
+          "gf": 8,
+          "ga": 1,
+          "pj": 3
+        },
+        {
+          "team": "Switzerland",
+          "pos": 1,
+          "pts": 7,
+          "gd": 4,
+          "gf": 7,
+          "ga": 3,
+          "pj": 3
+        }
+      ],
+      "matches_played": [
+        {
+          "result": "Argentina 3-0 Algeria"
+        },
+        {
+          "result": "Argentina 2-0 Austria"
+        },
+        {
+          "result": "Jordan 1-3 Argentina"
+        },
+        {
+          "result": "Argentina 3-2 Cape Verde"
+        },
+        {
+          "result": "Argentina 3-2 Egypt"
+        },
+        {
+          "result": "Qatar 1-1 Switzerland"
+        },
+        {
+          "result": "Switzerland 4-1 Bosnia and Herzegovina"
+        },
+        {
+          "result": "Canada 1-2 Switzerland"
+        },
+        {
+          "result": "Switzerland 2-0 Algeria"
+        },
+        {
+          "result": "Switzerland 4-3 Colombia"
+        }
+      ],
+      "classification_scenarios": {
+        "if_home_wins": "Argentina avanza a la siguiente ronda; Switzerland queda ELIMINADO",
+        "if_draw": "Empate en 90' → tiempo extra y posible tanda de PENALES (no hay reparto de puntos)",
+        "if_away_wins": "Switzerland avanza a la siguiente ronda; Argentina queda ELIMINADO"
+      }
+    },
+    "round_1": {
+      "group_analyst": "### Análisis Profundo: Argentina vs. Suiza (Cuartos de Final, Eliminación Directa)\n\n#### 1. Calidad del Camino: ¿Quién llegó más sólido?\n\n**Argentina (Grupo J, 1º, 9 pts, GD +7, GF 8)**  \n- Récord perfecto (5-0-0), pero los rivales fueron de nivel bajo a medio: Argelia (África media), Austria (europeo modesto), Jordania (débil), Cabo Verde (muy débil) y Egipto (África media).  \n- Sus dos últimos partidos (3-2 vs. Cabo Verde y 3-2 vs. Egipto) muestran fragilidad defensiva: encajó 2 goles en cada uno, contra equipos que no son ofensivamente temibles.  \n- Dominio estadístico claro (GF 8, GC 5), pero la solidez se diluye al ver que los marcadores ajustados llegaron contra rivales de menor jerarquía.\n\n**Suiza (Grupo B, 1º, 7 pts, GD +4, GF 7)**  \n- Récord de 4-1-0 (un empate 1-1 con Qatar, un equipo débil). Victoria clave ante Colombia (4-3), un rival sudamericano de mayor peso que cualquiera de los de Argentina. También goleó a Bosnia (4-1) y venció a Canadá y Argelia con solvencia.  \n- Suiza tuvo un calendario más equilibrado: enfrentó a Colombia (potencia media-alta) y a Bosnia (equipo europeo físico). El empate con Qatar es una mancha, pero también muestra inconsistencia.  \n- Ofensivamente similar (GF 7), pero defensivamente algo más frágil (GC 6) que Argentina en promedio.\n\n**Veredicto:** Argentina parece más \"sólida\" por puntos y diferencia de goles, pero su fortaleza es relativa al bajo nivel de sus oponentes. Suiza, con un camino más duro, también tuvo un tropiezo (Qatar) y una victoria de locura (4-3). **No hay un claro dominante; ambos llegan con dudas defensivas y virtudes ofensivas.**\n\n---\n\n#### 2. Lectura de Nivel Real: ¿Inflado o desinflado?\n\n- **Argentina** puede estar **inflada** por su récord perfecto ante rivales débiles. Los 3-2 consecutivos contra Cabo Verde y Egipto indican que su defensa no es fiable bajo presión. Su ataque es efectivo pero no arrollador (promedio 1.6 goles/partido).  \n- **Suiza** tiene un perfil más realista: cayó en empate con Qatar (error evitable), pero demostró capacidad de anotar a Colombia (4 goles) y de manejar partidos abiertos. Su defensa es permeable (encajó 3 goles a Colombia y 1 a Qatar, Bosnia y Canadá).  \n- **Conclusión:** El nivel real de ambos es muy parejo. Argentina tiene un techo ofensivo ligeramente más alto (",
+      "tactical_scout": "## ANÁLISIS TÁCTICO: ARGENTINA vs SUIZA (CUARTOS DE FINAL – MATA-MATA)  \n\n### 1. TÁCTICA DE ELIMINATORIA: ¿PRORROGA O ASALTO DIRECTO?\n\n**Suiza** llega con un perfil de \"equipo difícil de quebrar\". Su 1-1 ante Qatar y el 4-3 ante Colombia muestran inconsistencia defensiva, pero en eliminatorias suelen priorizar el orden. **Probablemente se cierren en un bloque medio-bajo, buscando el 0-0 hasta el 70' y luego apostar a un contragolpe o penales.** Tienen fondo físico para alargar el partido, pero su talón de Aquiles es la concentración en tramos largos (golpes de Bosnia y Colombia).\n\n**Argentina**, con un arranque demoledor en grupos (8 GF, 1 GC), tiene la confianza y la pegada para **romper partidos cerrados**. Messi, Di María y Julián Álvarez son especialistas en espacios reducidos. El 3-2 ante Egipto fue un aviso: pueden ganar incluso sin brillar. **Buscarán gol temprano para evitar la angustia de la prórroga**, pero si el marcador está 0-0 al 60', no dudarán en forzar con laterales, centros y remates de media distancia.\n\n**Conclusión táctica:**  \n- Suiza: cierre + contraataque + penales.  \n- Argentina: dominio + posesión + desborde individual.  \n\n---\n\n### 2. CHOQUE DE ESTILOS\n\n| **Argentina** | **Suiza** |\n|--------------|-----------|\n| Posesión alta, triangulaciones ofensivas. | Transiciones rápidas, juego directo a los puntas. |\n| Defensa adelantada (riesgo de contragolpes). | Defensa replegada, líneas juntas. |\n| Messi como generador de espacios. | Xhaka como timón, Shaqiri como amenaza aérea/tiro libre. |\n\n**Neutralización:**  \n- **Argentina explota** la debilidad suiza en defensa tras pérdida de balón (goles de Colombia llegaron así). Si presionan arriba, pueden robar y atacar con superioridad.  \n- **Suiza explota** los espacios a la espalda de los laterales argentinos (Molina/Acuña suben mucho). Un balón largo a Embolo o Seferovic puede ser letal en transición.  \n\n**Punto crítico:** La velocidad de los centrales suizos (Akanji, Elvedi) vs la agilidad de Álvarez/Di María. Si Suiza se retrasa demasiado, los argentinos encontrarán huecos desde la media luna.\n\n---\n\n### 3. DEFENSA vs ATAQUE (CRUCE DE DATOS)\n\n| **Ataque Argentina** (8 GF) | vs | **Defensa Suiza** (3 GA) |\n|-----------------------------|----|--------------------------|\n| 8 goles en 3 partidos (2.67 por partido). | | 3 goles en 3 partidos (1.0 por partido). |\n| Dato: 5 de 8 goles fueron en segundo tiempo (resistencia). | | Suiza encajó 2 goles en primeros 30' (ante Bosnia y Colombia). |\n\n**Ventaja ofensiva de Argentina:** Suiza no ha enfrentado un ataque tan versátil (Egipto y Colombia fueron más directos). La defensa suiza es sólida en bloque bajo, pero vulnerable en balones parados y cuando la presión es sostenida.\n\n| **Ataque Suiza** (7 GF) | vs | **Defensa Argentina** (1 GA) |\n|-------------------------|----|-------------------------------|\n| 7 goles (promedio 2.33). | | 1 solo gol en contra (a Egipto). |\n\n**Ventaja defensiva de Argentina:** La zaga con Romero y Otamendi ha mostrado solidez, aunque el gol de Egipto llegó por desatención en un centro lateral. Suiza necesita centros precisos o errores individuales para perforar.\n\n**Equilibrio:** Argentina domina en ambos lados, pero Suiza tiene armas para un gol de rebote o jugada aislada.\n\n---\n\n### 4. GESTIÓN DEL PARTIDO (90' + PRÓRROGA + PENALES)\n\n- **Físico:** Suiza es un equipo físico (Xhaka, Freuler, Akanji) que puede sostener 120' a alta intensidad. Argentina tiene un desgaste menor en grupos (dominó posesión) pero jugadores como Messi suelen dosificar esfuerzo.  \n- **Banca:** Argentina tiene más recursos ofensivos de cambio (Lautaro, Correa, Garnacho) que Suiza (Zuber, Okafor, Steffen). En defensa, Argentina tiene menos recambios fiables (Pezzella, Lisandro).  \n- **Penales:** Argentina es letal en tandas: Messi, Di María, Paredes, Julián son especialistas. Suiza tiene a Shaqiri y Xhaka, pero fallaron en momentos clave (Eurocopa vs España). *Ventaja psicológica para Argentina.*  \n\n**Estrategia de tiempos:**  \n- Si Argentina marca antes del 60': Suiza se desordenará y el partido se abrirá.  \n- Si el 0-0 persiste al 80': Suiza se cerrará aún más y buscará penales. Argentina deberá arriesgar con centros y segundas jugadas.  \n\n---\n\n### 5. MARCADORES MÁS PROBABLES (90')\n\n**TOP 1: Argentina 1-0 (Confianza: ALTA)**  \n- **Táctica:** Gol de Messi en una jugada individual (recorte, definición cruzada) o de cabeza de un defensor en córner. Argentina controla la posesión (65-70%) y Suiza se repliega. El gol llega entre el 55'-75' cuando la defensa suiza se fatiga.  \n- **Riesgo:** Si Suiza empata, irían a penales. Pero Argentina sabe manejar 1-0 y cerrar líneas.\n\n**TOP 2: Argentina 2-1 (Confianza: MEDIA)**  \n- **Táctica:** Argentina abre rápido (gol en primeros 20') y Suiza reacciona con un contraataque (Embolo al 60'). Argentina",
+      "sentiment_reader": "### ANÁLISIS PSICODEPORTIVO: ARGENTINA vs SUIZA (CUARTOS DE FINAL)\n\n#### 1. MOMENTUM DE CIERRE\n\n- **Argentina (3-2 vs Egypt, 3-2 vs Cape Verde):** Cierra la fase de grupos con dos victorias ajustadas, pero **ganando**. El mensaje interno es doble: por un lado, confianza por mantener el invicto y la capacidad de resolver partidos complicados; por otro, **señales de alerta** defensiva (recibir 2 goles en cada uno de los últimos dos partidos contra rivales de menor jerarquía). El equipo llega **tenso** porque no ha mostrado solidez. La ventaja es que el entrenador puede usar esos partidos para corregir errores sin perder puntos.\n\n- **Suiza (4-3 vs Colombia):** Un resultado de locos: ganar 4-3 en el último partido genera **adrenalina** pero también expone fragilidad (recibir 3 goles de Colombia). Sin embargo, el equipo mostró carácter para remontar o sostener una ventaja en un partido de muchos goles. La sensación es de **montaña rusa emocional**: euforia por el triunfo, pero incertidumbre por la defensa. Además, el empate inicial con Qatar (1-1) les quitó presión de ser favoritos.\n\n**Conclusión:** Ambos llegan con **momentum positivo** (victorias), pero **no con contundencia**. La diferencia es que Argentina ganó todos sus partidos (100% de efectividad), mientras que Suiza empató uno. Psicológicamente, Argentina tiene una **ventaja de racha**, pero con más dudas internas por los goles encajados.\n\n#### 2. VENTAJA PSICOLÓGICA: ¿QUIÉN LLEGA MÁS ENCHUFADO?\n\n- **Argentina:** Históricamente es favorito. Llega con el **peso de la superioridad numérica y de plantel**. El riesgo es el **exceso de confianza** o, por el contrario, la **parálisis por el miedo a fallar**. Al haber clasificado primero con solvencia, puede sentirse con derecho a pasar, pero los últimos partidos ajustados les han recordado que cualquier error cuesta caro. El \"enchufe\" es real, pero puede ser **tensión controlada** o **ansiedad**.\n\n- **Suiza:** Juega **sin nada que perder** y con la etiqueta de \"equipo que complica a los grandes\". Su clasificación fue más sufrida (7 puntos, apenas +4 de diferencia), lo que les da un **chip de supervivientes**. Llegan sueltos, con la mentalidad de que ya cumplieron al pasar primeros de grupo. Esto puede traducirse en **atrevimiento** y **mayor frescura mental** para ejecutar su plan sin presión. La historia muestra que equipos \"tapados\" en cuartos suelen rendir por encima de su potencial cuando se sienten liberados.\n\n**Veredicto:** **Suiza tiene la ventaja psicológica del \"rol de underdog\"**. Argentina carga con la obligación de ganar; cualquier imprevisto (gol en contra, error arbitral) puede generar **frustración** y **bloqueo**. Suiza, en cambio, puede jugar con la **tranquilidad de ir a muerte** sin miedo al ridículo.\n\n#### 3. PESO DE LA ELIMINATORIA: PRESIÓN Y MIEDO\n\n- **Argentina:** **Presión máxima**. Es un equipo con tradición, estrellas (Messi, etc.) y una hinchada que exige títulos. El \"gana o a casa\" se multiplica porque una eliminación temprana sería un fracaso monumental. El **miedo a quedar afuera** puede generar **agarrotamiento** en momentos clave (definiciones, penales). Además, el historial reciente (campeón del mundo 2022 en un hipotético contexto) les suma una carga extra: deben demostrar que no fue casualidad.\n\n- **Suiza:** **Presión baja**. Nadie espera que eliminen a Argentina. Su objetivo realista era"
+    },
+    "round_2": {
+      "rebate_1": "**No estoy en desacuerdo con ellos; al contrario, refuerzan mi escepticismo inicial.**  \n\n- **Expert 2** (táctico) confirma que Suiza priorizará el orden defensivo y buscará llevar el partido a alargue o penales. Eso precisamente expone la fragilidad defensiva de Argentina (2 goles encajados ante Cabo Verde y Egipto).  \n- **Expert 3** (psicológico) destaca la doble lectura de sus últimos triunfos: confianza por ganar, pero **alerta defensiva**. Coincido: no es una señal de solidez, sino de vulnerabilidad ante rivales débiles.  \n\n**Puntos válidos:** Ambos expertos reconocen que Argentina no llega con una defensa fiable y que Suiza tiene herramientas (bloque bajo, físico, experiencia en eliminatorias) para explotarlo.  \n\n**¿Ajusto mi predicción?** Sí. Inicialmente veía a Argentina favorita, pero ahora considero más probable un partido cerrado. Ajusto mi marcador a **1-1 en 90', con victoria de Suiza en penales** (si Argentina no corrige su línea defensiva).  \n\n**Defiendo mi posición:** Mi análisis original ya señalaba la fragilidad defensiva y rivales de bajo nivel. Los expertos aportan matices tácticos y psicológicos que **refuerzan la posibilidad de sorpresa**. Argentina no es invencible; Suiza, ordenada, puede neutralizarla.",
+      "rebate_2": "**Respuesta breve (Tactical Scout):**\n\nNo estoy en desacuerdo total; sus puntos sobre la fragilidad defensiva de Argentina y la inconsistencia de Suiza son válidos. Sin embargo, el análisis de **Group Analyst** sobre la debilidad del grupo argentino subestima que en mata-mata el rival define el ritmo, no la fase de grupos. **Sentiment** acierta en la doble señal anímica, pero en eliminatorias el factor táctico (presión, repliegue, transiciones) pesa más que los últimos resultados ajustados.\n\n**¿Me convencen?** Parcialmente. La fragilidad defensiva argentina es real, pero Suiza no es un equipo que explote ese espacio con velocidad constante; su 4-3 ante Colombia muestra que también pueden ser vulnerables. El bloque bajo y la búsqueda de penales es un plan coherente, pero requiere disciplina total.\n\n**¿Ajusto mi predicción?** Sí, ligeramente. Antes veía 1-0 o 2-0 argentino en tiempo regular. Ahora considero más probable un **2-1** con un gol suizo de contragolpe, pero Argentina resolviendo en los 90’. No creo en prórroga porque Argentina tiene calidad individual (Messi, Lautaro) para desbloquear defensas cerradas.\n\n**Defiendo mi posición:** En cuartos de final, la experiencia en knockouts y la jerarquía ofensiva argentina (Garnacho, Mac Allister) superan las dudas defensivas. Suiza se cerrará, pero no tiene pegada para sostener el 0-0 todo el partido. Argentina gana en tiempo regular.",
+      "rebate_3": "No estoy en desacuerdo total, pero matizo. Coincido en que la defensa argentina es vulnerable (2 goles por partido ante rivales menores), pero el **Expert 1** subestima la capacidad de resolución ofensiva en partidos cerrados. El **Expert 2** acierta en que Suiza buscará el bloque bajo, pero olvida que Argentina ya ganó partidos “sucios” (vs. Egipto y Cabo Verde) forzando errores.\n\n**Puntos válidos:** la fragilidad defensiva es real; el camino fácil de Argentina infla su record. También es cierto que Suiza tiene físico para alargar el partido.\n\n**¿Me convencen?** Parcialmente. La defensa argentina preocupa, pero el ataque (con Messi, Álvarez, etc.) es diferencial en eliminatorias. Suiza no es una roca: ante Colombia encajó 3 y ante Qatar casi pierde.\n\n**Ajuste de predicción:** Mantengo Argentina 2-1 en 90’, pero con menos confianza. Si el partido se va a penales, Suiza tiene opciones.\n\n**Defensa:** Mi posición inicial no ignoraba los problemas defensivos; los señalaba como alerta, pero también destacaba el **momentum ganador**. En mata-mata, ese “saber sufrir” pesa más que la solidez estadística."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): Argentina 1-0 (0.18)\n   Análisis: Récord perfecto pero rivales débiles; defensa argentina vulnerable. Suiza puede aguantar, pero Argentina resuelve 1-0.\n\n🟠 **Tactical Scout** (tácticas): Argentina 2-1 (0.16)\n   Análisis: Partido cerrado; Suiza prioriza orden, pero Argentina tiene calidad para marcar la diferencia. 2-1 ajustado.\n\n🟡 **Sentiment Reader** (psicología MD1): Argentina 1-0 (0.20)\n   Análisis: Momentum de cierre positivo para Argentina, aunque defensa frágil. Resolución ofensiva clave. 1-0.\n\n🏆 **CONSENSO FINAL**: Argentina 1-0 (0.22)\n\nANÁLISIS FINAL (2-3 líneas):\n- Los tres expertos convergen en que Argentina es favorita por su invicto y capacidad ofensiva, aunque reconocen vulnerabilidades defensivas y el orden de Suiza. El choque de estilos se inclina hacia un partido de pocos goles, donde la resolución individual argentina será determinante en un marcador ajustado.\n- Confianza general en la predicción: 7/10\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.18}, \"tactical_scout\": {\"home_goals\": 2, \"away_goals\": 1, \"probability\": 0.16}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.20}, \"consensus\": {\"home_goals\": 1, \"away_goals\": 0, \"probability\": 0.22}}",
+    "predictions": [
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.18,
+        "predicted_winner": "home",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 2,
+        "away_goals": 1,
+        "probability": 0.16,
+        "predicted_winner": "home",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.2,
+        "predicted_winner": "home",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 0,
+        "probability": 0.22,
+        "predicted_winner": "home",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 1,
+      "away_goals": 0,
+      "probability": 0.18,
+      "predicted_winner": "home",
+      "agent": "Group Analyst"
+    }
   }
 ]
