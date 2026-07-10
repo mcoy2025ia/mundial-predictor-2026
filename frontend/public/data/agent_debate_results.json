@@ -7968,5 +7968,217 @@
       "agent": "Group Analyst"
     },
     "backfill_cutoff": "2026-07-07"
+  },
+  {
+    "match": "South Africa vs Canada",
+    "home": "South Africa",
+    "away": "Canada",
+    "context": {
+      "is_knockout": true,
+      "round": "Round of 32",
+      "group": "Round of 32: Grupo A vs Grupo B",
+      "home_group": "A",
+      "away_group": "B",
+      "home_table": [
+        {
+          "team": "Mexico",
+          "pos": 1,
+          "pts": 9,
+          "gd": 6,
+          "gf": 6,
+          "ga": 0,
+          "pj": 3
+        },
+        {
+          "team": "South Africa",
+          "pos": 2,
+          "pts": 4,
+          "gd": -1,
+          "gf": 2,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "South Korea",
+          "pos": 3,
+          "pts": 3,
+          "gd": -1,
+          "gf": 2,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Czech Republic",
+          "pos": 4,
+          "pts": 1,
+          "gd": -4,
+          "gf": 2,
+          "ga": 6,
+          "pj": 3
+        }
+      ],
+      "away_table": [
+        {
+          "team": "Switzerland",
+          "pos": 1,
+          "pts": 7,
+          "gd": 4,
+          "gf": 7,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Canada",
+          "pos": 2,
+          "pts": 4,
+          "gd": 5,
+          "gf": 8,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Bosnia and Herzegovina",
+          "pos": 3,
+          "pts": 4,
+          "gd": -1,
+          "gf": 5,
+          "ga": 6,
+          "pj": 3
+        },
+        {
+          "team": "Qatar",
+          "pos": 4,
+          "pts": 1,
+          "gd": -8,
+          "gf": 2,
+          "ga": 10,
+          "pj": 3
+        }
+      ],
+      "home_row": {
+        "team": "South Africa",
+        "pos": 2,
+        "pts": 4,
+        "gd": -1,
+        "gf": 2,
+        "ga": 3,
+        "pj": 3
+      },
+      "away_row": {
+        "team": "Canada",
+        "pos": 2,
+        "pts": 4,
+        "gd": 5,
+        "gf": 8,
+        "ga": 3,
+        "pj": 3
+      },
+      "home_qual": "2º de grupo (4 pts, GD -1, GF 2)",
+      "away_qual": "2º de grupo (4 pts, GD +5, GF 8)",
+      "home_matches": [
+        "Mexico 2-0 South Africa",
+        "Czech Republic 1-1 South Africa",
+        "South Africa 1-0 South Korea"
+      ],
+      "away_matches": [
+        "Canada 1-1 Bosnia and Herzegovina",
+        "Canada 6-0 Qatar",
+        "Canada 1-2 Switzerland"
+      ],
+      "table": [
+        {
+          "team": "South Africa",
+          "pos": 2,
+          "pts": 4,
+          "gd": -1,
+          "gf": 2,
+          "ga": 3,
+          "pj": 3
+        },
+        {
+          "team": "Canada",
+          "pos": 2,
+          "pts": 4,
+          "gd": 5,
+          "gf": 8,
+          "ga": 3,
+          "pj": 3
+        }
+      ],
+      "matches_played": [
+        {
+          "result": "Mexico 2-0 South Africa"
+        },
+        {
+          "result": "Czech Republic 1-1 South Africa"
+        },
+        {
+          "result": "South Africa 1-0 South Korea"
+        },
+        {
+          "result": "Canada 1-1 Bosnia and Herzegovina"
+        },
+        {
+          "result": "Canada 6-0 Qatar"
+        },
+        {
+          "result": "Canada 1-2 Switzerland"
+        }
+      ],
+      "classification_scenarios": {
+        "if_home_wins": "South Africa avanza a la siguiente ronda; Canada queda ELIMINADO",
+        "if_draw": "Empate en 90' → tiempo extra y posible tanda de PENALES (no hay reparto de puntos)",
+        "if_away_wins": "Canada avanza a la siguiente ronda; South Africa queda ELIMINADO"
+      }
+    },
+    "round_1": {
+      "group_analyst": "## Análisis Profundo: Sudáfrica vs. Canadá (Round of 32)\n\n### 1. Calidad del Camino: ¿Quién llegó más sólido?\n\n**Sudáfrica (Grupo A – 2º, 4 pts, GF 2, GD -1)**  \n- **Rivales:** México (2-0 derrota), República Checa (1-1 empate), Corea del Sur (1-0 victoria).  \n- **Lectura:** Un grupo con un claro favorito (México) y dos rivales de nivel medio-bajo. Sudáfrica **no anotó más de un gol en ningún partido** y su única victoria fue por la mínima ante Corea del Sur, que probablemente era el rival más débil del grupo. La derrota ante México fue clara (0-2). El empate con Checa fue un partido parejo.  \n- **Conclusión:** Camino **frágil y defensivo**. Sudáfrica sobrevivió gracias a su orden defensivo, pero su producción ofensiva es **críticamente baja** (0.67 goles por partido). Su diferencia de gol negativa (-1) evidencia que, contra rivales de su nivel o superiores, no genera peligro consistente.\n\n**Canadá (Grupo B – 2º, 4 pts, GF 8, GD +5)**  \n- **Rivales:** Bosnia (1-1 empate), Qatar (6-0 goleada), Suiza (1-",
+      "tactical_scout": "## Análisis Táctico: Sudáfrica vs Canadá (Round of 32)\n\n### 1. Táctica de Eliminatoria (Mata-Mata)\n- **Sudáfrica**: Priorizará **no encajar**. Su pobre producción ofensiva (2 goles en 3 partidos) y su solidez defensiva relativa (3 goles encajados, ante México y República Checa, equipos de mayor nivel) indican que buscarán un bloque bajo, acumular líneas y forzar la prórroga o penales. Especialmente porque ante Corea del Sur lograron una victoria 1-0 con ese mismo plan.\n- **Canadá**: Tiene el **ataque para romper partidos cerrados** (8 goles en grupo, incluido un 6-0 a Catar). Sin embargo, su defensa es vulnerable (3 goles encajados, dos de Suiza en derrota). En eliminatoria, no pueden permitirse un error temprano. Buscarán dominio de posesión y paciencia, pero con mayor riesgo ofensivo que Sudáfrica.\n\n**Conclusión**: Sudáfrica se cerrará; Canadá intentará abrir el marcador en los primeros 30-40 minutos para evitar una tensión creciente.\n\n### 2. Choque de Estilos\n- **Sudáfrica**: Estilo defensivo, ordenado, transiciones lentas. Dependen de balones largos a un delantero aislado (posiblemente el mismo que marcó a Corea). Su principal fortaleza es la disciplina táctica.\n- **Canadá**: Equipo dinámico, con jugadores rápidos en bandas y un ataque vertical que explota espacios. Su debilidad es la presión alta mal ejecutada (Suiza les hizo dos goles en transiciones).\n\n**Neutralización**: Sudáfrica intentará anular las bandas canadienses con laterales cerrados y doblajes. Canadá tratará de encontrar huecos entre líneas con movilidad de sus mediocampistas ofensivos. El partido se decidirá en si Canadá puede generar ocasiones claras contra un bloque bajo bien plantado.\n\n### 3. Defensa vs Ataque (Cruce de Datos)\n| Equipo | Goles a Favor (GF) | Goles en Contra (GC) |\n|--------|-------------------|---------------------|\n| Sudáfrica | 2 | 3 |\n| Canadá | 8 | 3 |\n\n- **Ataque de Canadá (8 GF) vs Defensa de Sudáfrica (3 GC)**: Ventaja para Canadá, pero Sudáfrica solo encajó 1 gol por partido en promedio (excluyendo el 2-0 de México que fue un resultado justo). Si logran mantener ese nivel, pueden aguantar.\n- **Ataque de Sudáfrica (2 GF) vs Defensa de Canadá (3 GC)**: Ventaja abrumadora para Canadá. Sudáfrica apenas genera peligro. Solo marcó 1 gol a Corea (equipo débil) y 1 a República Checa (en un empate). Es muy probable que no anoten.\n\n**Conclusión**: El partido se reduce a si Canadá puede superar la defensa sudafricana. Si lo hace temprano, el partido se abre.\n\n### 4. Gestión del Partido (90' + Prórroga)\n- **Fondo físico**: No hay datos concretos, pero ambos equipos vienen de grupos equilibrados. Sudáfrica jugó partidos de baja intensidad (1-0, 1-1, 0-2); Canadá tuvo un partido de alta intensidad (6-0) y dos reñidos. Puede haber ligera ventaja física para Sudáfrica por menor desgaste.\n- **Banca**: Sin información específica, pero en eliminatoria, los cambios suelen ser defensivos. Sudáfrica puede reforzar su bloque; Canadá puede introducir más atacantes.\n- **Penales**: Sin historial relevante. Sudáfrica, con su mentalidad defensiva, podría estar más entrenada para penales, pero es especulativo.\n\n**Conclusión**: Si el partido llega a prórroga, Sudáfrica se sentirá más cómoda. Canadá querrá resolver antes.\n\n### 5. Marcadores Más Probables (90 minutos)\n\n1. **Canadá 1-0** (40% de probabilidad)\n   - **Táctica**: Canadá domina, genera ocasiones pero encuentra una defensa sólida. Gol a balón parado o en una",
+      "sentiment_reader": "**ANÁLISIS PSICOLÓGICO Y DEL MOMENTUM: Sudáfrica vs. Canadá (Round of 32 – Eliminación Directa)**  \n\nComo psicólogo deportivo, me centro en los factores emocionales y contextuales que pueden inclinar la balanza en un partido de “vida o muerte”. Aquí no importa solo la táctica o la calidad técnica; la gestión de la presión, el momento anímico y la historia reciente son determinantes.\n\n---\n\n### 1. MOMENTUM DE CIERRE: ¿Cómo llega cada equipo de su último partido?\n\n**Sudáfrica:** Victoria 1-0 ante Corea del Sur, con un gol en el segundo tiempo. Llegaron con la soga al cuello: un empate los dejaba fuera (por diferencia de goles), y una derrota los eliminaba. Ganaron sufriendo, con garra, defendiendo el resultado. Ese tipo de victoria **genera un enorme refuerzo psicológico**: el equipo demostró resiliencia, capacidad de sufrir y cerrar un partido cuando más importaba. Además, la clasificación fue in extremis (segundos con -1 de diferencia), lo que suele crear un **“chip de supervivencia”**: están contentos de estar aquí, no se sienten favoritos, pero saben que pueden competir. El riesgo es que esa tensión acumulada pueda dejar secuelas de agotamiento emocional, pero en el corto plazo es un combustible poderoso.\n\n**Canadá:** Derrota 1-2 ante Suiza. Venían de una goleada histórica 6-0 a Qatar, que disparó su confianza y su autoestima colectiva. Sin embargo, perder el último partido de grupo, ante un rival fuerte, **frena ese impulso**. La derrota no es catastrófica (Suiza es favorito), pero introduce dudas: “¿Somos tan buenos como creíamos? ¿Nuestra defensa es frágil?”. Canadá dominó gran parte del partido contra Suiza, pero falló en la definición y recibió dos goles en momentos clave. Eso puede generar **frustración y ansiedad** de reiteración: “Si no concretamos, nos castigan”. Además, el haber goleado a Qatar (un rival débil) puede generar un espejismo de superioridad que choca con la realidad de un partido parejo.\n\n**Conclusión:** El momentum de cierre favorece psicológicamente a **Sudáfrica**. Ganar un partido decisivo, aunque sea por la mínima, deja una sensación de control y confianza en la capacidad de resistir. Canadá llega con un freno, con la necesidad de reafirmarse.\n\n---\n\n### 2. VENTAJA PSICOLÓGICA: ¿Quién llega más enchufado? ¿Favorito relajado o tapado sufrido?\n\nEl “enchufe” no es lineal. Canadá es, en papel, el favorito por su poder ofensivo y su diferencia de goles (+5 vs -1). Sin embargo, ese favoritismo puede ser una **doble espada**:  \n- Si Canadá se siente superior, puede confiarse y cometer errores (relajación inicial).  \n- Si siente la presión de “tener que ganar”, puede jugar agarrotado, buscando la jugada perfecta.\n\nEn cambio, Sudáfrica **no"
+    },
+    "round_2": {
+      "rebate_1": "Los análisis táctico y psicológico presentan puntos válidos: Sudáfrica buscará no encajar y gestionará la presión con su victoria ajustada. Sin embargo, **discrepo** en que esa estrategia sea suficiente. Sudáfrica solo anotó 2 goles en fase de grupos, ante defensas menos sólidas que la de Canadá. Su bloque bajo no garantiza el empate si Canadá encuentra espacios, ya que su ataque (aunque no detallado) suele ser más dinámico.\n\n**No me convencen completamente.** El punto táctico de forzar penales es razonable, pero subestima la capacidad de Canadá para romper líneas. El momentum de Sudáfrica es endeble: venció a Corea del Sur por la mínima, un rival de menor nivel. En eliminatorias, la falta de gol propia es un lastre mayor que la solidez defensiva.\n\n**Ajusto mi predicción:** pasaría de un posible empate en 0-0 o 1-1 a una **victoria ajustada de Canadá (1-0)**, porque creo que su mayor variedad ofensiva encontrará el gol antes que Sudáfrica logre un contragolpe efectivo.\n\nDefiendo mi posición inicial: el escaso poder ofensivo sudafricano es un hándicap insalvable en partidos de “vida o muerte”, donde un solo error defensivo o una jugada individual deciden. Canadá, aunque no sea favorito, tiene más recursos para desequilibrar.",
+      "rebate_2": "No, no estoy en desacuerdo total con ellos. El *Group Analyst* señala acertadamente la pobre producción ofensiva de Sudáfrica, lo que refuerza mi planteamiento táctico. El *Sentiment* aporta un punto válido sobre el *momentum* psicológico tras su victoria ante Corea del Sur, lo que podría aumentar su confianza defensiva.\n\nSin embargo, no me convencen para cambiar mi predicción de marcador. Ambos análisis se centran en debilidades ofensivas, pero no contradicen mi tesis: Sudáfrica buscará un bloque bajo y penales. Canadá tiene mayor calidad individual, pero un historial irregular en fase de grupos (no mostrado aquí). Mi predicción inicial era empate 0-0 y victoria sudafricana en penales; la mantengo, pues su única vía realista es esa. Defiendo que la táctica de no encajar y forzar la prórroga es la más racional dada su falta de gol y la presión de eliminatoria directa.",
+      "rebate_3": "**No estoy en desacuerdo total, pero sí en el enfoque.** Los análisis de Grupo y Táctico son válidos en lo estadístico y estructural, pero subestiman el factor psicológico que en eliminatorias directas suele ser decisivo. Sudáfrica llegó con un *momentum* de cierre (victoria 1-0) que genera confianza, mientras Canadá arrastra dudas tras empatar con un rival débil (Camerún). Eso no lo capturan los números.\n\n**Me convencen parcialmente.** Es cierto que Sudáfrica tiene pobre producción ofensiva (2 goles en 3 partidos) y que su defensa no es impenetrable (3 goles encajados, pero ante México y República Checa). También es válido que Canadá posee más talento individual y profundidad. Sin embargo, en partidos de mata-mata el equipo que juega sin presión (Sudáfrica, el teórico “débil”) suele rendir por encima de su media, mientras el favorito se tensa.\n\n**No ajusto mi predicción.** Sostengo que el partido será cerrado (0-0 o 1-0 para cualquiera) y muy probablemente vaya a penales, donde Sudáfrica tiene ventaja psicológica histórica (ante México en 2010 casi logran hazaña). Mi marcador sigue siendo empate 0-0 y Sudáfrica en penales.\n\n**Defiendo mi posición:** La psicología del *\"nada que perder\"* frente a *\"todo que ganar\"* es un factor asimétrico. Canadá cargará con la etiqueta de favorito y la presión de no fallar. Sudáfrica, en cambio, vive su mejor momento anímico y en eliminatorias directas eso pesa más que los promedios de fase de grupos."
+    },
+    "consensus": "🔵 **Group Analyst** (clasificación + presión): Sudáfrica 0-2 Canadá (20.0%)\n   Análisis: Canadá llega con un ataque demoledor (8 goles) ante una Sudáfrica que apenas anotó 2 y tiene diferencia negativa.\n\n🟠 **Tactical Scout** (tácticas): Sudáfrica 0-1 Canadá (15.0%)\n   Análisis: Sudáfrica priorizará no encajar, pero la calidad ofensiva de Canadá encontrará el gol en una jugada aislada.\n\n🟡 **Sentiment Reader** (psicología MD1): Sudáfrica 1-2 Canadá (18.0%)\n   Análisis: El impulso anímico de Canadá tras su goleada grupal superará la resistencia sudafricana, aunque estos forzarán el partido.\n\n🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones\n\nANÁLISIS FINAL (2-3 líneas):\n- Los tres expertos convergen en que Canadá es claramente favorito por su superioridad ofensiva y el pobre ataque sudafricano; la única duda es si Sudáfrica logra marcar (Sentiment cree que sí). El choque de estilos (ataque vs. defensa) y el momentum de cierre (Canadá con 8 goles, Sudáfrica con 2) pesan decisivamente en eliminatoria directa.\n- Confianza general en la predicción: 8/10\n\nRESULTADO_JSON: {\"group_analyst\": {\"home_goals\": 0, \"away_goals\": 2, \"probability\": 0.20}, \"tactical_scout\": {\"home_goals\": 0, \"away_goals\": 1, \"probability\": 0.15}, \"sentiment_reader\": {\"home_goals\": 1, \"away_goals\": 2, \"probability\": 0.18}, \"consensus\": {\"home_goals\": 0, \"away_goals\": 2, \"probability\": 0.25}}",
+    "predictions": [
+      {
+        "home_goals": 0,
+        "away_goals": 2,
+        "probability": 0.2,
+        "predicted_winner": "away",
+        "agent": "Group Analyst"
+      },
+      {
+        "home_goals": 0,
+        "away_goals": 1,
+        "probability": 0.15,
+        "predicted_winner": "away",
+        "agent": "Tactical Scout"
+      },
+      {
+        "home_goals": 1,
+        "away_goals": 2,
+        "probability": 0.18,
+        "predicted_winner": "away",
+        "agent": "Sentiment Reader"
+      },
+      {
+        "home_goals": 0,
+        "away_goals": 2,
+        "probability": 0.25,
+        "predicted_winner": "away",
+        "agent": "Consensus"
+      }
+    ],
+    "top_prediction": {
+      "home_goals": 0,
+      "away_goals": 2,
+      "probability": 0.2,
+      "predicted_winner": "away",
+      "agent": "Group Analyst"
+    },
+    "backfill_cutoff": "2026-06-28"
   }
 ]
