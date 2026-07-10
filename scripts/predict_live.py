@@ -121,23 +121,49 @@ def load_fixture() -> list[dict]:
     """Carga partidos del fixture oficial (wc2026_fixture.json).
 
     Normaliza team1/team2 → home_team/away_team con nombres del dataset.
-    Solo devuelve partidos con equipos reales (no placeholders tipo W101, 1A, etc.).
+    - Fase de grupos: usa los equipos reales del fixture.
+    - Eliminatorias: los cruces vienen con placeholders (1A, 2B, 3A/B/C/D/F,
+      W73, L101). Se resuelven contra los resultados reales vía
+      `src.bracket.resolve_bracket` para que el modelo prediga R32/R16/etc.
+      en cuanto cada cruce es determinable. Un cruce aún no determinable
+      (p.ej. W73 antes de jugarse el #73) se omite.
     """
     with open(FIXTURE_PATH, encoding="utf-8") as f:
         data = json.load(f)
 
+    # Resolución del bracket de eliminatorias desde los resultados reales.
+    try:
+        from src.bracket import resolve_bracket
+        resolved_ko = resolve_bracket(fixture=data)
+    except Exception as e:
+        logger.warning("No se pudo resolver el bracket de eliminatorias: %s", e)
+        resolved_ko = {}
+
     _placeholder = re.compile(r"^(W|L|Runner|1[A-L]|2[A-L]|3[A-L])")
 
     matches = []
+    n_ko_resolved = 0
     for raw in data.get("matches", []):
+        is_group = bool(raw.get("group"))
         t1_raw = raw.get("team1", "")
         t2_raw = raw.get("team2", "")
-        if _placeholder.match(t1_raw) or _placeholder.match(t2_raw):
-            continue
+
+        if is_group:
+            # Grupos: nombres reales directos (saltar si por alguna razón hay placeholder)
+            if _placeholder.match(t1_raw) or _placeholder.match(t2_raw):
+                continue
+            t1 = _norm_team(t1_raw)
+            t2 = _norm_team(t2_raw)
+        else:
+            # Eliminatorias: resolver placeholder → equipos reales
+            slot = resolved_ko.get(raw.get("num"))
+            if not slot or not slot.get("resolved"):
+                continue  # cruce aún no determinable
+            t1 = _norm_team(slot["home"])
+            t2 = _norm_team(slot["away"])
+            n_ko_resolved += 1
 
         kickoff = _parse_kickoff(raw.get("date", ""), raw.get("time", ""))
-        t1 = _norm_team(t1_raw)
-        t2 = _norm_team(t2_raw)
         ground = raw.get("ground", "")
 
         matches.append({
@@ -145,14 +171,17 @@ def load_fixture() -> list[dict]:
             "away_team": t2,
             "kickoff": kickoff,
             "kickoff_str": kickoff.strftime("%Y-%m-%dT%H:%M:00"),
-            "stage": "group" if raw.get("group") else "knockout",
+            "stage": "group" if is_group else "knockout",
             "group": raw.get("group", ""),
             "venue": ground,
             "is_neutral": _is_neutral(t1, t2, ground),
             "round": raw.get("round", ""),
         })
 
-    logger.info("Fixture cargado: %d partidos con equipos reales", len(matches))
+    logger.info(
+        "Fixture cargado: %d partidos con equipos reales (%d cruces de eliminatorias resueltos)",
+        len(matches), n_ko_resolved,
+    )
     return matches
 
 
@@ -800,7 +829,12 @@ def _run_live_predictions(
         kickoff: datetime = match["kickoff"]
         is_played = kickoff < now
 
-        if is_played and not predict_all:
+        # Grupos: saltar partidos ya jugados (salvo --all). Eliminatorias: siempre
+        # predecir, aunque el kickoff ya haya pasado — el cruce recién se vuelve
+        # determinable cuando terminan los grupos y el partido puede estar en juego.
+        # No usan agentes (costo 0) y el cutoff anti-leakage excluye su propio
+        # resultado, así que predecirlos es seguro y útil para la pestaña Modelo.
+        if is_played and not predict_all and match["stage"] == "group":
             continue
 
         cutoff = kickoff - EPSILON

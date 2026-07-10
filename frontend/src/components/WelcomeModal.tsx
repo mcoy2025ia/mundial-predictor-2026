@@ -15,22 +15,12 @@ interface Props {
   liveScores: ScoreMap;
   onGoToPredictor: () => void;
   onGoToModel: () => void;
-  onGoToBestThirds: () => void;
+  onGoToBracket: () => void;
 }
 
 const AGENT_NAMES = ["Group Analyst", "Tactical Scout", "Sentiment Reader", "Consensus"] as const;
 
-function buildByMd(results: { groupMd: number; hit: boolean }[]) {
-  const map: Record<number, { hits: number; played: number }> = {};
-  for (const r of results) {
-    if (!map[r.groupMd]) map[r.groupMd] = { hits: 0, played: 0 };
-    map[r.groupMd].played++;
-    if (r.hit) map[r.groupMd].hits++;
-  }
-  return map;
-}
-
-export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor, onGoToModel, onGoToBestThirds }: Props) {
+export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor, onGoToModel, onGoToBracket }: Props) {
   const T = useLang();
   const [open, setOpen] = useState(false);
   const [agentDebateResults, setAgentDebateResults] = useState<AgentDebateMatch[]>([]);
@@ -48,7 +38,7 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
     () => computeAgentResults(groupMatches, liveScores, agentDebateResults),
     [groupMatches, liveScores, agentDebateResults]
   );
-  const agentByMd = useMemo(() => buildByMd(flattenAgentResults(agentResults)), [agentResults]);
+  const flatAgentResults = useMemo(() => flattenAgentResults(agentResults), [agentResults]);
   const agentStatsByAgent = useMemo(() => computeAgentStatsByAgent(agentResults), [agentResults]);
 
   const bestAgent = useMemo(() => {
@@ -62,22 +52,22 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
     return best;
   }, [agentStatsByAgent]);
 
-  const currentMd = useMemo(() => {
-    for (const md of [3, 2, 1]) {
-      if (agentByMd[md]) return md;
-    }
-    return null;
-  }, [agentByMd]);
-
-  const mdStats = currentMd !== null ? agentByMd[currentMd] : null;
-  const mdPct = mdStats ? Math.round((mdStats.hits / mdStats.played) * 100) : null;
+  const agentSummary = useMemo(() => {
+    if (!flatAgentResults.length) return null;
+    const hits = flatAgentResults.filter((r) => r.hit).length;
+    return {
+      hits,
+      played: flatAgentResults.length,
+      pct: Math.round((hits / flatAgentResults.length) * 100),
+    };
+  }, [flatAgentResults]);
 
   // Solo se abre una vez que hay algo real que contar.
   useEffect(() => {
-    if (mdPct !== null && bestAgent) setOpen(true);
-  }, [mdPct, bestAgent]);
+    if (agentSummary && bestAgent) setOpen(true);
+  }, [agentSummary, bestAgent]);
 
-  if (!open || mdPct === null || !bestAgent) return null;
+  if (!open || !agentSummary || !bestAgent) return null;
 
   function go(action: () => void) {
     setOpen(false);
@@ -131,7 +121,7 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
             fontFamily: "var(--font-body)", fontSize: "0.92rem", lineHeight: 1.65,
             color: "var(--color-ink-primary)", margin: 0,
           }}>
-            {T.welcomeIntro(currentMd ?? 3, mdPct)}{" "}
+            {T.welcomeIntro(agentSummary.played, agentSummary.pct)}{" "}
             {T.welcomeBestAgent(bestAgent.name, bestAgent.pct)}
           </p>
 
@@ -172,7 +162,7 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
               {T.welcomeCtaPredictor}
             </button>
             <button
-              onClick={() => go(onGoToBestThirds)}
+              onClick={() => go(onGoToBracket)}
               style={{
                 width: "100%", padding: "0.65rem 1rem", borderRadius: 12,
                 border: "1px solid rgba(255,255,255,0.12)", cursor: "pointer",

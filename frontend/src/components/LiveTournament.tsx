@@ -8,7 +8,6 @@ import { computeGroupStandings, rankBestThirds, buildFixedResults } from "@/lib/
 import { runMonteCarlo } from "@/lib/simulator";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 import { useLang } from "@/lib/i18n";
-import GroupNarrativeCard from "./GroupNarrativeCard";
 import AgentDebatePanel from "./AgentDebatePanel";
 
 interface Props {
@@ -35,7 +34,7 @@ function fill(template: string, vals: string[]) {
 }
 
 export default function LiveTournament({
-  teams, predictions, groups, liveMatches, stats, verdicts, groupNarratives, jumpToSection, jumpToken,
+  teams, predictions, groups, liveMatches, stats, verdicts, jumpToSection, jumpToken,
 }: Props) {
   const T = useLang();
   const [section, setSection] = useState<LiveSection>("resultados");
@@ -43,9 +42,10 @@ export default function LiveTournament({
   const [showAll, setShowAll] = useState(false);
   const flag = (name: string) => teams[name]?.flag ?? "";
 
+  // Fase de eliminatorias: la sección "posiciones" (tablas de grupo + mejores
+  // terceros) ya no aplica. Los standings y el bracket viven en sus pestañas.
   const SECTIONS: { id: LiveSection; label: string }[] = [
     { id: "resultados", label: T.lt_secResults },
-    { id: "posiciones", label: T.lt_secStandings },
     { id: "proximos",   label: T.lt_secUpcoming },
   ];
 
@@ -57,7 +57,7 @@ export default function LiveTournament({
   }
 
   useEffect(() => {
-    if (jumpToSection && jumpToken) switchSection(jumpToSection);
+    if (jumpToSection && jumpToSection !== "posiciones" && jumpToken) switchSection(jumpToSection);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jumpToken]);
 
@@ -104,11 +104,6 @@ export default function LiveTournament({
   }, [predictions, groups, teams, fixedResults]);
 
   const today = new Date().toLocaleDateString("en-CA");
-  const bogotaToday = todayBogota();
-  const dailyGroupNarratives = useMemo(
-    () => selectDailyGroupNarratives(groupNarratives, bogotaToday),
-    [groupNarratives, bogotaToday]
-  );
   const upcoming = useMemo(() => {
     const pending = liveMatches.filter(
       (m) =>
@@ -190,18 +185,9 @@ export default function LiveTournament({
         </motion.section>
       )}
 
-      {/* ── Sub-navegación ── */}
-      {dailyGroupNarratives.length > 0 && (
-        <motion.section variants={fadeUp} className="space-y-3">
-          <SectionTitle title="Previas de grupos" note="GroupNarrative-Preview" />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {dailyGroupNarratives.map(({ group, text }) => (
-              <GroupNarrativeCard key={group} group={group} text={text} variant="compact" />
-            ))}
-          </div>
-        </motion.section>
-      )}
+      {/* Previas de grupos retiradas en fase de eliminatorias (no group-stage content). */}
 
+      {/* ── Sub-navegación ── */}
       <motion.div variants={fadeUp}>
         <div style={{
           display: "flex", gap: 4,
@@ -544,34 +530,6 @@ export default function LiveTournament({
 }
 
 /* ── Piezas ─────────────────────────────────────────── */
-function todayBogota() {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Bogota",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(new Date());
-  const get = (type: string) => parts.find((part) => part.type === type)?.value ?? "";
-  return `${get("year")}-${get("month")}-${get("day")}`;
-}
-
-function selectDailyGroupNarratives(groupNarratives: Record<string, string> | undefined, today: string) {
-  if (!groupNarratives) return [];
-  const entries = Object.entries(groupNarratives)
-    .map(([key, text]) => {
-      const [group, date, lang] = key.split("|");
-      return { group, date, lang, text };
-    })
-    .filter((entry) => entry.lang === "bogotano" && entry.text?.trim());
-
-  // Solo grupos cuya previa fue generada para HOY (no >=, para no arrastrar
-  // previas de grupos que aún no juegan, diluyendo visibilidad de los que sí).
-  return entries
-    .filter((entry) => entry.date === today)
-    .sort((a, b) => a.group.localeCompare(b.group))
-    .map(({ group, text }) => ({ group, text }));
-}
-
 function Kpi({ label, value, sub, gold }: {
   label: string; value: string; sub?: string; gold?: boolean;
 }) {

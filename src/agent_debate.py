@@ -104,8 +104,111 @@ class AgentDebateSystem:
         }
         return context
 
+    def _maybe_knockout_context(self, home_team: str, away_team: str) -> Optional[dict]:
+        """Si ambos equipos vienen de grupos distintos, es un cruce de eliminatorias.
+
+        Devuelve un contexto de eliminación directa (campaña de grupos de cada
+        equipo por separado, sin tabla común ni presión de clasificación de grupo).
+        Devuelve None si es un partido de fase de grupos (mismo grupo) o si no se
+        puede determinar el grupo de alguno.
+        """
+        import pandas as pd
+        try:
+            from src.bracket import (
+                load_fixture_raw, group_membership, final_standings, resolve_bracket, _norm as bnorm,
+            )
+        except Exception as e:
+            logger.warning("No se pudo importar src.bracket para contexto de eliminatorias: %s", e)
+            return None
+
+        fixture = load_fixture_raw()
+        mem = group_membership(fixture)
+        h_norm = bnorm(normalize_team_name(home_team))
+        a_norm = bnorm(normalize_team_name(away_team))
+        hg, ag = mem.get(h_norm), mem.get(a_norm)
+
+        if not hg or not ag or hg == ag:
+            return None  # mismo grupo o desconocido → no es cruce de eliminatorias
+
+        try:
+            df = pd.read_csv(ROOT / "data/external/wc2026_live_results.csv")
+        except Exception:
+            df = pd.DataFrame(columns=["home_team", "away_team", "home_score", "away_score"])
+
+        standings = final_standings(df, mem)
+        home_table = standings.get(hg, [])
+        away_table = standings.get(ag, [])
+        home_row = next((r for r in home_table if r["team"] == h_norm), None)
+        away_row = next((r for r in away_table if r["team"] == a_norm), None)
+        if home_row is None or away_row is None:
+            return None
+
+        def _team_matches(team_norm: str) -> list[str]:
+            out = []
+            if df.empty:
+                return out
+            sub = df[(df["home_team"].map(bnorm) == team_norm) | (df["away_team"].map(bnorm) == team_norm)]
+            for _, r in sub.iterrows():
+                if pd.isna(r["home_score"]) or pd.isna(r["away_score"]):
+                    continue
+                out.append(
+                    f"{bnorm(str(r['home_team']))} {int(r['home_score'])}-{int(r['away_score'])} {bnorm(str(r['away_team']))}"
+                )
+            return out
+
+        home_matches = _team_matches(h_norm)
+        away_matches = _team_matches(a_norm)
+
+        # Etiqueta de ronda real desde el bracket resuelto
+        round_label = "Eliminatorias"
+        try:
+            resolved = resolve_bracket(fixture, df)
+            for slot in resolved.values():
+                if slot.get("resolved") and {bnorm(slot["home"]), bnorm(slot["away"])} == {h_norm, a_norm}:
+                    round_label = slot["round"]
+                    break
+        except Exception:
+            pass
+
+        def _qual(row: dict) -> str:
+            pos = row["pos"]
+            label = {1: "1º de grupo", 2: "2º de grupo", 3: "mejor tercero"}.get(pos, f"{pos}º")
+            return f"{label} ({row['pts']} pts, GD {row['gd']:+d}, GF {row['gf']})"
+
+        return {
+            "is_knockout": True,
+            "round": round_label,
+            "group": f"{round_label}: Grupo {hg} vs Grupo {ag}",  # para logging
+            "home_group": hg,
+            "away_group": ag,
+            "home_table": home_table,
+            "away_table": away_table,
+            "home_row": home_row,
+            "away_row": away_row,
+            "home_qual": _qual(home_row),
+            "away_qual": _qual(away_row),
+            "home_matches": home_matches,
+            "away_matches": away_matches,
+            # Compatibilidad hacia atrás con código que espera estas llaves:
+            "table": [home_row, away_row],
+            "matches_played": [{"result": m} for m in (home_matches + away_matches)],
+            "classification_scenarios": {
+                "if_home_wins": f"{home_team} avanza a la siguiente ronda; {away_team} queda ELIMINADO",
+                "if_draw": "Empate en 90' → tiempo extra y posible tanda de PENALES (no hay reparto de puntos)",
+                "if_away_wins": f"{away_team} avanza a la siguiente ronda; {home_team} queda ELIMINADO",
+            },
+        }
+
     def get_full_group_context(self, home_team: str, away_team: str) -> dict:
-        """Contexto COMPLETO del grupo: tabla 4 equipos, partidos jugados, análisis de terceros."""
+        """Contexto COMPLETO del grupo: tabla 4 equipos, partidos jugados, análisis de terceros.
+
+        En eliminatorias (equipos de grupos distintos) delega en
+        `_maybe_knockout_context`, que arma un contexto de eliminación directa.
+        """
+        ko = self._maybe_knockout_context(home_team, away_team)
+        if ko is not None:
+            return ko
+
         import pandas as pd
         import json
 
@@ -410,10 +513,60 @@ class AgentDebateSystem:
 
         return info
 
+    @staticmethod
+    def _ko_campaign_block(team: str, row: dict, qual: str, matches: list[str], group: str) -> str:
+        """Formatea la campaña de grupos de un equipo para prompts de eliminatorias."""
+        results = "\n".join(f"    {m}" for m in matches) or "    (sin datos)"
+        return (
+            f"{team} — Grupo {group}, clasificó como {qual}\n"
+            f"  Partidos de grupo:\n{results}"
+        )
+
     def agent_1_group_analyst(
         self, home_team: str, away_team: str, context: dict
     ) -> str:
-        """Agent 1: Group Analyst - Analiza TODA la secuencia del grupo + clasificación."""
+        """Agent 1: Group/Path Analyst.
+
+        Grupos: analiza la secuencia completa del grupo + presión de clasificación.
+        Eliminatorias: analiza CÓMO clasificó cada equipo (camino, nivel de rivales,
+        diferencia de gol) y qué dice de su nivel en un partido a un solo juego.
+        """
+        if context.get("is_knockout"):
+            home_block = self._ko_campaign_block(
+                home_team, context["home_row"], context.get("home_qual", "?"),
+                context.get("home_matches", []), context.get("home_group", "?"),
+            )
+            away_block = self._ko_campaign_block(
+                away_team, context["away_row"], context.get("away_qual", "?"),
+                context.get("away_matches", []), context.get("away_group", "?"),
+            )
+            prompt = f"""
+Eres un analista experto de torneos. Es ELIMINACIÓN DIRECTA ({context.get('round','Eliminatorias')}): {home_team} vs {away_team}.
+GANA O QUEDA ELIMINADO. No hay reparto de puntos: empate en 90' → tiempo extra y penales.
+
+**CÓMO LLEGÓ CADA EQUIPO (campaña de grupos):**
+{home_block}
+
+{away_block}
+
+**ANALIZA PROFUNDAMENTE (extendiéndote):**
+
+1. **CALIDAD DEL CAMINO:** ¿Quién llegó más sólido?
+   - Un 1º de grupo con GD alto vs un mejor-tercero que clasificó raspando NO es lo mismo.
+   - ¿Contra qué nivel de rivales sumó cada uno sus puntos?
+
+2. **LECTURA DE NIVEL REAL:** ¿La posición de grupo refleja su verdadero nivel o hubo inflado/desinflado por el rival?
+
+3. **FACTOR ELIMINATORIA:** ¿Quién maneja mejor un partido único de alta presión? ¿Experiencia en mata-mata?
+
+4. **MARCADORES MÁS PROBABLES (90'):**
+   - Top 3 marcadores con probabilidad. Recuerda: el empate es un resultado válido en 90' (lleva a prórroga).
+   - Justificación por cada uno basada en el camino real de cada equipo.
+
+**IMPORTANTE:** No asumas favorito solo por el nombre; usa la evidencia de la campaña de grupos.
+"""
+            return self._call_deepseek(prompt, use_reasoner=True)
+
         group = context.get("group", "?")
         table = context.get("table", [])
         matches = context.get("matches_played", [])
@@ -473,7 +626,45 @@ Eres un experto analista de grupos en torneos de fútbol. ANALIZA LA SECUENCIA C
     def agent_2_tactical_scout(
         self, home_team: str, away_team: str, context: dict
     ) -> str:
-        """Agent 2: Tactical Scout - Analiza tácticas MODULADAS por presión de clasificación."""
+        """Agent 2: Tactical Scout.
+
+        Grupos: tácticas moduladas por presión de clasificación.
+        Eliminatorias: tácticas de un partido único a matar o morir (gestión de
+        prórroga, manejar el 0-0, salir o no a por el partido).
+        """
+        if context.get("is_knockout"):
+            hr, ar = context["home_row"], context["away_row"]
+            prompt = f"""
+Eres un estratega táctico experto. Es ELIMINACIÓN DIRECTA ({context.get('round','Eliminatorias')}): {home_team} vs {away_team}.
+Partido ÚNICO a matar o morir: empate en 90' → prórroga y penales.
+
+**CÓMO LLEGÓ CADA EQUIPO:**
+{home_team}: {context.get('home_qual','?')} (Grupo {context.get('home_group','?')})
+  Goles a favor/contra en grupo: {hr['gf']}-{hr['ga']}
+{away_team}: {context.get('away_qual','?')} (Grupo {context.get('away_group','?')})
+  Goles a favor/contra en grupo: {ar['gf']}-{ar['ga']}
+
+**HISTÓRICO RECIENTE (grupos):**
+{chr(10).join([f"  {m['result']}" for m in context.get('matches_played', [])[-6:]]) or "  (sin datos)"}
+
+**ANALIZA PROFUNDAMENTE:**
+
+1. **TÁCTICA DE ELIMINATORIA (no de grupo):**
+   - En mata-mata muchos equipos priorizan NO encajar: ¿alguno se cerrará buscando la prórroga/penales?
+   - ¿Quién tiene el ataque para romper un partido cerrado?
+
+2. **CHOQUE DE ESTILOS:** Estilo conocido de cada selección y cómo se neutralizan o explotan mutuamente.
+
+3. **DEFENSA vs ATAQUE:** Cruza el ataque de uno (GF en grupo) con la defensa del otro (GA en grupo). ¿Dónde está la ventaja?
+
+4. **GESTIÓN DEL PARTIDO:** ¿Quién maneja mejor los 90'+prórroga? ¿Fondo físico, banca, especialistas en penales?
+
+5. **MARCADORES MÁS PROBABLES (90'):**
+   - Top 3 con confianza. En eliminatoria son comunes 1-0, 2-1, 0-0, 1-1.
+   - Explica la táctica detrás de cada marcador.
+"""
+            return self._call_deepseek(prompt, use_reasoner=True)
+
         group = context.get("group", "?")
         table = context.get("table", [])
         matches = context.get("matches_played", [])
@@ -538,7 +729,41 @@ Eres un estratega táctico experto. NO analizas solo tácticas → analizas CÓM
     def agent_3_sentiment_reader(
         self, home_team: str, away_team: str, context: dict
     ) -> str:
-        """Agent 3: Sentiment Reader - Analiza MOMENTUM real de la SECUENCIA del grupo."""
+        """Agent 3: Sentiment Reader - Analiza MOMENTUM real.
+
+        Grupos: momentum de la secuencia completa del grupo.
+        Eliminatorias: momentum con que cada equipo cerró la fase de grupos y la
+        carga psicológica de un partido a vida o muerte.
+        """
+        if context.get("is_knockout"):
+            hr, ar = context["home_row"], context["away_row"]
+            home_seq = "\n".join(f"    {m}" for m in context.get("home_matches", [])) or "    (sin datos)"
+            away_seq = "\n".join(f"    {m}" for m in context.get("away_matches", [])) or "    (sin datos)"
+            prompt = f"""
+Eres un experto en psicología deportiva. Es ELIMINACIÓN DIRECTA ({context.get('round','Eliminatorias')}): {home_team} vs {away_team}.
+GANA O A CASA. Analiza el MOMENTUM con que cada equipo terminó la fase de grupos y la presión emocional del mata-mata.
+
+**CAMPAÑA DE {home_team}** ({context.get('home_qual','?')}):
+{home_seq}
+
+**CAMPAÑA DE {away_team}** ({context.get('away_qual','?')}):
+{away_seq}
+
+**ANALIZA PROFUNDAMENTE (extendiéndote):**
+
+1. **MOMENTUM DE CIERRE:** ¿Cómo llegó cada uno del último partido de grupo? (goleada que da confianza, raspar la clasificación, derrota que siembra dudas).
+
+2. **VENTAJA PSICOLÓGICA:** ¿Quién llega más enchufado? ¿Un favorito relajado puede ser sorprendido por un equipo que clasificó sufriendo y va "suelto"?
+
+3. **PESO DE LA ELIMINATORIA:** ¿Quién carga más presión/expectativa (favorito que DEBE pasar) vs quién juega sin nada que perder? El miedo a quedar eliminado puede agarrotar.
+
+4. **EXPERIENCIA EN MATA-MATA:** Historial reciente del equipo en partidos de eliminación y tandas de penales.
+
+5. **GOLEADAS Y SORPRESAS:** ¿Algún equipo mostró fragilidad o poderío que marque el duelo emocionalmente?
+
+**RESPONDE:**"""
+            return self._call_deepseek(prompt, use_reasoner=True)
+
         table = context.get("table", [])
         matches = context.get("matches_played", [])
 
@@ -683,25 +908,41 @@ Responde BREVEMENTE (máx 300 palabras):
         rebate3: str,
         context: dict,
     ) -> str:
-        """Ronda 3: Los 3 agentes llegan a consenso CON IMPACTO EN CLASIFICACION."""
-        # Contexto nuevo: tabla completa del grupo (no el viejo home_team/away_team)
-        table = context.get("table", [])
+        """Ronda 3: Los 3 agentes llegan a consenso con impacto en clasificación/avance."""
         scenarios = context.get("classification_scenarios", {})
-        table_str = "\n".join(
-            f"  {r['pos']}. {r['team']} — {r['pts']} pts, GD {r['gd']:+d} (J{r['played']})"
-            for r in table
-        )
+        is_ko = context.get("is_knockout")
 
-        consensus_prompt = f"""
-Los 3 expertos debaten sobre: {home_team} vs {away_team}
+        if is_ko:
+            hr, ar = context.get("home_row", {}), context.get("away_row", {})
+            context_block = f"""**CRUCE DE ELIMINACIÓN DIRECTA — {context.get('round','Eliminatorias')}:** {home_team} vs {away_team}
+Gana o queda eliminado (empate en 90' → prórroga y penales).
+  {home_team}: {context.get('home_qual','?')} (Grupo {context.get('home_group','?')}), goles en grupo {hr.get('gf','?')}-{hr.get('ga','?')}
+  {away_team}: {context.get('away_qual','?')} (Grupo {context.get('away_group','?')}), goles en grupo {ar.get('gf','?')}-{ar.get('ga','?')}
 
-**TABLA ACTUAL DEL GRUPO {context.get("group", "?")}:**
+**QUÉ ESTÁ EN JUEGO:**
+- Si gana {home_team}: {scenarios.get("if_home_wins", "N/A")}
+- Si empatan en 90': {scenarios.get("if_draw", "N/A")}
+- Si gana {away_team}: {scenarios.get("if_away_wins", "N/A")}"""
+            converge_hint = "camino de clasificación, choque de estilos, momentum de cierre, peso del mata-mata"
+        else:
+            table = context.get("table", [])
+            table_str = "\n".join(
+                f"  {r['pos']}. {r['team']} — {r['pts']} pts, GD {r['gd']:+d} (J{r['played']})"
+                for r in table
+            )
+            context_block = f"""**TABLA ACTUAL DEL GRUPO {context.get("group", "?")}:**
 {table_str or "  (sin datos)"}
 
 **ESCENARIOS DE CLASIFICACION:**
 - Si gana {home_team}: {scenarios.get("if_home_wins", "N/A")}
 - Si empatan: {scenarios.get("if_draw", "N/A")}
-- Si gana {away_team}: {scenarios.get("if_away_wins", "N/A")}
+- Si gana {away_team}: {scenarios.get("if_away_wins", "N/A")}"""
+            converge_hint = "presión diferencial, MD1 momentum, etc"
+
+        consensus_prompt = f"""
+Los 3 expertos debaten sobre: {home_team} vs {away_team}
+
+{context_block}
 
 POSICIONES INICIALES Y REBATES:
 
@@ -735,7 +976,7 @@ RESPONDE EN ESTE FORMATO:
 🏆 **CONSENSO FINAL**: Ranking de probabilidad considerando las 3 posiciones
 
 ANÁLISIS FINAL (2-3 líneas):
-- ¿En qué convergieron los 3 expertos? (presión diferencial, MD1 momentum, etc)
+- ¿En qué convergieron los 3 expertos? ({converge_hint})
 - Confianza general en la predicción (0-10)
 
 REGLA DE PROBABILIDAD: la probabilidad es de ESE marcador exacto. Ningún marcador exacto

@@ -4,28 +4,50 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
-## 🔴 TOURNAMENT STATUS
-**Live: WC 2026 Group Stage — Matchday 3 runs Jun 24–27 (simultaneous group matches)**
-- **J3 ops:** third-place probabilities update 3×/day via `update_third_place_probs.py` (CI auto-detects Jun 24–27); full cycle resumes after
-- **Next Phase:** Knockout rounds (Round of 32 ~Jul 1 → Final Jul 19, 2026)
-- **Memory System:** Auto-memory at `~/.claude/projects/mundial-predictor-master/memory/` tracks roadmap phases, UI changes, and model improvements across conversations
+## 🟡 TOURNAMENT STATUS
+**WC 2026 KNOCKOUT PHASE IN PROGRESS** (Group Stage completed Jun 27; Round of 32 began Jun 28; Final is Jul 19, 2026)
+- **Bracket resolution:** The knockout fixture (`data/external/wc2026_fixture.json`) ships with placeholders (`1A`, `2B`, `3A/B/C/D/F`, `W73`) instead of real teams. `src/bracket.py` resolves them progressively from `wc2026_live_results.csv` as each round is played — `predict_live.py` and `agent_debate.py` consume the resolved bracket automatically. See [Knockout Bracket Resolution](#knockout-bracket-resolution) under Architecture.
+- **Current ops:** Full matchday cycle applies for every knockout round (no more `update_third_place_probs.py` 3×/day — that was group-stage-only). After `predict_live.py --export`, also run `export_knockout_bracket.py` and `run_upset_agent.py` (see Quick Reference below).
+- **Knockout dialects:** All 5 dialects auto-activated (`bogotano`, `paisa`, `boyaco`, `costeño`, `en`) — `precompute_narrations.py` handles this automatically when `match.stage != "group"`
+- **Agent Debate:** High-priority for knockout matches (budget 0.08–0.10 USD/match); run before each R32/R16/QF/SF/Final. A 4th voice, **Cazador de Sorpresas** (`src/upset_agent.py`), always argues the underdog's case — separate from the 3-agent debate/consensus.
+- **Frontend:** **Grupos** tab, best-thirds, and group narratives are hidden during knockout. **Eliminatorias** (R32) and **Octavos** (R16) tabs render `KnockoutBracket.tsx` from `knockout_bracket.json`.
+- **Memory System:** Auto-memory at `~/.claude/projects/mundial-predictor-master/memory/` tracks roadmap phases, UI changes, and model improvements across conversations — check it for the latest known match/round status, since this file is not re-verified against live data on every edit.
 - **See Also:** `docs/runbook.md` for daily operational cycles, `docs/finops.md` for AI cost tracking
+
+> ⚠️ This document is tournament-specific (WC 2026: Jun 11 – Jul 19, 2026) and describes an operational system with daily data-refresh cycles. Dates, phases (J1/J2/J3, R32/R16/QF/SF), and "current" match state go stale between edits — treat them as directional, and check `git log`, `data/external/wc2026_live_results.csv`, or the memory system for the actual current state before assuming a specific round is "next."
 
 ---
 
 ## Quick Reference: Daily Matchday Cycle
 
 ```bash
-# After each group-stage matchday, run this sequence (~90s total):
+# After each matchday (group or knockout), run this sequence (~90s total):
 python scripts/live_update.py              # Fetch results → retrain model
 python scripts/predict_live.py --export    # Update live predictions (anti-leakage cutoff)
-python scripts/precompute_narrations.py    # Regenerate narrations × dialects
+python scripts/precompute_narrations.py    # Regenerate narrations × dialects (all 5 in knockout)
 cd frontend && npx vercel --prod           # Deploy
 ```
 
-**MD2 Double-Run (Jun 18–23 afternoon/evening blocks):** Run steps above twice — once before afternoon matches, again after afternoon results, so evening predictions reflect real qualification pressure.
+**Knockout phase (Jun 28–Jul 19):** Same full cycle above, plus the bracket export. The knockout fixture uses placeholders (`1A`, `2B`, `3A/B/C/D/F`, `W73`) that `src/bracket.py` resolves from real results — `predict_live.py` and `agent_debate.py` consume this automatically. After `predict_live.py --export`, also run:
 
-**MD3 Simultaneous Matches (Jun 24–27):** CI runs `update_third_place_probs.py` 3×/day (terceros only, no narrations). Narratives emphasize scenarios, goal difference, best-third qualification (not assumed sequential results).
+```bash
+python scripts/export_knockout_bracket.py     # → knockout_bracket.json (R32 + R16 feeders, drives Eliminatorias/Octavos tabs)
+python scripts/run_agent_debate.py "Home" "Away" ...   # cross-group debates now work (knockout framing)
+python scripts/run_upset_agent.py                       # Cazador de Sorpresas → upset_predictions.json (4ª voz en el panel)
+python scripts/export_frontend_data.py                  # publishes agent debate results
+cd frontend && npx vercel --prod
+```
+
+Frontend in knockout: the **Grupos** tab, best-thirds, and group narratives are hidden; **Eliminatorias** (R32) and **Octavos** (R16) tabs render the resolved bracket with model probs + AgentDebatePanel (which now also shows the Cazador de Sorpresas upset pick).
+
+**Ensemble recalibration** (run after every ~4 played WC 2026 matches to improve weights):
+```bash
+python scripts/calibrate_ensemble_2026.py --apply   # updates ensemble.py weights in-place
+```
+
+**MD2 Double-Run (Jun 18–23 afternoon/evening blocks):** *(historical — group stage complete)* Run the full cycle twice per day to capture afternoon results before evening predictions.
+
+**MD3 Simultaneous Matches (Jun 24–27):** *(historical — complete)* CI ran `update_third_place_probs.py` 3×/day.
 
 ---
 
@@ -39,6 +61,9 @@ cd frontend && npx vercel --prod           # Deploy
 | **Live predictions only** | `python scripts/predict_live.py --export` |
 | **Narrations only** | `python scripts/precompute_narrations.py` |
 | **Agent debate** | `python scripts/run_agent_debate.py "Team1" "Team2" && python scripts/export_frontend_data.py` |
+| **Recalibrate ensemble** | `python scripts/calibrate_ensemble_2026.py --apply` |
+| **Export knockout bracket** | `python scripts/export_knockout_bracket.py` |
+| **Run upset agent (Cazador de Sorpresas)** | `python scripts/run_upset_agent.py` |
 | **All tests** | `pytest` |
 | **Single test** | `pytest tests/test_model.py::test_temporal_split_no_leakage` |
 | **Frontend dev** | `cd frontend && npm run dev` (http://localhost:3000) |
@@ -46,6 +71,22 @@ cd frontend && npx vercel --prod           # Deploy
 | **Vercel status** | `vercel status` |
 | **Vercel deploy preview** | `vercel` (from project root) |
 | **Vercel deploy production** | `vercel --prod` or `cd frontend && npx vercel --prod` |
+
+---
+
+## Task Decision Tree
+
+| I need to... | Run this | Why |
+|---|---|---|
+| See what's playing today / current standings | `cd frontend && npm run dev`, check "Live" tab | Frontend loads live results from `/api/live`; no script needed |
+| Sync predictions + narratives after a matchday | Full cycle (see Quick Reference above) | Predictions, narrations, and bracket must stay in sync with each other |
+| Get fresh 1X2 probabilities without a full retrain | `python scripts/predict_live.py --export` | Uses live ELO cutoff; cheap, no LLM cost |
+| Add reasoning/debate to specific upcoming matches | `python scripts/run_agent_debate.py "Home" "Away"` | Forward-only, ~$0.08–0.10/match — reserve for high-profile matches |
+| Get the underdog case for a knockout cross | `python scripts/run_upset_agent.py` | Cazador de Sorpresas — always argues the less-favored team |
+| Resolve/refresh the knockout bracket (who plays whom) | `python scripts/export_knockout_bracket.py` | Reads `src/bracket.py` resolution, writes `knockout_bracket.json` for the frontend |
+| Improve model accuracy after ~4 new played matches | `python scripts/calibrate_ensemble_2026.py --apply` | Recalibrates ELO/Poisson/XGB blend weights in-place |
+| Diagnose a prediction that looks wrong | See "Debugging Predictions" under Troubleshooting | Checks leakage, component disagreement, ELO sanity, calibration |
+| Ship changes to production | Full cycle + `cd frontend && npx vercel --prod` | Static JSON must be regenerated *and* deployed — code changes alone don't update predictions |
 
 ---
 
@@ -80,12 +121,24 @@ Pre-computed data (narrations, group previews, predictions) must be exported to 
 | **Model RPS is worse than baseline** | Feature set or temporal split is broken | Verify test set is Qatar 2022 (not random), FEATURE_COLS are present, no leakage via `pytest tests/test_model.py::test_temporal_split_no_leakage` |
 | **Narrations missing for knockout** | Pre-computed narrations only run for *today's* matches | `python scripts/precompute_narrations.py --days 1` to include tomorrow; narration endpoint has LLM fallback for missing keys |
 | **Tournament context stale in chat** | Chat injects `group_standings.json` + today's `group_matches.json` at runtime | Verify `export_frontend_data.py` ran and files are deployed |
+| **Knockout match shows placeholder teams (e.g. "1A vs 2B")** | That fixture slot's feeder group/round hasn't finished yet | Expected — `src/bracket.py` only resolves a slot once its source group/match is complete; re-run `export_knockout_bracket.py` once the feeder match is played |
+
+### Debugging Predictions
+
+If a specific prediction looks wrong or inconsistent:
+
+1. **Check anti-leakage first.** If the match already kicked off, `predict_live.py` should still predict it correctly (cutoff = kickoff − 60s), but verify no assertion was silently caught upstream. For knockout matches, predictions run *even after kickoff* (no agents = zero leakage risk); group matches skip already-played fixtures.
+2. **Inspect which ensemble component is driving it.** `streamlit run src/app.py` shows the ELO / Poisson / XGB breakdown — a prediction that looks off is often one component disagreeing sharply with the other two (e.g., Poisson sees a high-scoring history the ELO diff doesn't reflect).
+3. **Check ELO sanity.** Look up both teams in `data/processed/elo_current.json`. A team that looks underrated is usually missing a recent result in `results.csv` — confirm `live_update.py` actually ran after the last matchday.
+4. **Verify no leakage in the test harness.** `pytest tests/test_model.py::test_temporal_split_no_leakage` — a regression here would systematically bias every prediction, not just one match.
+5. **For knockout crosses, confirm the bracket resolved correctly.** Check `frontend/public/data/knockout_bracket.json` — a mis-assigned third-place team or wrong feeder match will produce a prediction for the wrong pair of teams. `wc2026_knockout_fixture.json` (cached from the football-data.org API) is the source of truth for third-place slot assignment, not the local backtracking algorithm.
 
 ---
 
 ## Table of Contents
 - [Tournament Status & Quick Reference](#🔴-tournament-status)
 - [Quick Command Reference](#quick-command-reference)
+- [Task Decision Tree](#task-decision-tree)
 - [Critical Gotchas](#critical-gotchas)
 - [Troubleshooting](#troubleshooting)
 - [Project Overview](#project-overview)
@@ -115,7 +168,8 @@ Pre-computed data (narrations, group previews, predictions) must be exported to 
 - **Narrator AI** — pre-computed match narrations and group previews (DeepSeek, run once/twice per day depending on matchday) stored in `narrations.json` and `group_narratives.json`; zero LLM calls per user for cached content, Bogotá/neutral Spanish during group-stage stabilization, group standings context from MD2 onward
 - AI chat assistant (DeepSeek + RAG with DashScope embeddings) with topic filter, response cache, rate limiting, and live tournament context injection
 - Multi-agent system (Orchestrator + 7 specialists) that enrich predictions with contextual analysis when API budget allows. Agents are fed real derived evidence (form, H2H, goal trends, scorers, third-place math) via `src/agents/match_intel.py` — they reason from data, not team names
-- 151 passed, 1 skipped pytest tests covering extraction, features, model training, agents, simulation, integrity, and live prediction
+- Knockout bracket resolution (`src/bracket.py`) resolves fixture placeholders (`1A`, `2B`, `3A/B/C/D/F`, `W73`) to real teams as each round completes, feeding both `predict_live.py` and `agent_debate.py`
+- 157 pytest tests covering extraction, features, model training, agents, simulation, integrity, bracket resolution, and live prediction
 
 ---
 
@@ -136,9 +190,14 @@ This repository includes supporting documents organized by purpose. **Consult th
 - **`methodology.md`** — Model limitations and responsible-use statement.
 
 ### Implementation Reference
-- **`contracts/`** — Data schemas and contracts (prevent silent failures). `data_contracts.md` specifies `results.csv`, features, and exported JSONs format.
-- **`agent/*.md`** — Each specialist agent (e.g., `intmatch_analytics_pro.md`) documents role, input context, output (delta_P adjustment), and cost profile.
+- **`contracts/`** — Data schemas and contracts (prevent silent failures). `data_contracts.md` specifies `results.csv`, features, and exported JSONs format; `module_contracts.md` specifies feature/model input-output contracts (incl. `DEFAULT_WEIGHTS`); `core_model_contracts.md` covers the must-have deterministic core (ELO/Poisson/XGB/Ensemble/Simulator); `agent_enrichment_contracts.md` covers the optional LLM agent layer (degrades to delta=0, never required).
+- **`agent/*.md`** — Each specialist agent (e.g., `IntMatch-Analytics-Pro.md`, `FinOps-Market-Calibration-Validator.md`) documents role, input context, output (delta_P adjustment), and cost profile. `orchestrator.md` documents the routing/blending logic itself. Note: `GroupScenario-Reasoner` (classification pressure + third-place math) has no spec file yet — infer its contract from `src/agents/specialists/group_scenario.py`.
 - **`README.md`** — Quick-start for new developers; external marketing.
+- **`QUICK_START.md`** — 2-minute external-facing summary (what it is, what it does, is it production-ready) for evaluators/recruiters who won't read the full README.
+- **`docs/system_overview.md`** — 10-minute deep-dive for AI architects/recruiters/new devs: full architecture, data flow, and design-decision walkthrough in one document.
+- **`retrospective.md`** — Post-tournament template (model baseline vs. walk-forward vs. actual WC 2026 RPS); intentionally blank until after the Jul 19 final.
+- **`AGENTS.md`** — Equivalent of this file for OpenAI Codex; kept in sync with CLAUDE.md by convention (see commit history for "sync AGENTS.md" commits). If you update architecture/ops content here, mirror it there.
+- **`instructivo-github-actions.md`** — One-time setup guide for the 6 GitHub Actions secrets (`FOOTBALL_DATA_TOKEN`, `DEEPSEEK_API_KEY`, `ANTHROPIC_API_KEY`, `VERCEL_TOKEN`, etc.) that `.github/workflows/wc2026-live-update.yml` needs to run scheduled updates. Consult if the CI workflow is failing with an auth/missing-secret error.
 
 ---
 
@@ -309,6 +368,11 @@ pytest tests/test_integrity.py
 pytest tests/test_poisson.py
 pytest tests/test_predict_live.py
 pytest tests/test_simulator_parity.py
+pytest tests/test_agent_debate.py
+pytest tests/test_match_intel.py
+pytest tests/test_pipeline_logger.py
+pytest tests/test_precompute_narrations.py
+pytest tests/test_bracket.py
 
 # Verbose with output
 pytest -v
@@ -316,7 +380,7 @@ pytest -v
 # Run a single test
 pytest tests/test_model.py::test_temporal_split_no_leakage
 
-# Test count: 152 tests (151 passed, 1 skipped) across core pipeline, agents, cost guard, and integrity checks
+# Test count: 157 tests across core pipeline, agents, cost guard, bracket resolution, and integrity checks
 ```
 
 ### Development Servers
@@ -437,6 +501,33 @@ vercel logs frontend --follow
 
 ## Architecture
 
+### Three Prediction Systems at a Glance
+
+There are **three separate systems** that produce predictions — don't confuse them:
+
+1. **EnsembleModel** (statistical, always runs, zero LLM cost): ELO (22%) + Poisson (58%) + XGBoost (20%). Powers `live_predictions.json` and the client-side Monte Carlo simulator. This is the fallback whenever budget is exceeded or an LLM call fails.
+2. **Orchestrator + specialists** (contextual enrichment, runs automatically inside `predict_live.py`): routes each match to up to 5 specialist agents (2 in knockout) fed by `MatchIntel`'s free derived evidence (form, H2H, goal trends, third-place math). Each agent returns a `delta_P` adjustment to the Ensemble prior, clamped to 12% max total shift. No manual trigger needed — it's part of the standard live-update cycle.
+3. **Agent Debate** (logic-based, opt-in, expensive): 3 personas (Group Analyst, Tactical Scout, Sentiment Reader) debate a specific match over 3 rounds using `deepseek-reasoner`, reasoning from tournament pressure/narrative rather than the trained model's probabilities. Forward-only — must be triggered explicitly per match (`run_agent_debate.py`) before it's played. In knockout, a 4th independent voice, **Cazador de Sorpresas** (`src/upset_agent.py`), always argues the underdog's case.
+
+**When to use each:** EnsembleModel is always-on and free. Orchestrator enrichment is automatic — no action needed. Agent Debate is reserved for high-profile/high-context matches because of cost (~$0.08–0.10/match); run it deliberately, not on every match.
+
+### Data Flow Overview
+
+```
+Raw match results → ELO ratings → Features → EnsembleModel → live_predictions.json → Frontend
+                                                    ↑
+                        MatchIntel evidence → Orchestrator delta_P (automatic, in predict_live.py)
+
+Knockout only:  wc2026_fixture.json (placeholders) + live results → src/bracket.py → resolved bracket
+                                                                          ↓
+                                                    predict_live.py / agent_debate.py consume it
+
+Narrations:     Match/group context → DeepSeek → narrations.json / group_narratives.json (pre-computed, cached)
+
+Agent Debate:   Match + group standings → 3 agents × 3 rounds (deepseek-reasoner) → agent_debate_results.json
+                Knockout cross → src/upset_agent.py → upset_predictions.json (4th, independent voice)
+```
+
 **See `docs/architecture.md` for the complete thesis.** The system has 4 distinct layers, each producing different claims:
 
 | Layer | Purpose | Produces | Source |
@@ -491,6 +582,20 @@ Exit codes from `update_wc_results.py`: `0` = no new matches, `2` = matches upda
 
 **Name normalization:** football-data.org uses different team names. `FD_NAME_MAP` in `update_wc_results.py` handles all known variants (e.g., `"Bosnia-Herzegovina"` → `"Bosnia and Herzegovina"`, `"Korea Republic"` → `"South Korea"`).
 
+### Knockout Bracket Resolution
+
+`data/external/wc2026_fixture.json` ships knockout crosses as placeholders instead of real teams: `1A`/`2B` (group winner/runner-up), `3A/B/C/D/F` (best third assigned from a set of groups), `W73`/`L101` (winner/loser of match #73/#101). `src/bracket.py` resolves these progressively as real results come in:
+
+- Computes final group standings from `wc2026_live_results.csv` with FIFA tiebreakers (points → GD → GF → head-to-head) and picks the 8 best thirds.
+- **Best-third assignment is API-authoritative, not self-computed.** The naive backtracking approach doesn't replicate FIFA's fixed 495-combination lookup table and mis-pairs thirds. `update_wc_results.py` caches the real bracket from football-data.org into `data/external/wc2026_knockout_fixture.json` (`stage: "LAST_32"` entries); `bracket._assign_thirds_with_api` uses that cache as the source of truth for which third-place team lands in which slot. The backtracking algorithm is only a fallback when the cache is unavailable.
+- A slot only resolves once its feeder group/match is actually complete — R32 resolves as soon as groups finish; R16/QF/SF/Final resolve progressively as `W##` placeholders get real winners.
+- `predict_live.py`'s `load_fixture()` calls into `bracket.py` instead of skipping every placeholder match. Knockout predictions are generated **even after kickoff** (no agents involved = zero leakage risk; the anti-leakage cutoff still excludes each match's own result). Group-stage matches still skip if already played.
+- `agent_debate.py`'s `_maybe_knockout_context()` reuses `bracket.py` to build cross-group elimination framing (each team's own group campaign, no shared table or third-place pressure) — the 3 agents + consensus have `is_knockout` branches for win-or-go-home / extra-time / penalties framing.
+- `scripts/export_knockout_bracket.py` publishes the resolved bracket to `frontend/public/data/knockout_bracket.json` (R32 rounds carry full ML predictions; R16+ show feeder labels like "Brazil / Japan" until both feeders resolve). It also attaches actual results + model verdict ("✓/✗ Modelo acertó") once a knockout match is played — `update_wc_results.py` materializes resolved crosses as rows in `results.csv` (`_append_knockout_fixtures`) so the live API fill picks them up like group matches.
+- `frontend/src/components/KnockoutBracket.tsx` renders it; the **Eliminatorias** (R32) and **Octavos** (R16) frontend tabs replace **Grupos** once the tournament enters knockout.
+- **Cazador de Sorpresas** (`src/upset_agent.py`, run via `scripts/run_upset_agent.py`): a 4th, independent agent — separate from the 3-agent debate — that always argues the underdog's case for each knockout cross with an honest plausibility score (≥0.35 = "live upset case"). Output: `upset_predictions.json`, shown as a 4th voice in `AgentDebatePanel`.
+- Tests: `tests/test_bracket.py`.
+
 ### Feature Engineering
 
 **Features used in XGBoost:**
@@ -537,18 +642,32 @@ The "Proyecciones" tab has two views:
 
 **Technology:** Next.js 15 + React 19 + Tailwind CSS + Recharts + Framer Motion
 
+**Data model — pre-computed, not real-time.** `frontend/public/data/` holds static JSON generated by Python scripts. The frontend reads these at page load; there are **no per-user LLM calls** for predictions, narrations, or agent debate. Chat and the narrator endpoint are the only exceptions, and even they only call an LLM live when a pre-computed key is missing. To change what users see, you always run a Python script → export JSON → deploy — editing frontend code alone never updates predictions or narratives.
+
+| JSON file | Produced by |
+|---|---|
+| `live_predictions.json` | `scripts/predict_live.py --export` |
+| `narrations.json`, `group_narratives.json` | `scripts/precompute_narrations.py` |
+| `agent_debate_results.json` | `scripts/run_agent_debate.py` |
+| `upset_predictions.json` | `scripts/run_upset_agent.py` |
+| `knockout_bracket.json` | `scripts/export_knockout_bracket.py` |
+| `group_standings.json`, `group_matches.json`, `teams.json`, `matches.json`, `stats.json`, `predictions.json` | `scripts/export_frontend_data.py` |
+
 **Key files:**
 - `src/app/page.tsx`: Main tabbed interface (Live Tournament, Predictor, Groups, Simulator, ChatTab, etc.)
 - `src/app/api/live/route.ts`: Server-side proxy to football-data.org (no-store cache, BOM-safe token parsing)
 - `src/app/api/chat/route.ts`: AI chat endpoint — topic filter + response cache + rate limit + RAG + DeepSeek streaming
 - `src/app/api/narrator/route.ts`: Scenario detection & contextual metadata (stadium names, historical matchups, confederation info) for match presentation
+- `src/app/api/agent-debate/route.ts`: Serves `agent_debate_results.json` (60s in-memory cache, never calls DeepSeek per request)
+- `src/app/api/og/route.tsx`: Dynamic Open Graph social-share image (`@vercel/og` `ImageResponse`)
 - `src/lib/simulator.ts`: Client-side Monte Carlo (runs 5,000 simulations in browser)
 - `src/lib/live.ts`: Fetches live match results via `/api/live` endpoint
 - `src/lib/i18n.tsx`: Dialect context — `Lang = "bogotano"|"paisa"|"boyaco"|"costeño"|"en"`. Base `_es` + 4 dialect narrator overlays; `useI18n()` / `useLang()` hooks
-- `src/components/Predictor.tsx`: Match predictor UI — NarratorBanner (scenario detection + stadium info), CelebrationBurst, ColombiaPortugalOverlay, StadiumOverlay SVG
+- `src/components/Predictor.tsx`: Match predictor UI — NarratorBanner (scenario detection + stadium info), CelebrationBurst, ColombiaPortugalOverlay, StadiumOverlay SVG, AgentDebatePanel
 - `src/components/ChatTab.tsx`: Tabbed AI conversation interface with topic filtering and response caching
 - `src/components/StatsTab.tsx`: WC 2026 live stats dashboard — goals KPIs, top scoring teams (bar chart), top scoring matches, score distribution, upsets (model misses sorted by lowest actual-winner probability). All computed client-side from `liveMatches` + `groupMatches` + `liveScores`. Replaces the ChatTab in the "Stats" tab (`curiosidades`).
 - `src/components/ModelTab.tsx`: Live model accuracy — KPI pills, per-matchday bars, per-group grid with J1/J2/J3/FG columns (FG = group total %, count, delta vs J1), surprises section
+- `src/components/KnockoutBracket.tsx`: Renders the resolved knockout bracket from `knockout_bracket.json` — model predictions for resolved R32 crosses, feeder labels (e.g. "Brazil / Japan") for unresolved later rounds, actual result + model verdict once played. Powers the **Eliminatorias**/**Octavos** tabs that replace **Grupos** during knockout.
 
 **Data flow:**
 1. Pipeline exports JSON files (`export_frontend_data.py`) to `frontend/public/data/`
@@ -573,6 +692,11 @@ Budget controls are enforced at 3 levels:
 3. **Observability** — All LLM calls logged to `logs/llm_costs.jsonl`. Pipeline runs appended to `logs/pipeline_runs.jsonl` with duration, status, metrics, and artifacts for post-match evaluation.
 
 If budget is exceeded, deterministic predictions fall back to EnsembleModel (no LLM).
+
+**Decision points before running an expensive operation:**
+- Narrations run once/day per active dialect set — group stage = bogotano only (~$0.01–0.02/match); knockout = all 5 dialects (~$0.015–0.05/match). No manual budgeting needed, it's automatic via `DIALECTS_GROUP`/`DIALECTS_KNOCKOUT`.
+- Agent Debate (~$0.08–0.10/match) and the Cazador de Sorpresas upset agent are the two calls worth thinking about before running in bulk — check `logs/llm_costs.jsonl` for the day's spend if debating many matches at once.
+- Orchestrator enrichment (inside `predict_live.py`) is already budget-gated automatically; it degrades to delta=0 per agent rather than failing the run.
 
 ### AI Chat API (`/api/chat`)
 
@@ -705,6 +829,8 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── simulator.py        # Tournament simulation (official 2026 bracket, host advantage)
 │   ├── app.py              # Streamlit demo interface
 │   ├── agent_debate.py     # Agent Debate System: 3-round logic-based debate (deepseek-reasoner)
+│   ├── bracket.py          # Resolves knockout fixture placeholders (1A/2B/3X/W##) from live results
+│   ├── upset_agent.py      # Cazador de Sorpresas: 4th independent agent, always argues the underdog
 │   └── agents/
 │       ├── base.py         # MatchContext (+ MatchIntel fields), AgentResult, BaseAgent ABC
 │       ├── match_intel.py  # Free derived evidence: form, H2H, goal trends, scorers, third-place math
@@ -718,16 +844,20 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │           ├── finops.py          # Odds implied probs (deterministic, inactive without odds)
 │           ├── fifa_regs.py       # Bracket/altitude/classification math (deterministic)
 │           └── _llm.py            # LLM gateway: DeepSeek→Claude, reasoner-empty fallback
-├── agent/                  # Agent design specs (one .md per specialist)
-│   ├── intmatch_analytics_pro.md
-│   ├── roster_data_scout.md
-│   ├── media_sentiment_parser.md
-│   ├── travel_logistics_quant.md
-│   ├── finops_bookmaker_alpha.md
-│   └── fifa_regs_strategist.md
+├── agent/                  # Agent design specs (one .md per specialist, PascalCase-hyphenated names)
+│   ├── orchestrator.md
+│   ├── IntMatch-Analytics-Pro.md
+│   ├── Roster-Data-Scout.md
+│   ├── Media-Sentiment-Parser.md
+│   ├── Travel-Logistics-Quant.md
+│   ├── FinOps-Market-Calibration-Validator.md
+│   └── FIFA-Regs-Strategist.md
+│   # (GroupScenario-Reasoner has no spec file yet — see src/agents/specialists/group_scenario.py)
 ├── contracts/              # Formal data + feature schemas (prevent silent failures)
 │   ├── data_contracts.md   # Bronze/silver/gold schemas for CSVs, parquets, JSONs
-│   └── module_contracts.md # Feature + model input/output contracts
+│   ├── module_contracts.md # Feature + model input/output contracts (incl. DEFAULT_WEIGHTS)
+│   ├── core_model_contracts.md      # Must-have deterministic core (ELO/Poisson/XGB/Ensemble/Simulator)
+│   └── agent_enrichment_contracts.md # Optional LLM agent layer (never required, degrades to delta=0)
 ├── configs/
 │   └── budget.yaml         # LLM cost limits (daily/monthly/per-run) + token costs
 ├── scripts/
@@ -739,9 +869,14 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   ├── update_third_place_probs.py # Recompute ONLY third-place probs (Monte Carlo ~5s, no narrations) — J3 3x/day
 │   ├── precompute_narrations.py    # Daily narrations × dialects → narrations.json (DeepSeek, 1 call/match)
 │   ├── run_agent_debate.py         # Runs Agent Debate System for given matches → agent_debate_results.json (accumulative, idempotent)
+│   ├── export_knockout_bracket.py  # Publishes resolved knockout bracket → knockout_bracket.json (R32 + feeders)
+│   ├── run_upset_agent.py          # Runs Cazador de Sorpresas for knockout crosses → upset_predictions.json
 │   ├── ablation_features.py        # Ablation test for candidate features vs base FEATURE_COLS
+│   ├── calibrate_ensemble_2026.py  # Recalibrate ensemble weights via mini walk-forward over played WC 2026 matches (--apply writes ensemble.py)
+│   ├── ci_debate_targets.py        # Print upcoming group-stage Home/Away pairs within DEBATE_WINDOW_HOURS (CI agent-debate automation; empty = skip)
 │   ├── walk_forward_validation.py  # Walk-forward RPS vs ELO baseline
 │   ├── build_rag_index.py          # Generate embedding index for chat RAG
+│   ├── inspect_rounds.py           # Debug utility: inspect simulator round-by-round probabilities
 │   └── enrich_goalscorers.py       # Optional: goalscorer enrichment
 ├── frontend/               # Next.js 15 + React 19
 │   ├── src/app/
@@ -749,32 +884,39 @@ Tests use the same temporal strategy: fixture data with year=2014/2018/2022 to v
 │   │   ├── api/live/       # Proxy to football-data.org
 │   │   ├── api/chat/       # AI chat: tournament context injection + topic filter + cache + RAG + DeepSeek
 │   │   ├── api/narrator/   # Serves narrations.json; LLM fallback for missing keys only
-│   │   └── api/agent-debate/ # Serves agent_debate_results.json (60s in-memory cache, no live LLM calls)
+│   │   ├── api/agent-debate/ # Serves agent_debate_results.json (60s in-memory cache, no live LLM calls)
+│   │   └── api/og/         # route.tsx — dynamic Open Graph social-share image (@vercel/og ImageResponse)
 │   ├── src/components/
 │   │   ├── Predictor.tsx   # Match predictor + UnifiedNarration (localLang + dialect selector) + AgentDebatePanel
 │   │   ├── ModelTab.tsx    # Live model accuracy: KPIs, per-matchday bars, per-group J1/J2/J3/FG (ML + Agents side-by-side), surprises
 │   │   ├── AgentDebatePanel.tsx # Collapsed-by-default consensus panel (compact: Predictor/Próximos; full: detailed)
 │   │   ├── StatsTab.tsx    # WC 2026 stats dashboard: goals, top teams, top matches, score dist, upsets
-│   │   └── ...             # Groups, Simulator, Knockout, ChatTab, etc.
+│   │   ├── KnockoutBracket.tsx # Resolved bracket renderer (Eliminatorias/Octavos tabs) from knockout_bracket.json
+│   │   └── ...             # Groups, Simulator, ChatTab, etc.
 │   ├── src/lib/
 │   │   ├── simulator.ts    # Client-side Monte Carlo
 │   │   ├── live.ts         # Live results fetching + orientScore + modelVerdict
 │   │   ├── agentDebate.ts  # Agent Debate verdict/accuracy helpers (mirrors live.ts for the ML model)
 │   │   └── i18n.tsx        # i18n context + regional dialects
-│   └── public/data/        # Exported JSONs: teams, predictions, narrations, group_matches, standings, etc.
-├── tests/                  # 152 tests: features, model, agents, cost guard, integrity, simulator, live prediction
+│   └── public/data/        # Exported JSONs: teams, predictions, narrations, group_matches, standings, knockout_bracket, upset_predictions, etc.
+├── tests/                  # 157 tests: features, model, agents, cost guard, bracket resolution, integrity, simulator, live prediction
 ├── data/
 │   ├── raw/                # results.csv (incl. WC 2026 fixture), shootouts.csv, goalscorers.csv
 │   ├── processed/          # Generated CSVs, parquets, JSONs (regenerable, gitignored)
-│   └── external/           # wc2026_fixture.json; wc2026_live_results.csv (played WC 2026 only)
+│   └── external/           # wc2026_fixture.json (group + knockout placeholders); wc2026_knockout_fixture.json (cached real R32 bracket from football-data.org, authoritative for best-third assignment); wc2026_live_results.csv (played WC 2026 only)
 ├── models/                 # Serialized models (gitignored, regenerable)
 ├── logs/                   # pipeline_runs.jsonl, llm_costs.jsonl (gitignored)
 ├── notebooks/              # EDA and analysis
 ├── instrucciones.md        # Daily ops: MD1/MD2/MD3 cycles, double-run protocol, cost table
+├── instrucciones2.md       # J3 CI windows / simultaneous-match protocol detail
+├── instructivo-github-actions.md # One-time GitHub Actions secrets setup
 ├── proyecto.md             # Project definition, deliverables (E1–E5), and status
 ├── model_card.md           # Model performance, walk-forward results, feature ablation
 ├── methodology.md          # Model methodology, limitations, responsible-use statement
 ├── guia.md                 # Technical roadmap (Phases 0–6), design decisions (D1–D6)
+├── retrospective.md        # Post-tournament template (blank until after Jul 19 final)
+├── QUICK_START.md          # 2-min external-facing summary for evaluators
+├── AGENTS.md               # Codex equivalent of this file — keep in sync
 ├── requirements.txt        # Python dependencies
 └── README.md
 ```

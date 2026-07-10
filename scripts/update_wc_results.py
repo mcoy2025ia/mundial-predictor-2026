@@ -15,9 +15,11 @@ Uso:
 """
 
 import argparse
+import json
 import logging
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -29,6 +31,10 @@ sys.path.insert(0, str(ROOT))
 
 RESULTS_CSV = ROOT / "data" / "raw" / "results.csv"
 LIVE_RESULTS_CSV = ROOT / "data" / "external" / "wc2026_live_results.csv"
+# Cruces oficiales de eliminatorias del API (fuente autoritativa de los
+# emparejamientos, incluida la asignación de mejores terceros que FIFA hace
+# con su tabla fija — que nuestro backtracking no replica).
+KNOCKOUT_FIXTURE_CACHE = ROOT / "data" / "external" / "wc2026_knockout_fixture.json"
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("update_wc_results")
@@ -84,12 +90,47 @@ def _load_token(override: str | None) -> str:
     return token.strip()
 
 
-def _fetch_finished(token: str) -> list[dict]:
+def _fetch_all(token: str) -> list[dict]:
     url = "https://api.football-data.org/v4/competitions/WC/matches"
     resp = requests.get(url, headers={"X-Auth-Token": token}, timeout=60)
     resp.raise_for_status()
-    data = resp.json()
-    return [m for m in data.get("matches", []) if m.get("status") == "FINISHED"]
+    return resp.json().get("matches", [])
+
+
+def _fetch_finished(token: str) -> list[dict]:
+    return [m for m in _fetch_all(token) if m.get("status") == "FINISHED"]
+
+
+def _write_knockout_cache(all_matches: list[dict]) -> int:
+    """Guarda los cruces de eliminatorias con equipos definidos desde el API.
+
+    Esta es la fuente autoritativa de los emparejamientos (incluida la
+    asignación de mejores terceros). `src.bracket` la usa para no equivocarse
+    con su backtracking. Solo guarda cruces con AMBOS equipos ya definidos.
+    """
+    ko = []
+    for m in all_matches:
+        stage = m.get("stage", "")
+        if stage == "GROUP_STAGE":
+            continue
+        home = (m.get("homeTeam") or {}).get("name")
+        away = (m.get("awayTeam") or {}).get("name")
+        if not home or not away:
+            continue  # cruce aún sin definir (p.ej. octavos antes de jugarse 32avos)
+        ko.append({
+            "stage": stage,
+            "home": _normalize(home),
+            "away": _normalize(away),
+            "date": (m.get("utcDate") or "")[:10],
+            "status": m.get("status", ""),
+        })
+    payload = {"fetched_at": datetime.now(timezone.utc).isoformat(), "matches": ko}
+    KNOCKOUT_FIXTURE_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    KNOCKOUT_FIXTURE_CACHE.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    logger.info("Cache de eliminatorias (API): %d cruce(s) con equipos definidos.", len(ko))
+    return len(ko)
 
 
 def main(dry_run: bool = False, token_override: str | None = None) -> int:
@@ -107,7 +148,7 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
 
     logger.info("Consultando football-data.org...")
     try:
-        finished = _fetch_finished(token)
+        all_matches = _fetch_all(token)
     except requests.HTTPError as e:
         logger.error("HTTP error: %s", e)
         return -1
@@ -115,7 +156,12 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
         logger.error("Error de red: %s", e)
         return -1
 
+    finished = [m for m in all_matches if m.get("status") == "FINISHED"]
     logger.info("%d partido(s) terminado(s) en la API", len(finished))
+
+    # Cachear los cruces oficiales de eliminatorias (incluye terceros bien asignados)
+    if not dry_run:
+        _write_knockout_cache(all_matches)
 
     if not finished:
         logger.info("El torneo aún no ha comenzado o no hay partidos terminados.")
@@ -123,6 +169,10 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
 
     # Cargar el CSV completo
     df = pd.read_csv(RESULTS_CSV, parse_dates=["date"])
+
+    # Materializar los cruces de eliminatorias ya determinables como filas (score NA)
+    # para que la API los rellene igual que los partidos de grupos.
+    df, n_ko_added = _append_knockout_fixtures(df)
 
     # Máscara de filas del WC 2026 que todavía tienen scores vacíos
     wc2026_na_mask = (
@@ -159,13 +209,26 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
 
         # Buscar la fila del WC 2026 con estos equipos (sin importar fecha UTC vs local)
         # Normalize both sides to handle CSV encoding artifacts (e.g. Curaçao → Curacao)
-        row_mask = (
-            (df["tournament"] == "FIFA World Cup") &
-            (df["date"].dt.year == 2026) &
-            (df["home_team"].apply(_normalize) == home) &
-            (df["away_team"].apply(_normalize) == away)
-        )
+        wc2026_mask = (df["tournament"] == "FIFA World Cup") & (df["date"].dt.year == 2026)
+        norm_home = df.loc[wc2026_mask, "home_team"].apply(_normalize)
+        norm_away = df.loc[wc2026_mask, "away_team"].apply(_normalize)
+
+        row_mask = wc2026_mask & (norm_home == home) & (norm_away == away)
         matches_found = df[row_mask]
+
+        # Fallback: la API puede tener home/away invertido respecto a nuestro fixture
+        # (todos los partidos son en sede neutral). Si no se encontró, buscar al revés
+        # y cruzar los scores para que queden en las columnas correctas del CSV.
+        swapped = False
+        if matches_found.empty:
+            row_mask_rev = wc2026_mask & (norm_home == away) & (norm_away == home)
+            matches_found = df[row_mask_rev]
+            if not matches_found.empty:
+                swapped = True
+                row_mask = row_mask_rev
+                logger.info(
+                    "  [SWAP]   fixture tiene home/away invertido: %s vs %s", away, home
+                )
 
         if matches_found.empty:
             not_found.append(f"{home} vs {away}")
@@ -184,13 +247,19 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
             skipped_done += 1
             continue
 
+        # Si el fixture tiene home/away invertido, cruzar scores (API: home→away col, away→home col)
+        csv_home_score = int(away_score) if swapped else int(home_score)
+        csv_away_score = int(home_score) if swapped else int(away_score)
+        csv_home = df.at[idx, "home_team"]
+        csv_away = df.at[idx, "away_team"]
+
         logger.info(
             "  [UPDATE] %-25s %d - %d  %s",
-            home, int(home_score), int(away_score), away,
+            csv_home, csv_home_score, csv_away_score, csv_away,
         )
         if not dry_run:
-            df.at[idx, "home_score"] = int(home_score)
-            df.at[idx, "away_score"] = int(away_score)
+            df.at[idx, "home_score"] = csv_home_score
+            df.at[idx, "away_score"] = csv_away_score
         updated += 1
 
     if not_found:
@@ -205,16 +274,24 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
     )
 
     if dry_run:
-        if updated == 0:
+        if updated == 0 and n_ko_added == 0:
             logger.info("Sin cambios — todos los partidos ya están al día.")
         else:
             logger.info("[DRY-RUN] No se escribió nada en results.csv.")
         return updated
 
-    if updated > 0:
+    # Segundo pase: con los marcadores de R32 ya rellenos, octavos (W##) puede
+    # volverse determinable. Añadir esas filas (score NA) para próximas corridas.
+    df, n_ko_added2 = _append_knockout_fixtures(df)
+    n_ko_added += n_ko_added2
+
+    if updated > 0 or n_ko_added > 0:
         # Escribir CSV preservando el formato original (sin comillas innecesarias)
         df.to_csv(RESULTS_CSV, index=False)
-        logger.info("results.csv guardado con %d score(s) actualizado(s).", updated)
+        logger.info(
+            "results.csv guardado: %d score(s) actualizado(s), %d cruce(s) de eliminatorias añadidos.",
+            updated, n_ko_added,
+        )
     else:
         logger.info("Sin cambios — todos los partidos ya están al día.")
 
@@ -223,6 +300,85 @@ def main(dry_run: bool = False, token_override: str | None = None) -> int:
     _sync_live_results_csv(df)
 
     return updated
+
+
+# Sedes anfitrionas (para is_neutral en eliminatorias)
+_MX_VENUES = ("Mexico City", "Monterrey", "Guadalajara")
+_CA_VENUES = ("Toronto", "Vancouver")
+
+
+def _venue_country(ground: str) -> str:
+    if any(g in ground for g in _MX_VENUES):
+        return "Mexico"
+    if any(g in ground for g in _CA_VENUES):
+        return "Canada"
+    return "United States"
+
+
+def _ko_is_neutral(home: str, away: str, ground: str) -> bool:
+    """No-neutral si la selección anfitriona de la sede es uno de los dos equipos."""
+    host = _venue_country(ground)
+    return host not in (home, away)
+
+
+def _append_knockout_fixtures(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
+    """Añade a results.csv las filas de eliminatorias ya determinables (score NA).
+
+    El fixture de eliminatorias trae placeholders (1A, 2B, 3X, W73). `src.bracket`
+    los resuelve desde los resultados ya jugados. Aquí materializamos cada cruce
+    resuelto como una fila de results.csv (sin score) para que el flujo normal de
+    la API rellene su marcador, igual que con los partidos de grupos. Idempotente:
+    no duplica un cruce ya presente.
+    """
+    try:
+        from src.bracket import resolve_bracket, load_fixture_raw
+    except Exception as e:
+        logger.warning("No se pudo importar src.bracket (eliminatorias): %s", e)
+        return df, 0
+
+    # Resolver el bracket con los partidos del WC 2026 ya jugados en results.csv
+    played_2026 = df[
+        (df["tournament"] == "FIFA World Cup") &
+        (df["date"].dt.year == 2026) &
+        df["home_score"].notna() & df["away_score"].notna()
+    ][["home_team", "away_team", "home_score", "away_score"]].copy()
+
+    resolved = resolve_bracket(load_fixture_raw(), played_2026)
+
+    # Pares ya presentes en results.csv (en cualquier orden) para 2026
+    existing = set()
+    df2026 = df[(df["tournament"] == "FIFA World Cup") & (df["date"].dt.year == 2026)]
+    for _, r in df2026.iterrows():
+        existing.add(frozenset({str(r["home_team"]), str(r["away_team"])}))
+
+    new_rows = []
+    for slot in resolved.values():
+        if not slot.get("resolved"):
+            continue
+        home, away = slot["home"], slot["away"]
+        if frozenset({home, away}) in existing:
+            continue
+        ground = slot.get("ground", "")
+        city = ground.split("(")[0].strip() if "(" in ground else ground
+        new_rows.append({
+            "date": pd.Timestamp(slot["date"]),
+            "home_team": home,
+            "away_team": away,
+            "home_score": np.nan,
+            "away_score": np.nan,
+            "tournament": "FIFA World Cup",
+            "city": city,
+            "country": _venue_country(ground),
+            "neutral": _ko_is_neutral(home, away, ground),
+        })
+        existing.add(frozenset({home, away}))
+
+    if not new_rows:
+        return df, 0
+
+    df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
+    logger.info("Eliminatorias: %d cruce(s) nuevo(s) añadidos a results.csv (score NA).", len(new_rows))
+    return df, len(new_rows)
 
 
 def _sync_live_results_csv(df: pd.DataFrame) -> None:

@@ -16,6 +16,18 @@ interface Prediction {
   agent: string;
 }
 
+interface Upset {
+  home: string;
+  away: string;
+  favorite: string;
+  underdog: string;
+  scoreline: string | null;       // "H-A" en 90'
+  upset_plausibility: number;
+  upset_pick: boolean;
+  one_liner: string;
+  key_factors: string[];
+}
+
 const AGENT_META: Record<string, { dot: string; label: string; focus: string }> = {
   'Group Analyst':    { dot: '🔵', label: 'Group Analyst',    focus: 'clasificación + presión' },
   'Tactical Scout':   { dot: '🟠', label: 'Tactical Scout',   focus: 'tácticas' },
@@ -56,19 +68,21 @@ export default function AgentDebatePanel({
   variant = 'compact',
 }: AgentDebateProps) {
   const [debate, setDebate] = useState<any>(null);
+  const [upset, setUpset] = useState<Upset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const matches = (a: string, b: string) =>
+      a === b || a === b.replace('United States', 'USA') || b === a.replace('United States', 'USA');
+
     const fetchDebate = async () => {
       try {
         setLoading(true);
         const response = await fetch('/api/agent-debate');
         const results = await response.json();
         const matchDebate = results.find(
-          (r: any) =>
-            (r.home === homeTeam || r.home === homeTeam.replace('United States', 'USA')) &&
-            (r.away === awayTeam || r.away === awayTeam.replace('United States', 'USA'))
+          (r: any) => matches(r.home, homeTeam) && matches(r.away, awayTeam)
         );
         if (matchDebate) setDebate(matchDebate);
         else setError('Agent debate not available');
@@ -79,7 +93,23 @@ export default function AgentDebatePanel({
         setLoading(false);
       }
     };
+
+    // Cazador de Sorpresas (4ª voz). Estático en /data; si no existe, se ignora.
+    const fetchUpset = async () => {
+      try {
+        const res = await fetch('/data/upset_predictions.json');
+        if (!res.ok) return;
+        const data = await res.json();
+        const list: Upset[] = Array.isArray(data?.upsets) ? data.upsets : [];
+        const hit = list.find((u) => matches(u.home, homeTeam) && matches(u.away, awayTeam));
+        if (hit) setUpset(hit);
+      } catch {
+        /* opcional: sin sorpresa, no pasa nada */
+      }
+    };
+
     fetchDebate();
+    fetchUpset();
   }, [homeTeam, awayTeam]);
 
   // Silencioso: si no hay debate para este partido, no ocupar espacio
@@ -136,6 +166,32 @@ export default function AgentDebatePanel({
       </div>
     ) : null;
 
+  const UpsetBanner = () => {
+    if (!upset) return null;
+    const live = upset.upset_pick;
+    const plaus = Math.round((upset.upset_plausibility || 0) * 100);
+    // scoreline "H-A" → orientado local-visitante
+    const sl = upset.scoreline?.match(/(\d+)\s*-\s*(\d+)/);
+    const scoreStr = sl ? `${homeTeam} ${sl[1]}-${sl[2]} ${awayTeam}` : null;
+    return (
+      <div className={`rounded-md border px-3 py-2 mb-3 ${live ? 'bg-orange-50 border-orange-300' : 'bg-gray-50 border-gray-200'}`}>
+        <div className="flex items-center gap-2 flex-wrap text-sm">
+          <span>🚨</span>
+          <span className="font-bold text-orange-900">Cazador de Sorpresas:</span>
+          {scoreStr && <span className="font-mono text-gray-800">{scoreStr}</span>}
+          <span className="text-orange-700 font-semibold">Gana {upset.underdog}</span>
+          <span className={`px-1.5 py-0.5 rounded text-xs ${live ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-600'}`}>
+            {live ? 'sorpresa viva' : 'palo lejano'} · plausibilidad {plaus}%
+          </span>
+        </div>
+        {upset.one_liner && <div className="text-xs text-gray-600 mt-1 italic">«{upset.one_liner}»</div>}
+        <div className="text-[11px] text-gray-400 mt-0.5">
+          Voz aparte: defiende el batacazo del menos favorito · contrapeso al consenso
+        </div>
+      </div>
+    );
+  };
+
   const StandingsLine = () =>
     (homeRow || awayRow) ? (
       <div className="text-xs text-gray-500 mb-3 flex gap-4">
@@ -156,6 +212,7 @@ export default function AgentDebatePanel({
         </summary>
         <div className="px-4 pb-4">
           <ConsensusBanner />
+          <UpsetBanner />
           <StandingsLine />
           <div className="space-y-2">
             {agentPreds.map((p, i) => <AgentRow key={i} p={p} />)}
@@ -177,6 +234,7 @@ export default function AgentDebatePanel({
         )}
       </div>
       <ConsensusBanner />
+      <UpsetBanner />
       <StandingsLine />
       <div className="bg-white p-4 rounded-lg border border-blue-200 space-y-2">
         <div className="text-sm font-semibold text-blue-900 mb-1">Predicción por agente</div>

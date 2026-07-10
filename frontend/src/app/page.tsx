@@ -13,7 +13,7 @@ import {
 } from "@/lib/live";
 import Predictor      from "@/components/Predictor";
 import SimulatorTab   from "@/components/Simulator";
-import Groups         from "@/components/Groups";
+import KnockoutBracket, { type BracketData } from "@/components/KnockoutBracket";
 import Knockout       from "@/components/Knockout";
 import LiveTournament, { type LiveSection } from "@/components/LiveTournament";
 import ModelTab       from "@/components/ModelTab";
@@ -30,11 +30,11 @@ const _shellEs = {
   eyebrow:     "Análisis con Machine Learning",
   subtitle:    "Sigue el Mundial 2026 en tiempo real: resultados, probabilidades por partido y quién tiene más opciones de llegar a la final.",
   tabs: [
-    { id: "envivo",       label: "En Vivo"      },
-    { id: "predictor",    label: "Predictor"    },
-    { id: "grupos",       label: "Grupos"       },
-    { id: "modelo",       label: "Modelo"       },
-    { id: "chat",         label: "Chat IA"      },
+    { id: "envivo",        label: "En Vivo"       },
+    { id: "predictor",     label: "Predictor"     },
+    { id: "eliminatorias", label: "Eliminatorias" },
+    { id: "modelo",        label: "Modelo"        },
+    { id: "chat",          label: "Chat IA"       },
   ],
   projByRound: "Por ronda",
   projSim:     "Simulador",
@@ -58,11 +58,11 @@ const _shellEn = {
   eyebrow:     "Machine Learning Analysis",
   subtitle:    "Follow the 2026 World Cup live: scores, match probabilities and who has the best shot at lifting the trophy.",
   tabs: [
-    { id: "envivo",       label: "Live"        },
-    { id: "predictor",    label: "Predictor"   },
-    { id: "grupos",       label: "Groups"      },
-    { id: "modelo",       label: "Model"       },
-    { id: "chat",         label: "AI Chat"     },
+    { id: "envivo",        label: "Live"        },
+    { id: "predictor",     label: "Predictor"   },
+    { id: "eliminatorias", label: "Knockout"    },
+    { id: "modelo",        label: "Model"       },
+    { id: "chat",          label: "AI Chat"     },
   ],
   projByRound: "By round",
   projSim:     "Simulator",
@@ -88,7 +88,7 @@ const SHELL = {
   en:       _shellEn,
 } as const;
 
-type TabId = "envivo" | "predictor" | "grupos" | "proyecciones" | "curiosidades" | "modelo" | "chat";
+type TabId = "envivo" | "predictor" | "eliminatorias" | "grupos" | "proyecciones" | "curiosidades" | "modelo" | "chat";
 
 /* ─────────────────────────────────────────────────────────────
    PAGE
@@ -115,6 +115,7 @@ export default function Home() {
   const [qatar,          setQatar]          = useState<QatarBacktest | null>(null);
   const [narrations,     setNarrations]     = useState<Record<string, string>>({});
   const [groupNarratives,setGroupNarratives]= useState<Record<string, string>>({});
+  const [bracket,        setBracket]        = useState<BracketData | null>(null);
   const [agentNotes,     setAgentNotes]     = useState<Record<string, string>>({});
   const [loading,        setLoading]        = useState(true);
 
@@ -212,7 +213,8 @@ export default function Home() {
       fetch("/data/live_predictions.json").then((r) => r.json()).catch(() => null),
       fetch("/data/narrations.json").then((r) => r.json()).catch(() => ({})),
       fetch("/data/group_narratives.json").then((r) => r.json()).catch(() => ({})),
-    ]).then(([t, p, g, m, s, gs, gm, gst, q, lp, nar, groupNar]) => {
+      fetch("/data/knockout_bracket.json").then((r) => r.json()).catch(() => null),
+    ]).then(([t, p, g, m, s, gs, gm, gst, q, lp, nar, groupNar, brk]) => {
       // Merge live_predictions (agent-adjusted) on top of base predictions
       const notes: Record<string, string> = {};
       if (lp && Array.isArray(lp)) {
@@ -229,6 +231,7 @@ export default function Home() {
       setQatar(q);
       if (nar && typeof nar === "object") setNarrations(nar);
       if (groupNar && typeof groupNar === "object") setGroupNarratives(groupNar);
+      if (brk && brk.rounds) setBracket(brk);
       setLoading(false);
     });
   }, []);
@@ -260,7 +263,7 @@ export default function Home() {
             liveScores={liveScores}
             onGoToPredictor={() => { setTab("envivo"); setLiveJumpSection("proximos"); setLiveJumpToken((n) => n + 1); }}
             onGoToModel={() => setTab("modelo")}
-            onGoToBestThirds={() => { setTab("envivo"); setLiveJumpSection("posiciones"); setLiveJumpToken((n) => n + 1); }}
+            onGoToBracket={() => { setTab("eliminatorias"); }}
           />
         )}
 
@@ -497,9 +500,11 @@ export default function Home() {
                   <Predictor teams={teams} predictions={predictions} matches={matches} liveMatches={liveMatches} narrations={narrations} agentNotes={agentNotes} onSelectDialect={setLang} />
                 </TabPane>
               )}
-              {tab === "grupos" && groupMatches && groupStandings && (
-                <TabPane key="grupos">
-                  <Groups groupMatches={groupMatches} groupStandings={groupStandings} liveScores={liveScores} groupNarratives={groupNarratives} />
+              {tab === "eliminatorias" && teams && (
+                <TabPane key="eliminatorias">
+                  {bracket
+                    ? <KnockoutBracket data={bracket} roundKey="Round of 32" teams={teams} />
+                    : <div className="stat-card text-center py-10 text-[var(--text-muted)]">Cargando bracket de eliminatorias…</div>}
                 </TabPane>
               )}
               {tab === "proyecciones" && teams && predictions && groups && (
@@ -523,7 +528,7 @@ export default function Home() {
               )}
               {tab === "modelo" && (
                 <TabPane key="modelo">
-                  <ModelTab groupMatches={groupMatches ?? {}} liveScores={liveScores} teams={teams ?? {}} />
+                  <ModelTab groupMatches={groupMatches ?? {}} liveScores={liveScores} teams={teams ?? {}} bracket={bracket} />
                 </TabPane>
               )}
               {tab === "chat" && (
