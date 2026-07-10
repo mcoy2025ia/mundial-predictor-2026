@@ -9,10 +9,12 @@ import {
   type AgentDebateMatch,
 } from "@/lib/agentDebate";
 import { useLang } from "@/lib/i18n";
+import type { BracketData } from "@/components/KnockoutBracket";
 
 interface Props {
   groupMatches: Record<string, GroupMatch[]>;
   liveScores: ScoreMap;
+  bracket?: BracketData | null;
   onGoToPredictor: () => void;
   onGoToModel: () => void;
   onGoToBracket: () => void;
@@ -20,10 +22,23 @@ interface Props {
 
 const AGENT_NAMES = ["Group Analyst", "Tactical Scout", "Sentiment Reader", "Consensus"] as const;
 
-export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor, onGoToModel, onGoToBracket }: Props) {
+/** Última ronda del bracket con al menos un cruce resuelto (equipos definidos) —
+ * es la fase "actual" del torneo desde la perspectiva del usuario, aunque esa
+ * ronda todavía no haya terminado de jugarse. "group" si knockout no arrancó. */
+function currentPhaseKey(bracket: BracketData | null | undefined): string {
+  if (!bracket) return "group";
+  for (let i = bracket.round_order.length - 1; i >= 0; i--) {
+    const rk = bracket.round_order[i];
+    if ((bracket.rounds[rk] ?? []).some((m) => m.home && m.away)) return rk;
+  }
+  return "group";
+}
+
+export default function WelcomeModal({ groupMatches, liveScores, bracket, onGoToPredictor, onGoToModel, onGoToBracket }: Props) {
   const T = useLang();
   const [open, setOpen] = useState(false);
   const [agentDebateResults, setAgentDebateResults] = useState<AgentDebateMatch[]>([]);
+  const phaseKey = useMemo(() => currentPhaseKey(bracket), [bracket]);
 
   useEffect(() => {
     let active = true;
@@ -121,7 +136,7 @@ export default function WelcomeModal({ groupMatches, liveScores, onGoToPredictor
             fontFamily: "var(--font-body)", fontSize: "0.92rem", lineHeight: 1.65,
             color: "var(--color-ink-primary)", margin: 0,
           }}>
-            {T.welcomeIntro(agentSummary.played, agentSummary.pct)}{" "}
+            {T.welcomeIntro(agentSummary.played, agentSummary.pct, phaseKey)}{" "}
             {T.welcomeBestAgent(bestAgent.name, bestAgent.pct)}
           </p>
 

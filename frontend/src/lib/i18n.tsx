@@ -9,6 +9,28 @@ export function useLang() {
   return UI[lang];
 }
 
+/** Fase actual del torneo (clave de round_order del bracket, o "group" si aún
+ * no arrancó knockout) → texto legible. Evita hardcodear "R32" en la UI, que
+ * queda desactualizado apenas el torneo avanza de ronda. */
+export const PHASE_LABEL_ES: Record<string, string> = {
+  group: "fase de grupos",
+  "Round of 32": "32avos de final",
+  "Round of 16": "octavos de final",
+  "Quarter-final": "cuartos de final",
+  "Semi-final": "semifinales",
+  "Match for third place": "el tercer puesto",
+  Final: "la Final",
+};
+export const PHASE_LABEL_EN: Record<string, string> = {
+  group: "the group stage",
+  "Round of 32": "the Round of 32",
+  "Round of 16": "the Round of 16",
+  "Quarter-final": "the Quarterfinals",
+  "Semi-final": "the Semifinals",
+  "Match for third place": "the third-place match",
+  Final: "the Final",
+};
+
 /* ─────────────────────────────────────────────────────────────
    BASE ESPAÑOL — compartido por los 4 dialectos colombianos
 ───────────────────────────────────────────────────────────── */
@@ -96,14 +118,14 @@ const _es = {
   lt_bestThirdsGapGd:   "mismos pts, {0} de DG para alcanzar al 8°",
   lt_bestThirdsProb:    "Prob.",
   welcomeBadge:    "Cómo van los Agentes de IA",
-  welcomeIntro:    (played: number, pct: number) =>
-    `Con la fase de grupos cerrada y el torneo en R32, el Agent Debate (los 3 agentes de IA que analizan cada partido sin usar las probabilidades del modelo) lleva ${pct}% de aciertos en ${played} partidos evaluados.`,
+  welcomeIntro:    (played: number, pct: number, phaseKey: string = "group") =>
+    `Con el torneo en ${PHASE_LABEL_ES[phaseKey] ?? phaseKey}, el Agent Debate (los 3 agentes de IA que analizan cada partido sin usar las probabilidades del modelo) lleva ${pct}% de aciertos en ${played} partidos evaluados.`,
   welcomeBestAgent: (agent: string, pct: number) =>
     `El más certero en este momento es ${agent}, con ${pct}% de aciertos.`,
   welcomePath:     "Ruta: Predictor → elige un partido → Predecir resultado → despliega \"🤖 Análisis de Agentes Expertos\" → Ver consenso completo.",
   welcomeCtaPredictor:  "📅 Ver próximos partidos",
   welcomeCtaModel:      "🤖 Ver análisis de los agentes",
-  welcomeCtaBestThirds: "Eliminatorias R32",
+  welcomeCtaBestThirds: "Ver Eliminatorias",
   simTitle:         "Grupos del Mundial 2026",
   simCount:         "Simulaciones",
   simBtn:           "🎲 Simular torneo",
@@ -351,14 +373,14 @@ const _en = {
   lt_bestThirdsGapGd:   "same pts, {0} GD to reach 8th",
   lt_bestThirdsProb:    "Prob.",
   welcomeBadge:    "How the AI Agents are doing",
-  welcomeIntro:    (played: number, pct: number) =>
-    `With the group stage complete and the tournament in R32, Agent Debate (3 AI agents that analyze each match without using the model's probabilities) is getting ${pct}% right across ${played} evaluated matches.`,
+  welcomeIntro:    (played: number, pct: number, phaseKey: string = "group") =>
+    `With the tournament in ${PHASE_LABEL_EN[phaseKey] ?? phaseKey}, Agent Debate (3 AI agents that analyze each match without using the model's probabilities) is getting ${pct}% right across ${played} evaluated matches.`,
   welcomeBestAgent: (agent: string, pct: number) =>
     `The most accurate right now is ${agent}, with ${pct}% correct.`,
   welcomePath:     "Path: Predictor tab → pick a match → \"Predecir resultado\" → expand \"🤖 Análisis de Agentes Expertos\" → \"Ver consenso completo\".",
   welcomeCtaPredictor:  "📅 See upcoming matches",
   welcomeCtaModel:      "🤖 See agents' analysis",
-  welcomeCtaBestThirds: "Knockout R32",
+  welcomeCtaBestThirds: "See Knockout Bracket",
   simTitle:         "2026 World Cup Groups",
   simCount:         "Simulations",
   simBtn:           "🎲 Simulate tournament",

@@ -261,6 +261,7 @@ export default function Home() {
           <WelcomeModal
             groupMatches={groupMatches}
             liveScores={liveScores}
+            bracket={bracket}
             onGoToPredictor={() => { setTab("envivo"); setLiveJumpSection("proximos"); setLiveJumpToken((n) => n + 1); }}
             onGoToModel={() => setTab("modelo")}
             onGoToBracket={() => { setTab("eliminatorias"); }}
