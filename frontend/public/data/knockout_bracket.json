@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T19:24:03.086830+00:00",
+  "generated_at": "2026-07-11T21:09:13.363147+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -1101,24 +1101,24 @@
         "away_label": "England",
         "resolved": true,
         "pred": {
-          "p_home": 0.1729,
-          "p_draw": 0.2471,
-          "p_away": 0.58,
+          "p_home": 0.1736,
+          "p_draw": 0.2439,
+          "p_away": 0.5825,
           "top_scorelines": [
             {
               "home": 0,
               "away": 1,
-              "prob": 0.1885
-            },
-            {
-              "home": 0,
-              "away": 0,
-              "prob": 0.1348
+              "prob": 0.1826
             },
             {
               "home": 0,
               "away": 2,
-              "prob": 0.1318
+              "prob": 0.1307
+            },
+            {
+              "home": 0,
+              "away": 0,
+              "prob": 0.1275
             }
           ]
         }

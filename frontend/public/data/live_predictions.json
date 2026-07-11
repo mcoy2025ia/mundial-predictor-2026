@@ -1484,9 +1484,9 @@
   {
     "home_team": "Norway",
     "away_team": "England",
-    "p_home": 0.1729,
-    "p_draw": 0.2471,
-    "p_away": 0.58,
+    "p_home": 0.1736,
+    "p_draw": 0.2439,
+    "p_away": 0.5825,
     "is_neutral": true,
     "kickoff": "2026-07-11T21:00:00",
     "model": "ensemble_live",
@@ -1501,38 +1501,38 @@
     "elo_home": 0.2344,
     "elo_draw": 0.1848,
     "elo_away": 0.5807,
-    "poisson_home": 0.1332,
-    "poisson_draw": 0.2549,
-    "poisson_away": 0.6119,
+    "poisson_home": 0.1344,
+    "poisson_draw": 0.2494,
+    "poisson_away": 0.6162,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1885
-      },
-      {
-        "home": 0,
-        "away": 0,
-        "prob": 0.1348
+        "prob": 0.1826
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.1318
+        "prob": 0.1307
+      },
+      {
+        "home": 0,
+        "away": 0,
+        "prob": 0.1275
       },
       {
         "home": 0,
         "away": 3,
-        "prob": 0.1013
+        "prob": 0.1029
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1
+        "prob": 0.1003
       }
     ],
-    "lambda_home": 0.53,
-    "lambda_away": 1.398,
+    "lambda_home": 0.549,
+    "lambda_away": 1.432,
     "stage": "knockout",
     "group": "",
     "venue": "Miami (Miami Gardens)",
