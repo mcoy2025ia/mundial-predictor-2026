@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-07-11T03:28:00.610970+00:00",
+  "fetched_at": "2026-07-11T06:21:53.701557+00:00",
   "matches": [
     {
       "stage": "LAST_32",
@@ -195,6 +195,13 @@
       "home": "Argentina",
       "away": "Switzerland",
       "date": "2026-07-12",
+      "status": "TIMED"
+    },
+    {
+      "stage": "SEMI_FINALS",
+      "home": "France",
+      "away": "Spain",
+      "date": "2026-07-14",
       "status": "TIMED"
     }
   ]
