@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T17:19:44.888305+00:00",
+  "generated_at": "2026-07-11T19:29:55.424985+00:00",
   "agent": "Cazador de Sorpresas",
   "pick_threshold": 0.35,
   "n": 29,
@@ -12,280 +12,16 @@
       "underdog": "Morocco",
       "round": "Round of 32",
       "model_fav_prob": 0.4008,
-      "analysis": "Netherlands llegó primero de grupo pero con una defensa que encajó 4 goles ante Morocco en el mismo torneo, señal de vulnerabilidad clara. Morocco, por su parte, mostró solidez táctica, capacidad de contraataque y ya sabe cómo romper a este rival. En partido único, la varianza es alta y el precedente directo pesa. La plausibilidad es moderada-alta porque el batacazo ya ocurrió una vez.",
-      "upset_plausibility": 0.55,
+      "analysis": "**Análisis:** Países Bajos ya perdió contra Marruecos en la fase de grupos (3-4), exponiendo una defensa vulnerable que encajó 4 goles en ese partido y mostró fragilidad ante Japón (2-2). Marruecos, por su parte, sumó méritos de peso: empató con Brasil y solo cayó ante Francia, demostrando solidez defensiva y contundencia al contragolpe. En partido único, la varianza aumenta y Marruecos ya sabe competir 120 minutos. La plausibilidad es alta porque el precedente reciente y las debilidades neerlandesas son reales.",
+      "upset_plausibility": 0.65,
       "predicted_winner": "Morocco",
-      "scoreline": "3-2",
+      "scoreline": "2-1",
       "key_factors": [
         "Victoria previa de Marruecos sobre Países Bajos en grupos",
-        "Defensa neerlandesa frágil (4 goles recibidos de Marruecos)",
-        "Marruecos demuestra eficacia en transiciones ofensivas"
+        "Defensa frágil de Países Bajos (4 goles recibidos ante Marruecos)",
+        "Marruecos mostró disciplina táctica y pegada contra rivales fuertes"
       ],
-      "one_liner": "Ya lo hicieron en grupos, ahora lo repiten en el mata-mata.",
-      "upset_pick": true
-    },
-    {
-      "match": "Germany vs Paraguay",
-      "home": "Germany",
-      "away": "Paraguay",
-      "favorite": "Germany",
-      "underdog": "Paraguay",
-      "round": "Round of 32",
-      "model_fav_prob": 0.4876,
-      "analysis": "**GRIETAS DEL FAVORITO:** Alemania llegó como primero de grupo, pero su defensa es endeble: encajó 4 goles ante el propio Paraguay y 2 frente a Ecuador, mostrando vulnerabilidad en transiciones. Su arranque dubitativo (derrota vs Ecuador) y el 7-1 a Curazao inflan su promedio, pero no reflejan solidez real.\n\n**ARMAS DE PARAGUAY:** Ya derrotó a Alemania 5-4 en fase de grupos con una pegada letal a la contra y eficacia en balón parado. Su orden defensivo (0-0 vs Australia, victoria 1-0 vs Turquía) demuestra que puede sufrir pero aprovechar oportunidades. El factor sorpresa y la confianza de haberle ganado al favorito son armas reales.\n\n**FACTOR ELIMINATORIA:** Partido único nivela fuerzas; Paraguay ya demostró que puede competir 120 minutos y forzar penales si es necesario. La varianza del mata-mata y el historial reciente hacen que el riesgo para Alemania sea tangible.\n\n**PLAUSIBILIDAD HONESTA:** Dado que Paraguay ya ganó a Alemania en el grupo y el favorito mostró grietas claras, la sorpresa es perfectamente plausible. No es un palo lejano, sino una amenaza real.",
-      "upset_plausibility": 0.45,
-      "predicted_winner": "Paraguay",
-      "scoreline": "3-2",
-      "key_factors": [
-        "Ya derrotaron a Alemania 5-4 en fase de grupos",
-        "Defensa vulnerable de Alemania (4 goles encajados vs Paraguay)",
-        "Eficacia de Paraguay a la contra y en balón parado",
-        "Partido único que maximiza varianza y confianza del underdog"
-      ],
-      "one_liner": "Paraguay ya le demostró a Alemania que su defensa es papel; en mata-mata, la historia se repite.",
-      "upset_pick": true
-    },
-    {
-      "match": "Switzerland vs Colombia",
-      "home": "Switzerland",
-      "away": "Colombia",
-      "favorite": "Switzerland",
-      "underdog": "Colombia",
-      "round": "Round of 16",
-      "model_fav_prob": 0.4197,
-      "analysis": "Colombia tiene argumentos reales para dar el batacazo: su defensa fue la más sólida del grupo (solo 1 gol encajado fuera del partido contra Suiza), mientras que Suiza mostró fragilidad atrás al recibir goles en 4 de 5 partidos. Además, el 4-3 del grupo demuestra que Colombia puede desequilibrar a Suiza, y en un partido único la varianza juega a favor del underdog que ya conoce al rival. La disciplina táctica colombiana y su capacidad para aguantar 90 minutos (o más) refuerzan el caso.",
-      "upset_plausibility": 0.45,
-      "predicted_winner": "Colombia",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Defensa sólida de Colombia (solo 1 gol recibido fuera del duelo directo)",
-        "Vulnerabilidad defensiva de Suiza (goles encajados en 4 de 5 partidos)",
-        "Colombia ya le marcó 3 goles a Suiza en fase de grupos",
-        "Partido único aumenta varianza y favorece al underdog ordenado"
-      ],
-      "one_liner": "Colombia ya demostró que puede hacerle daño a Suiza; su defensa será la clave.",
-      "upset_pick": true
-    },
-    {
-      "match": "Portugal vs Croatia",
-      "home": "Portugal",
-      "away": "Croatia",
-      "favorite": "Portugal",
-      "underdog": "Croatia",
-      "round": "Round of 32",
-      "model_fav_prob": 0.4491,
-      "analysis": "Portugal llega como favorito tras ganar a Croacia en fase de grupos, pero mostró vulnerabilidad ante equipos que le cierran espacios (empates con DR Congo y Colombia). Croacia, por su parte, mejoró defensivamente tras el 4-2 inicial contra Inglaterra y tiene la pegada de Modric y Kramaric para castigar en transiciones. En un partido único, la experiencia croata en eliminatorias y la posibilidad de llegar a penales nivelan la balanza. La sorpresa es realista: Croacia ajusta su planteamiento, anula a Bruno Fernandes y gana por la mínima en un duelo táctico.",
-      "upset_plausibility": 0.42,
-      "predicted_winner": "Croatia",
-      "scoreline": "1-2",
-      "key_factors": [
-        "Portugal mostró fisuras ante bloques defensivos",
-        "Croacia mejora en partidos de alta presión",
-        "Modric y la veteranía croata en eliminatorias directas"
-      ],
-      "one_liner": "Croacia aprende de la derrota en grupo y da el golpe en el momento justo.",
-      "upset_pick": true
-    },
-    {
-      "match": "Portugal vs Spain",
-      "home": "Portugal",
-      "away": "Spain",
-      "favorite": "Spain",
-      "underdog": "Portugal",
-      "round": "Round of 16",
-      "model_fav_prob": 0.5232,
-      "analysis": "Portugal tiene una defensa sólida que solo encajó un gol en toda la fase de grupos, y España, aunque dominante en posesión, genera pocas ocasiones claras (5 goles en 6 partidos de grupo). El partido único nivela la calidad técnica y Portugal ya demostró capacidad para competir contra España perdiendo solo 0-1. La disciplina táctica lusa puede llevar el duelo a penales o un golpe de contraataque.",
-      "upset_plausibility": 0.42,
-      "predicted_winner": "Portugal",
-      "scoreline": "1-0",
-      "key_factors": [
-        "Defensa de Portugal solo recibió 1 gol en grupo",
-        "España depende de posesión pero con poca pegada",
-        "Partido único aumenta varianza y posibilidad de penales",
-        "Portugal perdió por la mínima en el duelo previo, mostrando competitividad"
-      ],
-      "one_liner": "Portugal's stingy defense and counter-attacking threat can stun Spain in a tight knockout.",
-      "upset_pick": true
-    },
-    {
-      "match": "United States vs Belgium",
-      "home": "United States",
-      "away": "Belgium",
-      "favorite": "Belgium",
-      "underdog": "United States",
-      "round": "Round of 16",
-      "model_fav_prob": 0.4954,
-      "analysis": "**ANÁLISIS DEL BATACAZO: United States vs Belgium**\n\nBélgica mostró grietas evidentes en su grupo: arrancó con dos empates sin brillo ante Egipto e Irán, encajó goles en tres de sus cinco partidos (incluyendo una derrota contra España) y solo sacó adelante un partido cerrado contra Senegal por 3-2. Su defensa es vulnerable cuando la presionan, y su ataque no siempre es letal contra rivales ordenados. Estados Unidos, por su parte, demostró pegada ofensiva (8 goles en fase de grupos) y capacidad de reacción tras la derrota inicial ante Turquía. Su victoria 4-1 sobre Paraguay y los dos 2-0 consecutivos revelan un equipo que sabe cerrar partidos. En un duelo de eliminación directa, la varianza aumenta: un partido único nivelado por la tensión, donde Estados Unidos puede explotar contragolpes y balón parado para dar la sorpresa. Ya conocen a Bélgica de la fase de grupos, lo que permite ajustes tácticos para neutralizar su juego.",
-      "upset_plausibility": 0.42,
-      "predicted_winner": "United States",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Vulnerabilidad defensiva de Bélgica ante equipos organizados",
-        "Eficacia ofensiva de EE.UU. en transiciones",
-        "Factor de partido único y conocimiento previo del rival"
-      ],
-      "one_liner": "El conocimiento del rival y la pegada a la contra pueden inclinar un partido de alta tensión.",
-      "upset_pick": true
-    },
-    {
-      "match": "Australia vs Egypt",
-      "home": "Australia",
-      "away": "Egypt",
-      "favorite": "Egypt",
-      "underdog": "Australia",
-      "round": "Round of 32",
-      "model_fav_prob": 0.402,
-      "analysis": "Australia ya demostró en fase de grupos que puede desnudar la fragilidad defensiva de Egipto al anotarle tres goles. Su orden táctico y capacidad para cerrar espacios en partidos únicos nivelan la balanza, mientras que la irregularidad egipcia (encajó goles en casi todos los partidos) abre una ventana real para la sorpresa. El factor eliminatoria, con posible prórroga y penales, beneficia a un equipo que sabe sufrir como Australia. Con una defensa que puede replicar el 0-0 ante Paraguay, la sorpresa es factible.",
-      "upset_plausibility": 0.4,
-      "predicted_winner": "Australia",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Australia ya le marcó tres goles a Egipto en grupos",
-        "Defensa australiana sólida ante Paraguay y Turquía",
-        "Egipto mostró vulnerabilidad defensiva en múltiples partidos",
-        "Partido único aumenta la varianza y favorece al underdog"
-      ],
-      "one_liner": "Australia ya le marcó tres a Egipto; en un partido de vida o muerte, puede repetir la hazaña.",
-      "upset_pick": true
-    },
-    {
-      "match": "Brazil vs Norway",
-      "home": "Brazil",
-      "away": "Norway",
-      "favorite": "Brazil",
-      "underdog": "Norway",
-      "round": "Round of 16",
-      "model_fav_prob": 0.529,
-      "analysis": "Noruega ya le ganó a Brasil en la fase de grupos (2-1), una prueba directa de que puede competir. Brasil mostró grietas defensivas al encajar goles en tres de sus cinco partidos, incluyendo el empate con Marruecos. La capacidad goleadora de Noruega (8 tantos en grupo) y su confianza tras ese triunfo son armas reales. En un partido único de eliminatoria, la varianza es alta y el factor sorpresa ya está probado. La plausibilidad de la sorpresa es sólida, no es un palo lejano.",
-      "upset_plausibility": 0.4,
-      "predicted_winner": "Norway",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Norway ya venció a Brasil en grupos",
-        "Defensa brasileña vulnerable (3 partidos encajando)",
-        "Noruega tiene pegada (8 goles en grupo)"
-      ],
-      "one_liner": "Noruega ya tumbó a Brasil; en eliminatoria, el hambre y el golpean primero.",
-      "upset_pick": true
-    },
-    {
-      "match": "France vs Spain",
-      "home": "France",
-      "away": "Spain",
-      "favorite": "Spain",
-      "underdog": "France",
-      "round": "Semi-final",
-      "model_fav_prob": 0.4073,
-      "analysis": "**ANÁLISIS DEL BATACAZO:**  \nSpain llega como favorito tras una fase de grupos casi perfecta en defensa (0 goles en contra), pero su ataque es notablemente modesto: solo 5 goles en 6 partidos, con una alarmante sequía ante rivales cerrados (0-0 vs Cabo Verde, 1-0 a Uruguay y Portugal). Francia, en cambio, exhibió contundencia ofensiva (10 goles) y solidez defensiva (2 goles encajados), además de un ritmo ascendente. En un partido único con presión eliminatoria, la disciplina táctica y la capacidad de contraataque de Francia pueden explotar la falta de profundidad ofensiva española. La historia reciente de penales y partidos igualados favorece a un equipo acostumbrado a sufrir, y Spain no ha mostrado la versatilidad para romper bloques bajos.",
-      "upset_plausibility": 0.4,
-      "predicted_winner": "France",
-      "scoreline": "1-0",
-      "key_factors": [
-        "Defensa sólida de Francia (2 goles encajados en 6 partidos)",
-        "Ataque poco eficaz de Spain (solo 5 goles, dependencia de partidos abiertos)",
-        "Capacidad de contra y balón parado de Francia en partidos cerrados"
-      ],
-      "one_liner": "Francia capitaliza la falta de gol española y da la sorpresa en un duelo táctico.",
-      "upset_pick": true
-    },
-    {
-      "match": "Belgium vs Senegal",
-      "home": "Belgium",
-      "away": "Senegal",
-      "favorite": "Belgium",
-      "underdog": "Senegal",
-      "round": "Round of 32",
-      "model_fav_prob": 0.545,
-      "analysis": "Belgium's group performance reveals clear defensive cracks: they conceded in nearly every match, including against weak sides, and needed a late winner to beat Senegal 3-2. Senegal, despite losing three times, showed lethal finishing (8 goals) and can hurt Belgium on the counter. In a single elimination match, the margin shrinks; Senegal’s ability to match Belgium for 90+ minutes and force penalties makes an upset very possible.",
-      "upset_plausibility": 0.38,
-      "predicted_winner": "Senegal",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Belgium's defensive vulnerability in group stage",
-        "Senegal's strong attacking record (8 goals)",
-        "Close previous encounter (3-2) shows competitiveness"
-      ],
-      "one_liner": "Senegal's attack can exploit Belgium's shaky defense in a high-stakes clash.",
-      "upset_pick": true
-    },
-    {
-      "match": "Colombia vs Ghana",
-      "home": "Colombia",
-      "away": "Ghana",
-      "favorite": "Colombia",
-      "underdog": "Ghana",
-      "round": "Round of 32",
-      "model_fav_prob": 0.5453,
-      "analysis": "Ghana ya demostró en fase de grupos que puede competir con Colombia, perdiendo solo 1-0 en un partido muy cerrado. La defensa ghanesa es sólida (empató 0-0 con Inglaterra) y explota bien el balón parado, mientras Colombia encajó 4 goles contra Suiza y depende de su solidez defensiva. En un partido de eliminación directa, la tensión y la varianza favorecen al underdog, especialmente si Ghana aguanta y busca una contra o un error del rival. La plausibilidad de la sorpresa es realista, no lejana.",
-      "upset_plausibility": 0.38,
-      "predicted_winner": "Ghana",
-      "scoreline": "1-0",
-      "key_factors": [
-        "Defensa sólida de Ghana que ya frenó a Inglaterra",
-        "Colombia mostró fragilidad defensiva contra Suiza (4 goles)",
-        "Partido único aumenta la varianza y la presión sobre el favorito"
-      ],
-      "one_liner": "Ghana puede repetir la fórmula que le funcionó contra Inglaterra: orden y paciencia.",
-      "upset_pick": true
-    },
-    {
-      "match": "Spain vs Belgium",
-      "home": "Spain",
-      "away": "Belgium",
-      "favorite": "Spain",
-      "underdog": "Belgium",
-      "round": "Quarter-final",
-      "model_fav_prob": 0.5931,
-      "analysis": "Spain llega invicto y con la valla menos batida, pero su arranque dubitativo ante Cabo Verde y el gol que recibió de Bélgica en fase de grupos revelan fisuras. Bélgica mostró pegada goleadora contra rivales de menor calibre, pero también supo competir ante España perdiendo por solo un gol. En un partido único de eliminación directa, la varianza se dispara: Bélgica puede aprovechar su velocidad al contragolpe y forzar una prórroga donde el favoritismo se diluye. La evidencia concreta (el 2-1 del grupo y la capacidad ofensiva belga) hace viable la sorpresa, aunque España sigue siendo superior en el papel.",
-      "upset_plausibility": 0.38,
-      "predicted_winner": "Belgium",
-      "scoreline": "1-2",
-      "key_factors": [
-        "Arranque titubeante de España ante Cabo Verde",
-        "Bélgica ya le marcó un gol a España en el grupo",
-        "Partido único aumenta la varianza y favorece la contra"
-      ],
-      "one_liner": "Belgium ya sabe hacerle daño a España; en 90 minutos todo puede pasar.",
-      "upset_pick": true
-    },
-    {
-      "match": "South Africa vs Canada",
-      "home": "South Africa",
-      "away": "Canada",
-      "favorite": "Canada",
-      "underdog": "South Africa",
-      "round": "Round of 32",
-      "model_fav_prob": 0.3713,
-      "analysis": "South Africa's defensive discipline is their greatest weapon; they conceded only one goal to Canada in the group stage and held strong against Mexico and Czech Republic. Canada, meanwhile, looked shaky against quality opposition—losing 0-3 to Morocco and 1-2 to Switzerland—revealing vulnerability against organized, compact defenses. In a do-or-die knockout, the lower variance and potential for extra time/penalties favor an upset, especially as South Africa has shown they can grind out results. The head-to-head loss was narrow (0-1), and a slight tactical adjustment could tip the balance. With Canada's attack prone to frustration, South Africa can snatch a set-piece winner.",
-      "upset_plausibility": 0.35,
-      "predicted_winner": "South Africa",
-      "scoreline": "1-0",
-      "key_factors": [
-        "South Africa's defensive solidity (3 GA in 4 group matches)",
-        "Canada's inconsistency against strong defenses (losses to Switzerland and Morocco)",
-        "Knockout pressure increasing variance and penalty potential"
-      ],
-      "one_liner": "Stingy defense and set-piece threat give South Africa a real chance to shock Canada.",
-      "upset_pick": true
-    },
-    {
-      "match": "Ivory Coast vs Norway",
-      "home": "Ivory Coast",
-      "away": "Norway",
-      "favorite": "Norway",
-      "underdog": "Ivory Coast",
-      "round": "Round of 32",
-      "model_fav_prob": 0.4642,
-      "analysis": "Ivory Coast ya demostró en fase de grupos que puede competir con Noruega: perdió 1-2 en un partido ajustado y ahora, en un único enfrentamiento sin margen, su orden defensivo (solo 2 goles encajados en los otros cuatro partidos) es una amenaza real. Noruega, pese a su pegada ofensiva, tiene una defensa endeble (7 goles recibidos en 5 partidos) y depende de un ritmo alto que en un mata-mata puede romperse. La varianza del partido único, sumada a la capacidad de Costa de Marfil para aguantar 90 minutos y forzar penales, convierte al underdog en una opción sólida.",
-      "upset_plausibility": 0.35,
-      "predicted_winner": "Ivory Coast",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Defensa frágil de Noruega (7 goles encajados)",
-        "Solidez defensiva de Costa de Marfil (2 goles en 4 partidos sin Noruega)",
-        "Partido único que iguala la varianza y permite penales"
-      ],
-      "one_liner": "Norway vulnerable atrás; Ivory Coast capitaliza el desgaste y se lleva el batacazo.",
+      "one_liner": "Marruecos ya tumbó a Países Bajos; la historia se repite en mata-mata.",
       "upset_pick": true
     },
     {
@@ -296,16 +32,218 @@
       "underdog": "Mexico",
       "round": "Round of 16",
       "model_fav_prob": 0.4369,
-      "analysis": "Mexico tiene un caso sólido: su campaña de grupos fue casi perfecta (9 pts, +6 GD, 0 goles en contra salvo el duelo directo). La derrota 2-3 ante England fue empate virtual hasta el minuto 80, mostrando que pueden competir. England, aunque potente, encajó goles en 3 de 5 partidos (Croatia, DR Congo, Mexico) y su arranque fue dubitativo. En un partido único, el orden defensivo mexicano y su capacidad para golpear a la contra pueden nivelar la balanza, especialmente si el partido se alarga a penales, donde la presión es del favorito. La plausibilidad es realista, no un palo lejano.",
-      "upset_plausibility": 0.35,
+      "analysis": "**Análisis del batacazo: Mexico vs England**\n\nEngland muestra vulnerabilidad defensiva: encajó goles en 4 de 5 partidos de grupo (incluyendo 2 ante Mexico), y su arranque titubeante (empate 0-0 con Ghana) revela falta de contundencia. Mexico, invicto hasta el duelo previo, tiene una defensa de hierro (4 vallas invictas en 5 partidos) y ya demostró que puede hacerle daño a England (2-3 con remontada parcial). En partido único de eliminatoria, la disciplina táctica y la capacidad de aguantar 120' nivelan la balanza; Mexico sabe competir en tensión alta y tiene pólvora a la contra. La plausibilidad es alta porque el favorito no es aplastante.",
+      "upset_plausibility": 0.65,
       "predicted_winner": "Mexico",
       "scoreline": "2-1",
       "key_factors": [
-        "Solidez defensiva de Mexico (3 porterías a cero en fase de grupos)",
-        "Vulnerabilidad defensiva de England (encajó en 3/5 partidos)",
-        "Partido cerrado previo (2-3) que muestra paridad competitiva"
+        "Mexico ya le marcó 2 goles a England en fase grupal",
+        "defensa sólida de Mexico (solo 3 goles encajados en 5 partidos)",
+        "England mostró fragilidad defensiva (goles en 4 de 5 partidos)",
+        "varianza del mata-mata favorece al underdog ordenado"
       ],
-      "one_liner": "Mexico tiene orden, England filtra goles: en mata-mata, la sorpresa es viable.",
+      "one_liner": "Mexico ya probó que puede; la eliminatoria es su hábitat natural.",
+      "upset_pick": true
+    },
+    {
+      "match": "France vs Spain",
+      "home": "France",
+      "away": "Spain",
+      "favorite": "Spain",
+      "underdog": "France",
+      "round": "Semi-final",
+      "model_fav_prob": 0.4073,
+      "analysis": "Francia llega como un rodillo ofensivo (10 goles en 6 partidos) y una defensa férrea (solo 2 goles encajados), mientras que España, aunque imbatida, ha mostrado un ataque poco explosivo (5 goles) y un arranque dubitativo ante Cabo Verde. En un partido único, la eficacia al contraataque y la solidez defensiva de Francia son armas letales para desactivar la posesión española. Además, la varianza del mata-mata nivela a los favoritos, y Francia sabe competir 120 minutos tras una fase de grupos perfecta.",
+      "upset_plausibility": 0.55,
+      "predicted_winner": "France",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Solidez defensiva de Francia (solo 2 goles encajados)",
+        "Ataque letal de Francia (10 goles en grupo)",
+        "España con poca profundidad ofensiva y empate inicial"
+      ],
+      "one_liner": "Francia tiene el ritmo y el hambre para derribar a una España sin chispa.",
+      "upset_pick": true
+    },
+    {
+      "match": "Germany vs Paraguay",
+      "home": "Germany",
+      "away": "Paraguay",
+      "favorite": "Germany",
+      "underdog": "Paraguay",
+      "round": "Round of 32",
+      "model_fav_prob": 0.4876,
+      "analysis": "Paraguay derrotó 5-4 a Alemania en la fase de grupos, evidenciando una vulnerabilidad defensiva germana que encajó nueve goles en cuatro partidos. La defensa alemana es frágil ante transiciones rápidas, y Paraguay demostró pegada letal en ese enfrentamiento. Además, el partido único de eliminación directa maximiza la varianza; Paraguay sabe competir bajo presión y ya tiene la fórmula. La confianza del underdog es alta tras su victoria previa, mientras Alemania mostró inconsistencias. La plausibilidad del batacazo es notable.",
+      "upset_plausibility": 0.45,
+      "predicted_winner": "Paraguay",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Victoria directa de Paraguay en grupos (5-4)",
+        "Defensa frágil de Alemania (9 goles recibidos)",
+        "Eficacia al contraataque de Paraguay"
+      ],
+      "one_liner": "Paraguay ya sabe cómo ganarle a Alemania; repite la hazaña en el mata-mata.",
+      "upset_pick": true
+    },
+    {
+      "match": "Australia vs Egypt",
+      "home": "Australia",
+      "away": "Egypt",
+      "favorite": "Egypt",
+      "underdog": "Australia",
+      "round": "Round of 32",
+      "model_fav_prob": 0.402,
+      "analysis": "Australia demostró en fase de grupos que puede hacerle daño a Egipto, marcándole tres goles en un duelo de ida y vuelta. La defensa egipcia es frágil (promedio de 1.8 goles encajados por partido) y depende de su ataque para compensar, pero en un partido único la tensión eleva el riesgo. El orden defensivo australiano, que dejó dos porterías a cero ante Turquía y Paraguay, puede aguantar y castigar a la contra. Con la varianza del mata-mata, el batacazo es más que plausible.",
+      "upset_plausibility": 0.45,
+      "predicted_winner": "Australia",
+      "scoreline": "3-2",
+      "key_factors": [
+        "Vulnerabilidad defensiva de Egipto (encaja 1.8 goles por partido)",
+        "Australia ya le marcó 3 goles en el grupo",
+        "Partido único: alta varianza y tensión nivelan fuerzas"
+      ],
+      "one_liner": "Australia ya perforó la defensa egipcia; en eliminatoria, la sorpresa acecha.",
+      "upset_pick": true
+    },
+    {
+      "match": "Brazil vs Norway",
+      "home": "Brazil",
+      "away": "Norway",
+      "favorite": "Brazil",
+      "underdog": "Norway",
+      "round": "Round of 16",
+      "model_fav_prob": 0.529,
+      "analysis": "Norway ya venció a Brasil en fase de grupos, mostrando un camino claro. Brasil mostró fisuras defensivas (gol encajado ante Marruecos y Noruega) y depende de su ataque, pero Noruega explota bien la contra y tiene pegada. En eliminatoria directa, el margen de error se reduce y el precedente reciente favorece al bajo perfil. La plausibilidad es intermedia-alta porque el favorito no es dominante.",
+      "upset_plausibility": 0.45,
+      "predicted_winner": "Norway",
+      "scoreline": "1-2",
+      "key_factors": [
+        "Victoria previa de Noruega sobre Brasil en grupos",
+        "Defensa vulnerable de Brasil (goles encajados ante Marruecos)",
+        "Noruega efectiva al contragolpe y en balón parado"
+      ],
+      "one_liner": "Noruega ya demostró que puede; el batacazo se repite en eliminatoria.",
+      "upset_pick": true
+    },
+    {
+      "match": "Portugal vs Spain",
+      "home": "Portugal",
+      "away": "Spain",
+      "favorite": "Spain",
+      "underdog": "Portugal",
+      "round": "Round of 16",
+      "model_fav_prob": 0.5232,
+      "analysis": "Portugal mostró solidez defensiva en fase de grupos (solo 1 gol encajado) y ya compitió de tú a tú contra España, perdiendo por la mínima. España, aunque invicta, tuvo un ataque poco explosivo (5 goles en 5 partidos) y arranques dubitativos, lo que la hace vulnerable en un partido único donde cualquier error es letal. La experiencia de Portugal en eliminatorias y su capacidad para aguantar 120 minutos nivelan la balanza. El batacazo es más que plausible.",
+      "upset_plausibility": 0.4,
+      "predicted_winner": "Portugal",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Defensa sólida de Portugal (solo 1 gol recibido en grupos)",
+        "Ataque poco efectivo de España (promedio de 1 gol por partido)",
+        "Partido único aumenta la varianza y penaltis nivelan",
+        "Portugal ya compitió de cerca (derrota 1-0) y tiene respuesta táctica"
+      ],
+      "one_liner": "Portugal puede repetir la fórmula defensiva y sorprender a una España que no termina de convencer.",
+      "upset_pick": true
+    },
+    {
+      "match": "Switzerland vs Colombia",
+      "home": "Switzerland",
+      "away": "Colombia",
+      "favorite": "Switzerland",
+      "underdog": "Colombia",
+      "round": "Round of 16",
+      "model_fav_prob": 0.4197,
+      "analysis": "Suiza es un favorito frágil: su defensa encajó 3 goles ante Colombia en fase de grupos y mostró dudas ante Qatar y Canadá. Colombia, en cambio, demostró solidez defensiva (solo 1 gol encajado en los otros cuatro partidos) y tiene recursos ofensivos para explotar las transiciones, como evidenció al marcar tres tantos a Suiza. En un partido único, la varianza juega a favor del underdog, y Colombia ya sabe competir bajo presión (penales o 120 minutos). La plausibilidad es moderada-alta porque el precedente directo invita a pensar en un desenlace ajustado favorable al menos favorito.",
+      "upset_plausibility": 0.4,
+      "predicted_winner": "Colombia",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Vulnerabilidad defensiva de Suiza (encajó 3 goles de Colombia)",
+        "Capacidad de Colombia para anotar en transiciones rápidas",
+        "Sólida defensa colombiana en el resto de la fase de grupos"
+      ],
+      "one_liner": "Colombia ya le marcó tres a Suiza; esta vez la defensa será más firme.",
+      "upset_pick": true
+    },
+    {
+      "match": "France vs Morocco",
+      "home": "France",
+      "away": "Morocco",
+      "favorite": "France",
+      "underdog": "Morocco",
+      "round": "Quarter-final",
+      "model_fav_prob": 0.5366,
+      "analysis": "Francia es favorito sólido tras su campaña de grupos perfecta, pero ya ganó a Marruecos 2-0, lo que puede generar relajación. Marruecos mostró pegada ante rivales de peso (Brasil, Países Bajos) y orden defensivo para aguantar 120 minutos. En eliminatoria directa, la varianza nivela y el contraataque marroquí puede castigar cualquier error. La plausibilidad es moderada porque, aunque el modelo da 46% a Marruecos, Francia tiene más recursos individuales.",
+      "upset_plausibility": 0.4,
+      "predicted_winner": "Morocco",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Francia ya venció a Marruecos en grupos, lo que puede generar exceso de confianza",
+        "Marruecos demostró capacidad de competir contra Brasil y Países Bajos",
+        "El partido único aumenta la varianza y Marruecos tiene buen contraataque"
+      ],
+      "one_liner": "Marruecos tiene armas para dar el golpe en un duelo de alta intensidad.",
+      "upset_pick": true
+    },
+    {
+      "match": "Argentina vs Switzerland",
+      "home": "Argentina",
+      "away": "Switzerland",
+      "favorite": "Argentina",
+      "underdog": "Switzerland",
+      "round": "Quarter-final",
+      "model_fav_prob": 0.5521,
+      "analysis": "Las últimas concesiones de Argentina a equipos como Cabo Verde y Egipto revelan una defensa quebradiza, y Suiza tiene la pegada y el orden para castigarla en transiciones. El combinado helvético demostró en fase de grupos que puede marcar en ráfagas (4-3 a Colombia) y que sabe sufrir (1-1 contra Qatar), justo lo que se necesita en un partido de muerte súbita. El factor eliminación directa nivela el favoritismo: a 90 o 120 minutos, la disciplina táctica suiza puede forzar penales, donde siempre tiene opciones.",
+      "upset_plausibility": 0.4,
+      "predicted_winner": "Switzerland",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Vulnerabilidad defensiva de Argentina (goles encajados ante equipos menores)",
+        "Capacidad ofensiva de Suiza en transiciones y balón parado",
+        "Experiencia en eliminatorias y capacidad para aguantar 120 minutos"
+      ],
+      "one_liner": "Suiza explota los huecos defensivos argentinos y da el golpe en cuartos.",
+      "upset_pick": true
+    },
+    {
+      "match": "Colombia vs Ghana",
+      "home": "Colombia",
+      "away": "Ghana",
+      "favorite": "Colombia",
+      "underdog": "Ghana",
+      "round": "Round of 32",
+      "model_fav_prob": 0.5453,
+      "analysis": "Ghana ya demostró en fase de grupos que puede competir con Colombia, perdiendo solo 1-0 en un partido muy cerrado. Su defensa sólida (solo 2 goles encajados en 4 partidos) y la falta de contundencia ofensiva de Colombia (promedio de 0.8 goles por partido) son grietas claras. En eliminación directa, la varianza se multiplica, y Ghana sabe sufrir y definir en transiciones. Un gol tempranero o una tanda de penales podría ser el escenario perfecto para que el underdog avance.",
+      "upset_plausibility": 0.38,
+      "predicted_winner": "Ghana",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Defensa sólida de Ghana (solo 2 goles en 4 partidos)",
+        "Partido único aumenta varianza",
+        "Colombia vulnerable en ataque y con derrota ante Suiza"
+      ],
+      "one_liner": "Ghana ya lo rozó y en mata-mata, la disciplina defensiva puede dar el batacazo.",
+      "upset_pick": true
+    },
+    {
+      "match": "Canada vs Morocco",
+      "home": "Canada",
+      "away": "Morocco",
+      "favorite": "Morocco",
+      "underdog": "Canada",
+      "round": "Round of 16",
+      "model_fav_prob": 0.5453,
+      "analysis": "Morocco's defense has been leaky, conceding 3+ goals in two group matches, while Canada showed they can punish any lapse with a 6-0 demolition of Qatar. The previous 3-0 loss to Morocco actually gives Canada a clear tactical reference to adjust, and knockout pressure often levels the playing field. If Canada stays compact and hits on the counter, they can turn the tables.",
+      "upset_plausibility": 0.38,
+      "predicted_winner": "Canada",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Morocco's porous defense conceding 3+ goals in multiple group matches",
+        "Canada's ability to score on the break (6-0 vs Qatar)",
+        "Knockout pressure could unsettle Morocco's rhythm"
+      ],
+      "one_liner": "Morocco's defensive flaws and Canada's opportunistic attack set the stage for a revenge upset.",
       "upset_pick": true
     },
     {
@@ -316,16 +254,157 @@
       "underdog": "Norway",
       "round": "Quarter-final",
       "model_fav_prob": 0.58,
-      "analysis": "Norway llega tras un grupo de alto voltaje donde tumbó a Brasil y mostró pegada letal (8 goles, 3 por partido como mínimo ante rivales duros). Inglaterra, aunque líder invicto, dejó dudas: necesitó remontar contra México, empató con Ghana y encajó 2 goles en dos partidos diferentes. La defensa noruega es frágil (7 goles recibidos), pero en un partido único su capacidad de contraataque y su fe en remontadas —como ante Senegal o Brasil— nivelan la balanza. La fatiga de un torneo largo y la presión de ser favorito pueden abrir resquicios para que Norway aproveche una jugada a balón parado o un error de marca. Con la varianza del mata-mata, el batacazo es perfectamente plausible.",
-      "upset_plausibility": 0.35,
+      "analysis": "Norway ha demostrado pegada en fase de grupos (8 goles), incluyendo victorias de mérito ante Brasil y Senegal, mientras que England tuvo arranques dubitativos (empate con Ghana, victoria ajustada ante México) y dependencia de momentos individuales. La defensa de Norway es frágil (7 goles encajados), pero su capacidad de golpear a la contra y la presión en partido único pueden nivelar la jerarquía. En eliminatoria directa, la varianza favorece al underdog si sabe sufrir y forzar tiempos extra; Norway ya mostró resiliencia remontando partidos. La plausibilidad es moderada porque England es superior en posesión y solidez defensiva, pero no es implacable.",
+      "upset_plausibility": 0.37,
       "predicted_winner": "Norway",
       "scoreline": "2-1",
       "key_factors": [
-        "Norway's counter-attacking efficiency against top sides",
-        "England's defensive lapses in group stage (4 goals conceded)",
-        "Norway's proven big-game win over Brazil"
+        "Eficacia ofensiva de Norway ante rivales de jerarquía",
+        "Vulnerabilidad defensiva de England en partidos abiertos",
+        "Varianza del mata-mata y capacidad de aguantar 120 minutos"
       ],
-      "one_liner": "Norway's relentless attack exploits England's shaky moments in a tight knockout thriller.",
+      "one_liner": "Norway explota las dudas inglesas y firma la sorpresa en cuartos",
+      "upset_pick": true
+    },
+    {
+      "match": "Ivory Coast vs Norway",
+      "home": "Ivory Coast",
+      "away": "Norway",
+      "favorite": "Norway",
+      "underdog": "Ivory Coast",
+      "round": "Round of 32",
+      "model_fav_prob": 0.4642,
+      "analysis": "**ANÁLISIS:**  \nNoruega llega con una defensa frágil (7 goles encajados en 5 partidos) y una dependencia ofensiva que puede ser neutralizada por el bloque ordenado de Costa de Marfil. Los marfileños ya mostraron capacidad de competir de tú a tú contra Noruega en la fase de grupos (derrota 1-2 ajustada) y poseen la disciplina táctica para soportar 120 minutos. En un partido de eliminación directa, la solidez defensiva y la efectividad en transiciones convierten a Costa de Marfil en un candidato real a la sorpresa.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "Ivory Coast",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Solidez defensiva (solo 2 goles encajados en grupo)",
+        "Vulnerabilidad defensiva de Noruega (7 goles recibidos)",
+        "Precedente ajustado en fase de grupos (1-2)"
+      ],
+      "one_liner": "El orden marfileño y la ansiedad noruega allanan el camino al batacazo.",
+      "upset_pick": true
+    },
+    {
+      "match": "United States vs Bosnia and Herzegovina",
+      "home": "United States",
+      "away": "Bosnia and Herzegovina",
+      "favorite": "United States",
+      "underdog": "Bosnia and Herzegovina",
+      "round": "Round of 32",
+      "model_fav_prob": 0.5924,
+      "analysis": "Estados Unidos terminó primero de grupo, pero sus derrotas ante Bélgica (1-4) y Turquía (2-3) revelan una defensa endeble que encajó 4 goles en dos partidos. Bosnia, aunque irregular, mostró pegada a la contra ante Qatar y capacidad para igualar con Canadá. En un partido único, el margen de error se reduce; Bosnia sabe sufrir y puede castigar en transiciones o balón parado. La varianza del mata-mata le da una oportunidad real, aunque no es favorito.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "Bosnia and Herzegovina",
+      "scoreline": "1-2",
+      "key_factors": [
+        "Defensa frágil de Estados Unidos (4 goles recibidos vs Bélgica y Turquía)",
+        "Bosnia muestra pegada a la contra y solidez defensiva en partidos cerrados",
+        "Eliminatoria directa aumenta la varianza y el factor sorpresa"
+      ],
+      "one_liner": "La fragilidad defensiva de EE.UU. abre la puerta a un batacazo bien trabajado de Bosnia.",
+      "upset_pick": true
+    },
+    {
+      "match": "Portugal vs Croatia",
+      "home": "Portugal",
+      "away": "Croatia",
+      "favorite": "Portugal",
+      "underdog": "Croatia",
+      "round": "Round of 32",
+      "model_fav_prob": 0.4491,
+      "analysis": "Portugal mostró fisuras en su grupo: un empate con DR Congo y una derrota ante España evidencian que no es invencible, y su victoria previa sobre Croacia fue por solo un gol. Croacia, pese a una defensa proclive a goles, tiene la capacidad de competir en partidos cerrados, con disciplina táctica y pegada a la contra. En un duelo único, la varianza y la experiencia croata en eliminatorias (su ADN de sufrir y avanzar) nivelan el campo. La plausibilidad es moderada, pero el batacazo está al alcance.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "Croatia",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Portugal ya venció a Croacia pero por solo un gol",
+        "Croacia tiene experiencia y temple en partidos de eliminación directa",
+        "Portugal mostró vulnerabilidad defensiva ante España y DR Congo"
+      ],
+      "one_liner": "Croacia sabe sufrir y ganar en el mata-mata; Portugal no es infalible.",
+      "upset_pick": true
+    },
+    {
+      "match": "Switzerland vs Algeria",
+      "home": "Switzerland",
+      "away": "Algeria",
+      "favorite": "Switzerland",
+      "underdog": "Algeria",
+      "round": "Round of 32",
+      "model_fav_prob": 0.574,
+      "analysis": "Suiza llega como favorita tras ganar el grupo, pero mostró grietas claras: encajó tres goles frente a Colombia y empató con Qatar, evidenciando debilidad defensiva ante equipos agresivos. Argelia, aunque perdió 2-0 en fase de grupos, compitió bien contra Austria y Argentina, y tiene armas de contraataque rápido que pueden explotar la falta de concentración suiza. En partido único de eliminación directa, la varianza aumenta y Argelia sabe sufrir y mantener el orden táctico para aguantar 120 minutos. La plausibilidad es moderada, basada en el historial reciente de Suiza de sufrir ante rivales que le exigen físicamente.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "Algeria",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Suiza encajó 3 goles ante Colombia",
+        "Argelia tiene contraataque rápido",
+        "Partido único aumenta la varianza"
+      ],
+      "one_liner": "Un gol de contra de Argelia puede tumbar a una Suiza irregular en defensa.",
+      "upset_pick": true
+    },
+    {
+      "match": "United States vs Belgium",
+      "home": "United States",
+      "away": "Belgium",
+      "favorite": "Belgium",
+      "underdog": "United States",
+      "round": "Round of 16",
+      "model_fav_prob": 0.4954,
+      "analysis": "**Análisis del Batacazo: United States vs Belgium**\n\nBélgica llega como favorito, pero su campaña de grupos deja grietas claras: arrancó con dos empates sin gol ante Egipto e Irán, mostró fragilidad defensiva al encajar 2 goles contra España y 2 contra Senegal, y depende en exceso de la pegada individual. Estados Unidos, pese a la goleada sufrida ante Bélgica en grupo, demostró capacidad ofensiva (8 goles en 5 partidos) y orden táctico para explotar transiciones rápidas. En partido único, la varianza es alta: el conjunto estadounidense sabe competir 90+ minutos, tiene recursos en balón parado y la motivación de la revancha. Si Bélgica no arranca fino, Estados Unidos puede capitalizar y sostener el resultado.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "United States",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Defensa belga vulnerable en transiciones",
+        "Pegada ofensiva de Estados Unidos (8 goles)",
+        "Factor revancha y partido único de alta varianza"
+      ],
+      "one_liner": "Bélgica no es invencible; Estados Unidos tiene pegada y hambre para dar el batacazo.",
+      "upset_pick": true
+    },
+    {
+      "match": "Argentina vs Egypt",
+      "home": "Argentina",
+      "away": "Egypt",
+      "favorite": "Argentina",
+      "underdog": "Egypt",
+      "round": "Round of 16",
+      "model_fav_prob": 0.6664,
+      "analysis": "Argentina llega como favorito tras una fase de grupos casi perfecta, pero sus últimos dos partidos (3-2 contra Cape Verde y 3-2 contra Egipto) revelan una defensa vulnerable, especialmente por las bandas. Egypt ya demostró que puede hacerle daño al marcarle dos goles en ese mismo duelo, y su capacidad letal en transición quedó clara con el 5-3 ante Australia. En un partido único de eliminación directa, la varianza favorece al underdog si aguanta los 90' y lleva el juego a alargues o penales, donde la disciplina defensiva egipcia puede inclinar la balanza. La evidencia concreta del grupo —dos goles encajados por Argentina, plus la solidez de Egypt ante Bélgica— sostiene que la sorpresa no es un palo lejano, sino un escenario con fundamentos tácticos reales.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "Egypt",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Argentina's defensive lapses in last two group matches",
+        "Egypt's proven ability to score against Argentina (2 goals in previous meeting)",
+        "Counter-attacking threat and set-piece efficiency of Egypt",
+        "One-off knockout format increases variance and penalty potential"
+      ],
+      "one_liner": "Egypt's scoring punch and Argentina's leaky defense make this a genuine upset threat.",
+      "upset_pick": true
+    },
+    {
+      "match": "Spain vs Belgium",
+      "home": "Spain",
+      "away": "Belgium",
+      "favorite": "Spain",
+      "underdog": "Belgium",
+      "round": "Quarter-final",
+      "model_fav_prob": 0.5931,
+      "analysis": "Aquí está tu análisis, abogado del batacazo:\n\nSpain tuvo un arranque dubitativo (0-0 vs Cape Verde) y su único gol en contra en todo el torneo fue precisamente ante Belgium. Esto revela que el ataque belga ya le generó peligro real. Belgium demostró poderío ofensivo (6 goles en grupos) y capacidad para competir en partidos cerrados (empates con Egypt e Irán). En un partido de eliminación directa, la varianza es alta y Belgium ya sabe lo que es hacerle gol a Spain. Su pegada a la contra y solidez en 120 minutos pueden forzar penales, donde todo se iguala.",
+      "upset_plausibility": 0.35,
+      "predicted_winner": "Belgium",
+      "scoreline": "1-2",
+      "key_factors": [
+        "Spain ya recibió gol de Belgium en grupos",
+        "Belgium tiene pegada para partidos de alta tensión",
+        "Eliminatoria directa aumenta la varianza y el riesgo de penales"
+      ],
+      "one_liner": "Belgium ya sabe hacerle daño a Spain; en un partido, todo es posible.",
       "upset_pick": true
     },
     {
@@ -336,78 +415,36 @@
       "underdog": "Japan",
       "round": "Round of 32",
       "model_fav_prob": 0.6559,
-      "analysis": "Brasil llega como favorito pero perdió contra Noruega y empató con Marruecos, mostrando fisuras defensivas. Japón ya le marcó un gol en el grupo y tiene un bloque sólido que compitió de igual a igual con Países Bajos y Suecia. En eliminatoria directa, la presión y la varianza del partido único pueden nivelar la balanza, sobre todo si el partido se alarga. La plausibilidad del batacazo es moderada, sustentada en la capacidad de Japón para sostener el resultado y aprovechar contras.",
+      "analysis": "**ANÁLISIS DEL BATACAZO (Japón vs. Brasil)**\n\nBrasil llega como favorito tras ganar el grupo, pero dejó grietas claras: perdió contra Noruega y empató con Marruecos, mostrando fragilidad defensiva (goles encajados en tres de cinco partidos). Japón ya le plantó cara en la fase de grupos (2-1 ajustado) y cuenta con un bloque ordenado que concede poco (solo 3 goles en 4 partidos, dos de ellos ante Brasil). En eliminatoria directa, la varianza crece: Japón sabe competir 90 minutos, forzar la prórroga y aprovechar errores a balón parado o en transición. El precedente reciente y la inconsistencia brasileña convierten la sorpresa en algo más que una posibilidad remota.",
       "upset_plausibility": 0.32,
       "predicted_winner": "Japan",
       "scoreline": "2-1",
       "key_factors": [
-        "Brasil perdió contra Noruega mostrando vulnerabilidad",
-        "Japón ya le marcó un gol a Brasil y tiene buen orden defensivo",
-        "Partido único aumenta la varianza y la posibilidad de penales"
+        "Brazil conceded in 3 of 5 group matches",
+        "Japan held Brazil to 2-1 and has disciplined defense",
+        "One-off knockout amplifies variance and penalty risk"
       ],
-      "one_liner": "Japón compitió en grupo; en mata-mata, la sorpresa es posible con orden y contragolpe.",
+      "one_liner": "Japón ya rozó el batacazo; en eliminatoria, la disciplina puede inclinar la balanza.",
       "upset_pick": false
     },
     {
-      "match": "Argentina vs Egypt",
-      "home": "Argentina",
-      "away": "Egypt",
-      "favorite": "Argentina",
-      "underdog": "Egypt",
-      "round": "Round of 16",
-      "model_fav_prob": 0.6664,
-      "analysis": "Argentina llega como favorito, pero su defensa mostró fisuras al encajar dos goles contra Cape Verde y tres ante el propio Egypt en grupos. Los faraones ya demostraron que pueden hacerle daño a la Albiceleste, y su capacidad para anotar en partidos abiertos (5 goles en grupo) les da armas para una sorpresa. En un partido único, la varianza crece y Egypt sabe competir en partidos cerrados (empató con Bélgica e Irán). La plausibilidad es moderada porque el enfrentamiento previo fue muy parejo y Argentina no es invencible.",
-      "upset_plausibility": 0.32,
-      "predicted_winner": "Egypt",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Argentina vulnerable defensivamente (3 goles encajados en grupo)",
-        "Egypt ya demostró capacidad de marcarle a Argentina (2 goles en el grupo)",
-        "Partido único aumenta varianza y posibilidad de sorpresa",
-        "Egypt tiene experiencia en partidos cerrados (empató con Bélgica e Irán)"
-      ],
-      "one_liner": "Egypt aprovechó las dudas defensivas argentinas y selló el pase con un gol de contra.",
-      "upset_pick": false
-    },
-    {
-      "match": "Argentina vs Switzerland",
-      "home": "Argentina",
-      "away": "Switzerland",
-      "favorite": "Argentina",
-      "underdog": "Switzerland",
-      "round": "Quarter-final",
-      "model_fav_prob": 0.5521,
-      "analysis": "Argentina llega como favorito, pero su defensa ha sido endeble: encajó 2 goles ante Cape Verde y 2 ante Egipto, equipos de menor jerarquía. Suiza, en cambio, demostró pegada y capacidad de reacción: venció 4-3 a Colombia y 4-1 a Bosnia, mostrando contundencia ofensiva. En un partido único, el orden táctico suizo y su solidez en balón parado pueden explotar las dudas defensivas argentinas. Si Suiza aguanta el ritmo y lleva el partido a instancias de definición, la sorpresa es perfectamente viable.",
-      "upset_plausibility": 0.32,
-      "predicted_winner": "Switzerland",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Fragilidad defensiva de Argentina ante rivales menores",
-        "Eficacia ofensiva y reacción de Suiza en partidos clave",
-        "Partido único aumenta varianza y favorece el orden táctico suizo"
-      ],
-      "one_liner": "Suiza tiene el poder de fuego para castigar las dudas defensivas de Argentina.",
-      "upset_pick": false
-    },
-    {
-      "match": "Mexico vs Ecuador",
-      "home": "Mexico",
-      "away": "Ecuador",
-      "favorite": "Mexico",
-      "underdog": "Ecuador",
+      "match": "Belgium vs Senegal",
+      "home": "Belgium",
+      "away": "Senegal",
+      "favorite": "Belgium",
+      "underdog": "Senegal",
       "round": "Round of 32",
-      "model_fav_prob": 0.6166,
-      "analysis": "**Análisis del batacazo:** Mexico llega como favorito de grupo invicto hasta el traspié con Inglaterra (2-3), donde mostró grietas defensivas y dependencia de un ritmo alto. Ecuador, pese a la derrota previa 2-0 ante Mexico, creció en el torneo: venció a Alemania (2-1) y mantuvo solidez defensiva (solo 2 goles encajados en 4 partidos). En partido único, la presión y la fatiga pueden igualar fuerzas, y Ecuador sabe competir hasta el final (ya forzó empates difíciles). La contra ecuatoriana y el balón parado son armas reales contra un Mexico que, aunque superior, no es invulnerable. La sorpresa es posible, no probable, pero con evidencia concreta.",
-      "upset_plausibility": 0.3,
-      "predicted_winner": "Ecuador",
-      "scoreline": "1-0",
+      "model_fav_prob": 0.545,
+      "analysis": "Bélgica llega como favorito pero mostró grietas claras: arranque dubitativo con empates ante Egipto e Irán, y aunque venció a Senegal 3-2, fue un partido muy abierto donde encajó dos goles. Senegal, por su parte, demostró pegada ofensiva (8 goles en 4 partidos) y capacidad para competir contra potencias como Francia (3-1) y Noruega (3-2), aunque con fragilidad defensiva. En un partido único de eliminación directa, la varianza aumenta y Senegal, que ya sabe marcarle a Bélgica, puede aprovechar su orden táctico y velocidad en transiciones para forzar la prórroga o penales. La plausibilidad del batacazo es moderada: si bien Bélgica tiene más recursos, el historial reciente y la naturaleza del mata-mata le dan a Senegal un chance real.",
+      "upset_plausibility": 0.32,
+      "predicted_winner": "Senegal",
+      "scoreline": "2-1",
       "key_factors": [
-        "Victoria de mérito ante Alemania 2-1",
-        "Vulnerabilidad defensiva de Mexico contra Inglaterra (3 goles)",
-        "Orden defensivo de Ecuador y capacidad de aguantar 90+ minutos",
-        "Partido único eliminatorio que maximiza varianza y penales"
+        "Inconsistencia inicial de Bélgica (empates ante Egipto e Irán)",
+        "Capacidad ofensiva de Senegal (8 goles en fase de grupos)",
+        "Alta varianza de un partido único de eliminación directa"
       ],
-      "one_liner": "Ecuador ya demostró que puede tumbar a un gigante; Mexico no es invencible en 90 minutos.",
+      "one_liner": "Senegal ya le marcó dos goles a Bélgica; en un partido único, todo puede pasar.",
       "upset_pick": false
     },
     {
@@ -418,117 +455,17 @@
       "underdog": "DR Congo",
       "round": "Round of 32",
       "model_fav_prob": 0.7735,
-      "analysis": "Inglaterra llega como favorita tras un grupo irregular: encajó goles en tres de sus cinco partidos (2 a Croacia, 1 a DR Congo, 2 a México) y mostró cierta fragilidad defensiva, sobre todo en transiciones. Su única prueba realmente exigente fue el 4-2 ante Croacia; el resto fueron rivales menores. DR Congo demostró solidez táctica al empatar con Portugal y solo perder 2-1 ante la misma Inglaterra, generándole ocasiones claras. En un partido único de mata-mata, la defensa ordenada de los congoleños, su capacidad para golpear a la contra y la posible ansiedad inglesa por la presión de ser favoritos abren la puerta a la sorpresa. Si logran aguantar el empate hasta el final, los penales son un campo de minas para cualquier favorito.",
+      "analysis": "**Análisis:**  \nInglaterra exhibió fragilidad defensiva en fase de grupos, encajando goles en tres de cinco partidos, incluido un 2-1 ajustado contra la propia RD Congo. Su arranque dubitativo (0-0 con Ghana) y la dependencia de momentos de inspiración individual la hacen vulnerable en partidos únicos. RD Congo, por su parte, mostró orden táctico, capacidad para competir contra selecciones fuertes (empate con Portugal, derrota ajustada ante Colombia) y pegada a la contra (3-1 a Uzbekistán). En eliminatorias, el margen de error se reduce y la prórroga/pendientes nivelan la jerarquía. La evidencia del duelo directo refuerza que el batacazo es posible.",
       "upset_plausibility": 0.3,
       "predicted_winner": "DR Congo",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Defensa ordenada y bloque bajo",
-        "Pegada al contragolpe",
-        "Experiencia en partidos cerrados (empate con Portugal)",
-        "Presión sobre Inglaterra como favorito"
-      ],
-      "one_liner": "DR Congo puede sorprender con orden defensivo y pegada a la contra en un partido tenso.",
-      "upset_pick": false
-    },
-    {
-      "match": "Argentina vs Cape Verde",
-      "home": "Argentina",
-      "away": "Cape Verde",
-      "favorite": "Argentina",
-      "underdog": "Cape Verde",
-      "round": "Round of 32",
-      "model_fav_prob": 0.7787,
-      "analysis": "**ANÁLISIS DEL BATACAZO:**  \nArgentina llega invicta pero con claros signos de fragilidad defensiva: encajó 2 goles ante Cape Verde en fase de grupos y otros 2 ante Egipto, evidenciando que no es impermeable. Cape Verde, por su parte, demostró solidez táctica con tres empates de mérito ante España, Uruguay y Arabia Saudita, y ya sabe cómo hacerle daño a Argentina (2 goles en el duelo previo). En un partido único de eliminación directa, la varianza aumenta, y si Cape Verde mantiene el orden defensivo y aprovecha una contra o balón parado, puede forzar la prórroga o incluso ganar en los 90'. La fatiga o exceso de confianza del favorito y la experiencia del underdog en partidos cerrados inclinan la balanza hacia una sorpresa real.",
-      "upset_plausibility": 0.3,
-      "predicted_winner": "Cape Verde",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Vulnerabilidad defensiva de Argentina (8 goles recibidos en fase de grupos)",
-        "Cape Verde ya anotó 2 goles a Argentina en el duelo previo",
-        "Disciplina defensiva de Cape Verde y partido único que nivela la varianza"
-      ],
-      "one_liner": "Cape Verde ya casi tumbó a Argentina; un partido de eliminación directa es su mejor escenario.",
-      "upset_pick": false
-    },
-    {
-      "match": "Canada vs Morocco",
-      "home": "Canada",
-      "away": "Morocco",
-      "favorite": "Morocco",
-      "underdog": "Canada",
-      "round": "Round of 16",
-      "model_fav_prob": 0.5453,
-      "analysis": "Canadá ya perdió 0-3 contra Marruecos en fase de grupos, pero el mata-mata es otro escenario: el equipo de Alphonso Davies mostró pegada goleadora (8 tantos) y capacidad de reacción tras desventajas. Marruecos, pese a su calidad, encajó 3 goles ante Países Bajos y 2 frente a Haití, evidenciando una zaga que se rompe bajo presión constante. La motivación de Canadá por redimirse y la varianza del partido único (prórroga y penaltis) nivelan el duelo. Con un plan táctico más sólido y aprovechando la velocidad en transición, los canadienses pueden imponer su ritmo y lograr el batacazo.",
-      "upset_plausibility": 0.3,
-      "predicted_winner": "Canada",
-      "scoreline": "2-1",
-      "key_factors": [
-        "Vulnerabilidad defensiva de Marruecos ante ataques rápidos",
-        "Capacidad goleadora de Canadá (8 goles en grupos)",
-        "Factor motivacional por la derrota previa y deseo de revancha"
-      ],
-      "one_liner": "Canadá aprovecha la fragilidad defensiva de Marruecos para vengar la derrota de grupos",
-      "upset_pick": false
-    },
-    {
-      "match": "United States vs Bosnia and Herzegovina",
-      "home": "United States",
-      "away": "Bosnia and Herzegovina",
-      "favorite": "United States",
-      "underdog": "Bosnia and Herzegovina",
-      "round": "Round of 32",
-      "model_fav_prob": 0.5924,
-      "analysis": "Estados Unidos muestra fisuras claras: perdió dos partidos de grupo (vs. Turquía y Bélgica) encajando 7 goles, lo que revela una defensa frágil ante transiciones rápidas. Bosnia, aunque perdió 2-0 en fase de grupos, tuvo un buen desempeño defensivo ante Canadá y supo capitalizar (3-1 vs. Qatar). En partido único, el underdog puede apretar, forzar la prórroga y buscar un penal o un contragolpe certero. La varianza del mata-mata y la posible relajación del favorito otorgan una ventana real de sorpresa.",
-      "upset_plausibility": 0.28,
-      "predicted_winner": "Bosnia and Herzegovina",
       "scoreline": "1-2",
       "key_factors": [
-        "Vulnerabilidad defensiva de Estados Unidos ante contraataques",
-        "Capacidad de Bosnia para sostener partidos cerrados y explotar errores",
-        "Formato de eliminación directa eleva la varianza y favorece al underdog"
+        "Defensa vulnerable de Inglaterra (7 goles encajados en grupos)",
+        "RD Congo compitió de igual a igual en el duelo directo (2-1)",
+        "Capacidad de contraataque y balón parado de RD Congo",
+        "Eliminatoria directa: mayor varianza y resistencia física"
       ],
-      "one_liner": "Bosnia castiga las dudas atrás de Estados Unidos y firma el batacazo en el minuto 90.",
-      "upset_pick": false
-    },
-    {
-      "match": "Switzerland vs Algeria",
-      "home": "Switzerland",
-      "away": "Algeria",
-      "favorite": "Switzerland",
-      "underdog": "Algeria",
-      "round": "Round of 32",
-      "model_fav_prob": 0.574,
-      "analysis": "Suiza dominó en fase de grupos y venció 2-0 a Argelia, pero mostró fragilidad defensiva ante Colombia (4 goles recibidos) y tuvo un inicio dubitativo contra Qatar. Argelia, pese a ser tercero, demostró capacidad goleadora contra Austria (3-3) y orden táctica, aunque su defensa es endeble. En partido único, la varianza de eliminatoria puede igualar fuerzas, y Argelia sabe competir en penales. Sin embargo, la evidencia directa pesa fuerte.",
-      "upset_plausibility": 0.25,
-      "predicted_winner": "Algeria",
-      "scoreline": "1-0",
-      "key_factors": [
-        "Defensa errática de Suiza ante equipos ofensivos",
-        "Argelia tiene pegada en transiciones rápidas",
-        "Partido único aumenta la probabilidad de sorpresa"
-      ],
-      "one_liner": "Suiza es favorito, pero su fragilidad defensiva abre una ventana para la sorpresa argelina.",
-      "upset_pick": false
-    },
-    {
-      "match": "Paraguay vs France",
-      "home": "Paraguay",
-      "away": "France",
-      "favorite": "France",
-      "underdog": "Paraguay",
-      "round": "Round of 16",
-      "model_fav_prob": 0.6079,
-      "analysis": "Paraguay ya perdió 1-0 contra Francia en fase de grupos, pero ese marcador ajustado revela que la defensa paraguaya puede contener al ataque francés. En eliminatoria directa, un solo error o un golpe de suerte bastan para voltear la balanza. La irregularidad de Paraguay (victorias sobre Turquía y Alemania) muestra que sabe ganar partidos cerrados, mientras que Francia, pese a su dominio, no ha enfrentado una presión real de mata-mata. La varianza del partido único nivela las diferencias técnicas.",
-      "upset_plausibility": 0.25,
-      "predicted_winner": "Paraguay",
-      "scoreline": "2-1",
-      "key_factors": [
-        "El partido de grupos fue 1-0, dejando margen para la sorpresa",
-        "Paraguay tiene capacidad de aguantar 120' y definir en detalles",
-        "Francia puede sufrir en un escenario de alta tensión y contraataque"
-      ],
-      "one_liner": "Paraguay ya estuvo cerca; la eliminatoria es su oportunidad para dar el golpe.",
+      "one_liner": "DR Congo explota las grietas inglesas con disciplina defensiva y transiciones letales.",
       "upset_pick": false
     },
     {
@@ -539,16 +476,96 @@
       "underdog": "Austria",
       "round": "Round of 32",
       "model_fav_prob": 0.6697,
-      "analysis": "**ANÁLISIS DEL BATACAZO – Spain vs Austria**\n\nSpain llega como favorito sólido tras una fase de grupos casi perfecta: 5 goles a favor y solo 1 en contra, con una defensa impenetrable. Sin embargo, su arranque dubitativo (0-0 vs Cape Verde) y la dependencia de un esquema ofensivo que no siempre encuentra espacios contra bloques bajos abren una rendija. Austria, aunque perdió 3-0 ante Spain, mostró en otros partidos capacidad goleadora (6 tantos) y un empate 3-3 con Argelia que evidencia pegada a la contra y en balón parado. En un partido único, la varianza del mata-mata nivela las fuerzas, y si Austria mantiene el orden defensivo y aprovecha las transiciones, puede generar una sorpresa real. Sin embargo, la superioridad manifiesta de Spain y el resultado directo previo reducen la probabilidad a un nivel modesto.",
-      "upset_plausibility": 0.22,
+      "analysis": "Spain llega como favorito tras una fase de grupos casi perfecta, pero su 0-0 inicial contra Cabo Verde y la baja competencia ofensiva que enfrentó (excepto Bélgica) revelan que no es invulnerable. Austria, aunque goleado 3-0 por Spain, mostró capacidad de reacción ante Argelia y disciplina para competir contra Argentina. En un partido único, la presión y la posibilidad de alargar el duelo a penales nivelan la balanza. La defensa austriaca deberá mantenerse firme y buscar un golpe a balón parado o contraataque.",
+      "upset_plausibility": 0.3,
       "predicted_winner": "Austria",
       "scoreline": "1-0",
       "key_factors": [
-        "Spain's slow start vs Cape Verde shows vulnerability to low blocks",
-        "Austria's 3-3 draw with Algeria proves they can score against strong teams",
-        "Knockout pressure may disrupt Spain's rhythm and favor counters"
+        "disciplina táctica de Austria",
+        "varianza del partido único",
+        "posible exceso de confianza de Spain"
       ],
-      "one_liner": "Austria can stun Spain if they stay compact and strike on transitions.",
+      "one_liner": "Austria puede sorprender a Spain con un planteamiento defensivo y un gol de contraataque.",
+      "upset_pick": false
+    },
+    {
+      "match": "Argentina vs Cape Verde",
+      "home": "Argentina",
+      "away": "Cape Verde",
+      "favorite": "Argentina",
+      "underdog": "Cape Verde",
+      "round": "Round of 32",
+      "model_fav_prob": 0.7787,
+      "analysis": "Argentina no es invencible: encajó 2 goles contra Cape Verde en fase de grupos y mostró fragilidad defensiva en varios partidos. Cape Verde, por su parte, demostró solidez táctica al empatar con España y Uruguay, y ya sabe cómo hacerle daño a la defensa argentina. En un partido único, la varianza es alta y el orden defensivo de Cabo Verde puede forzar la prórroga o penales, donde cualquier cosa pasa.",
+      "upset_plausibility": 0.3,
+      "predicted_winner": "Cape Verde",
+      "scoreline": "2-1",
+      "key_factors": [
+        "Defensa ordenada que ya neutralizó a España y Uruguay",
+        "Capacidad comprobada de marcarle a Argentina (2 goles en grupo)",
+        "Partido único incrementa la varianza y el riesgo para el favorito"
+      ],
+      "one_liner": "Cape Verde ya sabe cómo competir; en 90 minutos, el batacazo es posible.",
+      "upset_pick": false
+    },
+    {
+      "match": "Paraguay vs France",
+      "home": "Paraguay",
+      "away": "France",
+      "favorite": "France",
+      "underdog": "Paraguay",
+      "round": "Round of 16",
+      "model_fav_prob": 0.6079,
+      "analysis": "Paraguay llega como un hueso duro de roer: perdió solo 1-0 ante Francia en grupos, mostrando que puede neutralizar su ataque. Su defensa ordenada y la capacidad de castigar al contragolpe (5 goles a Alemania) son armas reales. Francia, con un grupo demasiado cómodo, podría pagar el exceso de confianza en un partido único donde la presión iguala fuerzas. La prórroga y los penales son territorio fértil para un underdog que ya sabe sufrir 120 minutos.",
+      "upset_plausibility": 0.3,
+      "predicted_winner": "Paraguay",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Defensa sólida que ya contuvo a Francia",
+        "Peligro en transiciones ofensivas",
+        "Partido único aumenta la probabilidad de sorpresa"
+      ],
+      "one_liner": "Paraguay ya resistió a Francia; en eliminatoria, la sorpresa acecha.",
+      "upset_pick": false
+    },
+    {
+      "match": "Mexico vs Ecuador",
+      "home": "Mexico",
+      "away": "Ecuador",
+      "favorite": "Mexico",
+      "underdog": "Ecuador",
+      "round": "Round of 32",
+      "model_fav_prob": 0.6166,
+      "analysis": "Mexico dominó su grupo con autoridad, pero la derrota 2-3 ante England reveló que su defensa no es infranqueable y que pueden ser vulnerables ante presiones bien planteadas. Ecuador, aunque perdió 2-0 contra ellos, demostró en su grupo que sabe contener a rivales superiores (empate 0-0 con Curacao y victoria 2-1 ante Alemania) y tiene pegada a la contra. En un partido único de eliminación directa, la varianza es alta: prórroga y penales igualan las fuerzas, y Ecuador ya mostró resistencia táctica para aguantar 120 minutos. Con un plan defensivo sólido y aprovechando los espacios, el batacazo es viable, aunque no el escenario más probable.",
+      "upset_plausibility": 0.28,
+      "predicted_winner": "Ecuador",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Mexico's defensive vulnerability against England (3 goals conceded)",
+        "Ecuador's credible win over Germany",
+        "High variance of single-elimination format"
+      ],
+      "one_liner": "Ecuador knows how to sting when underestimated; Mexico's leaky defense gives them a chance.",
+      "upset_pick": false
+    },
+    {
+      "match": "South Africa vs Canada",
+      "home": "South Africa",
+      "away": "Canada",
+      "favorite": "Canada",
+      "underdog": "South Africa",
+      "round": "Round of 32",
+      "model_fav_prob": 0.3713,
+      "analysis": "Sudáfrica llega con una defensa ordenada que ya complicó a Canadá en grupo (0-1 ajustado) y mostró capacidad de aguantar ante rivales superiores. Canadá, pese a su brillantez ofensiva, viene de una goleada 0-3 contra Marruecos que expone fragilidad defensiva y posible desconcierto. En un partido único, la paciencia y las transiciones rápidas de Sudáfrica pueden castigar a un favorito que depende del ritmo de juego. La eliminatoria nivela fuerzas: si el marcador se cierra, los penales son una ruleta donde el underdog tiene opciones reales.",
+      "upset_plausibility": 0.25,
+      "predicted_winner": "South Africa",
+      "scoreline": "1-0",
+      "key_factors": [
+        "Defensa sólida y ordenada de Sudáfrica",
+        "Vulnerabilidad defensiva reciente de Canadá (0-3 vs Marruecos)",
+        "Partido único que amplifica la varianza y favorece el aguante del underdog"
+      ],
+      "one_liner": "Sudáfrica puede aprovechar la fragilidad defensiva de Canadá y sobrevivir al límite en un partido cerrado.",
       "upset_pick": false
     },
     {
@@ -559,32 +576,16 @@
       "underdog": "Sweden",
       "round": "Round of 32",
       "model_fav_prob": 0.5932,
-      "analysis": "Francia es ampliamente superior, como demostró en la fase de grupos con un 3-0 directo sobre Suecia. La defensa sueca es frágil (7 goles encajados contra rivales fuertes) y su ataque depende de la inspiración. La varianza del mata-mata es el único aliado real del underdog, pero la evidencia concreta apunta a una sorpresa extremadamente remota.",
-      "upset_plausibility": 0.15,
+      "analysis": "Francia arrasó en fase de grupos y ya goleó 3-0 a Suecia, mostrando una defensa sólida y un ataque letal. Sin embargo, en eliminatorias a partido único, la varianza es un factor: si Suecia logra cerrar espacios y aprovechar balones parados o contragolpes, podría inquietar. Pero las grietas francesas son mínimas: ningún partido reñido, sin lesiones clave, y el 5-1 que Suecia encajó ante Países Bajos expone fragilidad defensiva. La plausibilidad de la sorpresa es baja, pero no nula por el formato de muerte súbita.",
+      "upset_plausibility": 0.18,
       "predicted_winner": "Sweden",
-      "scoreline": "Sweden 2-1 France",
+      "scoreline": "1-0",
       "key_factors": [
-        "Francia dominó el duelo de grupos con un 3-0",
-        "Suecia solo suma una victoria (ante Túnez) y encaja muchos goles",
-        "La presión de una eliminatoria puede generar errores en Francia"
+        "Varianza de partido único",
+        "Posible exceso de confianza de Francia",
+        "Balón parado como arma de Suecia"
       ],
-      "one_liner": "Milagro táctico y máxima concentración defensiva, pero todo en contra.",
-      "upset_pick": false
-    },
-    {
-      "match": "France vs Morocco",
-      "home": "France",
-      "away": "Morocco",
-      "favorite": "France",
-      "underdog": "Morocco",
-      "round": "Quarter-final",
-      "model_fav_prob": 0.5366,
-      "analysis": "**ANÁLISIS DEL BATACAZO**  \nFrancia llega como favorito tras arrasar su grupo, pero una eliminatoria a partido único siempre abre la puerta a la sorpresa. Marruecos ya demostró solidez defensiva (solo 3 goles encajados en fase de grupos) y capacidad para competir contra grandes selecciones (empate ante Brasil). La derrota previa ante Francia por 2-0 no es definitiva: la falta de rodaje ofensivo de Marruecos se compensa con su orden táctico y posible exceso de confianza del rival. En un duelo cerrado, los penales o un gol de contra",
-      "upset_plausibility": 0.0,
-      "predicted_winner": "Morocco",
-      "scoreline": null,
-      "key_factors": [],
-      "one_liner": "",
+      "one_liner": "Un gol tempranero y defensa numantina, la única fórmula para el milagro sueco.",
       "upset_pick": false
     }
   ]
