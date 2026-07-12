@@ -504,8 +504,7 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
       {day.fixtures.length > 0 && (
         <motion.div
           variants={fadeUp}
-          className="rounded-2xl p-4"
-          style={{ background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.07)" }}
+          className="stat-card !p-4"
         >
           <div className="flex items-center gap-2 mb-3">
             <span className="live-dot" />
@@ -542,8 +541,8 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
                         onClick={() => { setHome(f.team1); setAway(f.team2); setPredicted(false); }}
                         className="shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
                         style={{
-                          background: isSel ? "rgba(212,168,67,0.12)" : "var(--color-arena-elevated)",
-                          border: `1px solid ${isSel ? "rgba(212,168,67,0.45)" : "rgba(255,255,255,0.07)"}`,
+                          background: isSel ? "rgba(185,255,102,0.10)" : "var(--color-arena-elevated)",
+                          border: `1px solid ${isSel ? "rgba(185,255,102,0.48)" : "var(--border)"}`,
                           color: "var(--color-ink-primary)",
                           fontFamily: "var(--font-body)",
                           cursor: "pointer",
@@ -576,27 +575,17 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
 
       {/* ── Tarjeta principal ── */}
       <motion.div variants={fadeUp} className="relative">
-        <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none" aria-hidden>
-          <motion.div
-            className="absolute inset-0"
-            animate={{ background: `radial-gradient(ellipse 50% 80% at 5% 50%, ${homeColor}28 0%, transparent 65%)` }}
-            transition={{ duration: 1.0, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute inset-0"
-            animate={{ background: `radial-gradient(ellipse 50% 80% at 95% 50%, ${awayColor}28 0%, transparent 65%)` }}
-            transition={{ duration: 1.0, ease: "easeInOut" }}
-          />
-        </div>
-
         <div
-          className="relative rounded-2xl overflow-hidden"
+          className="predictor-stage relative overflow-hidden"
           style={{
             background: "var(--color-arena-card)",
-            border: "1px solid rgba(255,255,255,0.07)",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.5), 0 16px 48px rgba(0,0,0,0.4)",
+            border: "1px solid var(--border)",
           }}
         >
+          <div className="predictor-accent" aria-hidden>
+            <span style={{ background: homeColor }} />
+            <span style={{ background: awayColor }} />
+          </div>
           {/* Header */}
           <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4">
             <div className="flex items-center gap-3">
@@ -618,7 +607,7 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
 
           <div
             className="h-px mx-6 mb-5"
-            style={{ background: "linear-gradient(90deg, transparent, rgba(212,168,67,0.20), transparent)" }}
+            style={{ background: "var(--border)" }}
           />
 
           {/* Selectores */}
@@ -684,22 +673,13 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setShowDialectPicker(false)}
-            style={{
-              position: "fixed", inset: 0, zIndex: 200,
-              background: "rgba(8,6,10,0.72)", backdropFilter: "blur(3px)",
-              display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem",
-            }}
+            className="welcome-backdrop"
           >
             <motion.div
               initial={{ opacity: 0, y: 16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.97 }} transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              style={{
-                maxWidth: 380, width: "100%",
-                background: "var(--color-arena-card)", border: "1px solid rgba(212,168,67,0.25)",
-                borderRadius: 18, padding: "1.4rem",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-              }}
+              className="predictor-dialog"
             >
               <p style={{
                 fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.12em",
@@ -719,13 +699,7 @@ export default function Predictor({ teams, predictions, matches, liveMatches, na
                   <button
                     key={opt.key}
                     onClick={() => pickDialectAndPredict(opt.key)}
-                    style={{
-                      padding: "0.6rem 0.5rem", borderRadius: 10, cursor: "pointer",
-                      border: "1px solid rgba(212,168,67,0.25)", background: "rgba(212,168,67,0.06)",
-                      color: "var(--color-ink-primary)", fontFamily: "var(--font-body)",
-                      fontWeight: 600, fontSize: "0.8rem",
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
-                    }}
+                    className="dialect-option"
                   >
                     <span>{opt.flag}</span>
                     <span>{opt.label}</span>

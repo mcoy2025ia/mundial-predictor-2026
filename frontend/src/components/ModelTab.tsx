@@ -154,7 +154,7 @@ function resolvedRoundFixtures(
   return out;
 }
 
-const cardBg = { background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.06)" };
+const cardBg = { background: "var(--color-arena-card)", border: "1px solid var(--border)" };
 
 function Pill({ value, label, color }: { value: string; label: string; color: string }) {
   return (
@@ -632,11 +632,12 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
     <div className="space-y-5 max-w-5xl mx-auto">
 
       {/* Header */}
-      <div>
-        <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1rem, 3vw, 1.4rem)", letterSpacing: "0.06em", color: "var(--color-ink)" }}>
+      <div className="product-section-heading">
+        <span>MODEL / LIVE</span>
+        <h2>
           Rendimiento del modelo
         </h2>
-        <p className="text-xs mt-1" style={{ color: "var(--color-ink-muted)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>
+        <p>
           {played} partidos jugados · actualizado en tiempo real
         </p>
       </div>
@@ -663,7 +664,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
       {/* Precisión por fase, de punta a punta del torneo: JOR 1/2/3 + eliminatorias */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <PhaseAccuracy
-          title="📈 Precisión por fase · Modelo ML"
+          title="Precisión por fase · Modelo ML"
           phaseOrder={phaseOrder}
           byPhase={mlByPhase}
         />
@@ -692,7 +693,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
         <div className="rounded-xl p-5 space-y-4" style={{ ...cardBg, borderColor: "rgba(101,165,206,0.15)" }}>
           <div>
             <h3 className="text-sm font-bold" style={{ color: "var(--color-ink)" }}>
-              🤖 Precisión por experto (1X2)
+              Agentes · precisión por experto (1X2)
             </h3>
             <p className="text-[0.6rem] mt-1" style={{ color: "var(--color-ink-muted)" }}>
               Evaluación de las 4 predicciones: Group Analyst, Tactical Scout, Sentiment Reader, y Consenso
@@ -720,7 +721,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
                       className="absolute -top-2 -right-1 text-[0.5rem] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-full"
                       style={{ background: "var(--color-wc-gold)", color: "#1a1410" }}
                     >
-                      🔥 más certero
+                      líder
                     </span>
                   )}
                   <div className="text-xs font-bold whitespace-normal" style={{ color: "var(--color-ink)" }}>
@@ -751,7 +752,7 @@ export default function ModelTab({ groupMatches, liveScores, teams, bracket }: P
           {agentPhaseSections.length > 0 && (
             <div className="space-y-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <h4 className="text-xs font-bold" style={{ color: "var(--color-ink)" }}>
-                🎯 Marcadores por partido
+                Predicciones por partido
               </h4>
               {agentPhaseSections.map((phase, sectionIdx) => {
                 const rows = agentRowsByPhase[phase.key];

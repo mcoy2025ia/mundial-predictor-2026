@@ -12,7 +12,7 @@ interface Props {
   teams: Record<string, TeamInfo>;
 }
 
-const cardBg = { background: "var(--color-arena-card)", border: "1px solid rgba(255,255,255,0.06)" };
+const cardBg = { background: "var(--color-arena-card)", border: "1px solid var(--border)" };
 
 function Kpi({ value, label, color = "var(--color-wc-gold)" }: {
   value: string; label: string; color?: string;
@@ -130,20 +130,12 @@ export default function StatsTab({ liveMatches, groupMatches, liveScores, teams 
     <div className="space-y-5 max-w-3xl mx-auto">
 
       {/* Header */}
-      <div>
-        <h2 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(1rem, 3vw, 1.4rem)",
-          letterSpacing: "0.06em",
-          color: "var(--color-ink)",
-        }}>
+      <div className="product-section-heading">
+        <span>DATA / LIVE</span>
+        <h2>
           Estadísticas WC 2026
         </h2>
-        <p className="text-xs mt-1" style={{
-          color: "var(--color-ink-muted)",
-          fontFamily: "var(--font-mono)",
-          letterSpacing: "0.04em",
-        }}>
+        <p>
           {kpis.played} partidos jugados · datos en tiempo real
         </p>
       </div>

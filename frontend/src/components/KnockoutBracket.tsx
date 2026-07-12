@@ -141,9 +141,40 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
   return (
     <div className="space-y-4">
       <style jsx global>{`
+        .bracket-intro {
+          display: grid;
+          grid-template-columns: auto 1fr;
+          gap: 0.25rem 1rem;
+          align-items: end;
+          padding: 0 0 0.8rem;
+          border-bottom: 1px solid var(--border);
+        }
+        .bracket-intro span {
+          grid-row: 1 / 3;
+          align-self: center;
+          padding-right: 1rem;
+          border-right: 2px solid var(--wc-gold);
+          color: var(--wc-gold);
+          font-family: var(--font-mono);
+          font-size: 0.58rem;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+        .bracket-intro h3 {
+          margin: 0;
+          color: var(--text);
+          font-size: 1.55rem;
+          font-weight: 820;
+          line-height: 1;
+        }
+        .bracket-intro p {
+          margin: 0;
+          color: var(--text-muted);
+          font-size: 0.75rem;
+        }
         .bracket-stage {
           overflow-x: auto;
-          padding: 0.25rem 0 1rem;
+          padding: 0.5rem 0 1rem;
         }
         .bracket-map {
           width: min(100%, 68rem);
@@ -155,22 +186,20 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
           grid-template-rows: repeat(16, 2.75rem);
           column-gap: 0.45rem;
           position: relative;
-          border-radius: 8px;
-          background:
-            radial-gradient(circle at 50% 48%, rgba(212,168,67,0.10), transparent 18rem),
-            linear-gradient(180deg, rgba(18,20,38,0.98), rgba(9,10,20,0.98));
+          border-radius: 6px;
+          background: #0d100f;
           color: var(--text);
           padding: 1.15rem;
-          box-shadow: 0 20px 70px rgba(0,0,0,0.42);
-          border: 1px solid rgba(212,168,67,0.18);
+          box-shadow: none;
+          border: 1px solid rgba(255,255,255,0.16);
         }
         .bracket-map::before {
           content: "";
           position: absolute;
           inset: 1.15rem;
           background-image:
-            linear-gradient(90deg, transparent 0 49.7%, rgba(212,168,67,0.08) 49.7% 50.3%, transparent 50.3% 100%),
-            radial-gradient(circle at 50% 50%, rgba(207,10,44,0.08), transparent 28rem);
+            linear-gradient(90deg, transparent 0 49.8%, rgba(185,255,102,0.09) 49.8% 50.2%, transparent 50.2% 100%),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 2.75rem);
           pointer-events: none;
         }
         .center-title {
@@ -185,11 +214,11 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          padding: 0.45rem 1rem;
-          border-radius: 999px;
-          background: #083f2d;
-          color: #f7fff7;
-          border: 0.22rem solid var(--wc-gold);
+          padding: 0.5rem 0.85rem;
+          border-radius: 4px;
+          background: #b9ff66;
+          color: #0a0d0b;
+          border: 0;
           font-family: var(--font-mono);
           font-size: 0.7rem;
           font-weight: 900;
@@ -202,7 +231,7 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
           font-size: clamp(1.55rem, 3vw, 2.35rem);
           line-height: 0.95;
           font-weight: 950;
-          color: var(--text);
+          color: #f7faf4;
           text-transform: uppercase;
           letter-spacing: 0;
           margin: 0;
@@ -217,17 +246,17 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
         }
         .connector {
           position: absolute;
-          border-color: rgba(70,70,70,0.20);
+          border-color: rgba(185,255,102,0.20);
           pointer-events: none;
         }
         .bracket-card {
           align-self: center;
           z-index: 2;
           width: 100%;
-          border: 1px solid rgba(212,168,67,0.24);
-          background: rgba(18,20,38,0.96);
+          border: 1px solid rgba(255,255,255,0.17);
+          background: #111512;
           color: var(--text);
-          box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+          box-shadow: none;
           overflow: hidden;
           text-align: left;
           cursor: pointer;
@@ -236,8 +265,8 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
         .bracket-card:hover,
         .bracket-card:focus-visible {
           transform: translateY(-1px);
-          border-color: rgba(212,168,67,0.72);
-          box-shadow: 0 12px 30px rgba(0,0,0,0.34), 0 0 0 1px rgba(212,168,67,0.18);
+          border-color: #3d7dff;
+          box-shadow: 0 12px 30px rgba(0,0,0,0.24);
           outline: none;
         }
         .bracket-card.r32 {
@@ -251,12 +280,12 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
           justify-content: space-between;
           gap: 0.4rem;
           padding: 0.2rem 0.35rem;
-          background: rgba(212,168,67,0.13);
-          border-bottom: 1px solid rgba(212,168,67,0.18);
+          background: #181d19;
+          border-bottom: 1px solid rgba(255,255,255,0.12);
           font-size: 0.62rem;
           font-weight: 900;
           line-height: 1.1;
-          color: var(--wc-gold);
+          color: #b9ff66;
         }
         .bracket-card.small .meta {
           font-size: 0.48rem;
@@ -305,7 +334,7 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
         .bracket-card .score {
           font-family: var(--font-mono);
           font-weight: 950;
-          color: #32d583;
+          color: #63ddb0;
         }
         .bracket-card .muted {
           color: var(--text-muted);
@@ -313,7 +342,7 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
         }
         .bracket-card .winner .name,
         .bracket-card .winner .score {
-          color: #32d583;
+          color: #63ddb0;
           font-weight: 950;
           font-style: normal;
         }
@@ -322,9 +351,9 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
           display: inline-flex;
           width: fit-content;
           padding: 0.08rem 0.28rem;
-          border-radius: 999px;
-          background: rgba(50,213,131,0.12);
-          color: #32d583;
+          border-radius: 3px;
+          background: rgba(99,221,176,0.12);
+          color: #63ddb0;
           font-size: 0.45rem;
           font-weight: 900;
           text-transform: uppercase;
@@ -337,11 +366,12 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
         }
       `}</style>
 
-      <div className="text-center">
-        <h3 className="text-2xl font-black mb-1" style={{ color: "var(--wc-gold)" }}>
+      <div className="bracket-intro">
+        <span>Mapa vivo · knockout</span>
+        <h3>
           Llaves de eliminatorias
         </h3>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p>
           {played} jugados · {resolved}/{total} cruces definidos · desde {focusedLabel}
         </p>
       </div>
@@ -349,7 +379,7 @@ export default function KnockoutBracket({ data, roundKey, teams }: Props) {
       <div className="bracket-stage">
         <div className="bracket-map">
           <div className="center-title">
-            <div className="cup-pill">World Cup</div>
+            <div className="cup-pill">MP / 26</div>
             <h3>16avos<br />Bracket</h3>
             <div className="center-note">16avos → Octavos → Cuartos → Semis → Final</div>
           </div>
