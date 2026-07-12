@@ -27,6 +27,8 @@ type DSMessage      = { role: "system" | "user" | "assistant"; content: string }
 const FOOTBALL_KEYWORDS = [
   // tourneys / editions
   "mundial","world cup","copa","torneo","wc","2026","copa del mundo","coupe du monde",
+  "fifa","anfitrion","anfitriones","host","hosts","reglamento","reglas","rules","formato","format",
+  "historia","history","campeon","campeones","champion","champions","finalista","record","records",
   // football terms
   "fútbol","futbol","football","soccer","gol","goal","partido","match","game","jogo",
   "jornada","fase","grupo","group","ronda","round","octavos","cuartos","semifinal","final",
@@ -46,6 +48,8 @@ const FOOTBALL_KEYWORDS = [
   // stats / model terms
   "elo","predicción","prediction","probabilidad","probability","modelo","model",
   "clasificación","standings","tabla","puntos","points","goles","goals","estadio","stadium",
+  "sedes","venues","altitud","altitude","altura","clima","climate","calor","heat",
+  "humedad","humidity","cesped","césped","surface","techo","roof","viaje","travel","logistica",
   "sede","venue","árbitro","referee","lesión","injury","convocatoria","squad","selección",
   "seleccion","equipo","team","jugador","player","portero","goalkeeper","delantero",
   "mediocampista","defensa","defender","entrenador","coach","manager",
@@ -77,6 +81,7 @@ function detectLang(text: string): "es" | "en" | "pt" {
 // ─────────────────────────────────────────────────────────────────────────────
 const CACHE_TTL_MS  = 2 * 60 * 60 * 1000;  // 2 horas
 const CACHE_MAX     = 400;
+const CHAT_CONTEXT_VERSION = "chat-v3-reasoner-expanded-worldcup-context";
 
 interface CacheEntry { response: string; ts: number }
 const _responseCache = new Map<string, CacheEntry>();
@@ -484,6 +489,34 @@ async function embedQuery(text: string): Promise<number[] | null> {
   } catch { return null; }
 }
 
+const WORLD_CUP_KNOWLEDGE_CONTEXT = `
+BASE DE CONOCIMIENTO MUNDIALISTA (usar para preguntas generales relacionadas con el Mundial):
+- Formato 2026: 48 equipos, 12 grupos de 4. Avanzan los 2 primeros de cada grupo y los 8 mejores terceros a dieciseisavos; luego octavos, cuartos, semifinales, tercer puesto y final.
+- Anfitriones 2026: Estados Unidos, Mexico y Canada. Hay 16 sedes: 11 en Estados Unidos, 3 en Mexico y 2 en Canada.
+- Modelo de la app: ensemble estadistico XGBoost + Poisson + ELO. Para probabilidades de partidos usa los JSON vivos; para explicaciones generales puedes explicar componentes, incertidumbre y factores contextuales.
+
+SEDES 2026, ALTITUD, SUPERFICIE Y FACTORES:
+- Mexico City / Estadio Azteca: 2240 m, pasto natural. Altitud extrema para futbol; baja disponibilidad de oxigeno, mas fatiga, recuperacion mas lenta y ritmo menor para equipos no aclimatados.
+- Guadalajara (Zapopan) / Estadio Akron: 1566 m, pasto natural. Altitud moderada-alta; puede afectar presion alta sostenida, sprints repetidos y recuperacion, sobre todo en equipos que llegan de nivel del mar.
+- Monterrey (Guadalupe) / Estadio BBVA: 538 m, pasto natural. Altitud baja-moderada; el factor grande suele ser calor fuerte de junio, mas que altitud.
+- Atlanta / Mercedes-Benz Stadium: 320 m, cesped artificial/FieldTurf, techo retractil. Condiciones mas controladas; superficie y rebote pueden importar.
+- Kansas City / Arrowhead Stadium: 305 m, pasto natural. Sin gran altitud; ruido/ambiente y calor moderado pueden pesar.
+- Los Angeles (Pasadena) / Rose Bowl: 275 m, pasto natural. Sede de la final; calor seco posible, altitud baja.
+- Dallas (Arlington) / AT&T Stadium: 183 m, FieldTurf, estadio cubierto/retractil. Calor exterior alto, pero condiciones internas mas controlables.
+- Toronto / BMO Field: 76 m, pasto natural; Los Angeles (Inglewood) / SoFi: 64 m; Philadelphia: 23 m; Boston/Foxborough: 18 m; Santa Clara: 12 m; New York/New Jersey: 7 m; Seattle: 5 m; Miami: 2 m; Vancouver: 0 m.
+- Miami no tiene altitud, pero si calor y humedad altos; eso tambien reduce intensidad, aumenta fatiga y puede favorecer pausas, posesiones mas medidas y rotaciones.
+
+EFECTOS FUTBOLISTICOS DE ALTITUD Y CLIMA:
+- Altitud: menos oxigeno disponible, mayor costo cardiovascular, mas fatiga en presion alta, transiciones y sprints repetidos. El balon tambien puede viajar algo mas rapido/lejos por menor densidad del aire.
+- Calor/humedad: eleva deshidratacion y carga termica; suele bajar ritmo, aumentar errores tarde y hacer mas valiosa la profundidad de banca.
+- Superficie/techo: cesped artificial o estadios cubiertos pueden cambiar bote, velocidad del balon, humedad percibida y control de condiciones.
+- No conviertas estos factores en certezas: son ajustes contextuales, no predicciones absolutas. Si hay probabilidades del modelo para un partido, presentalas como fuente numerica principal y luego explica el contexto.
+
+ALCANCE DE RESPUESTA:
+- Puedes responder preguntas sobre historia de Mundiales, sedes, formato, reglas, favoritos, tactica, jugadores/equipos, impacto de clima/altura/viajes, lectura de probabilidades, resultados ya jugados y siguientes partidos.
+- Si el usuario pide datos muy especificos no presentes (lesiones confirmadas, alineaciones oficiales, sanciones de ultimo minuto), dilo con claridad y separa dato verificado de inferencia.
+`;
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  System prompt
 // ─────────────────────────────────────────────────────────────────────────────
@@ -493,15 +526,21 @@ Tienes acceso a los siguientes datos reales del torneo (actualizados diariamente
 - Calendario completo de partidos de grupo con fechas, sedes y probabilidades del modelo ML
 - Probabilidades de clasificación por grupo (modelo XGBoost + Poisson + ELO ensemble)
 - Los 48 equipos participantes y sus grupos
+- Una base de conocimiento fija sobre formato, sedes, altitud, clima, superficies, historia y lectura futbolistica del Mundial
 
 INSTRUCCIONES:
 - Responde SOLO sobre fútbol y el Mundial FIFA 2026
 - Responde en el MISMO IDIOMA que la pregunta del usuario (español, inglés o portugués)
 - Para preguntas sobre partidos de hoy o próximos, usa SIEMPRE el CONTEXTO DEL TORNEO que se te provee abajo — es la fuente de verdad
 - Si el bloque "ESTADO ACTUAL DE EQUIPOS MENCIONADOS" dice ELIMINADO o sin próximo partido, no respondas con probabilidades de grupo como si el equipo siguiera activo
+- Para preguntas generales del Mundial (sedes, altitud, clima, formato, reglas, historia, tactica o modelo), usa la BASE DE CONOCIMIENTO MUNDIALISTA antes de decir que no tienes informacion
+- Si das una inferencia contextual, dilo como inferencia; si das una probabilidad, debe venir del contexto del modelo
 - Sé preciso con los números del contexto; las probabilidades son del modelo estadístico, no certezas
 - Sé conciso (máx 3-4 párrafos)
 - No inventes resultados, lesiones, goles ni datos que no estén en el contexto
+
+BASE DE CONOCIMIENTO MUNDIALISTA:
+{WORLD_CUP_KNOWLEDGE_CONTEXT}
 
 CONTEXTO DEL TORNEO (datos actuales):
 {TOURNAMENT_CONTEXT}
@@ -523,7 +562,7 @@ async function streamLLM(
       const res = await fetch("https://api.deepseek.com/chat/completions", {
         method: "POST",
         headers: { Authorization: `Bearer ${dsKey}`, "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "deepseek-chat", messages, stream: true, max_tokens: 700, temperature: 0.65 }),
+        body: JSON.stringify({ model: "deepseek-reasoner", messages, stream: true, max_tokens: 1600 }),
         signal,
       });
       if (res.ok) return buildOpenAIStream(res);
@@ -674,7 +713,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ── 3. Response cache ─────────────────────────────────────────────────────
-  const key     = cacheKey(message, todayInTournamentTimeZone());
+  const key     = cacheKey(message, `${todayInTournamentTimeZone()}::${CHAT_CONTEXT_VERSION}`);
   const cached  = cacheGet(key);
   if (cached) {
     return new Response(streamText(cached), {
@@ -708,6 +747,7 @@ export async function POST(req: NextRequest) {
     "",
   ].join("\n");
   const systemContent = venueGuard + SYSTEM_PROMPT
+    .replace("{WORLD_CUP_KNOWLEDGE_CONTEXT}", WORLD_CUP_KNOWLEDGE_CONTEXT)
     .replace("{TOURNAMENT_CONTEXT}", tournamentCtx)
     .replace("{RAG_CONTEXT}", contextText || "Sin contexto RAG adicional.");
 
