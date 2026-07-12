@@ -470,7 +470,11 @@ export default function AgentDebatePanel({
                 <span className="ora-sum-adv"><b>Oráculo de Eliminatorias</b></span>
               )}
               {cons && <span className="ora-sum-phase">Resuelto {PHASE_LABEL[cons.fase_de_definicion]}</span>}
-              <span className="ora-sum-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></span>
+              <span className="ora-sum-cta" aria-hidden="true">
+                <span className="is-closed">Clic para expandir</span>
+                <span className="is-open">Detalle abierto</span>
+                <span className="ora-sum-open"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg></span>
+              </span>
             </summary>
             <div className="ora-rule" />
             <OracleBody cons={cons} validPanel={validPanel} />
