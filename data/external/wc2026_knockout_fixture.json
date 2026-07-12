@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-07-12T06:05:39.930941+00:00",
+  "fetched_at": "2026-07-12T09:58:45.648629+00:00",
   "matches": [
     {
       "stage": "LAST_32",
@@ -139,7 +139,7 @@
       "home": "Mexico",
       "away": "England",
       "date": "2026-07-06",
-      "status": "2026-07-06 01:00:00Z"
+      "status": "FINISHED"
     },
     {
       "stage": "LAST_16",
@@ -202,6 +202,13 @@
       "home": "France",
       "away": "Spain",
       "date": "2026-07-14",
+      "status": "TIMED"
+    },
+    {
+      "stage": "SEMI_FINALS",
+      "home": "England",
+      "away": "Argentina",
+      "date": "2026-07-15",
       "status": "TIMED"
     }
   ]
