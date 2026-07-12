@@ -84,14 +84,14 @@
     "pen_total": 4
   },
   "Switzerland": {
-    "elo": 2182.5,
-    "rank": 6,
+    "elo": 2159.3,
+    "rank": 10,
     "flag": "🇨🇭",
     "group": "B",
     "confederation": "UEFA",
     "goals_scored": 2.6,
-    "goals_conceded": 1.2,
-    "wc_matches": 46,
+    "goals_conceded": 1.6,
+    "wc_matches": 47,
     "pen_wins": 2,
     "pen_total": 8
   },
@@ -121,7 +121,7 @@
   },
   "Morocco": {
     "elo": 2171.6,
-    "rank": 10,
+    "rank": 9,
     "flag": "🇲🇦",
     "group": "C",
     "confederation": "CAF",
@@ -289,7 +289,7 @@
   },
   "Belgium": {
     "elo": 2172.7,
-    "rank": 9,
+    "rank": 8,
     "flag": "🇧🇪",
     "group": "G",
     "confederation": "UEFA",
@@ -385,7 +385,7 @@
   },
   "France": {
     "elo": 2390.3,
-    "rank": 2,
+    "rank": 3,
     "flag": "🇫🇷",
     "group": "I",
     "confederation": "UEFA",
@@ -432,14 +432,14 @@
     "pen_total": 15
   },
   "Argentina": {
-    "elo": 2379.4,
-    "rank": 3,
+    "elo": 2402.5,
+    "rank": 2,
     "flag": "🇦🇷",
     "group": "J",
     "confederation": "CONMEBOL",
     "goals_scored": 2.8,
-    "goals_conceded": 1.0,
-    "wc_matches": 93,
+    "goals_conceded": 1.2,
+    "wc_matches": 94,
     "pen_wins": 15,
     "pen_total": 23
   },
@@ -456,7 +456,7 @@
     "pen_total": 15
   },
   "Austria": {
-    "elo": 1990.4,
+    "elo": 1990.3,
     "rank": 23,
     "flag": "🇦🇹",
     "group": "J",
@@ -481,7 +481,7 @@
   },
   "Colombia": {
     "elo": 2179.9,
-    "rank": 8,
+    "rank": 7,
     "flag": "🇨🇴",
     "group": "K",
     "confederation": "CONMEBOL",
@@ -493,7 +493,7 @@
   },
   "Portugal": {
     "elo": 2180.1,
-    "rank": 7,
+    "rank": 6,
     "flag": "🇵🇹",
     "group": "K",
     "confederation": "UEFA",
