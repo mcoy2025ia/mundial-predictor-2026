@@ -554,7 +554,7 @@ CONTEXTO ADICIONAL (RAG):
 async function streamLLM(
   messages: DSMessage[],
   signal: AbortSignal
-): Promise<ReadableStream<Uint8Array>> {
+): Promise<{ stream: ReadableStream<Uint8Array>; source: string }> {
   // ── Intento 1: DeepSeek ─────────────────────────────────────────────────
   const dsKey = (process.env.DEEPSEEK_API_KEY ?? "").replace(/^﻿/, "").trim();
   if (dsKey) {
@@ -565,7 +565,7 @@ async function streamLLM(
         body: JSON.stringify({ model: "deepseek-reasoner", messages, stream: true, max_tokens: 1600 }),
         signal,
       });
-      if (res.ok) return buildOpenAIStream(res);
+      if (res.ok) return { stream: buildOpenAIStream(res), source: "deepseek-reasoner" };
       // saldo insuficiente u otro error → caer al fallback
     } catch { /* network error → fallback */ }
   }
@@ -583,7 +583,7 @@ async function streamLLM(
     signal,
   });
   if (!res.ok) throw new Error(`Anthropic error ${res.status}: ${await res.text()}`);
-  return buildAnthropicStream(res);
+  return { stream: buildAnthropicStream(res), source: "anthropic" };
 }
 
 function buildOpenAIStream(res: Response): ReadableStream<Uint8Array> {
@@ -766,7 +766,7 @@ export async function POST(req: NextRequest) {
     const decoder  = new TextDecoder();
     let accumulated = "";
 
-    const [forClient, forCache] = upstream.tee();
+    const [forClient, forCache] = upstream.stream.tee();
 
     // Background: accumulate and cache the full response
     (async () => {
@@ -783,7 +783,7 @@ export async function POST(req: NextRequest) {
       headers: {
         "Content-Type":          "text/plain; charset=utf-8",
         "Cache-Control":         "no-cache",
-        "X-Source":              "anthropic",
+        "X-Source":              upstream.source,
         "X-Rag-Chunks":          contextText ? "5" : "0",
         "X-RateLimit-Remaining": String(remaining),
       },
