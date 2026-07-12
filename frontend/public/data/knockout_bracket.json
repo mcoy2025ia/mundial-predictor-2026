@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T23:06:25.685237+00:00",
+  "generated_at": "2026-07-12T03:48:50.385835+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -236,24 +236,24 @@
         "away_label": "Norway",
         "resolved": true,
         "pred": {
-          "p_home": 0.2555,
-          "p_draw": 0.2803,
-          "p_away": 0.4642,
+          "p_home": 0.2586,
+          "p_draw": 0.2835,
+          "p_away": 0.4579,
           "top_scorelines": [
             {
               "home": 0,
               "away": 0,
-              "prob": 0.1745
+              "prob": 0.1743
             },
             {
               "home": 0,
               "away": 1,
-              "prob": 0.1588
+              "prob": 0.1584
             },
             {
               "home": 1,
               "away": 0,
-              "prob": 0.1394
+              "prob": 0.1397
             }
           ]
         },
@@ -318,24 +318,24 @@
         "away_label": "DR Congo",
         "resolved": true,
         "pred": {
-          "p_home": 0.7735,
-          "p_draw": 0.1559,
-          "p_away": 0.0706,
+          "p_home": 0.7749,
+          "p_draw": 0.1556,
+          "p_away": 0.0694,
           "top_scorelines": [
             {
               "home": 1,
               "away": 0,
-              "prob": 0.1782
+              "prob": 0.178
             },
             {
               "home": 2,
               "away": 0,
-              "prob": 0.16
+              "prob": 0.1601
             },
             {
               "home": 3,
               "away": 0,
-              "prob": 0.158
+              "prob": 0.1583
             }
           ]
         },
@@ -771,9 +771,9 @@
         "away_label": "Norway",
         "resolved": true,
         "pred": {
-          "p_home": 0.529,
-          "p_draw": 0.2609,
-          "p_away": 0.21,
+          "p_home": 0.536,
+          "p_draw": 0.2564,
+          "p_away": 0.2075,
           "top_scorelines": [
             {
               "home": 1,
@@ -812,9 +812,9 @@
         "away_label": "England",
         "resolved": true,
         "pred": {
-          "p_home": 0.2485,
-          "p_draw": 0.3147,
-          "p_away": 0.4369,
+          "p_home": 0.243,
+          "p_draw": 0.3118,
+          "p_away": 0.4451,
           "top_scorelines": [
             {
               "home": 0,
@@ -824,12 +824,12 @@
             {
               "home": 0,
               "away": 1,
-              "prob": 0.189
+              "prob": 0.1894
             },
             {
               "home": 1,
               "away": 0,
-              "prob": 0.1293
+              "prob": 0.129
             }
           ]
         },
@@ -1101,26 +1101,32 @@
         "away_label": "England",
         "resolved": true,
         "pred": {
-          "p_home": 0.1736,
-          "p_draw": 0.2439,
-          "p_away": 0.5825,
+          "p_home": 0.1578,
+          "p_draw": 0.2365,
+          "p_away": 0.6057,
           "top_scorelines": [
             {
               "home": 0,
               "away": 1,
-              "prob": 0.1826
+              "prob": 0.1829
             },
             {
               "home": 0,
               "away": 2,
-              "prob": 0.1307
+              "prob": 0.1319
             },
             {
               "home": 0,
               "away": 0,
-              "prob": 0.1275
+              "prob": 0.1268
             }
           ]
+        },
+        "result": {
+          "home_score": 1,
+          "away_score": 2,
+          "winner": "away",
+          "played": true
         }
       },
       {
@@ -1136,24 +1142,24 @@
         "away_label": "Switzerland",
         "resolved": true,
         "pred": {
-          "p_home": 0.5521,
-          "p_draw": 0.2499,
-          "p_away": 0.198,
+          "p_home": 0.5553,
+          "p_draw": 0.2464,
+          "p_away": 0.1983,
           "top_scorelines": [
             {
               "home": 1,
               "away": 0,
-              "prob": 0.1849
+              "prob": 0.1803
             },
             {
               "home": 0,
               "away": 0,
-              "prob": 0.1553
+              "prob": 0.1476
             },
             {
               "home": 1,
               "away": 1,
-              "prob": 0.1143
+              "prob": 0.1146
             }
           ]
         }
@@ -1180,7 +1186,7 @@
             {
               "home": 0,
               "away": 0,
-              "prob": 0.194
+              "prob": 0.1939
             },
             {
               "home": 0,
@@ -1202,9 +1208,9 @@
         "date": "2026-07-15",
         "time": "15:00 UTC-4",
         "ground": "Atlanta",
-        "home": null,
+        "home": "England",
         "away": null,
-        "home_label": "Norway / England",
+        "home_label": "England",
         "away_label": "Argentina / Switzerland",
         "resolved": false
       }

@@ -408,14 +408,14 @@
     "pen_total": 21
   },
   "Norway": {
-    "elo": 2131.8,
+    "elo": 2115.5,
     "rank": 12,
     "flag": "🇳🇴",
     "group": "I",
     "confederation": "UEFA",
-    "goals_scored": 2.4,
-    "goals_conceded": 1.8,
-    "wc_matches": 13,
+    "goals_scored": 1.8,
+    "goals_conceded": 2.0,
+    "wc_matches": 14,
     "pen_wins": 0,
     "pen_total": 0
   },
@@ -528,14 +528,14 @@
     "pen_total": 5
   },
   "England": {
-    "elo": 2303.4,
+    "elo": 2319.7,
     "rank": 4,
     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "group": "L",
     "confederation": "UEFA",
-    "goals_scored": 2.2,
-    "goals_conceded": 1.0,
-    "wc_matches": 79,
+    "goals_scored": 1.8,
+    "goals_conceded": 0.8,
+    "wc_matches": 80,
     "pen_wins": 4,
     "pen_total": 12
   },

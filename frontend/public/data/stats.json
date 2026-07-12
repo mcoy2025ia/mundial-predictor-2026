@@ -1,6 +1,6 @@
 {
-  "total_matches": 1062,
-  "total_goals": 3030,
+  "total_matches": 1063,
+  "total_goals": 3033,
   "avg_goals_all": 2.853,
   "n_editions": 23,
   "highest_scoring_match": {
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 310,
-      "matches": 98,
-      "avg": 3.163
+      "total": 313,
+      "matches": 99,
+      "avg": 3.162
     }
   ],
   "best_avg_edition": {
@@ -229,10 +229,10 @@
     {
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "matches": 79,
-      "goals_for": 115,
-      "goals_against": 73,
-      "goal_diff": 42,
+      "matches": 80,
+      "goals_for": 117,
+      "goals_against": 74,
+      "goal_diff": 43,
       "avg": 1.46
     },
     {

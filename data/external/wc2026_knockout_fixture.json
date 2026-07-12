@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-07-11T22:57:46.251445+00:00",
+  "fetched_at": "2026-07-12T03:39:21.955989+00:00",
   "matches": [
     {
       "stage": "LAST_32",
@@ -188,14 +188,14 @@
       "home": "Norway",
       "away": "England",
       "date": "2026-07-11",
-      "status": "IN_PLAY"
+      "status": "FINISHED"
     },
     {
       "stage": "QUARTER_FINALS",
       "home": "Argentina",
       "away": "Switzerland",
       "date": "2026-07-12",
-      "status": "TIMED"
+      "status": "IN_PLAY"
     },
     {
       "stage": "SEMI_FINALS",
