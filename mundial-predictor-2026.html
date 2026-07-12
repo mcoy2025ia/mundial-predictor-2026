@@ -1,1354 +1,2356 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es-CO">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mundial Predictor 2026 | Arquitectura multiagente evaluable y FinOps IA</title>
-  <meta name="description" content="Caso técnico de Mundial Predictor 2026: laboratorio multiagente con modelos DeepSeek por fase, predicciones evaluables, benchmark ML, cache, RAG controlado y FinOps IA." />
+  <meta name="theme-color" content="#070908" />
+  <title>Mundial Predictor 2026 | El sistema que discute cada partido</title>
+  <meta name="description" content="Caso vivo de arquitectura multiagente: benchmark estadístico, agentes evaluables, aprendizaje por fase y FinOps IA durante el Mundial 2026." />
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #060610;
-      --panel: #0a0a1a;
-      --panel-2: #0f0f22;
-      --ink: #f2f2f8;
-      --muted: #9595b8;
-      --line: rgba(149, 149, 184, 0.2);
-      --accent: #00c853;
-      --accent-2: #0a84ff;
-      --warn: #f0be4a;
-      --risk: #e5002d;
-      --host-ca: #ff0000;
-      --host-mx: #006847;
-      --host-us: #002868;
-      --shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
-      --radius: 8px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color-scheme: light dark;
+      --night: #070908;
+      --night-2: #101522;
+      --paper: #f4f6f2;
+      --white: #ffffff;
+      --ink: #0a0d0b;
+      --muted: #66706a;
+      --line-dark: rgba(255, 255, 255, 0.17);
+      --line-light: rgba(10, 13, 11, 0.16);
+      --lime: #b9ff66;
+      --blue: #3d7dff;
+      --coral: #ff654f;
+      --yellow: #ffda45;
+      --mint: #63ddb0;
+      --red: #ff4d5f;
+      --max: 1320px;
+      --pad: 44px;
+      --radius: 6px;
+      font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     }
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      background: var(--bg);
+      overflow-x: hidden;
+      background: var(--paper);
       color: var(--ink);
-      line-height: 1.6;
-      font-size: 16px;
+      font-size: 17px;
+      line-height: 1.55;
+      text-rendering: optimizeLegibility;
     }
 
-    .host-stripe {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      z-index: 20;
-      background: linear-gradient(90deg, var(--host-ca) 0 33.3%, var(--host-mx) 33.3% 66.6%, var(--host-us) 66.6% 100%);
-    }
+    ::selection { background: var(--lime); color: var(--ink); }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    img, canvas { display: block; max-width: 100%; }
 
-    body::before {
-      content: "";
+    .skip-link {
       position: fixed;
-      inset: 0;
+      top: 12px;
+      left: 12px;
+      z-index: 100;
+      padding: 10px 14px;
+      background: var(--white);
+      color: var(--ink);
+      transform: translateY(-160%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .scroll-progress {
+      position: fixed;
+      inset: 0 auto auto 0;
+      z-index: 80;
+      width: 100%;
+      height: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: var(--lime);
       pointer-events: none;
-      background:
-        linear-gradient(120deg, rgba(0, 200, 83, 0.20), transparent 32%),
-        linear-gradient(220deg, rgba(10, 132, 255, 0.16), transparent 36%),
-        linear-gradient(310deg, rgba(240, 190, 74, 0.10), transparent 32%),
-        linear-gradient(40deg, rgba(229, 0, 45, 0.07), transparent 26%),
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.05), transparent 38%);
-      opacity: 0.95;
-      z-index: -1;
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-      [data-reveal] {
-        opacity: 0;
-        transform: translateY(18px);
-        transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
-      }
-      [data-reveal].in-view { opacity: 1; transform: translateY(0); }
+    .frame {
+      width: min(var(--max), calc(100% - (var(--pad) * 2)));
+      margin-inline: auto;
     }
-
-    a { color: var(--accent-2); text-decoration: none; transition: color .2s ease; }
-    a:hover { text-decoration: none; color: #5fd4ff; }
-
-    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
 
     .topbar {
-      position: sticky;
-      top: 4px;
-      z-index: 10;
-      border-bottom: 1px solid var(--line);
-      background: rgba(6, 6, 16, 0.86);
-      backdrop-filter: blur(14px);
-      transition: box-shadow .3s ease;
+      position: fixed;
+      inset: 3px 0 auto;
+      z-index: 60;
+      color: var(--white);
+      background: rgba(7, 9, 8, 0.78);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px) saturate(130%);
     }
-
     .topbar-inner {
       min-height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 24px;
     }
-
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      color: var(--ink);
       font-weight: 760;
-      letter-spacing: 0;
+      white-space: nowrap;
     }
-
-    .mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
+    .brand-mark {
+      width: 36px;
+      aspect-ratio: 1;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, #00c853, #0a84ff 55%, #f0be4a);
-      color: #031015;
+      background: var(--lime);
+      color: var(--ink);
+      border-radius: 4px;
       font-weight: 900;
-      transition: transform .4s cubic-bezier(.22,1,.36,1);
     }
-    .brand:hover .mark { transform: rotate(-8deg) scale(1.08); }
-
-    nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    nav a {
-      position: relative;
-      color: var(--muted);
-      padding: 8px 10px;
-      border-radius: 8px;
-      font-size: 0.92rem;
-      transition: color .25s ease, background-color .25s ease;
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 0.86rem;
+      color: rgba(255, 255, 255, 0.68);
     }
-    nav a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.07); text-decoration: none; }
-    nav a::after {
-      content: "";
-      position: absolute;
-      left: 10px;
-      right: 10px;
-      bottom: 4px;
-      height: 2px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    .topnav a {
+      padding-block: 20px;
+      border-bottom: 2px solid transparent;
+      transition: color 180ms ease, border-color 180ms ease;
     }
-    nav a:hover::after { transform: scaleX(1); }
+    .topnav a:hover,
+    .topnav a:focus-visible {
+      color: var(--white);
+      border-color: var(--lime);
+    }
+    .topbar-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--coral);
+      box-shadow: 0 0 0 5px rgba(255, 101, 79, 0.15);
+    }
 
     .hero {
-      padding: 72px 0 44px;
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-      gap: 36px;
-      align-items: start;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      color: #f0be4a;
-      font-weight: 700;
-      font-size: 0.88rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 16px;
-    }
-
-    h1, h2, h3 { line-height: 1.12; letter-spacing: 0; margin: 0; }
-    h1 {
-      font-size: clamp(2.6rem, 6vw, 5.6rem);
-      max-width: 920px;
-      background: linear-gradient(100deg, #f2f2f8 12%, #00e676 35%, #f0be4a 58%, #f2f2f8 88%);
-      background-size: 220% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: heroSheen 9s ease-in-out infinite;
-    }
-    @keyframes heroSheen {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    h2 { font-size: clamp(1.9rem, 3vw, 3rem); margin-bottom: 14px; }
-    h3 { font-size: 1.15rem; margin-bottom: 8px; }
-
-    .lead {
-      margin: 24px 0 0;
-      max-width: 850px;
-      color: #cfe0e7;
-      font-size: clamp(1.08rem, 1.5vw, 1.28rem);
-    }
-
-    .thesis {
-      margin-top: 28px;
-      padding: 22px;
-      border: 1px solid rgba(0, 200, 83, 0.34);
-      border-left: 5px solid var(--accent);
-      border-radius: var(--radius);
-      background: rgba(15, 15, 34, 0.78);
-      box-shadow: var(--shadow);
-      font-size: 1.06rem;
-      color: #e9f7ee;
-    }
-
-    .hero-card {
-      border: 1px solid var(--line);
-      background: rgba(15, 15, 34, 0.86);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: var(--shadow);
-    }
-
-    .metric-grid { display: grid; gap: 12px; }
-    .metric {
-      padding: 14px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.045);
-      border: 1px solid var(--line);
-      transition: transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease, background-color .3s ease;
-    }
-    .metric:hover {
-      transform: translateY(-3px);
-      border-color: rgba(0, 200, 83, 0.45);
-      background: rgba(0, 200, 83, 0.07);
-    }
-    .metric strong { display: block; font-size: 1.3rem; color: var(--ink); }
-    .metric span { color: var(--muted); font-size: 0.92rem; }
-
-    .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-    .badge {
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.055);
-      color: #d8e7ed;
-      border-radius: 999px;
-      padding: 7px 11px;
-      font-size: 0.9rem;
-      white-space: nowrap;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease, background-color .25s ease;
-    }
-    .badge:hover {
-      transform: translateY(-2px);
-      border-color: rgba(10, 132, 255, 0.5);
-      background: rgba(10, 132, 255, 0.12);
-    }
-
-    section { padding: 44px 0; border-top: 1px solid var(--line); }
-    .section-head { max-width: 820px; margin-bottom: 24px; }
-    .section-head p { color: var(--muted); margin: 0; font-size: 1.02rem; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-
-    .card {
-      display: block;
-      border: 1px solid var(--line);
-      background: rgba(15, 15, 34, 0.76);
-      border-radius: var(--radius);
-      padding: 20px;
-      min-height: 100%;
-      color: inherit;
-      text-decoration: none;
-      transition: transform .35s cubic-bezier(.22,1,.36,1), border-color .35s ease, box-shadow .35s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(0, 200, 83, 0.45);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(0, 200, 83, 0.12);
-    }
-    a.card:hover { border-color: rgba(10, 132, 255, 0.55); text-decoration: none; }
-    .card p, .card li { color: var(--muted); }
-    .card p:last-child { margin-bottom: 0; }
-
-    .kicker { color: var(--accent); font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-    .muted { color: var(--muted); }
-    .small { font-size: 0.92rem; }
-
-    .stack { display: grid; gap: 14px; }
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .step {
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.045);
-      border-radius: var(--radius);
-      padding: 14px;
-    }
-    .step b { color: var(--ink); display: block; margin-bottom: 4px; }
-    .step span { color: var(--muted); font-size: 0.9rem; }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
+      position: relative;
+      min-height: 94vh;
       overflow: hidden;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: rgba(15, 15, 34, 0.78);
+      display: flex;
+      align-items: flex-end;
+      background: var(--night);
+      color: var(--white);
+      isolation: isolate;
     }
-    th, td { padding: 14px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
-    th { color: #d8fbe9; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; background: rgba(0, 200, 83, 0.08); }
-    td { color: var(--muted); }
-    tr:last-child td { border-bottom: 0; }
-
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      border-radius: 999px;
-      padding: 5px 9px;
-      font-size: 0.82rem;
-      font-weight: 750;
-    }
-    .done { color: #b3f5d1; background: rgba(0, 200, 83, 0.14); }
-    .validating { color: #bfe9fb; background: rgba(10, 132, 255, 0.14); }
-    .experimental { color: #ffe9a8; background: rgba(240, 190, 74, 0.14); }
-    .pending { color: #ffd0d4; background: rgba(229, 0, 45, 0.14); }
-
-    code, pre {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      font-size: 0.92em;
-    }
-    code { color: #d8fbe9; background: rgba(255, 255, 255, 0.08); padding: 2px 5px; border-radius: 5px; }
-    pre {
-      margin: 0;
-      padding: 16px;
-      overflow-x: auto;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      background: #071017;
-      color: #d7fbe5;
-    }
-
-    .notice {
-      border: 1px solid rgba(240, 190, 74, 0.3);
-      background: rgba(240, 190, 74, 0.08);
-      border-radius: var(--radius);
-      padding: 18px;
-      color: #f8e9a5;
-    }
-
-    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-    .tab-button {
-      border: 1px solid var(--line);
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.045);
-      border-radius: 999px;
-      padding: 9px 13px;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 700;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), color .25s ease, background-color .25s ease, border-color .25s ease;
-    }
-    .tab-button:hover { transform: translateY(-2px); border-color: rgba(0, 200, 83, 0.45); }
-    .tab-button[aria-selected="true"] { color: #06130d; background: var(--accent); border-color: var(--accent); }
-    .tab-panel { display: none; }
-    .tab-panel.active {
-      display: block;
-      animation: tabIn .45s cubic-bezier(.22,1,.36,1);
-    }
-    @keyframes tabIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .viz-shell {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(15, 15, 34, 0.76);
-      padding: 20px;
-      transition: border-color .35s ease, box-shadow .35s ease;
-    }
-    .viz-shell:hover { border-color: rgba(10, 132, 255, 0.3); box-shadow: 0 16px 36px rgba(0,0,0,0.28); }
-    .viz-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-    .viz-button {
-      border: 1px solid var(--line);
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.045);
-      border-radius: 999px;
-      padding: 8px 12px;
-      cursor: pointer;
-      font: inherit;
-      font-weight: 750;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), color .25s ease, background-color .25s ease, border-color .25s ease;
-    }
-    .viz-button:hover { transform: translateY(-2px); border-color: rgba(10, 132, 255, 0.45); }
-    .viz-button.active { color: #06130d; background: var(--accent-2); border-color: var(--accent-2); }
-    .bar-list { display: grid; gap: 12px; }
-    .bar-row {
-      display: grid;
-      grid-template-columns: minmax(140px, 220px) minmax(0, 1fr) 92px;
-      gap: 12px;
-      align-items: center;
-    }
-    .bar-label { color: var(--ink); font-weight: 750; }
-    .bar-track {
-      min-height: 16px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.07);
-      overflow: hidden;
-      border: 1px solid var(--line);
-    }
-    .bar-fill {
-      display: block;
-      min-height: 16px;
-      width: var(--w);
-      background: linear-gradient(90deg, var(--accent), var(--accent-2) 60%, var(--warn));
-      border-radius: 999px;
-      transition: width .8s cubic-bezier(.22,1,.36,1);
-    }
-    .bar-value { color: #d8fbe9; font-variant-numeric: tabular-nums; text-align: right; }
-    .cost-hero {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-    .cost-tile {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.045);
-      padding: 16px;
-    }
-    .cost-tile strong {
-      display: block;
-      color: var(--ink);
-      font-size: clamp(1.45rem, 3vw, 2.35rem);
-      line-height: 1;
-      margin-bottom: 8px;
-      font-variant-numeric: tabular-nums;
-    }
-    .cost-tile span { color: var(--muted); font-size: 0.92rem; }
-    .finops-board {
-      display: grid;
-      grid-template-columns: 0.85fr 1.15fr;
-      gap: 18px;
-      align-items: stretch;
-      margin-bottom: 18px;
-    }
-    .gauge-card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background:
-        radial-gradient(circle at 50% 22%, rgba(48, 209, 88, 0.12), transparent 42%),
-        rgba(255, 255, 255, 0.035);
-      padding: 18px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      min-height: 330px;
-    }
-    .gauge-wrap { position: relative; width: min(260px, 100%); aspect-ratio: 1; }
-    .gauge-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-    .gauge-center {
+    #signalCanvas {
       position: absolute;
       inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
     }
-    .gauge-center strong {
+    .hero-shade {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(7, 9, 8, 0.42);
+    }
+    .hero-inner {
+      width: 100%;
+      padding-top: 142px;
+      padding-bottom: 42px;
+    }
+    .hero-overline {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin: 0 0 24px;
+      color: var(--lime);
+      font-size: 0.82rem;
+      font-weight: 760;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .hero-overline::before {
+      content: "";
+      width: 54px;
+      height: 2px;
+      background: currentColor;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { letter-spacing: 0; }
+    h1 {
+      max-width: 1050px;
+      margin-bottom: 22px;
+      font-size: 7.4rem;
+      line-height: 0.88;
+      font-weight: 820;
+    }
+    .hero-statement {
+      max-width: 870px;
+      margin-bottom: 48px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 2rem;
+      line-height: 1.18;
+      font-weight: 500;
+    }
+    .hero-statement strong {
+      color: var(--white);
+      font-weight: 760;
+    }
+    .hero-scoreboard {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1fr 1.2fr;
+      border-top: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .hero-score {
+      min-height: 116px;
+      padding: 20px 24px 18px 0;
+      border-right: 1px solid var(--line-dark);
+    }
+    .hero-score + .hero-score { padding-left: 24px; }
+    .hero-score:last-child { border-right: 0; }
+    .hero-score strong {
       display: block;
-      color: var(--ink);
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      margin-bottom: 6px;
+      color: var(--lime);
+      font-size: 2.25rem;
       line-height: 1;
-      font-variant-numeric: tabular-nums;
     }
-    .gauge-center span { color: var(--muted); font-size: 0.88rem; margin-top: 8px; }
-    .scenario-board {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
+    .hero-score span {
+      display: block;
+      max-width: 22ch;
+      color: rgba(255, 255, 255, 0.66);
+      font-size: 0.82rem;
+      line-height: 1.35;
     }
-    .scenario-row {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: rgba(255, 255, 255, 0.035);
-      padding: 14px;
-    }
-    .scenario-top {
+    .hero-foot {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-    .scenario-top b { color: var(--ink); }
-    .scenario-top span { color: var(--muted); font-size: 0.88rem; }
-    .scenario-scale {
-      height: 26px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(255,255,255,0.06);
-      display: flex;
-    }
-    .scenario-fill {
-      width: var(--w);
-      background: linear-gradient(90deg, var(--c1), var(--c2));
-      border-radius: 999px;
-    }
-    .model-cards {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-    .model-card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 14px;
-      background: rgba(255,255,255,0.035);
-      min-height: 142px;
-      position: relative;
-      overflow: hidden;
-    }
-    .model-card::before {
-      content: "";
-      position: absolute;
-      inset: 0 0 auto;
-      height: 4px;
-      background: var(--c);
-    }
-    .model-card b { display: block; color: var(--ink); margin: 6px 0 8px; }
-    .model-card strong { display: block; color: #d8fbe9; font-size: 1.35rem; font-variant-numeric: tabular-nums; }
-    .model-card span { color: var(--muted); font-size: 0.82rem; }
-    .call-visual {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      gap: 16px;
       align-items: center;
-      margin-top: 14px;
+      gap: 20px;
+      padding-top: 24px;
+      color: rgba(255, 255, 255, 0.56);
+      font-size: 0.78rem;
     }
-    .mini-stack {
-      display: grid;
-      gap: 8px;
-    }
-    .mini-pill {
-      border: 1px solid rgba(240, 190, 74, 0.34);
-      border-radius: 999px;
-      background: rgba(240, 190, 74, 0.08);
-      color: #ffe9a8;
-      padding: 8px 11px;
-      font-size: 0.86rem;
-      font-weight: 800;
-      text-align: center;
-    }
-    .call-equals {
-      color: var(--ink);
-      font-size: 2rem;
-      font-weight: 900;
-    }
-    .cost-stack {
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.035);
-      margin-bottom: 18px;
-    }
-    .stack-bar {
-      display: flex;
-      height: 36px;
-      overflow: hidden;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.06);
-      margin: 12px 0;
-    }
-    .stack-segment {
-      width: var(--w);
-      background: var(--c);
+    .scroll-cue { display: inline-flex; align-items: center; gap: 10px; }
+    .scroll-arrow {
       display: grid;
       place-items: center;
-      color: #06130d;
-      font-size: 0.78rem;
-      font-weight: 900;
-      min-width: 46px;
-      white-space: nowrap;
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      color: var(--lime);
     }
-    .stack-legend {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .legend-item {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.035);
-    }
-    .legend-swatch {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
-      background: var(--c);
-      margin-right: 6px;
-    }
-    .legend-item b { color: var(--ink); font-size: 0.88rem; }
-    .legend-item span { display: block; color: var(--muted); font-size: 0.82rem; margin-top: 3px; }
-    .cost-equation {
-      display: grid;
-      grid-template-columns: repeat(5, auto);
-      gap: 10px;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      margin: 16px 0 0;
-      text-align: center;
-    }
-    .equation-chip {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.045);
+
+    .manifesto {
+      padding: 96px 0 104px;
+      background: var(--lime);
       color: var(--ink);
+    }
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr;
+      gap: 80px;
+      align-items: end;
+    }
+    .manifesto h2 {
+      max-width: 920px;
+      margin-bottom: 0;
+      font-size: 5rem;
+      line-height: 0.98;
+      font-weight: 800;
+    }
+    .manifesto-copy {
+      margin-bottom: 4px;
+      font-size: 1.16rem;
+      line-height: 1.55;
+    }
+    .manifesto-copy strong { font-weight: 800; }
+
+    .section {
+      padding: 128px 0;
+      background: var(--paper);
+    }
+    .section-dark {
+      background: var(--night);
+      color: var(--white);
+    }
+    .section-blue {
+      background: var(--night-2);
+      color: var(--white);
+    }
+    .section-coral {
+      background: var(--coral);
+      color: var(--ink);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.42fr 1.58fr;
+      gap: 50px;
+      align-items: start;
+      margin-bottom: 74px;
+    }
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin: 8px 0 0;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .section-tag::before {
+      content: "";
+      width: 34px;
+      height: 2px;
+      background: currentColor;
+    }
+    .section-title {
+      max-width: 980px;
+      margin-bottom: 22px;
+      font-size: 4.6rem;
+      line-height: 0.98;
+      font-weight: 800;
+    }
+    .section-intro {
+      max-width: 840px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.24rem;
+      line-height: 1.5;
+    }
+    .section-dark .section-intro,
+    .section-blue .section-intro { color: rgba(255, 255, 255, 0.64); }
+
+    .phase-stage {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      min-height: 560px;
+      overflow: hidden;
+      border: 1px solid var(--line-light);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+    .phase-control {
+      padding: 38px;
+      background: var(--ink);
+      color: var(--white);
+    }
+    .phase-control-label {
+      margin-bottom: 34px;
+      color: rgba(255, 255, 255, 0.54);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .phase-tabs {
+      display: grid;
+      border-top: 1px solid var(--line-dark);
+    }
+    .phase-tab {
+      display: grid;
+      grid-template-columns: 54px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      width: 100%;
+      padding: 20px 0;
+      text-align: left;
+      border: 0;
+      border-bottom: 1px solid var(--line-dark);
+      background: transparent;
+      cursor: pointer;
+      transition: color 180ms ease, padding-left 180ms ease;
+    }
+    .phase-tab:hover,
+    .phase-tab:focus-visible { color: var(--lime); }
+    .phase-tab[aria-selected="true"] {
+      padding-left: 12px;
+      color: var(--lime);
+    }
+    .phase-tab-index {
+      color: rgba(255, 255, 255, 0.42);
+      font-variant-numeric: tabular-nums;
+    }
+    .phase-tab b { font-size: 1.02rem; }
+    .phase-tab small {
+      grid-column: 2;
+      color: rgba(255, 255, 255, 0.46);
+    }
+    .phase-tab-arrow { font-size: 1.2rem; }
+
+    .phase-display {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 50px 54px 42px;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .phase-display.is-changing {
+      opacity: 0.25;
+      transform: translateY(8px);
+    }
+    .phase-kicker {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line-light);
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+    .phase-number {
+      color: var(--blue);
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+    .phase-display h3 {
+      max-width: 780px;
+      margin: 42px 0 18px;
+      font-size: 3.4rem;
+      line-height: 1;
+    }
+    .phase-description {
+      max-width: 760px;
+      color: #39413d;
+      font-size: 1.1rem;
+    }
+    .signal-panel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 42px;
+      padding-top: 28px;
+      border-top: 1px solid var(--line-light);
+    }
+    .signal-meter label {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+    .meter-track {
+      height: 8px;
+      overflow: hidden;
+      background: #e2e6e1;
+    }
+    .meter-fill {
+      width: var(--value);
+      height: 100%;
+      transform-origin: left;
+      background: var(--meter-color, var(--blue));
+      transition: width 560ms cubic-bezier(.22, 1, .36, 1);
+    }
+    .phase-routing {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 30px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .phase-routing strong { color: var(--ink); }
+
+    .architecture-layout {
+      display: grid;
+      grid-template-columns: 410px minmax(0, 1fr);
+      gap: 90px;
+      align-items: start;
+    }
+    .architecture-sticky {
+      position: sticky;
+      top: 112px;
+      min-height: 520px;
+    }
+    .architecture-sticky h2 {
+      margin: 0 0 18px;
+      font-size: 3.9rem;
+      line-height: 1;
+    }
+    .architecture-sticky > p {
+      color: rgba(255, 255, 255, 0.58);
+    }
+    .arch-rail {
+      position: relative;
+      display: grid;
+      gap: 2px;
+      margin-top: 42px;
+    }
+    .arch-rail::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 20px;
+      bottom: 20px;
+      width: 1px;
+      background: var(--line-dark);
+    }
+    .arch-rail-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 15px;
+      align-items: center;
+      min-height: 58px;
+      color: rgba(255, 255, 255, 0.42);
+      transition: color 220ms ease, transform 220ms ease;
+    }
+    .arch-rail-node span:first-child {
+      position: relative;
+      z-index: 1;
+      width: 31px;
+      height: 31px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-dark);
+      border-radius: 50%;
+      background: var(--night);
+      font-size: 0.72rem;
+    }
+    .arch-rail-node.is-active {
+      color: var(--lime);
+      transform: translateX(8px);
+    }
+    .arch-rail-node.is-active span:first-child {
+      border-color: var(--lime);
+      background: var(--lime);
+      color: var(--ink);
+    }
+
+    .architecture-steps { border-top: 1px solid var(--line-dark); }
+    .architecture-step {
+      min-height: 68vh;
+      display: grid;
+      grid-template-columns: 0.56fr 1.44fr;
+      gap: 44px;
+      align-content: center;
+      padding: 72px 0;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .architecture-step-number {
+      color: var(--lime);
+      font-size: 0.8rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .architecture-step h3 {
+      margin: 0 0 16px;
+      font-size: 2.65rem;
+      line-height: 1.02;
+    }
+    .architecture-step p {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    .arch-visual {
+      min-height: 290px;
+      display: grid;
+      align-content: center;
+    }
+    .data-lanes { display: grid; gap: 14px; }
+    .data-lane {
+      display: grid;
+      grid-template-columns: 150px 1fr 84px;
+      gap: 16px;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .data-lane b { color: var(--white); }
+    .data-flow {
+      position: relative;
+      height: 2px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .data-flow::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 34%;
+      background: var(--lime);
+      animation: dataFlow 2.4s ease-in-out infinite;
+    }
+    .data-lane small { color: rgba(255, 255, 255, 0.46); text-align: right; }
+
+    .ensemble-visual {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 42px;
+      align-items: center;
+    }
+    .ensemble-ring {
+      width: 220px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue) 0 22%, var(--lime) 22% 80%, var(--coral) 80% 100%);
+    }
+    .ensemble-ring::before {
+      content: "ENSEMBLE\A BASE";
+      white-space: pre;
+      width: 142px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 50%;
+      background: var(--night);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+    .ensemble-legend { display: grid; gap: 18px; }
+    .legend-row {
+      display: grid;
+      grid-template-columns: 14px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .legend-swatch { width: 11px; height: 11px; background: var(--swatch); }
+    .legend-row strong { color: var(--white); }
+    .legend-row span:last-child { font-variant-numeric: tabular-nums; }
+
+    .routing-tree { display: grid; gap: 18px; }
+    .routing-origin {
+      width: max-content;
+      padding: 11px 14px;
+      background: var(--yellow);
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+    .routing-branches {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      border-top: 1px solid var(--line-dark);
+      padding-top: 18px;
+    }
+    .routing-branch {
+      min-height: 142px;
+      padding: 14px 12px;
+      border-left: 3px solid var(--branch);
+      background: rgba(255, 255, 255, 0.045);
+    }
+    .routing-branch b { display: block; margin-bottom: 28px; font-size: 1.22rem; }
+    .routing-branch small { color: rgba(255, 255, 255, 0.52); }
+
+    .agent-spectrum { display: grid; gap: 0; }
+    .agent-spectrum-row {
+      display: grid;
+      grid-template-columns: 54px 1.05fr 1.45fr 64px;
+      gap: 16px;
+      align-items: center;
+      min-height: 62px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .agent-code {
+      color: var(--agent-color);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .agent-spectrum-row b { color: var(--white); }
+    .agent-spectrum-row span:nth-child(3) { color: rgba(255, 255, 255, 0.5); font-size: 0.82rem; }
+    .agent-pulse {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .agent-pulse::after {
+      content: "";
+      display: block;
+      width: var(--pulse);
+      height: 100%;
+      background: var(--agent-color);
+    }
+
+    .evaluation-loop {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      align-items: stretch;
+    }
+    .loop-node {
+      position: relative;
+      min-height: 170px;
+      padding: 18px 16px;
+      border-top: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .loop-node + .loop-node { border-left: 1px solid var(--line-dark); }
+    .loop-node::after {
+      content: "→";
+      position: absolute;
+      right: -10px;
+      top: 12px;
+      z-index: 1;
+      color: var(--lime);
+      background: var(--night);
+      padding: 0 4px;
+    }
+    .loop-node:last-child::after { content: "↻"; }
+    .loop-node b {
+      display: block;
+      margin: 38px 0 8px;
+      color: var(--white);
+      font-size: 1rem;
+    }
+    .loop-node small { color: rgba(255, 255, 255, 0.48); }
+
+    .debate-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 60px;
+      margin-bottom: 64px;
+    }
+    .debate-header h2 {
+      max-width: 850px;
+      margin: 0;
+      font-size: 5rem;
+      line-height: 0.96;
+    }
+    .debate-header p {
+      max-width: 410px;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.62);
+    }
+    .match-plate {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 24px 0;
+      border-top: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.7rem;
+      font-weight: 780;
+    }
+    .team:last-child { justify-content: flex-end; text-align: right; }
+    .team-badge {
+      width: 50px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-dark);
+      border-radius: 50%;
+      font-size: 0.74rem;
+    }
+    .versus {
+      color: var(--yellow);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .debate-rounds {
+      display: flex;
+      gap: 0;
+      margin: 28px 0 34px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .round-button {
+      padding: 14px 22px;
+      border: 0;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+    }
+    .round-button:hover,
+    .round-button:focus-visible { color: var(--white); }
+    .round-button[aria-pressed="true"] {
+      color: var(--white);
+      border-color: var(--yellow);
+    }
+    .debate-console {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 54px;
+      align-items: stretch;
+    }
+    .agent-voices { border-top: 1px solid var(--line-dark); }
+    .voice-row {
+      display: grid;
+      grid-template-columns: 62px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      min-height: 120px;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .voice-id {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--voice);
+      color: var(--voice);
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+    .voice-row h3 { margin: 0 0 6px; font-size: 1.18rem; }
+    .voice-row p { margin: 0; color: rgba(255, 255, 255, 0.52); font-size: 0.84rem; }
+    .voice-pick {
+      color: var(--voice);
+      font-size: 1.7rem;
       font-weight: 800;
       font-variant-numeric: tabular-nums;
     }
-    .call-matrix {
+    .consensus-stage {
+      position: relative;
+      min-height: 420px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 14px;
+      place-items: center;
+      padding: 40px;
+      border: 1px solid var(--line-dark);
+      background: rgba(255, 255, 255, 0.035);
+      overflow: hidden;
+    }
+    .consensus-stage::before,
+    .consensus-stage::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: var(--line-dark);
+    }
+    .consensus-stage::before { top: 33%; }
+    .consensus-stage::after { bottom: 33%; }
+    .consensus-core { position: relative; z-index: 1; text-align: center; }
+    .consensus-ring {
+      --confidence: 80%;
+      position: relative;
+      width: 190px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 26px;
+      border-radius: 50%;
+      background: conic-gradient(var(--yellow) var(--confidence), rgba(255, 255, 255, 0.11) 0);
+      transition: background 420ms ease;
+    }
+    .consensus-ring::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border-radius: 50%;
+      background: var(--night-2);
+    }
+    .consensus-score {
+      position: relative;
+      z-index: 1;
+      font-size: 3.2rem;
+      line-height: 1;
+      font-weight: 820;
+    }
+    .consensus-label {
+      margin-bottom: 8px;
+      color: var(--yellow);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .consensus-note { max-width: 28ch; margin: 0 auto; color: rgba(255, 255, 255, 0.55); font-size: 0.86rem; }
+    .actual-result {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 22px;
+      align-items: center;
+      margin-top: 38px;
+      padding: 22px 0;
+      border-top: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .actual-result b { color: var(--mint); }
+    .actual-result span { color: rgba(255, 255, 255, 0.58); }
+    .actual-score { font-size: 1.8rem; font-weight: 800; color: var(--white) !important; }
+
+    .evidence-lead {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 70px;
+      align-items: end;
+      margin-bottom: 90px;
+    }
+    .big-number {
+      color: var(--blue);
+      font-size: 12rem;
+      line-height: 0.72;
+      font-weight: 860;
+      font-variant-numeric: tabular-nums;
+    }
+    .big-number-caption {
+      margin-top: 28px;
+      font-size: 1.35rem;
+      font-weight: 720;
+    }
+    .big-number-caption span { display: block; margin-top: 5px; color: var(--muted); font-size: 0.92rem; font-weight: 400; }
+    .evidence-thesis {
+      margin-bottom: 2px;
+      font-size: 2.25rem;
+      line-height: 1.18;
+      font-weight: 650;
+    }
+
+    .chart-title-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+    .chart-title-row h3 { margin: 0; font-size: 1.65rem; }
+    .chart-title-row p { margin: 0; color: var(--muted); font-size: 0.82rem; }
+    .accuracy-chart {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 86px;
+    }
+    .accuracy-row {
+      display: grid;
+      grid-template-columns: 168px minmax(0, 1fr) 62px 72px;
+      gap: 18px;
+      align-items: center;
+    }
+    .accuracy-row-label { font-weight: 650; }
+    .accuracy-track {
+      position: relative;
+      height: 34px;
+      background: #e1e5df;
+    }
+    .accuracy-track::before {
+      content: "";
+      position: absolute;
+      left: 33%;
+      top: -5px;
+      bottom: -5px;
+      width: 1px;
+      background: rgba(10, 13, 11, 0.3);
+    }
+    .accuracy-track::after {
+      content: "azar";
+      position: absolute;
+      left: 33%;
+      top: -20px;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.66rem;
+    }
+    .accuracy-bar {
+      width: var(--w);
+      height: 100%;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: var(--bar, var(--blue));
+      transition: transform 900ms cubic-bezier(.22, 1, .36, 1);
+    }
+    .accuracy-chart.is-drawn .accuracy-bar { transform: scaleX(1); }
+    .accuracy-value { font-size: 1.1rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .accuracy-count { color: var(--muted); font-size: 0.78rem; text-align: right; }
+
+    .matrix-wrap {
+      overflow-x: auto;
+      border-top: 1px solid var(--line-light);
+      border-bottom: 1px solid var(--line-light);
+    }
+    .matrix {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    .matrix th,
+    .matrix td {
+      padding: 18px 16px;
+      text-align: center;
+      border-bottom: 1px solid var(--line-light);
+    }
+    .matrix tr:last-child td { border-bottom: 0; }
+    .matrix th {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .matrix th:first-child,
+    .matrix td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      min-width: 170px;
+      text-align: left;
+      background: var(--paper);
+    }
+    .matrix-score {
+      display: inline-grid;
+      place-items: center;
+      width: 58px;
+      height: 38px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    .heat-low { background: #ffd9d4; color: #8b1f13; }
+    .heat-mid { background: #fff0a9; color: #5d4d00; }
+    .heat-high { background: #c7f3dc; color: #075d38; }
+    .heat-peak { background: var(--blue); color: var(--white); }
+    .evidence-note {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 20px;
+      max-width: 980px;
+      margin-top: 34px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .note-index {
+      color: var(--coral);
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .finops-hero {
+      display: grid;
+      grid-template-columns: 0.84fr 1.16fr;
+      gap: 74px;
+      align-items: end;
+      margin-bottom: 90px;
+    }
+    .finops-number {
+      margin-bottom: 18px;
+      color: var(--lime);
+      font-size: 10rem;
+      line-height: 0.78;
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+    }
+    .finops-label { color: rgba(255, 255, 255, 0.58); }
+    .finops-thesis {
+      margin: 0;
+      font-size: 2.5rem;
+      line-height: 1.18;
+      font-weight: 640;
+    }
+
+    .budget-figure { margin-bottom: 92px; }
+    .budget-track {
+      display: grid;
+      grid-template-columns: 54.2fr 30.6fr 15.2fr;
+      height: 76px;
+      overflow: hidden;
+      border: 1px solid var(--line-dark);
+    }
+    .budget-segment {
+      display: flex;
+      align-items: flex-end;
+      padding: 12px;
+      color: var(--ink);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .budget-segment.actual { background: var(--lime); }
+    .budget-segment.remaining { background: var(--blue); color: var(--white); }
+    .budget-segment.buffer { background: var(--coral); }
+    .budget-labels {
+      display: grid;
+      grid-template-columns: 54.2fr 30.6fr 15.2fr;
+      color: rgba(255, 255, 255, 0.56);
+      font-size: 0.74rem;
+    }
+    .budget-labels span { padding: 12px 10px 0 0; }
+    .budget-labels b { display: block; color: var(--white); font-size: 1.15rem; }
+
+    .finops-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 74px;
+      align-items: start;
+    }
+    .finops-block {
+      border-top: 1px solid var(--line-dark);
+      padding-top: 24px;
+    }
+    .finops-block h3 { margin-bottom: 10px; font-size: 1.7rem; }
+    .finops-block > p { color: rgba(255, 255, 255, 0.56); font-size: 0.9rem; }
+    .call-equation {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin: 36px 0 22px;
+      color: var(--lime);
+      font-size: 3.4rem;
+      font-weight: 830;
+    }
+    .call-equation small { color: rgba(255, 255, 255, 0.48); font-size: 0.78rem; font-weight: 400; }
+    .call-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
     }
     .call-cell {
-      border: 1px solid rgba(240, 190, 74, 0.32);
-      border-radius: 8px;
+      min-height: 74px;
       padding: 12px;
-      background: rgba(240, 190, 74, 0.08);
-      text-align: center;
+      border: 1px solid var(--line-dark);
+      background: rgba(255, 255, 255, 0.035);
     }
-    .call-cell b { display: block; color: var(--ink); font-size: 0.9rem; }
-    .call-cell span { color: var(--muted); font-size: 0.78rem; }
-    .learning-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18px; align-items: start; }
-    .phase-list { display: grid; gap: 10px; }
-    .phase-item {
-      border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.045);
-      border-radius: var(--radius);
-      padding: 14px;
+    .call-cell b { display: block; color: var(--yellow); font-size: 0.76rem; }
+    .call-cell span { color: rgba(255, 255, 255, 0.5); font-size: 0.7rem; }
+
+    .cost-bars { display: grid; gap: 18px; margin-top: 32px; }
+    .cost-row {
+      display: grid;
+      grid-template-columns: 180px 1fr 92px;
+      gap: 16px;
+      align-items: center;
+    }
+    .cost-row label { color: rgba(255, 255, 255, 0.7); font-size: 0.82rem; }
+    .cost-track { height: 12px; background: rgba(255, 255, 255, 0.1); }
+    .cost-fill {
+      width: var(--w);
+      height: 100%;
+      background: var(--cost-color);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 850ms cubic-bezier(.22, 1, .36, 1);
+    }
+    .cost-bars.is-drawn .cost-fill { transform: scaleX(1); }
+    .cost-value { color: var(--white); text-align: right; font-size: 0.78rem; }
+    .guardrail-line {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 86px;
+      border-top: 1px solid var(--line-dark);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .guardrail {
+      position: relative;
+      min-height: 122px;
+      padding: 18px 15px;
+      border-right: 1px solid var(--line-dark);
+    }
+    .guardrail:last-child { border-right: 0; }
+    .guardrail b { display: block; margin: 22px 0 4px; color: var(--white); }
+    .guardrail span { color: rgba(255, 255, 255, 0.46); font-size: 0.74rem; }
+    .guardrail-number { color: var(--lime); font-size: 0.7rem; }
+
+    .learning-title {
+      max-width: 1050px;
+      margin-bottom: 70px;
+      font-size: 5.2rem;
+      line-height: 0.96;
+    }
+    .feedback-loop {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+    }
+    .feedback-node {
+      position: relative;
+      min-height: 180px;
+      padding: 22px 20px;
+      border-right: 1px solid rgba(10, 13, 11, 0.38);
+    }
+    .feedback-node:last-child { border-right: 0; }
+    .feedback-node::after {
+      content: "→";
+      position: absolute;
+      right: -11px;
+      top: 18px;
+      z-index: 1;
+      padding: 0 3px;
+      background: var(--coral);
+      font-weight: 800;
+    }
+    .feedback-node:last-child::after { content: "↻"; }
+    .feedback-node strong {
+      display: block;
+      margin: 46px 0 8px;
+      font-size: 1.18rem;
+    }
+    .feedback-node span { font-size: 0.82rem; }
+
+    .learning-panel {
+      display: grid;
+      grid-template-columns: 0.7fr 1.3fr;
+      gap: 70px;
+      margin-top: 82px;
+      padding-top: 34px;
+      border-top: 2px solid var(--ink);
+    }
+    .learning-tabs { display: grid; }
+    .learning-tab {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      padding: 18px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(10, 13, 11, 0.28);
+      background: transparent;
+      text-align: left;
       cursor: pointer;
-      transition: transform .25s cubic-bezier(.22,1,.36,1), border-color .25s ease, background-color .25s ease;
     }
-    .phase-item:hover { transform: translateX(3px); border-color: rgba(10, 132, 255, 0.4); }
-    .phase-item.active { border-color: rgba(10, 132, 255, 0.7); background: rgba(10, 132, 255, 0.12); }
-    .phase-item b { display: block; color: var(--ink); }
-    .phase-item span { display: block; color: var(--muted); font-size: 0.9rem; margin-top: 3px; }
-    .insight-box {
-      border: 1px solid rgba(10, 132, 255, 0.28);
+    .learning-tab:hover,
+    .learning-tab:focus-visible { color: var(--white); }
+    .learning-tab[aria-selected="true"] { padding-left: 10px; background: var(--ink); color: var(--white); }
+    .learning-tab-index { font-size: 0.72rem; }
+    .learning-insight {
+      min-height: 360px;
+      padding: 44px;
+      background: var(--ink);
+      color: var(--white);
       border-radius: var(--radius);
-      background: rgba(10, 132, 255, 0.08);
-      padding: 18px;
-      min-height: 210px;
-      transition: opacity .35s ease;
     }
-    .insight-box ul { margin-bottom: 0; }
+    .learning-insight-label {
+      margin-bottom: 54px;
+      color: var(--yellow);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .learning-insight h3 { margin-bottom: 18px; font-size: 2.7rem; line-height: 1; }
+    .learning-insight p { color: rgba(255, 255, 255, 0.62); }
+    .learning-insight ul {
+      margin: 28px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .learning-insight li {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line-dark);
+      font-size: 0.86rem;
+    }
+    .learning-insight li::before { content: "↳"; color: var(--lime); }
 
-    .footer { padding: 34px 0 60px; color: var(--muted); border-top: 1px solid var(--line); }
+    .operation-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 70px;
+      margin-bottom: 80px;
+    }
+    .operation-head h2 {
+      margin: 0;
+      font-size: 5rem;
+      line-height: 0.96;
+    }
+    .operation-head p { color: rgba(255, 255, 255, 0.6); font-size: 1.15rem; }
+    .operation-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr 1fr;
+      gap: 52px;
+    }
+    .operation-column {
+      border-top: 1px solid var(--line-dark);
+      padding-top: 24px;
+    }
+    .operation-column h3 { margin-bottom: 28px; color: var(--lime); font-size: 0.82rem; text-transform: uppercase; }
+    .ops-step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .ops-step b { color: var(--white); font-size: 0.9rem; }
+    .ops-step span { color: rgba(255, 255, 255, 0.48); font-size: 0.76rem; }
+    .status-line {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 18px;
+      padding: 17px 0;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .status-name { color: var(--status); font-size: 0.76rem; font-weight: 800; text-transform: uppercase; }
+    .status-line b { display: block; color: var(--white); font-size: 0.92rem; }
+    .status-line span { color: rgba(255, 255, 255, 0.48); font-size: 0.76rem; }
+    .risk-item {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .risk-item b { display: block; margin-bottom: 6px; color: var(--white); }
+    .risk-item p { margin: 0; color: rgba(255, 255, 255, 0.48); font-size: 0.8rem; }
 
-    @media (max-width: 920px) {
-      .hero, .grid-2, .grid-3, .grid-4, .flow, .learning-grid, .cost-hero, .stack-legend, .call-matrix, .finops-board, .model-cards, .call-visual { grid-template-columns: 1fr; }
-      .cost-equation { grid-template-columns: 1fr; }
-      .topbar-inner { align-items: flex-start; flex-direction: column; padding: 14px 0; }
-      nav { justify-content: flex-start; }
-      section { padding: 34px 0; }
+    .closing {
+      padding: 128px 0 90px;
+      background: var(--white);
+      color: var(--ink);
+    }
+    .closing h2 {
+      max-width: 1150px;
+      margin-bottom: 72px;
+      font-size: 6rem;
+      line-height: 0.94;
+    }
+    .closing h2 span { color: var(--blue); }
+    .doc-list { border-top: 2px solid var(--ink); }
+    .doc-link {
+      display: grid;
+      grid-template-columns: 54px 1fr 1fr auto;
+      gap: 24px;
+      align-items: center;
+      min-height: 92px;
+      border-bottom: 1px solid var(--line-light);
+      transition: background-color 180ms ease, padding 180ms ease;
+    }
+    .doc-link:hover,
+    .doc-link:focus-visible {
+      padding-inline: 14px;
+      background: var(--lime);
+    }
+    .doc-link span:first-child { color: var(--muted); font-size: 0.72rem; }
+    .doc-link b { font-size: 1.25rem; }
+    .doc-link span:nth-child(3) { color: var(--muted); font-size: 0.82rem; }
+    .doc-arrow { font-size: 1.4rem; }
+
+    .footer {
+      padding: 34px 0 48px;
+      background: var(--white);
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line-light);
+    }
+    .footer p { max-width: 720px; margin: 0; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 700ms cubic-bezier(.22, 1, .36, 1), transform 700ms cubic-bezier(.22, 1, .36, 1);
+      transition-delay: var(--delay, 0ms);
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    @keyframes dataFlow {
+      0% { transform: translateX(-110%); }
+      100% { transform: translateX(310%); }
     }
 
-    @media (max-width: 560px) {
-      .shell { width: min(100% - 24px, 1180px); }
-      h1 { font-size: 2.4rem; }
-      .hero { padding-top: 42px; }
-      th, td { padding: 11px; }
+    @media (max-width: 1120px) {
+      h1 { font-size: 5.7rem; }
+      .hero-statement { font-size: 1.7rem; }
+      .section-title, .manifesto h2 { font-size: 4rem; }
+      .architecture-layout { grid-template-columns: 330px minmax(0, 1fr); gap: 54px; }
+      .architecture-step { grid-template-columns: 1fr; }
+      .architecture-step-number { margin-bottom: -26px; }
+      .routing-branches { grid-template-columns: 1fr 1fr; }
+      .evaluation-loop { grid-template-columns: 1fr 1fr; }
+      .loop-node:last-child { grid-column: 1 / -1; }
+      .debate-header h2, .learning-title, .operation-head h2 { font-size: 4.2rem; }
+      .big-number { font-size: 9rem; }
+      .finops-number { font-size: 7rem; }
+      .closing h2 { font-size: 4.8rem; }
+    }
+
+    @media (max-width: 880px) {
+      :root { --pad: 24px; }
+      .topnav { display: none; }
+      .hero { min-height: 900px; }
+      .hero-shade { background: rgba(7, 9, 8, 0.66); }
+      h1 { font-size: 4.8rem; }
+      .hero-scoreboard { grid-template-columns: 1fr 1fr; }
+      .hero-score:nth-child(2) { border-right: 0; }
+      .hero-score:nth-child(-n+2) { border-bottom: 1px solid var(--line-dark); }
+      .manifesto-grid, .section-head, .phase-stage, .architecture-layout, .debate-console,
+      .evidence-lead, .finops-hero, .finops-grid, .learning-panel, .operation-head {
+        grid-template-columns: 1fr;
+      }
+      .manifesto-grid { gap: 36px; }
+      .section-head { gap: 22px; margin-bottom: 50px; }
+      .section-title, .manifesto h2 { font-size: 3.4rem; }
+      .phase-stage { min-height: 0; }
+      .phase-tabs { grid-template-columns: repeat(4, 1fr); }
+      .phase-tab {
+        grid-template-columns: 1fr;
+        min-height: 96px;
+        align-content: center;
+        padding: 12px;
+        border-right: 1px solid var(--line-dark);
+      }
+      .phase-tab:last-child { border-right: 0; }
+      .phase-tab small, .phase-tab-arrow { display: none; }
+      .phase-tab[aria-selected="true"] { padding-left: 12px; background: rgba(185, 255, 102, 0.08); }
+      .architecture-sticky { position: relative; top: 0; min-height: 0; }
+      .arch-rail { grid-template-columns: repeat(5, 1fr); }
+      .arch-rail::before { left: 16px; right: 16px; top: 15px; bottom: auto; width: auto; height: 1px; }
+      .arch-rail-node { grid-template-columns: 1fr; justify-items: center; text-align: center; font-size: 0.7rem; }
+      .arch-rail-node.is-active { transform: translateY(-4px); }
+      .architecture-step { min-height: 0; }
+      .ensemble-visual { grid-template-columns: 220px 1fr; }
+      .debate-header { align-items: start; flex-direction: column; }
+      .debate-header h2, .learning-title, .operation-head h2 { font-size: 3.7rem; }
+      .finops-hero, .learning-panel, .operation-head { gap: 32px; }
+      .feedback-loop, .guardrail-line { grid-template-columns: 1fr; }
+      .feedback-node, .guardrail { min-height: auto; border-right: 0; border-bottom: 1px solid rgba(10, 13, 11, 0.3); }
+      .guardrail { border-color: var(--line-dark); }
+      .feedback-node::after { content: "↓"; right: 18px; top: auto; bottom: -13px; }
+      .feedback-node:last-child::after { content: "↻"; }
+      .operation-grid { grid-template-columns: 1fr; }
+      .doc-link { grid-template-columns: 44px 1fr auto; }
+      .doc-link span:nth-child(3) { display: none; }
+      .closing h2 { font-size: 4rem; }
+    }
+
+    @media (max-width: 620px) {
+      :root { --pad: 16px; }
+      body { font-size: 16px; }
+      .brand span:last-child { display: none; }
+      .topbar-status { font-size: 0.72rem; }
+      .hero { min-height: 820px; }
+      .hero-inner { padding-top: 120px; }
+      h1 { font-size: 3.55rem; }
+      .hero-statement { font-size: 1.35rem; }
+      .hero-score { min-height: 104px; padding: 16px 12px 14px 0; }
+      .hero-score + .hero-score { padding-left: 12px; }
+      .hero-score strong { font-size: 1.65rem; }
+      .hero-foot { align-items: flex-start; flex-direction: column; }
+      .manifesto, .section, .closing { padding: 86px 0; }
+      .manifesto h2, .section-title { font-size: 2.75rem; }
+      .section-intro { font-size: 1.05rem; }
+      .phase-control { padding: 24px 18px; }
+      .phase-display { padding: 34px 22px; }
+      .phase-display h3 { font-size: 2.5rem; }
+      .signal-panel { grid-template-columns: 1fr; }
+      .phase-routing { flex-direction: column; }
+      .architecture-sticky h2 { font-size: 3rem; }
+      .arch-rail-node span:last-child { display: none; }
+      .architecture-step { padding: 58px 0; }
+      .architecture-step h3 { font-size: 2.25rem; }
+      .data-lane { grid-template-columns: 108px 1fr; }
+      .data-lane small { display: none; }
+      .ensemble-visual { grid-template-columns: 1fr; }
+      .ensemble-ring { width: 190px; }
+      .routing-branches { grid-template-columns: 1fr 1fr; }
+      .agent-spectrum-row { grid-template-columns: 38px 1fr auto; }
+      .agent-spectrum-row span:nth-child(3) { display: none; }
+      .evaluation-loop { grid-template-columns: 1fr; }
+      .loop-node:last-child { grid-column: auto; }
+      .loop-node + .loop-node { border-left: 0; }
+      .loop-node::after { content: "↓"; right: 16px; top: auto; bottom: -12px; }
+      .debate-header h2, .learning-title, .operation-head h2 { font-size: 3rem; }
+      .match-plate { grid-template-columns: 1fr auto 1fr; gap: 8px; }
+      .team { gap: 8px; font-size: 1.1rem; }
+      .team-badge { width: 38px; }
+      .round-button { flex: 1; padding: 12px 6px; font-size: 0.78rem; }
+      .voice-row { grid-template-columns: 48px 1fr auto; gap: 10px; }
+      .voice-pick { font-size: 1.25rem; }
+      .consensus-stage { min-height: 360px; padding: 24px; }
+      .actual-result { grid-template-columns: 1fr auto; }
+      .actual-result span:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+      .big-number { font-size: 7rem; }
+      .evidence-thesis { font-size: 1.7rem; }
+      .accuracy-row { grid-template-columns: 98px minmax(0, 1fr) 48px; gap: 10px; }
+      .accuracy-count { display: none; }
+      .accuracy-row-label { font-size: 0.78rem; }
+      .finops-number { font-size: 5.7rem; }
+      .finops-thesis { font-size: 1.85rem; }
+      .budget-track { height: 58px; }
+      .budget-segment { padding: 7px; font-size: 0.64rem; }
+      .budget-labels b { font-size: 0.85rem; }
+      .call-grid { grid-template-columns: 1fr 1fr 1fr; }
+      .cost-row { grid-template-columns: 120px 1fr 70px; gap: 10px; }
+      .cost-row label { font-size: 0.72rem; }
+      .learning-insight { padding: 30px 22px; }
+      .learning-insight h3 { font-size: 2.15rem; }
+      .closing h2 { font-size: 3.2rem; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .accuracy-bar, .cost-fill { transform: none; }
+    }
+
+    @media print {
+      .topbar, .scroll-progress, #signalCanvas, .scroll-cue { display: none; }
+      .hero { min-height: auto; padding-top: 80px; }
+      .architecture-sticky { position: relative; top: 0; }
+      .architecture-step { min-height: auto; break-inside: avoid; }
+      .section { break-before: page; }
     }
   </style>
 </head>
 <body>
-  <div class="host-stripe" aria-hidden="true"></div>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
   <header class="topbar">
-    <div class="shell topbar-inner">
-      <a class="brand" href="#inicio" aria-label="Ir al inicio">
-        <span class="mark">MP</span>
-        <span>Mundial Predictor 2026</span>
+    <div class="frame topbar-inner">
+      <a class="brand" href="#inicio" aria-label="Mundial Predictor 2026, volver al inicio">
+        <span class="brand-mark">26</span>
+        <span>Mundial Predictor</span>
       </a>
-      <nav aria-label="Navegación principal">
-        <a href="#resumen">Resumen</a>
-        <a href="#arquitectura">Arquitectura</a>
+      <nav class="topnav" aria-label="Navegación principal">
+        <a href="#fases">Fases</a>
+        <a href="#sistema">Sistema</a>
+        <a href="#debate">Debate</a>
         <a href="#evidencia">Evidencia</a>
-        <a href="#finops-agentes">FinOps IA</a>
-        <a href="#estado">Estado</a>
-        <a href="#operacion">Operación</a>
-        <a href="#documentos">Docs</a>
+        <a href="#finops">FinOps</a>
       </nav>
+      <div class="topbar-status"><span class="live-dot" aria-hidden="true"></span>Cuartos en curso</div>
     </div>
   </header>
 
-  <main id="inicio" class="shell">
-    <section class="hero" aria-labelledby="hero-title">
-      <div>
-        <div class="eyebrow">Caso técnico · Arquitectura de agentes aplicada a un torneo real</div>
-        <h1 id="hero-title">Laboratorio multiagente para razonar el Mundial 2026</h1>
-        <p class="lead">Varios agentes predicen el mismo partido desde lógicas distintas, compiten contra un modelo estadístico base y son evaluados contra el resultado real para ajustar confianza, pesos y uso de modelos por fase.</p>
-        <div class="thesis"><strong>Tesis del proyecto:</strong> demostrar que una arquitectura de agentes puede entender la lógica cambiante de un Mundial, usar modelos DeepSeek según complejidad, controlar costos con cache y precomputación, y convertir cada resultado real en feedback medible.</div>
-        <div class="badges" aria-label="Capacidades principales">
-          <span class="badge">4 pronósticos por partido</span>
-          <span class="badge">Modelo ML como benchmark</span>
-          <span class="badge">DeepSeek por fase</span>
-          <span class="badge">USD 8.87-11.15 proyectados</span>
-        </div>
-      </div>
-      <aside class="hero-card" aria-label="Datos clave">
-        <div class="metric-grid">
-          <div class="metric"><strong>4 lecturas</strong><span>Group Analyst, Tactical Scout, Sentiment Reader y Consensus para el mismo partido.</span></div>
-          <div class="metric"><strong>1 benchmark</strong><span>Ensemble ELO + Poisson + XGBoost como piso reproducible y barato.</span></div>
-          <div class="metric"><strong>J1/J2/J3</strong><span>prompts, pesos y modelos cambian según presión competitiva y reglas de clasificación.</span></div>
-          <div class="metric"><strong>FinOps</strong><span>cache, RAG controlado y narraciones precomputadas evitan llamadas por clic.</span></div>
-        </div>
-      </aside>
-    </section>
+  <main id="contenido">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <canvas id="signalCanvas" aria-hidden="true"></canvas>
+      <div class="hero-shade" aria-hidden="true"></div>
+      <div class="frame hero-inner">
+        <p class="hero-overline">Caso vivo de arquitectura multiagente</p>
+        <h1 id="hero-title">Mundial<br>Predictor 2026</h1>
+        <p class="hero-statement">Un sistema que <strong>discute cada partido</strong>, mide quién tuvo razón y decide cuándo vale la pena usar más inteligencia.</p>
 
-    <section id="resumen" aria-labelledby="resumen-title">
-      <div class="section-head">
-        <h2 id="resumen-title">Qué Demuestra El Proyecto</h2>
-        <p>El fútbol es el entorno de prueba; el producto demostrado es una arquitectura de agentes evaluables, con costos controlados y lógica distinta por fase del torneo.</p>
-      </div>
-      <div class="grid-3">
-        <article class="card">
-          <div class="kicker">Benchmark estadístico</div>
-          <h3>Modelo base medible</h3>
-          <p>El ensemble ELO + Poisson + XGBoost produce una predicción reproducible y barata. No compite por protagonismo: sirve como punto de comparación contra los agentes.</p>
-        </article>
-        <article class="card">
-          <div class="kicker">Arquitectura multiagente</div>
-          <h3>Varios razonamientos, mismo partido</h3>
-          <p>Cada agente mira una señal distinta: presión de grupo, táctica, ánimo o consenso. Todos dejan una predicción estructurada que luego se evalúa contra el marcador real.</p>
-        </article>
-        <article class="card">
-          <div class="kicker">FinOps IA</div>
-          <h3>Gastar donde aporta</h3>
-          <p>DeepSeek Reasoner se reserva para debates complejos. Narraciones, predicciones y contexto quedan cacheados o precomputados para evitar llamadas LLM por cada clic.</p>
-        </article>
-      </div>
-      <div class="notice" style="margin-top:18px;"><strong>No es una app para apostar.</strong> Es una demostración de buenas prácticas: orquestación de agentes, uso selectivo de modelos, trazabilidad de predicciones, evaluación posterior y control de consumo.</div>
-    </section>
-
-    <section id="arquitectura" aria-labelledby="arquitectura-title">
-      <div class="section-head">
-        <h2 id="arquitectura-title">Arquitectura De Agentes Evaluables</h2>
-        <p>El diseño separa responsabilidades: el modelo base entrega el benchmark, los agentes generan hipótesis, el evaluador compara contra resultados reales y FinOps decide cuándo usar modelos caros.</p>
-      </div>
-      <div class="tabs" role="tablist" aria-label="Capas del sistema">
-        <button class="tab-button" role="tab" aria-selected="true" aria-controls="tab-core" id="tab-core-button" data-tab="tab-core">Benchmark ML</button>
-        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-ai" id="tab-ai-button" data-tab="tab-ai">IA cacheada</button>
-        <button class="tab-button" role="tab" aria-selected="false" aria-controls="tab-agents" id="tab-agents-button" data-tab="tab-agents">Debate de agentes</button>
-      </div>
-      <div id="tab-core" class="tab-panel active" role="tabpanel" aria-labelledby="tab-core-button">
-        <div class="grid-2">
-          <div class="card">
-            <h3>Benchmark reproducible</h3>
-            <p>El pipeline estadístico calcula una predicción base sin depender de LLM. Esa salida permite saber si los agentes realmente agregan valor o solo generan una explicación más bonita.</p>
-            <pre><code>results.csv
-  -> ELO + features
-  -> XGBoost calibrado + Poisson + ELO
-  -> Ensemble 22/58/20
-  -> benchmark para agentes</code></pre>
+        <div class="hero-scoreboard" aria-label="Indicadores principales">
+          <div class="hero-score">
+            <strong><span data-count="70">70</span>%</strong>
+            <span>precisión 1X2 del modelo en 97 partidos jugados</span>
           </div>
-          <div class="card">
-            <h3>Por qué sigue siendo necesario</h3>
-            <p>El modelo base es barato, estable y auditable. Si los agentes fallan, no hay presupuesto o no existe contexto suficiente, el sistema mantiene una predicción mínima confiable.</p>
-            <p class="small">El benchmark evita que el caso se vuelva puro storytelling: cada agente debe ganarse su peso con resultados.</p>
+          <div class="hero-score">
+            <strong><span data-count="100">100</span></strong>
+            <span>debates multiagente publicados y trazables</span>
+          </div>
+          <div class="hero-score">
+            <strong>24/24</strong>
+            <span>J1 completada por backfill con corte anti-leakage</span>
+          </div>
+          <div class="hero-score">
+            <strong>USD 1.79</strong>
+            <span>gasto real a hoy; USD 2.8–3.3 proyectados a la final</span>
           </div>
         </div>
-      </div>
-      <div id="tab-ai" class="tab-panel" role="tabpanel" aria-labelledby="tab-ai-button">
-        <div class="grid-2">
-          <div class="card">
-            <h3>Narraciones precomputadas</h3>
-            <p>Las narrativas no se generan cada vez que alguien abre la app. Se calculan por jornada, quedan en JSON y se actualizan cuando cambian resultados, presión de grupo o contexto competitivo.</p>
-          </div>
-          <div class="card">
-            <h3>RAG cerrado y caché</h3>
-            <p>El chat no consulta un RAG abierto sin control. Usa contexto del torneo, filtro temático, caché y límites por IP para evitar alucinaciones, respuestas fuera de dominio y consumo repetido.</p>
-          </div>
-        </div>
-      </div>
-      <div id="tab-agents" class="tab-panel" role="tabpanel" aria-labelledby="tab-agents-button">
-        <div class="grid-2">
-          <div class="card">
-            <h3>Cuatro hipótesis trazables</h3>
-            <p>Group Analyst, Tactical Scout, Sentiment Reader y Consensus predicen el mismo partido. Cada salida queda guardada para evaluar 1X2, marcador exacto y desempeño por jornada.</p>
-          </div>
-          <div class="card">
-            <h3>Aprendizaje operativo</h3>
-            <p>Los agentes no aprenden mágicamente: el sistema compara predicción vs resultado, identifica quién acertó más y ajusta pesos, prompts y modelos según la fase del Mundial.</p>
-          </div>
-        </div>
-      </div>
-      <div class="viz-shell" style="margin-top:18px;overflow-x:auto;">
-        <svg viewBox="0 0 1000 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:1000px;display:block;margin:0 auto">
-          <defs>
-            <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb8b5" stroke-width="1.6" stroke-linecap="round"/>
-            </marker>
-          </defs>
-          <g font-family="Inter, sans-serif">
-            <rect x="10" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="95" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">1. Contexto</text>
-            <text x="95" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">Fixture + tabla + resultados</text>
 
-            <line x1="180" y1="60" x2="218" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
-
-            <rect x="220" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="305" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">2. Benchmark</text>
-            <text x="305" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">ELO + Poisson + XGB</text>
-
-            <line x1="390" y1="60" x2="428" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
-
-            <rect x="430" y="28" width="170" height="64" rx="10" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="515" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">3. Agentes</text>
-            <text x="515" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">4 pronósticos trazables</text>
-
-            <line x1="600" y1="60" x2="638" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
-
-            <rect x="640" y="28" width="170" height="64" rx="10" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
-            <text x="725" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">4. Evaluación</text>
-            <text x="725" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">modelo vs agentes</text>
-
-            <line x1="810" y1="60" x2="848" y2="60" stroke="#9fb8b5" stroke-width="1.6" marker-end="url(#arrow1)"/>
-
-            <rect x="850" y="28" width="140" height="64" rx="10" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
-            <text x="920" y="55" text-anchor="middle" fill="#f1faf6" font-size="13" font-weight="700">5. Ajuste</text>
-            <text x="920" y="74" text-anchor="middle" fill="#9fb8b5" font-size="10.5">pesos, prompts, modelos</text>
-          </g>
-        </svg>
-      </div>
-    </section>
-
-    <section id="evidencia" aria-labelledby="evidencia-title">
-      <div class="section-head">
-        <h2 id="evidencia-title">Evidencia: Modelo Vs Agentes</h2>
-        <p>La métrica principal del caso no es “adivinar partidos”, sino comparar hipótesis: modelo base, agentes individuales y consenso contra el resultado real.</p>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <h3>Benchmark estadístico</h3>
-          <table>
-            <thead><tr><th>Elemento</th><th>Valor</th></tr></thead>
-            <tbody>
-              <tr><td>Uso en el caso</td><td>Piso estadístico reproducible para comparar contra agentes.</td></tr>
-              <tr><td>Test temporal</td><td>Qatar 2022, 64 partidos retenidos.</td></tr>
-              <tr><td>Walk-forward</td><td>5 Mundiales, 320 predicciones agregadas.</td></tr>
-              <tr><td>RPS ensemble</td><td>0.1958 global, menor es mejor.</td></tr>
-              <tr><td>XGBoost calibrado</td><td>RPS 0.217 en Qatar 2022.</td></tr>
-              <tr><td>Dataset</td><td>49k+ internacionales; los conteos varían entre filas históricas, partidos con score y matriz de features.</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card">
-          <h3>Evaluación multiagente</h3>
-          <ul>
-            <li>Cada partido debatido guarda 4 predicciones: 3 agentes + consenso.</li>
-            <li>Después del resultado, se evalúa 1X2, marcador exacto y desempeño por jornada.</li>
-            <li>La muestra actual es temprana: 4 partidos jugados con debate evaluable.</li>
-            <li>Group Analyst lidera la muestra inicial en J2 porque entiende puntos, presión y clasificación.</li>
-            <li>La decisión futura no es “usar más IA”, sino usar el agente correcto en la fase correcta.</li>
-          </ul>
+        <div class="hero-foot">
+          <span>Actualizado · 10 julio 2026 · 68/97 aciertos</span>
+          <span class="scroll-cue"><span class="scroll-arrow" aria-hidden="true">↓</span>Recorrer el sistema</span>
         </div>
       </div>
     </section>
 
-    <section id="finops-agentes" aria-labelledby="finops-agentes-title">
-      <div class="section-head">
-        <h2 id="finops-agentes-title">FinOps IA Y Aprendizaje De Agentes</h2>
-        <p>La demostración no es gastar más IA: es saber qué modelo usar, cuándo usarlo y cómo evitar llamadas repetidas con cache, RAG cerrado y narraciones precomputadas.</p>
+    <section class="manifesto" aria-labelledby="manifesto-title">
+      <div class="frame manifesto-grid">
+        <h2 id="manifesto-title" class="reveal">Un partido.<br>Cuatro hipótesis.<br>Una realidad.</h2>
+        <p class="manifesto-copy reveal"><strong>El fútbol es el entorno de prueba.</strong> La demostración real es una arquitectura que separa estadística, contexto, razonamiento y costo; después obliga a cada capa a responder ante el resultado.</p>
       </div>
-      <div class="viz-shell" style="margin-bottom:18px;">
-        <div class="kicker">Foto financiera del torneo</div>
-        <h3>El costo se mantiene bajo porque el stack no llama LLM por cada clic</h3>
-        <div class="finops-board">
-          <div class="gauge-card" aria-label="Gasto actual frente a proyección alta">
-            <div class="gauge-wrap">
-              <svg viewBox="0 0 120 120" role="img" aria-label="USD 0.51 gastado de un máximo proyectado de USD 11.15">
-                <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>
-                <circle cx="60" cy="60" r="48" fill="none" stroke="#30d158" stroke-width="12" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="287.8"/>
-              </svg>
-              <div class="gauge-center">
-                <div>
-                  <strong>$0.51</strong>
-                  <span>gastado a hoy<br>~4.6% del escenario alto</span>
+    </section>
+
+    <section class="section" id="fases" aria-labelledby="phases-title">
+      <div class="frame">
+        <div class="section-head">
+          <p class="section-tag">01 · Lógica cambiante</p>
+          <div>
+            <h2 class="section-title reveal" id="phases-title">El mismo torneo cambia de problema cuatro veces.</h2>
+            <p class="section-intro reveal">J1 tiene incertidumbre. J2 añade urgencia. J3 cruza escenarios simultáneos. En eliminatorias, el empate deja de ser una respuesta. El routing cambia agentes, contexto y capacidad por fase.</p>
+          </div>
+        </div>
+
+        <div class="phase-stage reveal">
+          <div class="phase-control">
+            <p class="phase-control-label">Seleccionar fase</p>
+            <div class="phase-tabs" role="tablist" aria-label="Fases del Mundial">
+              <button class="phase-tab" type="button" role="tab" aria-selected="true" data-phase="j1">
+                <span class="phase-tab-index">01</span><b>J1</b><span class="phase-tab-arrow">→</span><small>línea base</small>
+              </button>
+              <button class="phase-tab" type="button" role="tab" aria-selected="false" data-phase="j2">
+                <span class="phase-tab-index">02</span><b>J2</b><span class="phase-tab-arrow">→</span><small>presión</small>
+              </button>
+              <button class="phase-tab" type="button" role="tab" aria-selected="false" data-phase="j3">
+                <span class="phase-tab-index">03</span><b>J3</b><span class="phase-tab-arrow">→</span><small>escenarios</small>
+              </button>
+              <button class="phase-tab" type="button" role="tab" aria-selected="false" data-phase="ko">
+                <span class="phase-tab-index">04</span><b>KO</b><span class="phase-tab-arrow">→</span><small>supervivencia</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="phase-display" id="phaseDisplay" role="tabpanel" aria-live="polite">
+            <div class="phase-kicker"><span id="phaseEyebrow">Jornada 1 · línea base</span><span class="phase-number" id="phaseModel">Chat / Flash</span></div>
+            <div>
+              <h3 id="phaseTitle">Predecir sin memoria del torneo.</h3>
+              <p class="phase-description" id="phaseDescription">La primera jornada mide talento, forma histórica y matchup. Todavía no existen puntos, urgencia ni caminos de clasificación que puedan justificar una lectura más costosa.</p>
+              <div class="signal-panel" aria-label="Peso relativo de señales">
+                <div class="signal-meter">
+                  <label><span>Historia</span><b id="historyValue">78%</b></label>
+                  <div class="meter-track"><div class="meter-fill" id="historyMeter" style="--value:78%;--meter-color:var(--blue)"></div></div>
+                </div>
+                <div class="signal-meter">
+                  <label><span>Presión</span><b id="pressureValue">16%</b></label>
+                  <div class="meter-track"><div class="meter-fill" id="pressureMeter" style="--value:16%;--meter-color:var(--coral)"></div></div>
+                </div>
+                <div class="signal-meter">
+                  <label><span>Escenario</span><b id="scenarioValue">12%</b></label>
+                  <div class="meter-track"><div class="meter-fill" id="scenarioMeter" style="--value:12%;--meter-color:var(--yellow)"></div></div>
                 </div>
               </div>
             </div>
-            <p class="muted small" style="margin:0;">La cifra importante no es solo el gasto bajo, sino que el sistema sabe en qué parte se consume.</p>
-          </div>
-          <div class="scenario-board">
-            <div class="scenario-row">
-              <div class="scenario-top"><b>Costo por partido full-stack</b><span>Agent Debate + Narrator + agentes ligeros</span></div>
-              <div class="scenario-scale"><span class="scenario-fill" style="--w:100%;--c1:#0a84ff;--c2:#30d158"></span></div>
-              <div class="cost-equation"><span class="equation-chip">$0.08-0.10 Reasoner</span><span>+</span><span class="equation-chip">$0.016 Narrator</span><span>+</span><span class="equation-chip">$0.01-0.02 agentes</span></div>
+            <div class="phase-routing">
+              <span>Voz dominante · <strong id="phaseVoice">Benchmark ML + Tactical Scout</strong></span>
+              <span>Objetivo · <strong id="phaseObjective">establecer la línea base</strong></span>
             </div>
-            <div class="scenario-row">
-              <div class="scenario-top"><b>Proyección restante</b><span>76 partidos por jugar</span></div>
-              <div class="scenario-scale">
-                <span class="scenario-fill" style="--w:78%;--c1:#f0be4a;--c2:#ff9f0a"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="sistema" aria-labelledby="architecture-title">
+      <div class="frame architecture-layout">
+        <aside class="architecture-sticky">
+          <p class="section-tag">02 · Arquitectura</p>
+          <h2 id="architecture-title">Cinco capas. Cero fe ciega.</h2>
+          <p>El sistema avanza desde datos verificables hasta una predicción evaluable. Si una capa falla o agota presupuesto, el benchmark determinístico permanece.</p>
+          <div class="arch-rail" aria-label="Capas de la arquitectura">
+            <div class="arch-rail-node is-active" data-arch-node="1"><span>01</span><span>Contexto vivo</span></div>
+            <div class="arch-rail-node" data-arch-node="2"><span>02</span><span>Benchmark ML</span></div>
+            <div class="arch-rail-node" data-arch-node="3"><span>03</span><span>Routing</span></div>
+            <div class="arch-rail-node" data-arch-node="4"><span>04</span><span>Agentes</span></div>
+            <div class="arch-rail-node" data-arch-node="5"><span>05</span><span>Evaluación</span></div>
+          </div>
+        </aside>
+
+        <div class="architecture-steps">
+          <article class="architecture-step" data-arch-step="1">
+            <span class="architecture-step-number">01 / INPUT</span>
+            <div>
+              <h3>Contexto vivo, cerrado y auditable.</h3>
+              <p>Fixture, resultados, tabla, ELO y bracket resuelto entran con corte temporal. El agente ve el torneo; nunca el resultado que está intentando predecir.</p>
+              <div class="arch-visual data-lanes" aria-label="Flujos de datos de entrada">
+                <div class="data-lane"><b>Resultados</b><span class="data-flow"></span><small>49k+</small></div>
+                <div class="data-lane"><b>Fixture 2026</b><span class="data-flow"></span><small>104 cruces</small></div>
+                <div class="data-lane"><b>Standings</b><span class="data-flow"></span><small>12 grupos</small></div>
+                <div class="data-lane"><b>Bracket</b><span class="data-flow"></span><small>resuelto</small></div>
               </div>
-              <div class="cost-equation"><span class="equation-chip">$8.36 bajo</span><span>→</span><span class="equation-chip">$10.64 alto</span></div>
             </div>
-            <div class="scenario-row">
-              <div class="scenario-top"><b>Total hasta la final</b><span>si se mantiene la arquitectura controlada</span></div>
-              <div class="scenario-scale">
-                <span class="scenario-fill" style="--w:100%;--c1:#30d158;--c2:#f0be4a"></span>
+          </article>
+
+          <article class="architecture-step" data-arch-step="2">
+            <span class="architecture-step-number">02 / CORE</span>
+            <div>
+              <h3>Un benchmark barato antes de llamar a la IA.</h3>
+              <p>ELO, Poisson y XGBoost calibrado producen probabilidades reproducibles. Los agentes no sustituyen el modelo: deben demostrar que agregan una lectura útil.</p>
+              <div class="arch-visual ensemble-visual" aria-label="Pesos del ensemble estadístico">
+                <div class="ensemble-ring" aria-hidden="true"></div>
+                <div class="ensemble-legend">
+                  <div class="legend-row"><span class="legend-swatch" style="--swatch:var(--blue)"></span><strong>ELO</strong><span>22%</span></div>
+                  <div class="legend-row"><span class="legend-swatch" style="--swatch:var(--lime)"></span><strong>Poisson</strong><span>58%</span></div>
+                  <div class="legend-row"><span class="legend-swatch" style="--swatch:var(--coral)"></span><strong>XGBoost</strong><span>20%</span></div>
+                </div>
               </div>
-              <div class="cost-equation"><span class="equation-chip">$0.51 hoy</span><span>+</span><span class="equation-chip">$8.36-10.64</span><span>=</span><span class="equation-chip">$8.87-11.15</span></div>
+            </div>
+          </article>
+
+          <article class="architecture-step" data-arch-step="3">
+            <span class="architecture-step-number">03 / ROUTING</span>
+            <div>
+              <h3>La fase decide cuánto razonamiento comprar.</h3>
+              <p>Una regla de negocio dirige cada partido al flujo adecuado. Reasoner aparece cuando la complejidad competitiva lo justifica; cache y precomputación absorben el resto.</p>
+              <div class="arch-visual routing-tree" aria-label="Routing de modelos por fase">
+                <div class="routing-origin">CONTEXTO DEL PARTIDO</div>
+                <div class="routing-branches">
+                  <div class="routing-branch" style="--branch:var(--blue)"><b>J1</b><small>historia + forma<br>Chat / Flash</small></div>
+                  <div class="routing-branch" style="--branch:var(--mint)"><b>J2</b><small>presión de puntos<br>debate selectivo</small></div>
+                  <div class="routing-branch" style="--branch:var(--yellow)"><b>J3</b><small>simultaneidad<br>Reasoner</small></div>
+                  <div class="routing-branch" style="--branch:var(--coral)"><b>KO</b><small>prórroga + penales<br>Oráculo</small></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="architecture-step" data-arch-step="4">
+            <span class="architecture-step-number">04 / DEBATE</span>
+            <div>
+              <h3>Distintas preguntas para el mismo partido.</h3>
+              <p>Cada agente tiene una hipótesis y una salida estructurada. La diversidad no es estética: permite identificar qué señal funciona mejor en cada fase.</p>
+              <div class="arch-visual agent-spectrum" aria-label="Mapa de agentes y señales">
+                <div class="agent-spectrum-row" style="--agent-color:var(--blue);--pulse:78%"><span class="agent-code">GA</span><b>Group Analyst</b><span>puntos, tabla, clasificación</span><span class="agent-pulse"></span></div>
+                <div class="agent-spectrum-row" style="--agent-color:var(--coral);--pulse:71%"><span class="agent-code">TS</span><b>Tactical Scout</b><span>matchups, riesgo, espacios</span><span class="agent-pulse"></span></div>
+                <div class="agent-spectrum-row" style="--agent-color:var(--yellow);--pulse:58%"><span class="agent-code">SR</span><b>Sentiment Reader</b><span>momentum, ansiedad, confianza</span><span class="agent-pulse"></span></div>
+                <div class="agent-spectrum-row" style="--agent-color:var(--mint);--pulse:64%"><span class="agent-code">CS</span><b>Cazador de Sorpresas</b><span>caso plausible del underdog</span><span class="agent-pulse"></span></div>
+                <div class="agent-spectrum-row" style="--agent-color:var(--lime);--pulse:84%"><span class="agent-code">OR</span><b>Oráculo de Eliminatorias</b><span>90′, prórroga, penales, avance</span><span class="agent-pulse"></span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="architecture-step" data-arch-step="5">
+            <span class="architecture-step-number">05 / FEEDBACK</span>
+            <div>
+              <h3>La realidad tiene la última palabra.</h3>
+              <p>Cada salida queda guardada antes del partido. Después se compara 1X2, marcador y avance de llave para ajustar confianza, prompts y routing.</p>
+              <div class="arch-visual evaluation-loop" aria-label="Ciclo de evaluación y mejora">
+                <div class="loop-node"><span>01</span><b>Predecir</b><small>salida estructurada</small></div>
+                <div class="loop-node"><span>02</span><b>Congelar</b><small>timestamp + cutoff</small></div>
+                <div class="loop-node"><span>03</span><b>Comparar</b><small>resultado real</small></div>
+                <div class="loop-node"><span>04</span><b>Ponderar</b><small>error por agente</small></div>
+                <div class="loop-node"><span>05</span><b>Reenrutar</b><small>siguiente fase</small></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-blue" id="debate" aria-labelledby="debate-title">
+      <div class="frame">
+        <div class="debate-header">
+          <h2 id="debate-title" class="reveal">En la sala de debate, el desacuerdo es una señal.</h2>
+          <p class="reveal">Caso real de J2: Francia vs Irak. Tres lecturas independientes, tres rondas y un consenso. El resultado final permite medir algo más valioso que una explicación convincente.</p>
+        </div>
+
+        <div class="match-plate reveal" aria-label="Partido de ejemplo Francia contra Irak">
+          <div class="team"><span class="team-badge">FRA</span><span>Francia</span></div>
+          <span class="versus">VS · J2</span>
+          <div class="team"><span>Irak</span><span class="team-badge">IRQ</span></div>
+        </div>
+
+        <div class="debate-rounds reveal" role="group" aria-label="Rondas del debate">
+          <button class="round-button" type="button" aria-pressed="true" data-round="1">Ronda 1</button>
+          <button class="round-button" type="button" aria-pressed="false" data-round="2">Ronda 2</button>
+          <button class="round-button" type="button" aria-pressed="false" data-round="3">Ronda 3</button>
+          <button class="round-button" type="button" aria-pressed="false" data-round="4">Consenso</button>
+        </div>
+
+        <div class="debate-console reveal">
+          <div class="agent-voices">
+            <article class="voice-row" style="--voice:var(--blue)">
+              <span class="voice-id">GA</span>
+              <div><h3>Group Analyst</h3><p id="voiceGroup">Francia necesita margen; Irak juega sin red.</p></div>
+              <span class="voice-pick" id="pickGroup">2–0</span>
+            </article>
+            <article class="voice-row" style="--voice:var(--coral)">
+              <span class="voice-id">TS</span>
+              <div><h3>Tactical Scout</h3><p id="voiceTactical">La presión alta de Irak abre la transición francesa.</p></div>
+              <span class="voice-pick" id="pickTactical">3–0</span>
+            </article>
+            <article class="voice-row" style="--voice:var(--yellow)">
+              <span class="voice-id">SR</span>
+              <div><h3>Sentiment Reader</h3><p id="voiceSentiment">Momentum francés; un gol de orgullo sigue vivo.</p></div>
+              <span class="voice-pick" id="pickSentiment">2–1</span>
+            </article>
+          </div>
+
+          <div class="consensus-stage">
+            <div class="consensus-core">
+              <div class="consensus-ring" id="consensusRing">
+                <span class="consensus-score" id="consensusScore">2–0</span>
+              </div>
+              <p class="consensus-label" id="consensusLabel">Hipótesis dominante</p>
+              <p class="consensus-note" id="consensusNote">Las tres voces convergen en victoria de Francia; difieren en el margen y el riesgo de conceder.</p>
             </div>
           </div>
         </div>
-        <div class="cost-stack">
-          <div class="kicker">76 partidos restantes · costo por modelo y fase</div>
-          <div class="stack-bar" aria-label="Costo restante apilado por fase y modelo">
-            <div class="stack-segment" style="--w:16.2%;--c:#0a84ff">1.54</div>
-            <div class="stack-segment" style="--w:41.7%;--c:#f0be4a">3.96</div>
-            <div class="stack-segment" style="--w:11.8%;--c:#30d158">1.12</div>
-            <div class="stack-segment" style="--w:30.3%;--c:#ff9f0a">2.88</div>
-          </div>
-          <div class="model-cards">
-            <div class="model-card" style="--c:#0a84ff"><b>Grupos · Flash/Chat</b><strong>$1.54</strong><span>44 partidos · Narrator AI + agentes ligeros</span></div>
-            <div class="model-card" style="--c:#f0be4a"><b>Grupos · Reasoner</b><strong>$3.96</strong><span>44 partidos · Agent Debate, 9 llamadas por partido</span></div>
-            <div class="model-card" style="--c:#30d158"><b>Eliminatorias · Flash/Chat</b><strong>$1.12</strong><span>32 partidos · narraciones y contexto liviano</span></div>
-            <div class="model-card" style="--c:#ff9f0a"><b>Eliminatorias · Reasoner</b><strong>$2.88</strong><span>32 partidos · debate selectivo de alta presión</span></div>
-          </div>
-        </div>
-        <p class="muted small" style="margin-bottom:0;">El bloque caro no es la narración: es el <strong>Agent Debate</strong>. Reasoner domina porque cada partido debatido dispara 9 llamadas y cobra tokens de pensamiento interno. El resto se contiene con <code>deepseek-chat-v3-flash</code>, <code>deepseek-chat</code>, cache y precomputación.</p>
-      </div>
-      <div class="viz-shell">
-        <div class="kicker">Control de costos</div>
-        <h3>Por qué no se abusa del LLM: cache, RAG y rate limit antes de cada llamada</h3>
-        <p class="muted small">El Chat IA y el Narrator AI no llaman a DeepSeek por cada pregunta de cada usuario. Tres filtros bloquean el costo antes de llegar al modelo, y un cuarto guardia corta el gasto agregado si se acerca al límite diario o mensual.</p>
-        <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:740px;display:block;margin:10px auto 0">
-          <defs>
-            <marker id="arrow3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb8b5" stroke-width="1.5" stroke-linecap="round"/>
-            </marker>
-          </defs>
-          <g font-family="Inter, sans-serif">
-            <!-- Step 1 -->
-            <rect x="20" y="10" width="320" height="40" rx="9" fill="rgba(255,255,255,0.045)" stroke="#9fb8b5" stroke-opacity="0.4"/>
-            <text x="180" y="35" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Pregunta del usuario</text>
-            <line x1="180" y1="50" x2="180" y2="68" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
 
-            <!-- Step 2: Topic filter -->
-            <rect x="20" y="70" width="320" height="46" rx="9" fill="rgba(10,132,255,0.1)" stroke="#0a84ff"/>
-            <text x="180" y="91" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">1. Filtro de tema (regex fútbol)</text>
-            <text x="180" y="107" text-anchor="middle" fill="#9fb8b5" font-size="10">español/inglés/portugués</text>
-            <line x1="340" y1="93" x2="556" y2="93" stroke="#00c853" stroke-width="1.4" marker-end="url(#arrow3)"/>
-            <rect x="560" y="70" width="180" height="46" rx="9" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="650" y="89" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">Fuera de tema</text>
-            <text x="650" y="105" text-anchor="middle" fill="#b3f5d1" font-size="11" font-weight="700">→ respuesta fija, USD 0</text>
-            <line x1="180" y1="116" x2="180" y2="138" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
-
-            <!-- Step 3: Cache -->
-            <rect x="20" y="140" width="320" height="46" rx="9" fill="rgba(10,132,255,0.1)" stroke="#0a84ff"/>
-            <text x="180" y="161" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">2. Cache SHA-256 (TTL 2h)</text>
-            <text x="180" y="177" text-anchor="middle" fill="#9fb8b5" font-size="10">hasta 400 entradas, ~70-80% hit rate</text>
-            <line x1="340" y1="163" x2="556" y2="163" stroke="#00c853" stroke-width="1.4" marker-end="url(#arrow3)"/>
-            <rect x="560" y="140" width="180" height="46" rx="9" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="650" y="159" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">Pregunta repetida</text>
-            <text x="650" y="175" text-anchor="middle" fill="#b3f5d1" font-size="11" font-weight="700">→ respuesta cache, USD 0</text>
-            <line x1="180" y1="186" x2="180" y2="208" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
-
-            <!-- Step 4: Rate limit -->
-            <rect x="20" y="210" width="320" height="46" rx="9" fill="rgba(10,132,255,0.1)" stroke="#0a84ff"/>
-            <text x="180" y="231" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">3. Rate limit 20 req/hora/IP</text>
-            <text x="180" y="247" text-anchor="middle" fill="#9fb8b5" font-size="10">module-level Map, sin Redis</text>
-            <line x1="340" y1="233" x2="556" y2="233" stroke="#e5002d" stroke-width="1.4" marker-end="url(#arrow3)"/>
-            <rect x="560" y="210" width="180" height="46" rx="9" fill="rgba(229,0,45,0.12)" stroke="#e5002d"/>
-            <text x="650" y="229" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">Límite excedido</text>
-            <text x="650" y="245" text-anchor="middle" fill="#ffd0d4" font-size="11" font-weight="700">→ HTTP 429</text>
-            <line x1="180" y1="256" x2="180" y2="278" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
-
-            <!-- Step 5: RAG -->
-            <rect x="20" y="280" width="320" height="46" rx="9" stroke-dasharray="5,4" fill="rgba(10,132,255,0.06)" stroke="#0a84ff"/>
-            <text x="180" y="301" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">4. RAG (opcional): Qwen3 embeddings</text>
-            <text x="180" y="317" text-anchor="middle" fill="#9fb8b5" font-size="10">top-5 chunks inyectados al prompt</text>
-            <line x1="180" y1="326" x2="180" y2="348" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow3)"/>
-
-            <!-- Step 6: DeepSeek call (real cost) -->
-            <rect x="20" y="350" width="320" height="46" rx="9" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
-            <text x="180" y="371" text-anchor="middle" fill="#f1faf6" font-size="12" font-weight="700">5. Llamada a DeepSeek</text>
-            <text x="180" y="387" text-anchor="middle" fill="#9fb8b5" font-size="10">único paso con costo real — se guarda en cache</text>
-
-            <!-- Budget guard side note -->
-            <rect x="560" y="280" width="180" height="116" rx="9" fill="rgba(255,255,255,0.04)" stroke="#9fb8b5" stroke-opacity="0.35"/>
-            <text x="650" y="300" text-anchor="middle" fill="#f1faf6" font-size="11" font-weight="700">CostGuard</text>
-            <text x="650" y="317" text-anchor="middle" fill="#9fb8b5" font-size="9.5">budget.yaml: límite diario,</text>
-            <text x="650" y="330" text-anchor="middle" fill="#9fb8b5" font-size="9.5">mensual y por-run</text>
-            <text x="650" y="352" text-anchor="middle" fill="#9fb8b5" font-size="9.5">Si se agota: Agent Debate</text>
-            <text x="650" y="365" text-anchor="middle" fill="#9fb8b5" font-size="9.5">y agentes LLM caen a</text>
-            <text x="650" y="378" text-anchor="middle" fill="#b3f5d1" font-size="9.5" font-weight="700">Ensemble determinístico</text>
-          </g>
-        </svg>
-      </div>
-      <div class="grid-2" style="margin-top:18px;">
-        <div class="viz-shell">
-          <div class="kicker">FinOps actual + proyección</div>
-          <h3>USD por fase operativa</h3>
-          <p class="muted small">Gasto operativo a hoy: <strong>USD 0.51</strong>. Costo completo estimado por partido: <strong>USD 0.11-0.14</strong>. Si se corre el stack completo para los 76 partidos restantes, el total proyectado hasta la final queda cerca de <strong>USD 8.87-11.15</strong>.</p>
-          <div class="viz-controls" aria-label="Cambiar vista de costos">
-            <button class="viz-button active" type="button" data-cost-view="phase">Costo/partido</button>
-            <button class="viz-button" type="button" data-cost-view="current">Acumulado</button>
-            <button class="viz-button" type="button" data-cost-view="forecast">Hasta la final</button>
-            <button class="viz-button" type="button" data-cost-view="model">Por modelo</button>
-          </div>
-          <div id="costChart" class="bar-list" aria-live="polite"></div>
-          <p class="muted small" style="margin-bottom:0;margin-top:16px;">El Agent Debate domina el costo porque usa <code>deepseek-reasoner</code>, hace 9 llamadas por partido y el pensamiento interno del modelo también consume tokens facturables aunque no se muestre al usuario. Narrator AI y los agentes de enriquecimiento usan <code>deepseek-chat-v3-flash</code>/<code>deepseek-chat</code>, mucho más económicos.</p>
-        </div>
-        <div class="viz-shell">
-          <div class="kicker">Por qué domina Reasoner</div>
-          <h3>1 partido debatido = 9 llamadas caras</h3>
-          <p class="muted small">Cada agente no solo responde una vez: razona, rebate y participa en el consenso. Esa arquitectura da trazabilidad, pero concentra el costo en <code>deepseek-reasoner</code>.</p>
-          <div class="call-visual" aria-label="Ecuación visual de llamadas Reasoner">
-            <div class="mini-stack">
-              <div class="mini-pill">Group Analyst</div>
-              <div class="mini-pill">Tactical Scout</div>
-              <div class="mini-pill">Sentiment Reader</div>
-            </div>
-            <div class="call-equals">× 3 rondas = 9</div>
-            <div class="mini-stack">
-              <div class="mini-pill">Lectura inicial</div>
-              <div class="mini-pill">Rebate</div>
-              <div class="mini-pill">Ajuste final</div>
-            </div>
-          </div>
-          <div class="call-matrix" aria-label="Nueve llamadas del Agent Debate">
-            <div class="call-cell"><b>Group Analyst</b><span>R1 · lectura inicial</span></div>
-            <div class="call-cell"><b>Tactical Scout</b><span>R1 · lectura inicial</span></div>
-            <div class="call-cell"><b>Sentiment Reader</b><span>R1 · lectura inicial</span></div>
-            <div class="call-cell"><b>Group Analyst</b><span>R2 · rebate</span></div>
-            <div class="call-cell"><b>Tactical Scout</b><span>R2 · rebate</span></div>
-            <div class="call-cell"><b>Sentiment Reader</b><span>R2 · rebate</span></div>
-            <div class="call-cell"><b>Group Analyst</b><span>R3 · ajuste final</span></div>
-            <div class="call-cell"><b>Tactical Scout</b><span>R3 · ajuste final</span></div>
-            <div class="call-cell"><b>Sentiment Reader</b><span>R3 · ajuste final</span></div>
-          </div>
-          <p class="muted small" style="margin-bottom:0;margin-top:14px;">Por eso la optimización no es eliminar Reasoner, sino usarlo donde sí paga: J2/J3, escenarios simultáneos, mejores terceros y partidos de alta presión.</p>
+        <div class="actual-result reveal">
+          <b>RESULTADO REAL</b>
+          <span>Ganador correcto. Tactical Scout acertó el marcador exacto; el consenso acertó la dirección.</span>
+          <span class="actual-score">Francia 3–0 Irak</span>
         </div>
       </div>
-      <div class="viz-shell" style="margin-top:18px;">
-        <div class="kicker">Cómo se genera cada predicción</div>
-        <h3>Agent Debate: 3 agentes, 3 rondas, 1 consenso, 4 predicciones</h3>
-        <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:700px;display:block;margin:10px auto 0">
-          <defs>
-            <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M2 1L8 5L2 9" fill="none" stroke="#9fb8b5" stroke-width="1.5" stroke-linecap="round"/>
-            </marker>
-          </defs>
-          <g font-family="Inter, sans-serif">
-            <rect x="20" y="10" width="210" height="50" rx="9" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
-            <text x="125" y="40" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Group Analyst</text>
+    </section>
 
-            <rect x="265" y="10" width="210" height="50" rx="9" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
-            <text x="370" y="40" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Tactical Scout</text>
-
-            <rect x="510" y="10" width="210" height="50" rx="9" fill="rgba(10,132,255,0.12)" stroke="#0a84ff"/>
-            <text x="615" y="40" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Sentiment Reader</text>
-
-            <line x1="125" y1="60" x2="365" y2="108" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
-            <line x1="370" y1="60" x2="370" y2="108" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
-            <line x1="615" y1="60" x2="375" y2="108" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
-
-            <rect x="220" y="112" width="300" height="50" rx="9" fill="rgba(0,200,83,0.12)" stroke="#00c853"/>
-            <text x="370" y="133" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">3 rondas de debate</text>
-            <text x="370" y="150" text-anchor="middle" fill="#9fb8b5" font-size="10.5">clasificación, táctica, momentum — sin ML</text>
-
-            <line x1="370" y1="162" x2="370" y2="200" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
-
-            <rect x="260" y="204" width="220" height="44" rx="9" fill="rgba(240,190,74,0.12)" stroke="#f0be4a"/>
-            <text x="370" y="231" text-anchor="middle" fill="#f1faf6" font-size="12.5" font-weight="700">Consensus</text>
-
-            <line x1="370" y1="248" x2="370" y2="262" stroke="#9fb8b5" stroke-width="1.4" marker-end="url(#arrow2)"/>
-
-            <rect x="120" y="266" width="500" height="34" rx="8" fill="rgba(255,255,255,0.045)" stroke="#9fb8b5" stroke-opacity="0.4"/>
-            <text x="370" y="288" text-anchor="middle" fill="#d8fbe9" font-size="12" font-weight="700">4 predicciones evaluadas: 3 agentes + Consensus</text>
-          </g>
-        </svg>
-      </div>
-      <div class="grid-2" style="margin-top:18px;">
-        <div class="viz-shell">
-          <div class="kicker">Feedback real</div>
-          <h3>4 predicciones por debate</h3>
-          <p class="muted small">Cada partido con Agent Debate produce 4 lecturas: Group Analyst, Tactical Scout, Sentiment Reader y Consensus. La medición actual evalúa 4 partidos ya jugados.</p>
-          <div id="agentChart" class="bar-list" aria-live="polite"></div>
-        </div>
-      </div>
-      <div class="viz-shell" style="margin-top:18px;">
-        <div class="learning-grid">
+    <section class="section" id="evidencia" aria-labelledby="evidence-title">
+      <div class="frame">
+        <div class="section-head">
+          <p class="section-tag">03 · Evidencia</p>
           <div>
-            <div class="kicker">Ciclo de mejora</div>
-            <h3>Cómo aprenden de cada fase</h3>
-            <p class="muted small">No es fine-tuning automático: es aprendizaje operativo. Los resultados reales alimentan evaluación, ajuste de prompts, pesos y reglas por jornada.</p>
-            <div id="phaseList" class="phase-list"></div>
+            <h2 class="section-title reveal" id="evidence-title">La interfaz no celebra predicciones. Expone resultados.</h2>
+            <p class="section-intro reveal">El modelo y cada agente se comparan contra la realidad. La muestra crece por fase, las caídas se muestran y un 100% con un solo partido no se vende como certeza.</p>
           </div>
-          <div id="phaseInsight" class="insight-box" aria-live="polite"></div>
+        </div>
+
+        <div class="evidence-lead">
+          <div class="reveal">
+            <div class="big-number"><span data-count="70">70</span>%</div>
+            <p class="big-number-caption">WC 2026 · modelo ML<span>68 aciertos en 97 partidos jugados</span></p>
+          </div>
+          <p class="evidence-thesis reveal">El salto no está en “usar IA”. Está en saber que el benchmark domina el mata-mata, mientras el contexto multiagente mostró más valor en la presión de J2 y J3.</p>
+        </div>
+
+        <div class="chart-title-row">
+          <h3>Precisión 1X2 del modelo por fase</h3>
+          <p>La línea marca azar uniforme · 33%</p>
+        </div>
+        <div class="accuracy-chart reveal" id="accuracyChart" aria-label="Gráfico de precisión del modelo por fase">
+          <div class="accuracy-row"><span class="accuracy-row-label">Jornada 1</span><div class="accuracy-track"><div class="accuracy-bar" style="--w:46%;--bar:var(--yellow)"></div></div><span class="accuracy-value">46%</span><span class="accuracy-count">11/24</span></div>
+          <div class="accuracy-row"><span class="accuracy-row-label">Jornada 2</span><div class="accuracy-track"><div class="accuracy-bar" style="--w:79%;--bar:var(--blue)"></div></div><span class="accuracy-value">79%</span><span class="accuracy-count">19/24</span></div>
+          <div class="accuracy-row"><span class="accuracy-row-label">Jornada 3</span><div class="accuracy-track"><div class="accuracy-bar" style="--w:67%;--bar:var(--mint)"></div></div><span class="accuracy-value">67%</span><span class="accuracy-count">16/24</span></div>
+          <div class="accuracy-row"><span class="accuracy-row-label">16avos</span><div class="accuracy-track"><div class="accuracy-bar" style="--w:88%;--bar:var(--blue)"></div></div><span class="accuracy-value">88%</span><span class="accuracy-count">14/16</span></div>
+          <div class="accuracy-row"><span class="accuracy-row-label">Octavos</span><div class="accuracy-track"><div class="accuracy-bar" style="--w:88%;--bar:var(--blue)"></div></div><span class="accuracy-value">88%</span><span class="accuracy-count">7/8</span></div>
+          <div class="accuracy-row"><span class="accuracy-row-label">Cuartos</span><div class="accuracy-track"><div class="accuracy-bar" style="--w:100%;--bar:var(--coral)"></div></div><span class="accuracy-value">100%</span><span class="accuracy-count">1/1</span></div>
+        </div>
+
+        <div class="chart-title-row">
+          <h3>Matriz de precisión de agentes</h3>
+          <p>Color y cifra muestran el desempeño 1X2 · cada columna es una hipótesis distinta</p>
+        </div>
+        <div class="matrix-wrap reveal">
+          <table class="matrix">
+            <thead>
+              <tr><th>Fase</th><th>Group Analyst</th><th>Tactical Scout</th><th>Sentiment Reader</th><th>Consensus</th><th>Modelo ML</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Jornada 1</td><td><span class="matrix-score heat-mid">46%</span></td><td><span class="matrix-score heat-mid">54%</span></td><td><span class="matrix-score heat-low">38%</span></td><td><span class="matrix-score heat-low">38%</span></td><td><span class="matrix-score heat-mid">46%</span></td></tr>
+              <tr><td>Jornada 2</td><td><span class="matrix-score heat-mid">54%</span></td><td><span class="matrix-score heat-mid">42%</span></td><td><span class="matrix-score heat-mid">54%</span></td><td><span class="matrix-score heat-mid">54%</span></td><td><span class="matrix-score heat-high">79%</span></td></tr>
+              <tr><td>Jornada 3</td><td><span class="matrix-score heat-high">67%</span></td><td><span class="matrix-score heat-high">71%</span></td><td><span class="matrix-score heat-mid">54%</span></td><td><span class="matrix-score heat-high">63%</span></td><td><span class="matrix-score heat-high">67%</span></td></tr>
+              <tr><td>16avos</td><td><span class="matrix-score heat-high">81%</span></td><td><span class="matrix-score heat-high">63%</span></td><td><span class="matrix-score heat-high">69%</span></td><td><span class="matrix-score heat-high">75%</span></td><td><span class="matrix-score heat-peak">88%</span></td></tr>
+              <tr><td>Octavos</td><td><span class="matrix-score heat-low">38%</span></td><td><span class="matrix-score heat-low">38%</span></td><td><span class="matrix-score heat-low">38%</span></td><td><span class="matrix-score heat-low">38%</span></td><td><span class="matrix-score heat-peak">88%</span></td></tr>
+              <tr><td>Cuartos · 1 partido</td><td><span class="matrix-score heat-peak">100%</span></td><td><span class="matrix-score heat-peak">100%</span></td><td><span class="matrix-score heat-peak">100%</span></td><td><span class="matrix-score heat-peak">100%</span></td><td><span class="matrix-score heat-peak">100%</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="evidence-note reveal">
+          <span class="note-index">!</span>
+          <p>Lectura honesta: Octavos tiene muestra parcial por el apagón de CI del 28 de junio al 9 de julio. Cuartos todavía representa un solo partido. El benchmark histórico conserva RPS global 0.1958; menor es mejor.</p>
         </div>
       </div>
     </section>
 
-    <section id="decisiones" aria-labelledby="decisiones-title">
-      <div class="section-head">
-        <h2 id="decisiones-title">Decisiones De Diseño</h2>
-        <p>El valor del proyecto no está solo en predecir; también está en las decisiones que hacen que el sistema sea mantenible durante un torneo real.</p>
-      </div>
-      <table>
-        <thead><tr><th>Decisión</th><th>Trade-off</th><th>Resultado</th></tr></thead>
-        <tbody>
-          <tr><td>Modelo como benchmark</td><td>No todo lo resuelve el agente.</td><td>Cada predicción IA se compara contra un piso estadístico reproducible.</td></tr>
-          <tr><td>DeepSeek por fase</td><td>El modelo caro no se usa para todo.</td><td>Reasoner se reserva para J3, debate y escenarios complejos.</td></tr>
-          <tr><td>Cache y precomputación</td><td>Menos respuesta instantánea libre.</td><td>No se paga una llamada LLM por cada clic, narración o usuario.</td></tr>
-          <tr><td>RAG cerrado</td><td>Menos amplitud de respuesta.</td><td>Más control: fixtures, standings, resultados y contexto del torneo.</td></tr>
-          <tr><td>Evaluación posterior</td><td>Requiere guardar predicciones antes del partido.</td><td>Permite saber qué agente acertó más y ajustar pesos por fase.</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section id="estado" aria-labelledby="estado-title">
-      <div class="section-head">
-        <h2 id="estado-title">Estado Del Laboratorio</h2>
-        <p>La madurez se mide por trazabilidad: qué predijo cada capa, cuánto costó, qué acertó y qué regla debe cambiar después del resultado.</p>
-      </div>
-      <div class="grid-4">
-        <article class="card"><span class="status done">Implementado</span><h3>Benchmark + agentes</h3><p>Modelo base, Agent Debate, 4 pronósticos estructurados y evaluación por resultado.</p></article>
-        <article class="card"><span class="status validating">En validación</span><h3>Pesos por fase</h3><p>J2/J3 ajustan importancia de presión, puntos, diferencia de gol y mejores terceros.</p></article>
-        <article class="card"><span class="status experimental">Experimental</span><h3>Routing DeepSeek</h3><p>Uso progresivo de modelos: ligero en J1, más capacidad en J2 y Reasoner para escenarios complejos.</p></article>
-        <article class="card"><span class="status pending">Pendiente</span><h3>Autoajuste formal</h3><p>Convertir la evaluación histórica en reglas automáticas de confianza por agente y fase.</p></article>
-      </div>
-    </section>
-
-    <section id="operacion" aria-labelledby="operacion-title">
-      <div class="section-head">
-        <h2 id="operacion-title">Operación Durante El Mundial</h2>
-        <p>La operación diaria mantiene alineados cuatro artefactos: resultado real, benchmark ML, pronósticos de agentes y narrativas cacheadas.</p>
-      </div>
-      <div class="grid-2">
-        <div class="card">
-          <h3>Ciclo diario recomendado</h3>
-          <pre><code>python scripts/live_update.py
-python scripts/predict_live.py --export
-python scripts/precompute_narrations.py
-cd frontend
-npx vercel --prod</code></pre>
+    <section class="section section-dark" id="finops" aria-labelledby="finops-title">
+      <div class="frame">
+        <div class="section-head">
+          <p class="section-tag">04 · FinOps IA</p>
+          <div>
+            <h2 class="section-title reveal" id="finops-title">La inteligencia también necesita un marcador.</h2>
+            <p class="section-intro reveal">El objetivo no es minimizar llamadas a cualquier precio. Es comprar razonamiento solo donde cambia una decisión y conservar un fallback determinístico cuando el presupuesto o el proveedor fallan.</p>
+          </div>
         </div>
-        <div class="card">
-          <h3>J2 y J3 requieren más capacidad</h3>
-          <p>En J2, los agentes deben leer presión real: quién necesita ganar, quién puede empatar y quién se complica. En J3, Reasoner se justifica porque aparecen simultaneidad, diferencia de gol y pelea por mejores terceros.</p>
+
+        <div class="finops-hero">
+          <div class="reveal">
+            <div class="finops-number">$1.79</div>
+            <p class="finops-label">gasto real · 7.069 requests · 10.0M tokens</p>
+          </div>
+          <p class="finops-thesis reveal">Casi todo el torneo procesado por menos de lo que cuesta una suscripción mensual. La arquitectura evita pagar una llamada por cada clic, usuario o narración.</p>
+        </div>
+
+        <div class="budget-figure reveal" aria-label="Gasto real y proyección hasta la final">
+          <div class="budget-track">
+            <div class="budget-segment actual">GASTADO</div>
+            <div class="budget-segment remaining">RESTANTE BAJO</div>
+            <div class="budget-segment buffer">MARGEN ALTO</div>
+          </div>
+          <div class="budget-labels">
+            <span><b>$1.79</b>hoy</span>
+            <span><b>+$1.01</b>escenario bajo</span>
+            <span><b>+$0.50</b>buffer hasta $3.30</span>
+          </div>
+        </div>
+
+        <div class="finops-grid">
+          <div class="finops-block reveal">
+            <h3>Por qué domina Reasoner</h3>
+            <p>Agent Debate no hace una sola pregunta. Tres agentes razonan, rebaten y ajustan antes del consenso.</p>
+            <div class="call-equation">3 × 3 = 9 <small>llamadas por partido debatido</small></div>
+            <div class="call-grid" aria-label="Nueve llamadas de un debate">
+              <div class="call-cell"><b>GA · R1</b><span>lectura inicial</span></div>
+              <div class="call-cell"><b>TS · R1</b><span>lectura inicial</span></div>
+              <div class="call-cell"><b>SR · R1</b><span>lectura inicial</span></div>
+              <div class="call-cell"><b>GA · R2</b><span>rebate</span></div>
+              <div class="call-cell"><b>TS · R2</b><span>rebate</span></div>
+              <div class="call-cell"><b>SR · R2</b><span>rebate</span></div>
+              <div class="call-cell"><b>GA · R3</b><span>ajuste final</span></div>
+              <div class="call-cell"><b>TS · R3</b><span>ajuste final</span></div>
+              <div class="call-cell"><b>SR · R3</b><span>ajuste final</span></div>
+            </div>
+          </div>
+
+          <div class="finops-block reveal">
+            <h3>Costo unitario por capacidad</h3>
+            <p>La longitud visual representa el techo del rango. Narrator permanece pequeño porque se precomputa una vez y se reutiliza.</p>
+            <div class="cost-bars" id="costBars" aria-label="Costos por capacidad">
+              <div class="cost-row"><label>Oráculo KO</label><div class="cost-track"><div class="cost-fill" style="--w:100%;--cost-color:var(--coral)"></div></div><span class="cost-value">$0.08–0.12</span></div>
+              <div class="cost-row"><label>Agent Debate</label><div class="cost-track"><div class="cost-fill" style="--w:83%;--cost-color:var(--yellow)"></div></div><span class="cost-value">$0.08–0.10</span></div>
+              <div class="cost-row"><label>Especialistas</label><div class="cost-track"><div class="cost-fill" style="--w:17%;--cost-color:var(--blue)"></div></div><span class="cost-value">$0.01–0.02</span></div>
+              <div class="cost-row"><label>Narrator</label><div class="cost-track"><div class="cost-fill" style="--w:13%;--cost-color:var(--lime)"></div></div><span class="cost-value">$0.016</span></div>
+              <div class="cost-row"><label>Core ML</label><div class="cost-track"><div class="cost-fill" style="--w:4%;--cost-color:var(--mint)"></div></div><span class="cost-value">≈ $0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="guardrail-line reveal" aria-label="Guardrails de costo">
+          <div class="guardrail"><span class="guardrail-number">01</span><b>Cache</b><span>reutiliza respuestas</span></div>
+          <div class="guardrail"><span class="guardrail-number">02</span><b>Precompute</b><span>genera una vez por contexto</span></div>
+          <div class="guardrail"><span class="guardrail-number">03</span><b>RAG cerrado</b><span>menos ruido y tokens</span></div>
+          <div class="guardrail"><span class="guardrail-number">04</span><b>Rate limit</b><span>20 solicitudes por IP</span></div>
+          <div class="guardrail"><span class="guardrail-number">05</span><b>Fallback ML</b><span>el producto nunca queda mudo</span></div>
         </div>
       </div>
     </section>
 
-    <section id="limitaciones" aria-labelledby="limitaciones-title">
-      <div class="section-head">
-        <h2 id="limitaciones-title">Limitaciones Serias</h2>
-        <p>La arquitectura es potente precisamente porque declara cuándo no sabe, cuándo no debe gastar y cuándo una predicción todavía no tiene muestra suficiente.</p>
-      </div>
-      <div class="grid-3">
-        <article class="card"><h3>Muestra pequeña</h3><p>El desempeño inicial de agentes no debe venderse como verdad definitiva. Cada jornada aumenta la evidencia y reduce ruido.</p></article>
-        <article class="card"><h3>Datos vivos</h3><p>Si resultados, horarios o tablas llegan tarde, los agentes pueden razonar sobre contexto viejo hasta el siguiente ciclo de actualización.</p></article>
-        <article class="card"><h3>LLM no es oráculo</h3><p>Reasoner ayuda en escenarios complejos, pero no reemplaza evaluación. Toda salida debe quedar guardada y compararse contra el resultado real.</p></article>
+    <section class="section section-coral" id="aprendizaje" aria-labelledby="learning-title">
+      <div class="frame">
+        <p class="section-tag">05 · Aprendizaje operativo</p>
+        <h2 class="learning-title reveal" id="learning-title">No aprende por magia. Aprende porque queda en evidencia.</h2>
+
+        <div class="feedback-loop reveal" aria-label="Bucle de aprendizaje">
+          <div class="feedback-node"><span>01</span><strong>Predicción</strong><span>modelo y agentes dejan una salida estructurada</span></div>
+          <div class="feedback-node"><span>02</span><strong>Resultado</strong><span>marcador y avance real entran al evaluador</span></div>
+          <div class="feedback-node"><span>03</span><strong>Error</strong><span>se separa 1X2, exactitud y confianza</span></div>
+          <div class="feedback-node"><span>04</span><strong>Ajuste</strong><span>cambian pesos, prompts y reglas por fase</span></div>
+          <div class="feedback-node"><span>05</span><strong>Routing</strong><span>el siguiente partido recibe mejor combinación</span></div>
+        </div>
+
+        <div class="learning-panel reveal">
+          <div class="learning-tabs" role="tablist" aria-label="Aprendizajes por fase">
+            <button class="learning-tab" type="button" role="tab" aria-selected="true" data-learning="j1"><span class="learning-tab-index">01</span><b>J1 · línea base</b><span>→</span></button>
+            <button class="learning-tab" type="button" role="tab" aria-selected="false" data-learning="j2"><span class="learning-tab-index">02</span><b>J2 · presión</b><span>→</span></button>
+            <button class="learning-tab" type="button" role="tab" aria-selected="false" data-learning="j3"><span class="learning-tab-index">03</span><b>J3 · clasificación</b><span>→</span></button>
+            <button class="learning-tab" type="button" role="tab" aria-selected="false" data-learning="ko"><span class="learning-tab-index">04</span><b>KO · alta varianza</b><span>→</span></button>
+          </div>
+          <div class="learning-insight" id="learningInsight" role="tabpanel" aria-live="polite">
+            <p class="learning-insight-label" id="learningLabel">J1 · 24/24 debates</p>
+            <h3 id="learningHeadline">Una línea base completa y auditable.</h3>
+            <p id="learningSummary">El backfill usa cutoff por fecha y mantiene cero resultados visibles para los partidos del mismo día.</p>
+            <ul id="learningPoints">
+              <li>Todos los registros quedan marcados como backfill; unknown = 0.</li>
+              <li>Tactical Scout lideró J1 con 54.2% de acierto 1X2.</li>
+              <li>La incertidumbre inicial limita cuánto contexto competitivo puede aportar un agente.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="documentos" aria-labelledby="documentos-title">
-      <div class="section-head">
-        <h2 id="documentos-title">Documentación De Apoyo</h2>
-        <p>El HTML queda como caso ejecutivo/técnico. La profundidad operativa se deja en documentos especializados para evitar una landing interminable.</p>
+    <section class="section section-dark" id="operacion" aria-labelledby="operation-title">
+      <div class="frame">
+        <div class="operation-head">
+          <h2 id="operation-title" class="reveal">Un laboratorio vivo necesita disciplina de producción.</h2>
+          <p class="reveal">Resultados, probabilidades, agentes, bracket y narrativas deben avanzar en el mismo corte temporal. La madurez se mide por trazabilidad, no por cantidad de componentes.</p>
+        </div>
+
+        <div class="operation-grid">
+          <div class="operation-column reveal">
+            <h3>Ciclo de partido</h3>
+            <div class="ops-step"><span>01</span><div><b>Actualizar resultados</b><span>sincronizar fixture, ELO y bracket</span></div></div>
+            <div class="ops-step"><span>02</span><div><b>Recalcular probabilidades</b><span>cutoff a kickoff menos 60 segundos</span></div></div>
+            <div class="ops-step"><span>03</span><div><b>Ejecutar agentes</b><span>solo para cruces seleccionados</span></div></div>
+            <div class="ops-step"><span>04</span><div><b>Exportar artefactos</b><span>JSON estático, UTF-8 y cacheable</span></div></div>
+            <div class="ops-step"><span>05</span><div><b>Desplegar y evaluar</b><span>resultado real cierra el ciclo</span></div></div>
+          </div>
+
+          <div class="operation-column reveal">
+            <h3>Madurez actual</h3>
+            <div class="status-line" style="--status:var(--lime)"><span class="status-name">Implementado</span><div><b>Benchmark + agentes</b><span>debate, Cazador y Oráculo con evaluación</span></div></div>
+            <div class="status-line" style="--status:var(--yellow)"><span class="status-name">Validando</span><div><b>Pesos por fase</b><span>confianza dinámica según desempeño</span></div></div>
+            <div class="status-line" style="--status:var(--blue)"><span class="status-name">Experimental</span><div><b>Routing DeepSeek</b><span>capacidad progresiva por complejidad</span></div></div>
+            <div class="status-line" style="--status:var(--coral)"><span class="status-name">Pendiente</span><div><b>Autoajuste formal</b><span>reglas automáticas con muestra suficiente</span></div></div>
+          </div>
+
+          <div class="operation-column reveal">
+            <h3>Límites que sí se declaran</h3>
+            <div class="risk-item"><b>Muestra pequeña</b><p>Un 100% de cuartos representa 1 partido, no una ventaja demostrada.</p></div>
+            <div class="risk-item"><b>Datos vivos</b><p>Un resultado tardío propaga contexto viejo hasta el siguiente ciclo.</p></div>
+            <div class="risk-item"><b>Hueco de CI</b><p>16avos, octavos y QF1 tienen debate parcial por el apagón del 28 jun–9 jul.</p></div>
+            <div class="risk-item"><b>LLM no es oráculo</b><p>Reasoner amplía el análisis; nunca reemplaza evaluación ni fallback.</p></div>
+          </div>
+        </div>
       </div>
-      <div class="grid-3">
-        <a class="card" href="docs/architecture.md"><h3>Architecture Brief</h3><p>Capas, flujo de datos, artefactos y límites entre ML, IA y agentes.</p></a>
-        <a class="card" href="docs/ml-validation.md"><h3>ML Validation Brief</h3><p>Métricas, validación temporal, interpretación de RPS y riesgos de muestra.</p></a>
-        <a class="card" href="docs/finops.md"><h3>AI FinOps Brief</h3><p>CostGuard, caché, rate limit, RAG, narraciones precomputadas y fallbacks.</p></a>
-        <a class="card" href="docs/runbook.md"><h3>Live Runbook</h3><p>Ciclo diario, protocolo J2/J3 y orden correcto de recalculo.</p></a>
-        <a class="card" href="model_card.md"><h3>Model Card</h3><p>Resultados técnicos, pesos del ensemble y limitaciones del modelo.</p></a>
-        <a class="card" href="methodology.md"><h3>Methodology</h3><p>Metodología completa de datos, features, modelos y validación.</p></a>
+    </section>
+
+    <section class="closing" id="documentos" aria-labelledby="closing-title">
+      <div class="frame">
+        <h2 id="closing-title" class="reveal">Construido para ser <span>contradicho por la realidad.</span></h2>
+        <div class="doc-list">
+          <a class="doc-link reveal" href="docs/architecture.md"><span>01</span><b>Architecture Brief</b><span>capas, flujo, límites y artefactos</span><span class="doc-arrow">↗</span></a>
+          <a class="doc-link reveal" href="docs/ml-validation.md"><span>02</span><b>ML Validation</b><span>RPS, validación temporal y riesgos</span><span class="doc-arrow">↗</span></a>
+          <a class="doc-link reveal" href="docs/finops.md"><span>03</span><b>AI FinOps</b><span>costos, guardrails y proyección</span><span class="doc-arrow">↗</span></a>
+          <a class="doc-link reveal" href="docs/runbook.md"><span>04</span><b>Live Runbook</b><span>operación diaria durante el torneo</span><span class="doc-arrow">↗</span></a>
+          <a class="doc-link reveal" href="model_card.md"><span>05</span><b>Model Card</b><span>métricas, pesos y limitaciones</span><span class="doc-arrow">↗</span></a>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="shell">
-      <p><strong>Mundial Predictor 2026</strong> es una demostración de arquitectura multiagente, evaluación continua y FinOps IA aplicada a un dominio real. No ofrece asesoría de apuestas ni garantiza resultados deportivos.</p>
-      <p class="small">Última revisión editorial: 2026-06-19. Mantener métricas sincronizadas con resultados reales, costos LLM, <code>model_card.md</code>, <code>methodology.md</code> y desempeño por agente.</p>
+    <div class="frame footer-inner">
+      <p><strong>Mundial Predictor 2026</strong> es una demostración de arquitectura multiagente, evaluación continua y FinOps IA aplicada a un dominio real. No ofrece asesoría de apuestas ni garantiza resultados.</p>
+      <p>Revisión editorial · 2026-07-10</p>
     </div>
   </footer>
 
   <script>
-    const buttons = document.querySelectorAll('.tab-button');
-    const panels = document.querySelectorAll('.tab-panel');
-    buttons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const target = button.dataset.tab;
-        buttons.forEach((item) => item.setAttribute('aria-selected', String(item === button)));
-        panels.forEach((panel) => panel.classList.toggle('active', panel.id === target));
-      });
-    });
+    (function () {
+      var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var progress = document.getElementById('scrollProgress');
 
-    const costViews = {
-      phase: [
-        { label: 'Agent Debate System', value: 0.10, display: 'USD 0.08-0.10', note: '9 llamadas a DeepSeek Reasoner: 3 agentes x 3 rondas' },
-        { label: 'Narrator AI (bogotano)', value: 0.016, display: 'USD 0.016', note: '1 llamada DeepSeek; un dialecto en fase de grupos' },
-        { label: 'Predicciones + agentes LLM', value: 0.02, display: 'USD 0.01-0.02', note: 'hasta 2 especialistas por partido, según presupuesto y fase' }
-      ],
-      current: [
-        { label: 'Gasto operativo a hoy', value: 0.51, display: 'USD 0.51', note: 'incluye debates, narrativas y enriquecimientos ya ejecutados' },
-        { label: 'Ledger local revisado', value: 0.332464, display: 'USD 0.332464', note: 'subtotal registrado en logs/llm_costs.jsonl al momento de revisión' }
-      ],
-      forecast: [
-        { label: 'Ya gastado', value: 0.51, display: 'USD 0.51', note: 'corte operativo actual' },
-        { label: 'Restante bajo', value: 8.36, display: 'USD 8.36', note: '76 partidos x USD 0.11' },
-        { label: 'Restante alto', value: 10.64, display: 'USD 10.64', note: '76 partidos x USD 0.14' },
-        { label: 'Total final bajo', value: 8.87, display: 'USD 8.87', note: 'ya gastado + escenario bajo' },
-        { label: 'Total final alto', value: 11.15, display: 'USD 11.15', note: 'ya gastado + escenario alto' }
-      ],
-      model: [
-        { label: 'Grupos restantes — Flash/Chat', value: 1.54, display: 'USD 1.54', note: '44 partidos · Narrator AI + agentes ligeros' },
-        { label: 'Grupos restantes — Reasoner', value: 3.96, display: 'USD 3.96', note: '44 partidos · Agent Debate, 9 llamadas c/u' },
-        { label: 'Eliminatorias — Flash/Chat', value: 1.12, display: 'USD 1.12', note: '32 partidos · Narrator AI + agentes ligeros' },
-        { label: 'Eliminatorias — Reasoner', value: 2.88, display: 'USD 2.88', note: '32 partidos · Agent Debate, 9 llamadas c/u' }
-      ]
-    };
-
-    const agentStats = [
-      { label: 'Group Analyst', winPct: 100, exact: '1/4 exactos', note: 'la presión por puntos fue la señal más fuerte en J2' },
-      { label: 'Consensus', winPct: 75, exact: '0/4 exactos', note: 'mejoró estabilidad frente a agentes individuales' },
-      { label: 'Tactical Scout', winPct: 50, exact: '0/4 exactos', note: 'necesita ponderar más contexto reciente' },
-      { label: 'Sentiment Reader', winPct: 50, exact: '0/4 exactos', note: 'útil para ánimo, todavía ruidoso como predictor' }
-    ];
-
-    const learningPhases = [
-      {
-        key: 'j1',
-        title: 'J1 · Línea base',
-        subtitle: 'modelos ligeros y señales iniciales',
-        bullets: [
-          'DeepSeek ligero para narración y contexto: favoritos, localía, ELO y primera lectura del grupo.',
-          'El sistema evita gastar Reasoner cuando todavía no hay presión acumulada ni escenarios cruzados.',
-          'La evaluación inicial calibra qué resultados fueron realmente fuertes, normales o preocupantes.'
-        ]
-      },
-      {
-        key: 'j2',
-        title: 'J2 · Presión de puntos',
-        subtitle: 'más capacidad para presión, urgencia y margen de error',
-        bullets: [
-          'Muestra evaluada: 4 partidos con debate y resultado final.',
-          'Group Analyst va 4/4 en 1X2; Consensus va 3/4.',
-          'Sube el peso de agentes que entienden puntos, diferencia de gol, rival ganable y obligación de no quedar contra la pared.'
-        ]
-      },
-      {
-        key: 'j3',
-        title: 'J3 · Clasificación y mejores terceros',
-        subtitle: 'Reasoner para simultaneidad y escenarios cruzados',
-        bullets: [
-          'DeepSeek Reasoner se justifica porque aparecen clasificación directa, mejores terceros y partidos simultáneos.',
-          'No debe asumir información del otro partido del grupo si no existe input en vivo.',
-          'La métrica clave será si el debate mejora escenarios de supervivencia, no solo 1X2.'
-        ]
-      },
-      {
-        key: 'ko',
-        title: 'Eliminatorias · Alta varianza',
-        subtitle: 'Reasoner selectivo, no gasto automático',
-        bullets: [
-          'El core ML sigue entregando probabilidades base.',
-          'Reasoner se usa solo cuando el contexto lo amerita: bajas, fatiga, penales, presión o señales contradictorias.',
-          'La evaluación debe separar ganador en 90 minutos, clasificado y marcador exacto.'
-        ]
+      function updateProgress() {
+        var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        var value = scrollable > 0 ? window.scrollY / scrollable : 0;
+        progress.style.transform = 'scaleX(' + Math.min(1, Math.max(0, value)) + ')';
       }
-    ];
+      window.addEventListener('scroll', updateProgress, { passive: true });
+      updateProgress();
 
-    function usd(value) {
-      return `USD ${value.toFixed(6)}`;
-    }
-
-    function renderBars(targetId, rows, valueFormatter, valueKey = 'value') {
-      const target = document.getElementById(targetId);
-      if (!target) return;
-      const max = Math.max(...rows.map((row) => row[valueKey]), 1);
-      target.innerHTML = rows.map((row) => {
-        const width = Math.max(4, Math.round((row[valueKey] / max) * 100));
-        return `<div class="bar-row">
-          <div><div class="bar-label">${row.label}</div><div class="muted small">${row.note || ''}</div></div>
-          <div class="bar-track" aria-hidden="true"><span class="bar-fill" style="--w:${width}%"></span></div>
-          <div class="bar-value">${valueFormatter(row)}</div>
-        </div>`;
-      }).join('');
-    }
-
-    function renderCost(view) {
-      renderBars('costChart', costViews[view], (row) => row.display || usd(row.value));
-      document.querySelectorAll('[data-cost-view]').forEach((button) => {
-        button.classList.toggle('active', button.dataset.costView === view);
-      });
-    }
-
-    function renderAgents() {
-      renderBars('agentChart', agentStats, (row) => `${row.winPct}% 1X2<br><span class="muted small">${row.exact}</span>`, 'winPct');
-    }
-
-    function renderPhases(activeKey = 'j2') {
-      const list = document.getElementById('phaseList');
-      const insight = document.getElementById('phaseInsight');
-      if (!list || !insight) return;
-      list.innerHTML = learningPhases.map((phase) => `<button type="button" class="phase-item ${phase.key === activeKey ? 'active' : ''}" data-phase="${phase.key}">
-        <b>${phase.title}</b><span>${phase.subtitle}</span>
-      </button>`).join('');
-      const active = learningPhases.find((phase) => phase.key === activeKey) || learningPhases[0];
-      insight.innerHTML = `<h3>${active.title}</h3><p class="muted">${active.subtitle}</p><ul>${active.bullets.map((item) => `<li>${item}</li>`).join('')}</ul>`;
-      list.querySelectorAll('[data-phase]').forEach((button) => {
-        button.addEventListener('click', () => renderPhases(button.dataset.phase));
-      });
-    }
-
-    document.querySelectorAll('[data-cost-view]').forEach((button) => {
-      button.addEventListener('click', () => renderCost(button.dataset.costView));
-    });
-    renderCost('phase');
-    renderAgents();
-    renderPhases('j2');
-
-    // Scroll-reveal: marca cards, viz-shells y encabezados de sección para animar al entrar en viewport
-    document.querySelectorAll('.card, .viz-shell, .section-head, .hero-card').forEach((el) => {
-      el.setAttribute('data-reveal', '');
-    });
-    if ('IntersectionObserver' in window) {
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            revealObserver.unobserve(entry.target);
-          }
+      var revealItems = document.querySelectorAll('.reveal');
+      if (reducedMotion || !('IntersectionObserver' in window)) {
+        revealItems.forEach(function (item) { item.classList.add('is-visible'); });
+      } else {
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.14, rootMargin: '0px 0px -48px 0px' });
+        revealItems.forEach(function (item, index) {
+          item.style.setProperty('--delay', ((index % 3) * 70) + 'ms');
+          revealObserver.observe(item);
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-      document.querySelectorAll('[data-reveal]').forEach((el, i) => {
-        el.style.transitionDelay = `${Math.min(i % 6, 5) * 0.06}s`;
-        revealObserver.observe(el);
-      });
-    } else {
-      document.querySelectorAll('[data-reveal]').forEach((el) => el.classList.add('in-view'));
-    }
+      }
 
-    // Topbar: sombra sutil al hacer scroll (feedback de profundidad estilo Apple)
-    const topbar = document.querySelector('.topbar');
-    if (topbar) {
-      window.addEventListener('scroll', () => {
-        topbar.style.boxShadow = window.scrollY > 8 ? '0 12px 30px rgba(0,0,0,0.35)' : 'none';
-      }, { passive: true });
-    }
+      var countItems = document.querySelectorAll('[data-count]');
+      function animateCount(element) {
+        if (element.dataset.counted === 'true') return;
+        element.dataset.counted = 'true';
+        var target = Number(element.dataset.count);
+        if (reducedMotion) {
+          element.textContent = String(target);
+          return;
+        }
+        var startTime = performance.now();
+        function tick(now) {
+          var progressValue = Math.min(1, (now - startTime) / 900);
+          var eased = 1 - Math.pow(1 - progressValue, 3);
+          element.textContent = String(Math.round(target * eased));
+          if (progressValue < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      if ('IntersectionObserver' in window) {
+        var countObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              animateCount(entry.target);
+              countObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.65 });
+        countItems.forEach(function (item) { countObserver.observe(item); });
+      } else {
+        countItems.forEach(animateCount);
+      }
+
+      var phaseData = {
+        j1: {
+          eyebrow: 'Jornada 1 · línea base',
+          model: 'Chat / Flash',
+          title: 'Predecir sin memoria del torneo.',
+          description: 'La primera jornada mide talento, forma histórica y matchup. Todavía no existen puntos, urgencia ni caminos de clasificación que puedan justificar una lectura más costosa.',
+          history: 78,
+          pressure: 16,
+          scenario: 12,
+          voice: 'Benchmark ML + Tactical Scout',
+          objective: 'establecer la línea base'
+        },
+        j2: {
+          eyebrow: 'Jornada 2 · presión de puntos',
+          model: 'Debate selectivo',
+          title: 'Entender quién puede esperar y quién debe atacar.',
+          description: 'La tabla ya altera el comportamiento. Un empate puede servir, una derrota puede dejar al equipo contra la pared y la diferencia de gol empieza a cambiar el riesgo táctico.',
+          history: 58,
+          pressure: 72,
+          scenario: 46,
+          voice: 'Group Analyst + Tactical Scout',
+          objective: 'traducir urgencia en riesgo'
+        },
+        j3: {
+          eyebrow: 'Jornada 3 · simultaneidad',
+          model: 'DeepSeek Reasoner',
+          title: 'Razonar caminos de clasificación que cambian a la vez.',
+          description: 'Mejores terceros, diferencia de gol y partidos simultáneos convierten una predicción aislada en un problema de escenarios. Aquí el razonamiento extra sí paga.',
+          history: 42,
+          pressure: 88,
+          scenario: 96,
+          voice: 'Group Analyst + Reasoner',
+          objective: 'resolver supervivencia cruzada'
+        },
+        ko: {
+          eyebrow: 'Eliminatorias · alta varianza',
+          model: 'Oráculo + Reasoner',
+          title: 'Resolver la llave, no dejar un empate.',
+          description: 'El sistema separa 90 minutos, prórroga, penales y clasificado. El Cazador defiende al underdog; el Oráculo reúne especialistas de definición y entrega quién avanza.',
+          history: 66,
+          pressure: 94,
+          scenario: 82,
+          voice: 'Oráculo + Cazador de Sorpresas',
+          objective: 'decidir quién sigue vivo'
+        }
+      };
+
+      var phaseDisplay = document.getElementById('phaseDisplay');
+      function setPhase(key) {
+        var data = phaseData[key];
+        if (!data) return;
+        phaseDisplay.classList.add('is-changing');
+        window.setTimeout(function () {
+          document.getElementById('phaseEyebrow').textContent = data.eyebrow;
+          document.getElementById('phaseModel').textContent = data.model;
+          document.getElementById('phaseTitle').textContent = data.title;
+          document.getElementById('phaseDescription').textContent = data.description;
+          document.getElementById('historyValue').textContent = data.history + '%';
+          document.getElementById('pressureValue').textContent = data.pressure + '%';
+          document.getElementById('scenarioValue').textContent = data.scenario + '%';
+          document.getElementById('historyMeter').style.setProperty('--value', data.history + '%');
+          document.getElementById('pressureMeter').style.setProperty('--value', data.pressure + '%');
+          document.getElementById('scenarioMeter').style.setProperty('--value', data.scenario + '%');
+          document.getElementById('phaseVoice').textContent = data.voice;
+          document.getElementById('phaseObjective').textContent = data.objective;
+          phaseDisplay.classList.remove('is-changing');
+        }, reducedMotion ? 0 : 170);
+        document.querySelectorAll('[data-phase]').forEach(function (button) {
+          button.setAttribute('aria-selected', String(button.dataset.phase === key));
+        });
+      }
+      document.querySelectorAll('[data-phase]').forEach(function (button) {
+        button.addEventListener('click', function () { setPhase(button.dataset.phase); });
+      });
+
+      var archSteps = document.querySelectorAll('[data-arch-step]');
+      var archNodes = document.querySelectorAll('[data-arch-node]');
+      if ('IntersectionObserver' in window) {
+        var archObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var active = entry.target.dataset.archStep;
+            archNodes.forEach(function (node) {
+              node.classList.toggle('is-active', node.dataset.archNode === active);
+            });
+          });
+        }, { threshold: 0.5 });
+        archSteps.forEach(function (step) { archObserver.observe(step); });
+      }
+
+      var debateData = {
+        1: {
+          group: ['2–0', 'Francia necesita margen; Irak juega sin red.'],
+          tactical: ['3–0', 'La presión alta de Irak abre la transición francesa.'],
+          sentiment: ['2–1', 'Momentum francés; un gol de orgullo sigue vivo.'],
+          score: '2–0',
+          confidence: 68,
+          label: 'Hipótesis dominante',
+          note: 'Las tres voces convergen en victoria de Francia; difieren en el margen y el riesgo de conceder.'
+        },
+        2: {
+          group: ['2–0', 'Acepta la fragilidad iraquí, pero prioriza control y tabla.'],
+          tactical: ['3–0', 'Mantiene el marcador: el riesgo de Irak crea más espacios.'],
+          sentiment: ['2–1', 'Defiende que la urgencia todavía puede producir un gol aislado.'],
+          score: '2–0',
+          confidence: 73,
+          label: 'Después del rebate',
+          note: 'El desacuerdo se estrecha: cambia la confianza, no la dirección de la predicción.'
+        },
+        3: {
+          group: ['2–0', 'Cierra con victoria controlada y ventaja de clasificación.'],
+          tactical: ['3–0', 'La hipótesis de espacios permanece como señal más fuerte.'],
+          sentiment: ['2–1', 'Mantiene un riesgo pequeño de concesión por exceso de confianza.'],
+          score: '2–0',
+          confidence: 80,
+          label: 'Ajuste final',
+          note: 'Los agentes conservan diversidad de marcador y convergen con confianza 8/10.'
+        },
+        4: {
+          group: ['2–0', 'Presión + diferencia de gol.'],
+          tactical: ['3–0', 'Transición + defensa expuesta.'],
+          sentiment: ['2–1', 'Momentum + riesgo emocional.'],
+          score: '2–0',
+          confidence: 80,
+          label: 'Consensus final',
+          note: 'Victoria de Francia. La salida se congela y espera el resultado real para ser evaluada.'
+        }
+      };
+      function setDebateRound(round) {
+        var data = debateData[round];
+        document.getElementById('pickGroup').textContent = data.group[0];
+        document.getElementById('voiceGroup').textContent = data.group[1];
+        document.getElementById('pickTactical').textContent = data.tactical[0];
+        document.getElementById('voiceTactical').textContent = data.tactical[1];
+        document.getElementById('pickSentiment').textContent = data.sentiment[0];
+        document.getElementById('voiceSentiment').textContent = data.sentiment[1];
+        document.getElementById('consensusScore').textContent = data.score;
+        document.getElementById('consensusLabel').textContent = data.label;
+        document.getElementById('consensusNote').textContent = data.note;
+        document.getElementById('consensusRing').style.setProperty('--confidence', data.confidence + '%');
+        document.querySelectorAll('[data-round]').forEach(function (button) {
+          button.setAttribute('aria-pressed', String(button.dataset.round === String(round)));
+        });
+      }
+      document.querySelectorAll('[data-round]').forEach(function (button) {
+        button.addEventListener('click', function () { setDebateRound(Number(button.dataset.round)); });
+      });
+
+      var learningData = {
+        j1: {
+          label: 'J1 · 24/24 debates',
+          headline: 'Una línea base completa y auditable.',
+          summary: 'El backfill usa cutoff por fecha y mantiene cero resultados visibles para los partidos del mismo día.',
+          points: [
+            'Todos los registros quedan marcados como backfill; unknown = 0.',
+            'Tactical Scout lideró J1 con 54.2% de acierto 1X2.',
+            'La incertidumbre inicial limita cuánto contexto competitivo puede aportar un agente.'
+          ]
+        },
+        j2: {
+          label: 'J2 · presión de puntos',
+          headline: 'La tabla empezó a mover la predicción.',
+          summary: 'Los agentes ya pueden distinguir obligación de ganar, margen para empatar y exposición por diferencia de gol.',
+          points: [
+            'Cobertura completa: 24/24 debates con metadata de auditoría.',
+            'Group Analyst y Consensus cerraron la fase en 54.2%.',
+            'La urgencia se convierte en una señal táctica, no en una narración genérica.'
+          ]
+        },
+        j3: {
+          label: 'J3 · escenarios simultáneos',
+          headline: 'Más razonamiento solo cuando la combinatoria lo exige.',
+          summary: 'Reasoner entra por clasificación directa, mejores terceros y partidos que se juegan al mismo tiempo.',
+          points: [
+            'La información del otro partido no se asume si no existe input en vivo.',
+            'Tactical Scout alcanzó 71% y Consensus 63% en 1X2.',
+            'La evaluación observa supervivencia de grupo, no solo ganador del partido.'
+          ]
+        },
+        ko: {
+          label: 'KO · avance de llave',
+          headline: 'El empate dejó de ser una salida válida.',
+          summary: 'El core mantiene probabilidades; Cazador y Oráculo separan 90 minutos, prórroga, penales y clasificado.',
+          points: [
+            'El modelo ML lidera 16avos y octavos con 88% de precisión 1X2.',
+            'El Oráculo se reserva para cuartos, semifinales y final.',
+            'La muestra de agentes en knockout sigue incompleta por el apagón de CI.'
+          ]
+        }
+      };
+      function setLearning(key) {
+        var data = learningData[key];
+        document.getElementById('learningLabel').textContent = data.label;
+        document.getElementById('learningHeadline').textContent = data.headline;
+        document.getElementById('learningSummary').textContent = data.summary;
+        var points = document.getElementById('learningPoints');
+        points.innerHTML = '';
+        data.points.forEach(function (point) {
+          var item = document.createElement('li');
+          item.textContent = point;
+          points.appendChild(item);
+        });
+        document.querySelectorAll('[data-learning]').forEach(function (button) {
+          button.setAttribute('aria-selected', String(button.dataset.learning === key));
+        });
+      }
+      document.querySelectorAll('[data-learning]').forEach(function (button) {
+        button.addEventListener('click', function () { setLearning(button.dataset.learning); });
+      });
+
+      var drawTargets = [document.getElementById('accuracyChart'), document.getElementById('costBars')];
+      if ('IntersectionObserver' in window && !reducedMotion) {
+        var chartObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-drawn');
+              chartObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        drawTargets.forEach(function (target) { if (target) chartObserver.observe(target); });
+      } else {
+        drawTargets.forEach(function (target) { if (target) target.classList.add('is-drawn'); });
+      }
+
+      var canvas = document.getElementById('signalCanvas');
+      var context = canvas.getContext('2d');
+      var nodes = [];
+      var canvasWidth = 0;
+      var canvasHeight = 0;
+      var pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      var palette = ['#b9ff66', '#3d7dff', '#ff654f', '#ffda45', '#63ddb0'];
+
+      function resetCanvas() {
+        var rect = canvas.getBoundingClientRect();
+        canvasWidth = Math.max(1, rect.width);
+        canvasHeight = Math.max(1, rect.height);
+        canvas.width = Math.floor(canvasWidth * pixelRatio);
+        canvas.height = Math.floor(canvasHeight * pixelRatio);
+        context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        var count = canvasWidth < 700 ? 20 : 34;
+        nodes = Array.from({ length: count }, function (_, index) {
+          return {
+            x: canvasWidth * (0.38 + Math.random() * 0.62),
+            y: 80 + Math.random() * Math.max(120, canvasHeight - 160),
+            vx: (Math.random() - 0.5) * 0.18,
+            vy: (Math.random() - 0.5) * 0.18,
+            radius: index % 7 === 0 ? 5 : 2.4,
+            color: palette[index % palette.length]
+          };
+        });
+      }
+
+      function drawCanvas() {
+        context.clearRect(0, 0, canvasWidth, canvasHeight);
+        context.lineWidth = 1;
+        nodes.forEach(function (node, index) {
+          if (!reducedMotion) {
+            node.x += node.vx;
+            node.y += node.vy;
+            if (node.x < canvasWidth * 0.34 || node.x > canvasWidth - 20) node.vx *= -1;
+            if (node.y < 60 || node.y > canvasHeight - 45) node.vy *= -1;
+          }
+          for (var otherIndex = index + 1; otherIndex < nodes.length; otherIndex += 1) {
+            var other = nodes[otherIndex];
+            var dx = node.x - other.x;
+            var dy = node.y - other.y;
+            var distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 150) {
+              context.strokeStyle = 'rgba(255,255,255,' + ((1 - distance / 150) * 0.18) + ')';
+              context.beginPath();
+              context.moveTo(node.x, node.y);
+              context.lineTo(other.x, other.y);
+              context.stroke();
+            }
+          }
+          context.fillStyle = node.color;
+          context.globalAlpha = node.radius > 3 ? 0.92 : 0.56;
+          context.beginPath();
+          context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+          context.fill();
+          context.globalAlpha = 1;
+        });
+        if (!reducedMotion) requestAnimationFrame(drawCanvas);
+      }
+      resetCanvas();
+      drawCanvas();
+      window.addEventListener('resize', resetCanvas);
+    }());
   </script>
 </body>
 </html>

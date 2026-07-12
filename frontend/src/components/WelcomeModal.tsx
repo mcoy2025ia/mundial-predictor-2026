@@ -94,97 +94,56 @@ export default function WelcomeModal({ groupMatches, liveScores, bracket, onGoTo
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         onClick={() => setOpen(false)}
-        style={{
-          position: "fixed", inset: 0, zIndex: 200,
-          background: "rgba(8,6,10,0.72)", backdropFilter: "blur(3px)",
-          display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem",
-        }}
+        className="welcome-backdrop"
       >
         <motion.div
           initial={{ opacity: 0, y: 16, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.97 }} transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           onClick={(e) => e.stopPropagation()}
-          style={{
-            maxWidth: 440, width: "100%",
-            background: "var(--color-arena-card)", border: "1px solid rgba(212,168,67,0.25)",
-            borderRadius: 20, padding: "1.5rem", position: "relative",
-            boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
-          }}
+          className="welcome-panel"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="welcome-title"
         >
           <button
             onClick={() => setOpen(false)} aria-label="Cerrar"
-            style={{
-              position: "absolute", top: 12, right: 12, width: 28, height: 28, borderRadius: 8,
-              border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.04)",
-              color: "var(--color-ink-muted)", cursor: "pointer", fontSize: "0.9rem", lineHeight: 1,
-            }}
+            className="welcome-close"
           >
             ✕
           </button>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-            <span style={{ fontSize: "1.4rem" }}>🤖</span>
-            <span style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.6rem", letterSpacing: "0.14em",
-              textTransform: "uppercase", color: "var(--color-wc-gold)", fontWeight: 700,
-            }}>
-              {T.welcomeBadge}
-            </span>
+          <div className="welcome-heading">
+            <span className="welcome-code">AG</span>
+            <div>
+              <p>Evaluación multiagente · {phaseKey}</p>
+              <h2 id="welcome-title">{T.welcomeBadge}</h2>
+            </div>
           </div>
 
-          <p style={{
-            fontFamily: "var(--font-body)", fontSize: "0.92rem", lineHeight: 1.65,
-            color: "var(--color-ink-primary)", margin: 0,
-          }}>
+          <div className="welcome-metrics" aria-label="Resumen de agentes">
+            <div><span>Evaluadas</span><b>{agentSummary.played}</b></div>
+            <div><span>Precisión</span><b>{agentSummary.pct}%</b></div>
+            <div><span>Top agent</span><b>{bestAgent.pct}%</b><small>{bestAgent.name}</small></div>
+          </div>
+
+          <p className="welcome-copy">
             {T.welcomeIntro(agentSummary.played, agentSummary.pct, phaseKey)}{" "}
             {T.welcomeBestAgent(bestAgent.name, bestAgent.pct)}
           </p>
 
-          <div style={{
-            marginTop: "1rem", padding: "0.75rem 0.9rem", borderRadius: 12,
-            background: "rgba(212,168,67,0.07)", border: "1px solid rgba(212,168,67,0.18)",
-          }}>
-            <p style={{
-              fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.04em",
-              color: "var(--color-ink-secondary)", margin: 0, lineHeight: 1.7,
-            }}>
-              {T.welcomePath}
-            </p>
+          <div className="welcome-path">
+            <span>Benchmark</span><i>→</i><span>Agentes</span><i>→</i><span>Realidad</span>
+            <p>{T.welcomePath}</p>
           </div>
 
-          <div style={{ marginTop: "1.1rem", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-            <button
-              onClick={() => go(onGoToModel)}
-              style={{
-                width: "100%", padding: "0.85rem 1rem", borderRadius: 12,
-                border: "none", cursor: "pointer", fontFamily: "var(--font-body)", fontWeight: 800,
-                fontSize: "0.92rem", color: "#fff",
-                background: "linear-gradient(135deg, var(--color-wc-red), #ff4d5e)",
-                boxShadow: "0 8px 24px rgba(207,10,44,0.4)",
-              }}
-            >
+          <div className="welcome-actions">
+            <button onClick={() => go(onGoToModel)} className="welcome-primary">
               {T.welcomeCtaModel}
             </button>
-            <button
-              onClick={() => go(onGoToPredictor)}
-              style={{
-                width: "100%", padding: "0.6rem 1rem", borderRadius: 12,
-                border: "1px solid rgba(212,168,67,0.3)", cursor: "pointer",
-                fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.78rem",
-                color: "var(--color-wc-gold)", background: "rgba(212,168,67,0.05)",
-              }}
-            >
+            <button onClick={() => go(onGoToPredictor)} className="welcome-secondary">
               {T.welcomeCtaPredictor}
             </button>
-            <button
-              onClick={() => go(onGoToBracket)}
-              style={{
-                width: "100%", padding: "0.65rem 1rem", borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.12)", cursor: "pointer",
-                fontFamily: "var(--font-body)", fontWeight: 600, fontSize: "0.8rem",
-                color: "var(--color-ink-secondary)", background: "rgba(255,255,255,0.03)",
-              }}
-            >
+            <button onClick={() => go(onGoToBracket)} className="welcome-tertiary">
               {T.welcomeCtaBestThirds}
             </button>
           </div>

@@ -351,13 +351,12 @@ export default function ChatTab({ initialQuestion, groupMatches }: ChatTabProps 
           style={{
             background:
               streaming || !input.trim()
-                ? "rgba(212,168,67,0.15)"
-                : "linear-gradient(135deg, #D4A843, #F5CC6A)",
-            border: "none",
+                ? "rgba(185,255,102,0.10)"
+                : "#b9ff66",
+            border: streaming || !input.trim() ? "1px solid rgba(185,255,102,0.18)" : "1px solid #b9ff66",
             cursor: streaming || !input.trim() ? "not-allowed" : "pointer",
-            boxShadow:
-              streaming || !input.trim() ? "none" : "0 4px 14px rgba(212,168,67,0.3)",
-            color: streaming || !input.trim() ? "rgba(212,168,67,0.4)" : "#07070F",
+            boxShadow: "none",
+            color: streaming || !input.trim() ? "rgba(185,255,102,0.35)" : "#070908",
           }}
         >
           {streaming ? (

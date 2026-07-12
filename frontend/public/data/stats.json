@@ -1,7 +1,7 @@
 {
-  "total_matches": 1063,
-  "total_goals": 3033,
-  "avg_goals_all": 2.853,
+  "total_matches": 1064,
+  "total_goals": 3037,
+  "avg_goals_all": 2.854,
   "n_editions": 23,
   "highest_scoring_match": {
     "home_team": "Switzerland",
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 313,
-      "matches": 99,
-      "avg": 3.162
+      "total": 317,
+      "matches": 100,
+      "avg": 3.17
     }
   ],
   "best_avg_edition": {
@@ -193,11 +193,11 @@
     {
       "team": "Argentina",
       "flag": "🇦🇷",
-      "matches": 93,
-      "goals_for": 166,
-      "goals_against": 106,
-      "goal_diff": 60,
-      "avg": 1.78
+      "matches": 94,
+      "goals_for": 169,
+      "goals_against": 107,
+      "goal_diff": 62,
+      "avg": 1.8
     },
     {
       "team": "France",
@@ -332,7 +332,7 @@
       "favored": "South Korea",
       "winner": "Luxembourg",
       "elo_favored": 1982.0,
-      "elo_winner": 1073.0,
+      "elo_winner": 1074.0,
       "elo_advantage": 909.0,
       "flag_favored": "🇰🇷",
       "flag_winner": "🏳️"
@@ -443,7 +443,7 @@
       "away_score": 0,
       "favored": "Poland",
       "winner": "Moldova",
-      "elo_favored": 1912.0,
+      "elo_favored": 1911.0,
       "elo_winner": 1220.0,
       "elo_advantage": 691.0,
       "flag_favored": "🏳️",
@@ -459,6 +459,6 @@
     "goals_against": 35,
     "win_pct": 44.4,
     "elo_current": 2179.9,
-    "elo_rank": 8
+    "elo_rank": 7
   }
 }

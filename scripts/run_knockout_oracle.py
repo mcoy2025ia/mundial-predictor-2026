@@ -72,6 +72,24 @@ def _load_live_preds() -> dict[frozenset, dict]:
     return {}
 
 
+def _load_existing() -> list[dict]:
+    """Fusiona la cache local con la publicada; frontend prevalece si es mas nueva."""
+    by_key: dict[frozenset, dict] = {}
+    for path in (OUT_PATH, OUT_FRONTEND):
+        if not path.exists():
+            continue
+        try:
+            entries = json.loads(path.read_text(encoding="utf-8")).get("matches", [])
+        except (OSError, json.JSONDecodeError):
+            logger.warning("No se pudo leer la cache del Oraculo en %s", path)
+            continue
+        for entry in entries:
+            home, away = entry.get("home"), entry.get("away")
+            if home and away:
+                by_key[frozenset({bnorm(home), bnorm(away)})] = entry
+    return list(by_key.values())
+
+
 def _qual_label(row: dict) -> str:
     return {1: "1º de grupo", 2: "2º de grupo", 3: "mejor tercero"}.get(row["pos"], f"{row['pos']}º")
 
@@ -233,12 +251,7 @@ def main() -> None:
         print("[OK] No hay cruces de QF/SF/Final resueltos para analizar todavía.")
         return
 
-    # Cargar existentes (data/processed primero; si no, semilla publicada en frontend)
-    existing = []
-    for path in (OUT_PATH, OUT_FRONTEND):
-        if path.exists():
-            existing = json.loads(path.read_text(encoding="utf-8")).get("matches", [])
-            break
+    existing = _load_existing()
     done = {frozenset({bnorm(e["home"]), bnorm(e["away"])}) for e in existing if "error" not in e}
 
     oracle = KnockoutOracle()

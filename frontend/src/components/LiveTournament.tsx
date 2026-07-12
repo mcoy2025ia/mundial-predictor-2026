@@ -189,25 +189,15 @@ export default function LiveTournament({
 
       {/* ── Sub-navegación ── */}
       <motion.div variants={fadeUp}>
-        <div style={{
-          display: "flex", gap: 4,
-          background: "var(--surface-2)",
-          borderRadius: 12, padding: 4,
-          width: "fit-content",
-        }}>
+        <div className="section-switcher" role="tablist" aria-label="Vista del torneo en vivo">
           {SECTIONS.map(({ id, label }) => (
             <button
               key={id}
               onClick={() => switchSection(id)}
-              style={{
-                padding: "0.45rem 1.1rem", borderRadius: 9, cursor: "pointer",
-                fontFamily: "var(--font-mono)", fontSize: "0.6rem",
-                letterSpacing: "0.1em", textTransform: "uppercase",
-                fontWeight: 700, transition: "all 0.18s",
-                background: section === id ? "var(--wc-red)" : "transparent",
-                color: section === id ? "#fff" : "var(--text-muted)",
-                border: "none",
-              }}
+              type="button"
+              role="tab"
+              aria-selected={section === id}
+              className={`section-switch-btn ${section === id ? "active" : ""}`}
             >
               {label}
             </button>

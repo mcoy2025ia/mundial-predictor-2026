@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type {
   TeamInfo, Prediction, HistoricalMatch, SiteStats, FixedResults,
@@ -250,6 +250,7 @@ export default function Home() {
   const cycleLang = (dir: 1 | -1) =>
     setLang(LANGS[(langIdx + dir + LANGS.length) % LANGS.length].key);
   const footerBg = "var(--color-arena-deep)";
+  const modelPct = record.played ? Math.round((record.hits / record.played) * 100) : 0;
 
   return (
     /* Context provider: toda la app recibe el idioma activo */
@@ -269,69 +270,47 @@ export default function Home() {
         )}
 
         {/* ══ NAVBAR ══════════════════════════════════════════ */}
-        <nav className="navbar-wc">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: "80rem", margin: "0 auto" }}>
-            {/* Logo */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
-              {/* WC Trophy SVG icon */}
-              <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                <path d="M7 2h8l-1 11a5 5 0 01-6 0L7 2z" fill="url(#trophy-grad)"/>
-                <path d="M3 4c-2 3-1 6 2 7" stroke="#C9981F" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
-                <path d="M19 4c2 3 1 6-2 7" stroke="#C9981F" strokeWidth="1.4" strokeLinecap="round" fill="none"/>
-                <rect x="9" y="17" width="4" height="4" rx="0.5" fill="#C9981F" opacity="0.85"/>
-                <rect x="5.5" y="21" width="11" height="2.2" rx="1" fill="url(#trophy-base)"/>
-                <rect x="3.5" y="23" width="15" height="2" rx="1" fill="#C9981F" opacity="0.6"/>
-                <defs>
-                  <linearGradient id="trophy-grad" x1="7" y1="2" x2="15" y2="15" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#F5CC6A"/>
-                    <stop offset="1" stopColor="#C9981F"/>
-                  </linearGradient>
-                  <linearGradient id="trophy-base" x1="5.5" y1="21" x2="16.5" y2="23" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#C9981F"/>
-                    <stop offset="1" stopColor="#7A5C0F"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "0.28rem" }}>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(0.95rem, 2.5vw, 1.15rem)", letterSpacing: "0.08em", color: "var(--color-ink-primary)" }}>FIFA</span>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "clamp(0.95rem, 2.5vw, 1.15rem)", letterSpacing: "0.08em", color: "var(--color-wc-red)" }}>WC 2026</span>
-              </div>
-            </div>
+        <nav className="navbar-wc" aria-label="Barra principal">
+          <div className="shell-nav">
+            <button
+              type="button"
+              className="app-brand"
+              onClick={() => setTab("envivo")}
+              aria-label="Mundial Predictor 2026, ir a En Vivo"
+            >
+              <span className="app-brand-mark">26</span>
+              <span className="app-brand-copy">
+                <b>Mundial Predictor</b>
+                <small>Decision intelligence · live</small>
+              </span>
+            </button>
 
-            {/* Controls */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-              {/* Lang — desktop: 5 botones · móvil: ‹ activo › */}
-              <div className="hidden sm:flex" style={{ gap: "1px", background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "2px" }}>
+            <div className="nav-controls">
+              <div className="language-switch hidden sm:flex" role="group" aria-label="Seleccionar dialecto">
                 {LANGS.map(({ key, label }) => (
-                  <button key={key} onClick={() => setLang(key)} style={{
-                    fontFamily: "var(--font-mono)", fontSize: "0.58rem", letterSpacing: "0.06em",
-                    padding: "0.25rem 0.55rem",
-                    border: "none", borderRadius: 4, cursor: "pointer", minHeight: 28,
-                    background: lang === key ? "var(--color-wc-red)" : "transparent",
-                    color: lang === key ? "#fff" : "var(--color-ink-muted)",
-                    transition: "background 0.15s, color 0.15s",
-                  }}>{label}</button>
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setLang(key)}
+                    className={lang === key ? "language-option active" : "language-option"}
+                    aria-pressed={lang === key}
+                  >
+                    {label}
+                  </button>
                 ))}
               </div>
-              <div className="flex sm:hidden" style={{ alignItems: "center", background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "2px", gap: 0 }}>
-                <button onClick={() => cycleLang(-1)} aria-label="Dialecto anterior" style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.9rem", lineHeight: 1,
-                  padding: "0.2rem 0.45rem", border: "none", borderRadius: 4,
-                  background: "transparent", color: "var(--color-ink-muted)", cursor: "pointer", minHeight: 28,
-                }}>‹</button>
-                <span style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.62rem", letterSpacing: "0.06em",
-                  padding: "0 0.3rem", color: "#fff", minWidth: 32, textAlign: "center",
-                }}>{LANGS[langIdx].label}</span>
-                <button onClick={() => cycleLang(1)} aria-label="Dialecto siguiente" style={{
-                  fontFamily: "var(--font-mono)", fontSize: "0.9rem", lineHeight: 1,
-                  padding: "0.2rem 0.45rem", border: "none", borderRadius: 4,
-                  background: "transparent", color: "var(--color-ink-muted)", cursor: "pointer", minHeight: 28,
-                }}>›</button>
+              <div className="language-compact flex sm:hidden" role="group" aria-label="Cambiar dialecto">
+                <button type="button" onClick={() => cycleLang(-1)} aria-label="Dialecto anterior">‹</button>
+                <span>{LANGS[langIdx].label}</span>
+                <button type="button" onClick={() => cycleLang(1)} aria-label="Dialecto siguiente">›</button>
               </div>
-              {/* Theme toggle */}
-              <button onClick={() => setTheme(t => t === "dark" ? "light" : "dark")} className="theme-toggle" aria-label="Toggle theme">
-                {theme === "dark" ? "☀" : "☾"}
+              <button
+                type="button"
+                onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
+                className="theme-toggle"
+                aria-label={theme === "dark" ? "Activar tema claro" : "Activar tema oscuro"}
+              >
+                {theme === "dark" ? "☼" : "◐"}
               </button>
             </div>
           </div>
@@ -343,144 +322,88 @@ export default function Home() {
 
         {/* ══ HERO ══════════════════════════════════════════════ */}
         <header className="hero-brand">
-          {/* Aurora background */}
-          <div className="hero-aurora" aria-hidden />
+          <SignalCanvas />
+          <div className="hero-veil" aria-hidden />
 
-          <div style={{
-            position: "relative", zIndex: 1,
-            maxWidth: "80rem", margin: "0 auto",
-            padding: "clamp(2.25rem, 5vw, 3.5rem) clamp(1rem, 4vw, 1.5rem) 0",
-            display: "flex",
-            alignItems: "flex-end",
-            gap: "clamp(0.5rem, 2vw, 2rem)",
-          }}>
-            {/* Columna texto — ocupa todo el espacio disponible */}
-            <div style={{ flex: 1, minWidth: 0, paddingBottom: "clamp(1.75rem, 3vw, 2.5rem)" }}>
+          <div className="hero-shell">
+            <motion.div
+              className="hero-copy"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="hero-kicker">
+                <span className="live-dot" />
+                Cuartos de final · sistema activo
+              </div>
+              <h1>
+                <span>Mundial</span>
+                <span>Predictor <em>2026</em></span>
+              </h1>
+              <p>{S.subtitle}</p>
+              <div className="hero-status-row">
+                <TournamentStatus S={S} stats={liveStats} record={record} teams={teams} />
+              </div>
+            </motion.div>
 
-              {/* WC Logo + eyebrow row */}
-              <motion.div
-                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem", flexWrap: "wrap" }}
-              >
-                {/* Trophy icon — animated glow */}
-                <motion.div
-                  animate={{ boxShadow: ["0 0 12px rgba(201,152,31,0.2)", "0 0 32px rgba(201,152,31,0.55)", "0 0 12px rgba(201,152,31,0.2)"] }}
-                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                  style={{
-                    width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                    background: "linear-gradient(135deg, rgba(229,0,45,0.18) 0%, rgba(201,152,31,0.14) 50%, rgba(0,50,200,0.12) 100%)",
-                    border: "1px solid rgba(201,152,31,0.35)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}
-                >
-                  <svg width="26" height="30" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 2h10l-1.5 13a6 6 0 01-7 0L8 2z" fill="url(#hero-trophy)"/>
-                    <path d="M3.5 4.5C1 8 2 12 5.5 13.5" stroke="#F5CC6A" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
-                    <path d="M22.5 4.5C25 8 24 12 20.5 13.5" stroke="#F5CC6A" strokeWidth="1.6" strokeLinecap="round" fill="none"/>
-                    <rect x="11" y="19" width="4" height="4.5" rx="0.8" fill="#C9981F"/>
-                    <rect x="6.5" y="23.5" width="13" height="2.5" rx="1.2" fill="url(#hero-base)"/>
-                    <rect x="4" y="26" width="18" height="2.5" rx="1.2" fill="#7A5C0F" opacity="0.7"/>
-                    <ellipse cx="11" cy="8" rx="2" ry="1.2" fill="white" opacity="0.18"/>
-                    <defs>
-                      <linearGradient id="hero-trophy" x1="8" y1="2" x2="18" y2="17" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#FDEAAC"/>
-                        <stop offset="0.5" stopColor="#F5CC6A"/>
-                        <stop offset="1" stopColor="#C9981F"/>
-                      </linearGradient>
-                      <linearGradient id="hero-base" x1="6.5" y1="23.5" x2="19.5" y2="26" gradientUnits="userSpaceOnUse">
-                        <stop stopColor="#D4A843"/>
-                        <stop offset="1" stopColor="#7A5C0F"/>
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                </motion.div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.15rem" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span style={{
-                      fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.2em",
-                      color: "var(--color-wc-gold-bright)", textTransform: "uppercase",
-                    }}>FIFA WORLD CUP</span>
-                    <span style={{ width: 1, height: 8, background: "rgba(255,255,255,0.12)" }} />
-                    <span style={{
-                      fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.16em",
-                      color: "var(--color-ink-muted)", textTransform: "uppercase",
-                    }}>{S.eyebrow}</span>
-                  </div>
+            <motion.aside
+              className="decision-field"
+              initial={{ opacity: 0, x: 18 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.55, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              aria-label="Arquitectura de decisión activa"
+            >
+              <div className="decision-field-head">
+                <span>Decision layer</span>
+                <b>Live · QF</b>
+              </div>
+              <div className="decision-map">
+                <div className="decision-node node-model"><b>ML</b><span>ELO + Poisson + XGB</span></div>
+                <div className="decision-node node-agents"><b>AG</b><span>Agentes de contexto</span></div>
+                <div className="decision-node node-oracle"><b>OR</b><span>Oráculo KO</span></div>
+                <div className="decision-core">
+                  <span>{record.played ? modelPct : "—"}{record.played ? "%" : ""}</span>
+                  <small>precisión viva</small>
                 </div>
-
-                <div style={{ marginLeft: "auto", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
-                  <TournamentStatus S={S} stats={liveStats} record={record} teams={teams} />
-                </div>
-              </motion.div>
-
-              {/* H1 */}
-              <motion.h1
-                initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: 0.07, ease: [0.16, 1, 0.3, 1] }}
-                style={{ margin: 0, lineHeight: 0.9, letterSpacing: "-0.01em" }}
-              >
-                <span style={{ display: "block", fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 7.5vw, 5.5rem)", color: "var(--color-ink-primary)" }}>
-                  MUNDIAL
-                </span>
-                <span style={{ display: "block", fontFamily: "var(--font-display)", fontSize: "clamp(2.6rem, 7.5vw, 5.5rem)" }}>
-                  <span style={{ color: "var(--color-wc-red)" }}>2026</span>
-                  <span style={{ color: "rgba(255,255,255,0.18)", margin: "0 0.2em" }}>·</span>
-                  <span style={{ color: "var(--color-ink-primary)" }}>PREDICTOR</span>
-                </span>
-              </motion.h1>
-
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.2 }}
-                style={{
-                  fontFamily: "var(--font-body)", fontSize: "clamp(0.85rem, 1.4vw, 0.95rem)",
-                  lineHeight: 1.65, color: "var(--color-ink-secondary)",
-                  margin: "1rem 0 0", maxWidth: "42rem", fontWeight: 400,
-                }}
-              >{S.subtitle}</motion.p>
-
-            </div>
-
-            {/* Columna mascota — solo md+ */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/mascotas.webp"
-              alt=""
-              aria-hidden
-              className="hidden md:block"
-              style={{
-                flexShrink: 0,
-                alignSelf: "flex-end",
-                height: "clamp(160px, 24vw, 300px)",
-                width: "auto",
-                objectFit: "contain",
-                objectPosition: "bottom",
-                pointerEvents: "none",
-                userSelect: "none",
-              }}
-            />
+                <i className="decision-line line-one" aria-hidden />
+                <i className="decision-line line-two" aria-hidden />
+                <i className="decision-line line-three" aria-hidden />
+              </div>
+              <div className="decision-field-foot">
+                <span>Benchmark</span><span>Debate</span><span>Evaluación</span>
+              </div>
+            </motion.aside>
           </div>
 
-          <div className="accent-bar" />
+          <div className="hero-metric-rail">
+            <div><span>Partidos jugados</span><b>{liveStats.played || "—"}</b></div>
+            <div><span>Goles registrados</span><b>{liveStats.goals || "—"}</b></div>
+            <div><span>Modelo vs realidad</span><b>{record.played ? record.hits + "/" + record.played : "—"}</b></div>
+            <div><span>Debates publicados</span><b>100</b></div>
+          </div>
         </header>
 
         {/* ══ TABS ════════════════════════════════════════════ */}
-        <div className="tab-nav-bar" style={{ position: "sticky", top: 52, zIndex: 40 }}>
-          <div style={{ maxWidth: "80rem", margin: "0 auto", padding: "0 1.5rem", display: "flex", overflowX: "auto" }} className="scrollbar-hide">
-            {S.tabs.map((t) => (
-              <button key={t.id} onClick={() => setTab(t.id as TabId)}
-                className={`tab-btn ${tab === t.id ? "active" : ""}`}>
-                {t.label}
+        <div className="tab-nav-bar">
+          <div className="app-tab-list scrollbar-hide" role="tablist" aria-label="Secciones del producto">
+            {S.tabs.map((item, index) => (
+              <button
+                key={item.id}
+                type="button"
+                role="tab"
+                aria-selected={tab === item.id}
+                onClick={() => setTab(item.id as TabId)}
+                className={`tab-btn ${tab === item.id ? "active" : ""}`}
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {item.label}
               </button>
             ))}
           </div>
         </div>
 
         {/* ══ CONTENIDO ═══════════════════════════════════════ */}
-        <main style={{ maxWidth: "72rem", margin: "0 auto", padding: "clamp(1.25rem, 4vw, 2.5rem) clamp(0.75rem, 4vw, 1.5rem) 5rem" }}>
+        <main className="app-main">
           {loading ? (
             <LoadingState label={S.loading} />
           ) : (
@@ -542,30 +465,109 @@ export default function Home() {
         </main>
 
         {/* ══ FOOTER ══════════════════════════════════════════ */}
-        <footer>
-          <div className="accent-bar" />
-          <div style={{ background: footerBg, padding: "1.25rem clamp(1rem, 4vw, 1.5rem)", transition: "background 0.3s" }}>
-            <div style={{ maxWidth: "80rem", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.6rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.8rem", letterSpacing: "0.1em", color: "var(--color-ink-muted)" }}>FIFA WC</span>
-                <span style={{ fontFamily: "var(--font-display)", fontSize: "0.8rem", letterSpacing: "0.1em", color: "var(--color-wc-red)" }}>2026</span>
-                <span style={{ width: 1, height: 10, background: "rgba(255,255,255,0.08)" }} />
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", letterSpacing: "0.08em", color: "var(--color-ink-muted)", textTransform: "uppercase", opacity: 0.6 }}>Predictor</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", flexWrap: "wrap" }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.52rem", letterSpacing: "0.08em", color: "var(--color-wc-gold)", textTransform: "uppercase" }}>
-                  Manuel Coy · AI Data Strategist
-                </span>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.5rem", color: "var(--color-ink-muted)", opacity: 0.45 }}>
-                  · {S.footerNote}
-                </span>
-              </div>
+        <footer className="app-footer" style={{ background: footerBg }}>
+          <div className="app-footer-inner">
+            <div className="app-footer-brand"><span>26</span><b>Mundial Predictor</b></div>
+            <p>Modelo, agentes y realidad en el mismo marcador.</p>
+            <div className="app-footer-meta">
+              <b>Manuel Coy · AI Data Strategist</b>
+              <span>{S.footerNote}</span>
             </div>
           </div>
         </footer>
       </div>
     </LangContext.Provider>
   );
+}
+
+function SignalCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvasElement = canvasRef.current;
+    if (!canvasElement) return;
+    const canvas: HTMLCanvasElement = canvasElement;
+    const drawingContext = canvas.getContext("2d");
+    if (!drawingContext) return;
+    const context: CanvasRenderingContext2D = drawingContext;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const palette = ["#b9ff66", "#3d7dff", "#ff654f", "#ffda45", "#63ddb0"];
+    let nodes: Array<{ x: number; y: number; vx: number; vy: number; radius: number; color: string }> = [];
+    let width = 1;
+    let height = 1;
+    let animationFrame = 0;
+
+    function resize() {
+      const bounds = canvas.getBoundingClientRect();
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = Math.max(1, bounds.width);
+      height = Math.max(1, bounds.height);
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      const count = width < 720 ? 20 : 34;
+      nodes = Array.from({ length: count }, (_, index) => ({
+        x: width * (0.34 + Math.random() * 0.64),
+        y: 30 + Math.random() * Math.max(80, height - 60),
+        vx: (Math.random() - 0.5) * 0.16,
+        vy: (Math.random() - 0.5) * 0.16,
+        radius: index % 8 === 0 ? 4.5 : 2.2,
+        color: palette[index % palette.length],
+      }));
+    }
+
+    function draw() {
+      context.clearRect(0, 0, width, height);
+      nodes.forEach((node, index) => {
+        if (!reducedMotion) {
+          node.x += node.vx;
+          node.y += node.vy;
+          if (node.x < width * 0.31 || node.x > width - 16) node.vx *= -1;
+          if (node.y < 18 || node.y > height - 18) node.vy *= -1;
+        }
+
+        for (let otherIndex = index + 1; otherIndex < nodes.length; otherIndex += 1) {
+          const other = nodes[otherIndex];
+          const deltaX = node.x - other.x;
+          const deltaY = node.y - other.y;
+          const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+          if (distance < 135) {
+            context.strokeStyle = "rgba(255,255,255," + ((1 - distance / 135) * 0.16) + ")";
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(node.x, node.y);
+            context.lineTo(other.x, other.y);
+            context.stroke();
+          }
+        }
+
+        context.globalAlpha = node.radius > 3 ? 0.9 : 0.5;
+        context.fillStyle = node.color;
+        context.beginPath();
+        context.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        context.fill();
+        context.globalAlpha = 1;
+      });
+
+      if (!reducedMotion) animationFrame = window.requestAnimationFrame(draw);
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+      if (reducedMotion) draw();
+    });
+    resizeObserver.observe(canvas);
+    resize();
+    draw();
+
+    return () => {
+      resizeObserver.disconnect();
+      window.cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="hero-signal-canvas" aria-hidden="true" />;
 }
 
 /* ── Aviso de fuente en vivo ──
@@ -600,7 +602,7 @@ function LiveSourceBanner({
   const dot    = degraded ? "#C9981F" : "#C92A2A";
 
   return (
-    <div role="status" aria-live="polite" style={{
+    <div className="live-source-banner" role="status" aria-live="polite" style={{
       display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
       maxWidth: "80rem", margin: "0 auto", padding: "0.4rem 1rem",
       background: bg, borderBottom: `1px solid ${border}`,

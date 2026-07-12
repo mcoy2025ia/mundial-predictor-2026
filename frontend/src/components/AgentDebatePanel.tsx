@@ -495,10 +495,10 @@ export default function AgentDebatePanel({
 
   if (variant === 'compact') {
     return (
-      <details className="bg-blue-50 border border-blue-200 rounded-lg mt-4 group">
+      <details className="agent-debate agent-debate-compact mt-4 group">
         <summary className="cursor-pointer list-none px-4 py-2.5 flex items-center justify-between">
-          <span className="font-semibold text-blue-900 text-sm">🤖 Análisis de Agentes Expertos</span>
-          <span className="text-xs text-blue-600 flex items-center gap-1">
+          <span className="agent-debate-title font-semibold text-sm">AG · Análisis de agentes expertos</span>
+          <span className="agent-debate-open text-xs flex items-center gap-1">
             Ver detalle
             <span className="inline-block transition-transform group-open:rotate-180">▾</span>
           </span>
@@ -519,13 +519,13 @@ export default function AgentDebatePanel({
 
   // Variant: full (para en vivo)
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-300 rounded-lg p-5 my-4">
+    <div className="agent-debate agent-debate-full p-5 my-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-lg text-blue-900">
-          {hasDebate ? '🤖 Debate de 3 Agentes Expertos' : '🔮 Análisis de Eliminatorias'}
+        <h3 className="font-bold text-lg agent-debate-title">
+          {hasDebate ? 'AG · Debate de 3 agentes expertos' : 'KO · Análisis de eliminatorias'}
         </h3>
         {(homeRow || awayRow) && (
-          <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded">
+          <span className="text-xs agent-debate-score px-2 py-1 rounded">
             {homeRow?.pts ?? '–'} pts vs {awayRow?.pts ?? '–'} pts
           </span>
         )}

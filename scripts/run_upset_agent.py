@@ -57,6 +57,24 @@ def _load_live_preds() -> dict[frozenset, dict]:
     return {}
 
 
+def _load_existing() -> list[dict]:
+    """Fusiona la cache local con la publicada; frontend prevalece si es mas nueva."""
+    by_key: dict[frozenset, dict] = {}
+    for path in (OUT_PATH, OUT_FRONTEND):
+        if not path.exists():
+            continue
+        try:
+            entries = json.loads(path.read_text(encoding="utf-8")).get("upsets", [])
+        except (OSError, json.JSONDecodeError):
+            logger.warning("No se pudo leer la cache de sorpresas en %s", path)
+            continue
+        for entry in entries:
+            home, away = entry.get("home"), entry.get("away")
+            if home and away:
+                by_key[frozenset({bnorm(home), bnorm(away)})] = entry
+    return list(by_key.values())
+
+
 def _qual_label(row: dict) -> str:
     return {1: "1º de grupo", 2: "2º de grupo", 3: "mejor tercero"}.get(row["pos"], f"{row['pos']}º")
 
@@ -98,10 +116,7 @@ def main() -> None:
             for s in resolved.values() if s.get("resolved")
         ]
 
-    # Cargar existentes
-    existing = []
-    if OUT_PATH.exists():
-        existing = json.loads(OUT_PATH.read_text(encoding="utf-8")).get("upsets", [])
+    existing = _load_existing()
     done = {frozenset({bnorm(e["home"]), bnorm(e["away"])}) for e in existing}
 
     hunter = UpsetHunter()

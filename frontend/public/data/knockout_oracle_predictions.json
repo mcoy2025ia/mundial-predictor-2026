@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T18:16:57.629933+00:00",
+  "generated_at": "2026-07-12T06:18:05.471131+00:00",
   "agent": "Oráculo de Eliminatorias",
   "rounds": [
     "Final",
@@ -14,7 +14,7 @@
     "Especialista en Definiciones",
     "Consenso"
   ],
-  "n": 3,
+  "n": 5,
   "matches": [
     {
       "match": "Spain vs Belgium",
@@ -342,6 +342,273 @@
         "_analysis": "Argentina llega como favorito tras un torneo impecable y un historial directo abrumador. Suiza mostró fisuras defensivas ante rivales débiles, y aunque compite, la profundidad ofensiva argentina y la experiencia en eliminatorias deciden en 90 minutos. Los cuatro analistas coinciden en un 2-1 sin necesidad de alargues."
       },
       "generated_at": "2026-07-10T18:16:57.629933+00:00"
+    },
+    {
+      "match": "France vs Spain",
+      "home": "France",
+      "away": "Spain",
+      "round": "Semi-final",
+      "model": {
+        "favorite": "Spain",
+        "fav_prob": 0.4075
+      },
+      "panel": [
+        {
+          "agente": "Group Analyst",
+          "especialidad": "campaña y regularidad en el torneo",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 0
+          },
+          "habra_tiempo_extra": false,
+          "marcador_120_minutos": null,
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "France",
+          "fase_de_definicion": "90_minutos",
+          "conviccion": "media",
+          "explicacion": "Francia llega perfecta, con defensa férrea y localía. España cedió un empate en grupos. Los 'bleus' definen en tiempo reglamentario.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "Francia ha sido implacable en el torneo: pleno de victorias, solidez defensiva (solo 2 goles encajados en 6 partidos) y pegada constante. España, aunque invicta, mostró una ligera fisura al empatar con Cabo Verde en grupos. Con el factor local y un ritmo ofensivo superior, Francia puede romper el equilibrio en los 90 minutos."
+        },
+        {
+          "agente": "Tactical Scout",
+          "especialidad": "táctica, transiciones y balón parado",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 0
+          },
+          "habra_penaltis": false,
+          "resultado_penaltis": null,
+          "equipo_clasificado": "France",
+          "fase_de_definicion": "tiempo_extra",
+          "conviccion": "media",
+          "explicacion": "Partido táctico y cerrado. Francia aprovecha su solidez defensiva y transiciones rápidas para romper el empate en la prórroga, mientras España no encuentra espacios. Localía inclina la balanza.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": "Francia y España llegan con defensas sólidas y gran forma. En un partido de alta tensión táctica, las transiciones rápidas de Francia y su presión alta pueden desequilibrar el control de España. La igualdad defensiva sugiere un marcador cerrado que se decide en tiempo extra, donde la profundidad de banca y el factor local favorecen a Francia."
+        },
+        {
+          "agente": "Sentiment Reader",
+          "especialidad": "psicología, momentum y temple",
+          "marcador_90_minutos": {
+            "equipo_local": 0,
+            "equipo_visitante": 0
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_penaltis": true,
+          "resultado_penaltis": {
+            "equipo_local": 3,
+            "equipo_visitante": 4
+          },
+          "equipo_clasificado": "Spain",
+          "fase_de_definicion": "penaltis",
+          "conviccion": "media",
+          "explicacion": "Ambos llegan con racha impecable y defensas sólidas; la tensión de la semifinal y el historial de penaltis equilibrado apuntan a una definición desde los once metros, donde España muestra mayor temple reciente.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Ambos equipos llegan con un momentum imparable y defensas sólidas. La presión de la semifinal y el escenario local para Francia pueden generar ansiedad, mientras que España muestra temple tras victorias ajustadas. El historial de penaltis es equilibrado, pero la experiencia reciente en tandas pesa. Espero un partido muy táctico, con empate en 90' que se resolvería en penaltis donde España podría tener ligera ventaja psicológica."
+        },
+        {
+          "agente": "Especialista en Definiciones",
+          "especialidad": "prórroga y penales",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_penaltis": true,
+          "resultado_penaltis": {
+            "equipo_local": 4,
+            "equipo_visitante": 3
+          },
+          "equipo_clasificado": "France",
+          "fase_de_definicion": "penaltis",
+          "conviccion": "alta",
+          "explicacion": "Partido muy igualado con defensas sólidas y ataques eficaces. El empate en 90' es probable, y la fatiga en prórroga favorece penales donde Francia aprovecha su afición.",
+          "valido": true,
+          "predicted_winner": "home",
+          "_analysis": ""
+        }
+      ],
+      "consensus": {
+        "agente": "Consenso",
+        "especialidad": "veredicto reconciliado del panel",
+        "marcador_90_minutos": {
+          "equipo_local": 1,
+          "equipo_visitante": 1
+        },
+        "habra_tiempo_extra": true,
+        "marcador_120_minutos": {
+          "equipo_local": 1,
+          "equipo_visitante": 1
+        },
+        "habra_penaltis": true,
+        "resultado_penaltis": {
+          "equipo_local": 4,
+          "equipo_visitante": 3
+        },
+        "equipo_clasificado": "France",
+        "fase_de_definicion": "penaltis",
+        "conviccion": "media",
+        "explicacion": "Partido muy táctico y cerrado. Empate en 90' y prórroga sin goles. Penaltis donde Francia impone su localía y mejor tanda reciente.",
+        "valido": true,
+        "predicted_winner": "home",
+        "_analysis": "El partido presenta una igualdad máxima: ambas selecciones llegan invictas, con defensas sólidas y ataques eficaces. La localía de Francia y su reciente éxito en penales (victoria ante Portugal en 2024) inclinan la balanza en una definición desde los once metros, donde el apoyo del público puede ser decisivo. El empate en 90' es el escenario más probable ante la solidez defensiva de ambos."
+      },
+      "generated_at": "2026-07-12T06:17:11.079201+00:00"
+    },
+    {
+      "match": "England vs Argentina",
+      "home": "England",
+      "away": "Argentina",
+      "round": "Semi-final",
+      "model": {
+        "favorite": "Argentina",
+        "fav_prob": 0.3527
+      },
+      "panel": [
+        {
+          "agente": "Group Analyst",
+          "especialidad": "campaña y regularidad en el torneo",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_penaltis": true,
+          "resultado_penaltis": {
+            "equipo_local": 3,
+            "equipo_visitante": 4
+          },
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "penaltis",
+          "conviccion": "media",
+          "explicacion": "Ambos equipos muestran regularidad ofensiva pero defensas sólidas. Argentina tiene mejor ELO y experiencia en penales, mientras England juega local. Se espera empate en 90', sin goles en prórroga, y Argentina impone su historial en penales.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "**Análisis desde Group Analyst:**  \nAmbos equipos llegan invictos y con buena regularidad ofensiva, pero Argentina muestra mayor pegada (2.8 goles/partido) y mejor rendimiento en penales históricos (15-8). England cuenta con la ventaja local y una defensa más sólida (0.8 goles recibidos), aunque su historial en tandas es negativo (4-8). La diferencia de ELO y la tendencia a partidos cerrados en eliminatorias sugieren un empate en 90’, definición por penales donde Argentina tiene ventaja."
+        },
+        {
+          "agente": "Tactical Scout",
+          "especialidad": "táctica, transiciones y balón parado",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_penaltis": true,
+          "resultado_penaltis": {
+            "equipo_local": 3,
+            "equipo_visitante": 4
+          },
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "penaltis",
+          "conviccion": "media",
+          "explicacion": "Partido muy táctico, con pocos espacios. Argentina define en penales por su experiencia histórica y mayor efectividad en tandas.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Inglaterra presiona alto con bloque medio compacto, pero Argentina explota transiciones rápidas con Messi y Álvarez. En balón parado, ambos son peligrosos: Argentina marca más, Inglaterra defiende bien. La fatiga es similar; el historial en penales favorece a Argentina. La tendencia a proteger el empate lleva a prórroga y penales."
+        },
+        {
+          "agente": "Sentiment Reader",
+          "especialidad": "psicología, momentum y temple",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_penaltis": true,
+          "resultado_penaltis": {
+            "equipo_local": 3,
+            "equipo_visitante": 4
+          },
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "penaltis",
+          "conviccion": "media",
+          "explicacion": "Partido muy igualado; ambos equipos llegan con momentum pero Argentina tiene mejor historial de penales y más temple en eliminatorias, definiendo desde los once metros.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Análisis desde Sentiment Reader: Argentina llega con una racha perfecta de 5 victorias, mostrando temple en remontadas y capacidad de manejar presión. England también viene fuerte pero con un empate ante un rival menor, lo que revela cierta fragilidad psicológica. El historial de penales favorece ampliamente a Argentina, que ha ganado tandas decisivas recientemente, mientras England carga con más derrotas. Dada la igualdad en 90 minutos y la tendencia a empates en el H2H, es probable que el partido se alargue hasta los penales, donde Argentina impondrá su experiencia y confianza."
+        },
+        {
+          "agente": "Especialista en Definiciones",
+          "especialidad": "prórroga y penales",
+          "marcador_90_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_tiempo_extra": true,
+          "marcador_120_minutos": {
+            "equipo_local": 1,
+            "equipo_visitante": 1
+          },
+          "habra_penaltis": true,
+          "resultado_penaltis": {
+            "equipo_local": 3,
+            "equipo_visitante": 4
+          },
+          "equipo_clasificado": "Argentina",
+          "fase_de_definicion": "penaltis",
+          "conviccion": "alta",
+          "explicacion": "Partido muy parejo, con defensas sólidas. Argentina tiene mejor historial en penales y un portero determinante, lo que inclina la balanza en una tanda larga.",
+          "valido": true,
+          "predicted_winner": "away",
+          "_analysis": "Análisis: Partido muy equilibrado entre dos potencias. Argentina muestra mayor pegada y solidez en penales, mientras England tiene portería fiable. La igualdad sugiere que el encuentro se decidirá en una tanda de penales, donde la experiencia argentina es superior. Poco probable que se resuelva en 90 minutos."
+        }
+      ],
+      "consensus": {
+        "agente": "Consenso",
+        "especialidad": "veredicto reconciliado del panel",
+        "marcador_90_minutos": {
+          "equipo_local": 1,
+          "equipo_visitante": 1
+        },
+        "habra_tiempo_extra": true,
+        "marcador_120_minutos": {
+          "equipo_local": 1,
+          "equipo_visitante": 1
+        },
+        "habra_penaltis": true,
+        "resultado_penaltis": {
+          "equipo_local": 3,
+          "equipo_visitante": 4
+        },
+        "equipo_clasificado": "Argentina",
+        "fase_de_definicion": "penaltis",
+        "conviccion": "alta",
+        "explicacion": "Empate táctico en 90' y prórroga. Argentina impone su superioridad histórica en penales con portero determinante y mayor temple.",
+        "valido": true,
+        "predicted_winner": "away",
+        "_analysis": "Este es un duelo de élites con defensas sólidas y ataques efectivos. Argentina tiene mejor ELO y un historial de penales impecable, mientras que Inglaterra juega local pero muestra menos contundencia en tandas. Los cuatro analistas coinciden en un empate cerrado que se definirá desde los once metros, donde la experiencia argentina y su portero marcan la diferencia."
+      },
+      "generated_at": "2026-07-12T06:18:05.470130+00:00"
     }
   ]
 }
