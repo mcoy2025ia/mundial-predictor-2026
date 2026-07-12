@@ -347,30 +347,41 @@ export default function Home() {
             </motion.div>
 
             <motion.aside
-              className="decision-field"
+              className="hero-world-stage"
               initial={{ opacity: 0, x: 18 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.55, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
               aria-label="Arquitectura de decisión activa"
             >
-              <div className="decision-field-head">
-                <span>Decision layer</span>
-                <b>Live · QF</b>
-              </div>
-              <div className="decision-map">
-                <div className="decision-node node-model"><b>ML</b><span>ELO + Poisson + XGB</span></div>
-                <div className="decision-node node-agents"><b>AG</b><span>Agentes de contexto</span></div>
-                <div className="decision-node node-oracle"><b>OR</b><span>Oráculo KO</span></div>
-                <div className="decision-core">
-                  <span>{record.played ? modelPct : "—"}{record.played ? "%" : ""}</span>
-                  <small>precisión viva</small>
+              <div className="host-ribbon" aria-hidden><i /><i /><i /></div>
+              <div className="mascot-stage">
+                <div className="mascot-stage-copy">
+                  <span>United by football</span>
+                  <b>CAN · MEX · USA</b>
                 </div>
-                <i className="decision-line line-one" aria-hidden />
-                <i className="decision-line line-two" aria-hidden />
-                <i className="decision-line line-three" aria-hidden />
+                <img src="/images/mascotas.webp" alt="Maple, Zayu y Clutch, mascotas oficiales del Mundial 2026" />
+                <div className="mascot-stage-caption"><b>Maple</b><b>Zayu</b><b>Clutch</b></div>
               </div>
-              <div className="decision-field-foot">
-                <span>Benchmark</span><span>Debate</span><span>Evaluación</span>
+              <div className="decision-field">
+                <div className="decision-field-head">
+                  <span>Decision layer</span>
+                  <b>Live · QF</b>
+                </div>
+                <div className="decision-map">
+                  <div className="decision-node node-model"><b>ML</b><span>ELO + Poisson + XGB</span></div>
+                  <div className="decision-node node-agents"><b>AG</b><span>Agentes de contexto</span></div>
+                  <div className="decision-node node-oracle"><b>OR</b><span>Oráculo KO</span></div>
+                  <div className="decision-core">
+                    <span>{record.played ? modelPct : "—"}{record.played ? "%" : ""}</span>
+                    <small>precisión viva</small>
+                  </div>
+                  <i className="decision-line line-one" aria-hidden />
+                  <i className="decision-line line-two" aria-hidden />
+                  <i className="decision-line line-three" aria-hidden />
+                </div>
+                <div className="decision-field-foot">
+                  <span>Benchmark</span><span>Debate</span><span>Evaluación</span>
+                </div>
               </div>
             </motion.aside>
           </div>
