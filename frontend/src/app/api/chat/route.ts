@@ -176,6 +176,7 @@ function loadRagIndex(): RagChunk[] {
 // ─────────────────────────────────────────────────────────────────────────────
 interface GroupMatch { date: string; round: string; ground: string; team1: string; team2: string; team1_flag: string; team2_flag: string; t1_win: number; draw: number; t2_win: number }
 interface StandingEntry { team: string; flag: string; first: number; second: number }
+interface MatchResult { date: string; home_team: string; away_team: string; home_score: number; away_score: number; outcome?: string; year?: number }
 interface LivePrediction {
   home_team: string;
   away_team: string;
@@ -194,6 +195,7 @@ interface LivePrediction {
 let _groupMatches: Record<string, GroupMatch[]> | null = null;
 let _groupStandings: Record<string, StandingEntry[]> | null = null;
 let _livePredictions: LivePrediction[] | null = null;
+let _matchResults: MatchResult[] | null = null;
 
 function loadGroupMatches(): Record<string, GroupMatch[]> {
   if (_groupMatches) return _groupMatches;
@@ -219,6 +221,14 @@ function loadLivePredictions(): LivePrediction[] {
   return _livePredictions!;
 }
 
+function loadMatchResults(): MatchResult[] {
+  if (_matchResults) return _matchResults;
+  const p = join(process.cwd(), "public", "data", "matches.json");
+  try { _matchResults = JSON.parse(readFileSync(p, "utf-8")); }
+  catch { _matchResults = []; }
+  return _matchResults!;
+}
+
 function dateInTournamentTimeZone(value?: string): string {
   if (!value) return "";
   const d = new Date(value.endsWith("Z") ? value : `${value}Z`);
@@ -228,6 +238,39 @@ function dateInTournamentTimeZone(value?: string): string {
 
 function fmtPct(n: number): string {
   return `${Math.round(n * 1000) / 10}%`;
+}
+
+function normalizeTeamName(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function resultLineForTeam(match: MatchResult, team: string): string {
+  const isHome = match.home_team === team;
+  const gf = isHome ? match.home_score : match.away_score;
+  const ga = isHome ? match.away_score : match.home_score;
+  const opponent = isHome ? match.away_team : match.home_team;
+  const verdict = gf > ga ? "gano" : gf < ga ? "perdio" : "empato";
+  return `${match.date}: ${team} ${gf}-${ga} ${opponent} (${verdict})`;
+}
+
+function teamLost(match: MatchResult, team: string): boolean {
+  if (match.home_team === team) return match.home_score < match.away_score;
+  if (match.away_team === team) return match.away_score < match.home_score;
+  return false;
+}
+
+function detectTeamsInMessage(message: string, allTeams: string[]): string[] {
+  const normalizedMessage = normalizeTeamName(message);
+  return allTeams
+    .filter((team) => {
+      const normalizedTeam = normalizeTeamName(team);
+      return new RegExp(`(^|[^a-z])${normalizedTeam.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z]|$)`).test(normalizedMessage);
+    })
+    .sort((a, b) => b.length - a.length)
+    .slice(0, 3);
 }
 
 function livePredictionLine(p: LivePrediction, localDate = dateInTournamentTimeZone(p.kickoff)): string {
@@ -241,6 +284,65 @@ function livePredictionLine(p: LivePrediction, localDate = dateInTournamentTimeZ
     ? ` | Agentes: ${Object.entries(p.agent_notes).map(([k, v]) => `${k}: ${v}`).join(" ; ")}`
     : "";
   return `${localDate} ${p.group ?? ""}: ${p.home_team} vs ${p.away_team} - ${p.venue ?? "sede ?"} - Modelo vivo ${p.model ?? "live"}: ${p.home_team} ${fmtPct(p.p_home)}, Empate ${fmtPct(p.p_draw)}, ${p.away_team} ${fmtPct(p.p_away)} (${p.round ?? ""})${pressure}${simultaneous}${thirds}${agents}`;
+}
+
+function buildRequestedTeamContext(
+  message: string,
+  today: string,
+  groupMatches: Record<string, GroupMatch[]>,
+  standings: Record<string, StandingEntry[]>,
+  livePredictions: LivePrediction[],
+): string[] {
+  const wc2026Results = loadMatchResults()
+    .filter((m) => m.year === 2026 || m.date.startsWith("2026-"))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const allTeams = new Set<string>();
+  for (const teams of Object.values(standings)) for (const t of teams) allTeams.add(t.team);
+  for (const matches of Object.values(groupMatches)) {
+    for (const m of matches) {
+      allTeams.add(m.team1);
+      allTeams.add(m.team2);
+    }
+  }
+  for (const p of livePredictions) {
+    allTeams.add(p.home_team);
+    allTeams.add(p.away_team);
+  }
+  for (const m of wc2026Results) {
+    allTeams.add(m.home_team);
+    allTeams.add(m.away_team);
+  }
+
+  const requestedTeams = detectTeamsInMessage(message, [...allTeams]);
+  if (requestedTeams.length === 0) return [];
+
+  const lines: string[] = ["ESTADO ACTUAL DE EQUIPOS MENCIONADOS (fuente prioritaria sobre tablas historicas de grupo):"];
+  for (const team of requestedTeams) {
+    const results = wc2026Results.filter((m) => m.home_team === team || m.away_team === team);
+    const futurePredictions = livePredictions
+      .filter((p) => (p.home_team === team || p.away_team === team) && dateInTournamentTimeZone(p.kickoff) >= today)
+      .sort((a, b) => String(a.kickoff ?? "").localeCompare(String(b.kickoff ?? "")));
+    const groupEntry = Object.entries(standings).find(([, teams]) => teams.some((t) => t.team === team));
+    const groupTeam = groupEntry?.[1].find((t) => t.team === team);
+    const groupLine = groupEntry
+      ? `Grupo ${groupEntry[0]}: posicion modelo/tabla de grupo ${groupEntry[1].findIndex((t) => t.team === team) + 1}, prob. 1ro ${fmtPct(groupTeam?.first ?? 0)}`
+      : "Grupo: sin dato";
+    const lastResult = results.at(-1);
+    const lastKnockout = results.filter((m) => m.date >= "2026-06-28").at(-1);
+    const eliminated = !!lastKnockout && teamLost(lastKnockout, team) && futurePredictions.length === 0;
+    const status = eliminated
+      ? `ELIMINADO: ultimo partido de eliminatoria ${resultLineForTeam(lastKnockout, team)}. No tiene proximos partidos ni prediccion futura.`
+      : futurePredictions.length > 0
+        ? `ACTIVO: proximo partido ${livePredictionLine(futurePredictions[0])}`
+        : lastResult
+          ? `Sin proximo partido en datos vivos. Ultimo resultado: ${resultLineForTeam(lastResult, team)}.`
+          : "Sin resultados 2026 encontrados.";
+    const recentResults = results.length > 0
+      ? results.slice(-7).map((m) => resultLineForTeam(m, team)).join(" | ")
+      : "Sin resultados 2026.";
+    lines.push(`${team}: ${status} ${groupLine}. Resultados 2026 recientes: ${recentResults}`);
+  }
+  return lines;
 }
 
 function detectVenueQuery(message: string): string | null {
@@ -261,6 +363,7 @@ function buildTournamentContext(message = ""): string {
   const groupMatches = loadGroupMatches();
   const standings = loadGroupStandings();
   const livePredictions = loadLivePredictions();
+  const requestedTeamLines = buildRequestedTeamContext(message, today, groupMatches, standings, livePredictions);
 
   // Matches today
   const todayMatches: string[] = [];
@@ -315,6 +418,10 @@ function buildTournamentContext(message = ""): string {
     "",
     next3Days.length > 0
       ? `PRÓXIMOS PARTIDOS:\n${next3Days.join("\n")}`
+      : "",
+    "",
+    requestedTeamLines.length > 0
+      ? requestedTeamLines.join("\n")
       : "",
     "",
     `PROBABILIDADES DE CLASIFICAR PRIMERO POR GRUPO (modelo):\n${standingLines.join("\n")}`,
@@ -391,6 +498,7 @@ INSTRUCCIONES:
 - Responde SOLO sobre fútbol y el Mundial FIFA 2026
 - Responde en el MISMO IDIOMA que la pregunta del usuario (español, inglés o portugués)
 - Para preguntas sobre partidos de hoy o próximos, usa SIEMPRE el CONTEXTO DEL TORNEO que se te provee abajo — es la fuente de verdad
+- Si el bloque "ESTADO ACTUAL DE EQUIPOS MENCIONADOS" dice ELIMINADO o sin próximo partido, no respondas con probabilidades de grupo como si el equipo siguiera activo
 - Sé preciso con los números del contexto; las probabilidades son del modelo estadístico, no certezas
 - Sé conciso (máx 3-4 párrafos)
 - No inventes resultados, lesiones, goles ni datos que no estén en el contexto
