@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T18:10:03.526402+00:00",
+  "generated_at": "2026-07-13T21:15:07.681041+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -196,7 +196,7 @@
         "resolved": true,
         "pred": {
           "p_home": 0.593,
-          "p_draw": 0.2248,
+          "p_draw": 0.2249,
           "p_away": 0.1822,
           "top_scorelines": [
             {
@@ -361,7 +361,7 @@
         "pred": {
           "p_home": 0.5927,
           "p_draw": 0.2445,
-          "p_away": 0.1628,
+          "p_away": 0.1627,
           "top_scorelines": [
             {
               "home": 1,
@@ -690,7 +690,7 @@
         "resolved": true,
         "pred": {
           "p_home": 0.1542,
-          "p_draw": 0.2385,
+          "p_draw": 0.2386,
           "p_away": 0.6072,
           "top_scorelines": [
             {

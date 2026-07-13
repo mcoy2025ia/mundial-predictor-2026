@@ -208,16 +208,16 @@
       "team": "Belgium",
       "flag": "🇧🇪",
       "first": 0.6374,
-      "second": 0.2398,
-      "third": 0.0986,
+      "second": 0.2396,
+      "third": 0.0988,
       "fourth": 0.0242
     },
     {
       "team": "Iran",
       "flag": "🇮🇷",
       "first": 0.2008,
-      "second": 0.4066,
-      "third": 0.2842,
+      "second": 0.4068,
+      "third": 0.284,
       "fourth": 0.1084
     },
     {
@@ -378,9 +378,9 @@
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "first": 0.7264,
-      "second": 0.2034,
+      "second": 0.2036,
       "third": 0.0578,
-      "fourth": 0.0124
+      "fourth": 0.0122
     },
     {
       "team": "Croatia",
@@ -402,9 +402,9 @@
       "team": "Panama",
       "flag": "🇵🇦",
       "first": 0.021,
-      "second": 0.099,
+      "second": 0.0988,
       "third": 0.4096,
-      "fourth": 0.4704
+      "fourth": 0.4706
     }
   ]
 }
