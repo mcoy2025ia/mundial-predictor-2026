@@ -2,9 +2,9 @@
   {
     "home_team": "South Africa",
     "away_team": "Canada",
-    "p_home": 0.2964,
-    "p_draw": 0.332,
-    "p_away": 0.3716,
+    "p_home": 0.2965,
+    "p_draw": 0.3322,
+    "p_away": 0.3712,
     "is_neutral": true,
     "kickoff": "2026-06-28T19:00:00",
     "model": "ensemble_live",
@@ -13,9 +13,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2582,
-    "xgb_draw": 0.3341,
-    "xgb_away": 0.4077,
+    "xgb_home": 0.259,
+    "xgb_draw": 0.3351,
+    "xgb_away": 0.4059,
     "elo_home": 0.2201,
     "elo_draw": 0.1756,
     "elo_away": 0.6043,
@@ -59,9 +59,9 @@
   {
     "home_team": "Germany",
     "away_team": "Paraguay",
-    "p_home": 0.4862,
-    "p_draw": 0.2715,
-    "p_away": 0.2423,
+    "p_home": 0.4863,
+    "p_draw": 0.2716,
+    "p_away": 0.2421,
     "is_neutral": true,
     "kickoff": "2026-06-29T20:30:00",
     "model": "ensemble_live",
@@ -70,9 +70,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4437,
-    "xgb_draw": 0.2603,
-    "xgb_away": 0.296,
+    "xgb_home": 0.4444,
+    "xgb_draw": 0.2605,
+    "xgb_away": 0.2951,
     "elo_home": 0.373,
     "elo_draw": 0.2739,
     "elo_away": 0.3531,
@@ -116,9 +116,9 @@
   {
     "home_team": "Netherlands",
     "away_team": "Morocco",
-    "p_home": 0.4014,
-    "p_draw": 0.2985,
-    "p_away": 0.3001,
+    "p_home": 0.4015,
+    "p_draw": 0.2982,
+    "p_away": 0.3003,
     "is_neutral": true,
     "kickoff": "2026-06-30T01:00:00",
     "model": "ensemble_live",
@@ -127,9 +127,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.3626,
-    "xgb_draw": 0.224,
-    "xgb_away": 0.4134,
+    "xgb_home": 0.363,
+    "xgb_draw": 0.2227,
+    "xgb_away": 0.4143,
     "elo_home": 0.3036,
     "elo_draw": 0.2334,
     "elo_away": 0.463,
@@ -173,9 +173,9 @@
   {
     "home_team": "Brazil",
     "away_team": "Japan",
-    "p_home": 0.6575,
-    "p_draw": 0.2094,
-    "p_away": 0.1331,
+    "p_home": 0.657,
+    "p_draw": 0.2098,
+    "p_away": 0.1333,
     "is_neutral": true,
     "kickoff": "2026-06-29T17:00:00",
     "model": "ensemble_live",
@@ -184,9 +184,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.606,
-    "xgb_draw": 0.2308,
-    "xgb_away": 0.1632,
+    "xgb_home": 0.603,
+    "xgb_draw": 0.2329,
+    "xgb_away": 0.1641,
     "elo_home": 0.5904,
     "elo_draw": 0.181,
     "elo_away": 0.2286,
@@ -230,9 +230,9 @@
   {
     "home_team": "France",
     "away_team": "Sweden",
-    "p_home": 0.593,
-    "p_draw": 0.2249,
-    "p_away": 0.1822,
+    "p_home": 0.5881,
+    "p_draw": 0.2269,
+    "p_away": 0.185,
     "is_neutral": true,
     "kickoff": "2026-06-30T21:00:00",
     "model": "ensemble_live",
@@ -241,44 +241,44 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7286,
-    "xgb_draw": 0.166,
-    "xgb_away": 0.1053,
-    "elo_home": 0.8873,
+    "xgb_home": 0.7207,
+    "xgb_draw": 0.1747,
+    "xgb_away": 0.1045,
+    "elo_home": 0.879,
     "elo_draw": 0.08,
-    "elo_away": 0.0327,
-    "poisson_home": 0.4346,
-    "poisson_draw": 0.3001,
-    "poisson_away": 0.2654,
+    "elo_away": 0.041,
+    "poisson_home": 0.4321,
+    "poisson_draw": 0.3006,
+    "poisson_away": 0.2673,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1572
+        "prob": 0.1568
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1441
+        "prob": 0.1444
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1257
+        "prob": 0.1259
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1153
+        "prob": 0.116
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0857
+        "prob": 0.0851
       }
     ],
-    "lambda_home": 1.091,
-    "lambda_away": 0.8,
+    "lambda_home": 1.086,
+    "lambda_away": 0.803,
     "stage": "knockout",
     "group": "",
     "venue": "New York/New Jersey (East Rutherford)",
@@ -289,7 +289,7 @@
     "away_team": "Norway",
     "p_home": 0.2586,
     "p_draw": 0.2835,
-    "p_away": 0.4579,
+    "p_away": 0.4578,
     "is_neutral": true,
     "kickoff": "2026-06-30T17:00:00",
     "model": "ensemble_live",
@@ -298,9 +298,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2133,
-    "xgb_draw": 0.3053,
-    "xgb_away": 0.4814,
+    "xgb_home": 0.2135,
+    "xgb_draw": 0.3056,
+    "xgb_away": 0.4809,
     "elo_home": 0.1791,
     "elo_draw": 0.1504,
     "elo_away": 0.6705,
@@ -344,9 +344,9 @@
   {
     "home_team": "Mexico",
     "away_team": "Ecuador",
-    "p_home": 0.6174,
-    "p_draw": 0.2397,
-    "p_away": 0.1429,
+    "p_home": 0.6172,
+    "p_draw": 0.2399,
+    "p_away": 0.143,
     "is_neutral": false,
     "kickoff": "2026-07-01T01:00:00",
     "model": "ensemble_live",
@@ -355,9 +355,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6586,
-    "xgb_draw": 0.2213,
-    "xgb_away": 0.1201,
+    "xgb_home": 0.6573,
+    "xgb_draw": 0.2223,
+    "xgb_away": 0.1205,
     "elo_home": 0.6608,
     "elo_draw": 0.1541,
     "elo_away": 0.1852,
@@ -401,8 +401,8 @@
   {
     "home_team": "England",
     "away_team": "DR Congo",
-    "p_home": 0.7761,
-    "p_draw": 0.1548,
+    "p_home": 0.7758,
+    "p_draw": 0.1551,
     "p_away": 0.0691,
     "is_neutral": true,
     "kickoff": "2026-07-01T16:00:00",
@@ -412,8 +412,8 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7247,
-    "xgb_draw": 0.1635,
+    "xgb_home": 0.7233,
+    "xgb_draw": 0.1649,
     "xgb_away": 0.1119,
     "elo_home": 0.8762,
     "elo_draw": 0.08,
@@ -458,9 +458,9 @@
   {
     "home_team": "United States",
     "away_team": "Bosnia and Herzegovina",
-    "p_home": 0.5927,
-    "p_draw": 0.2445,
-    "p_away": 0.1627,
+    "p_home": 0.5929,
+    "p_draw": 0.2444,
+    "p_away": 0.1628,
     "is_neutral": false,
     "kickoff": "2026-07-02T00:00:00",
     "model": "ensemble_live",
@@ -469,9 +469,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7027,
-    "xgb_draw": 0.1948,
-    "xgb_away": 0.1025,
+    "xgb_home": 0.7034,
+    "xgb_draw": 0.1939,
+    "xgb_away": 0.1026,
     "elo_home": 0.8038,
     "elo_draw": 0.1027,
     "elo_away": 0.0935,
@@ -515,9 +515,9 @@
   {
     "home_team": "Belgium",
     "away_team": "Senegal",
-    "p_home": 0.5452,
-    "p_draw": 0.2583,
-    "p_away": 0.1965,
+    "p_home": 0.5448,
+    "p_draw": 0.2585,
+    "p_away": 0.1967,
     "is_neutral": true,
     "kickoff": "2026-07-01T20:00:00",
     "model": "ensemble_live",
@@ -526,9 +526,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6798,
-    "xgb_draw": 0.1734,
-    "xgb_away": 0.1469,
+    "xgb_home": 0.6775,
+    "xgb_draw": 0.1745,
+    "xgb_away": 0.148,
     "elo_home": 0.6469,
     "elo_draw": 0.1593,
     "elo_away": 0.1938,
@@ -572,9 +572,9 @@
   {
     "home_team": "Portugal",
     "away_team": "Croatia",
-    "p_home": 0.451,
-    "p_draw": 0.2998,
-    "p_away": 0.2492,
+    "p_home": 0.4508,
+    "p_draw": 0.2999,
+    "p_away": 0.2493,
     "is_neutral": true,
     "kickoff": "2026-07-02T23:00:00",
     "model": "ensemble_live",
@@ -583,9 +583,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5709,
-    "xgb_draw": 0.2646,
-    "xgb_away": 0.1645,
+    "xgb_home": 0.5699,
+    "xgb_draw": 0.2649,
+    "xgb_away": 0.1652,
     "elo_home": 0.5861,
     "elo_draw": 0.1827,
     "elo_away": 0.2312,
@@ -629,9 +629,9 @@
   {
     "home_team": "Spain",
     "away_team": "Austria",
-    "p_home": 0.6705,
-    "p_draw": 0.2069,
-    "p_away": 0.1226,
+    "p_home": 0.6745,
+    "p_draw": 0.2059,
+    "p_away": 0.1195,
     "is_neutral": true,
     "kickoff": "2026-07-02T19:00:00",
     "model": "ensemble_live",
@@ -640,15 +640,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7271,
-    "xgb_draw": 0.1666,
-    "xgb_away": 0.1063,
-    "elo_home": 0.871,
+    "xgb_home": 0.7295,
+    "xgb_draw": 0.165,
+    "xgb_away": 0.1054,
+    "elo_home": 0.8806,
     "elo_draw": 0.08,
-    "elo_away": 0.049,
-    "poisson_home": 0.5749,
-    "poisson_draw": 0.2689,
-    "poisson_away": 0.1562,
+    "elo_away": 0.0394,
+    "poisson_home": 0.5774,
+    "poisson_draw": 0.2678,
+    "poisson_away": 0.1548,
     "top_scorelines": [
       {
         "home": 1,
@@ -658,26 +658,26 @@
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1397
+        "prob": 0.139
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1224
+        "prob": 0.1229
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1069
+        "prob": 0.1065
       },
       {
         "home": 3,
         "away": 0,
-        "prob": 0.0891
+        "prob": 0.0899
       }
     ],
-    "lambda_home": 1.324,
-    "lambda_away": 0.578,
+    "lambda_home": 1.33,
+    "lambda_away": 0.576,
     "stage": "knockout",
     "group": "",
     "venue": "Los Angeles (Inglewood)",
@@ -686,9 +686,9 @@
   {
     "home_team": "Switzerland",
     "away_team": "Algeria",
-    "p_home": 0.5615,
-    "p_draw": 0.2514,
-    "p_away": 0.1871,
+    "p_home": 0.5611,
+    "p_draw": 0.2516,
+    "p_away": 0.1872,
     "is_neutral": true,
     "kickoff": "2026-07-03T03:00:00",
     "model": "ensemble_live",
@@ -697,9 +697,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6738,
-    "xgb_draw": 0.2,
-    "xgb_away": 0.1262,
+    "xgb_home": 0.6719,
+    "xgb_draw": 0.2012,
+    "xgb_away": 0.1268,
     "elo_home": 0.7172,
     "elo_draw": 0.1333,
     "elo_away": 0.1495,
@@ -743,9 +743,9 @@
   {
     "home_team": "Argentina",
     "away_team": "Cape Verde",
-    "p_home": 0.7801,
-    "p_draw": 0.1655,
-    "p_away": 0.0544,
+    "p_home": 0.7797,
+    "p_draw": 0.1658,
+    "p_away": 0.0545,
     "is_neutral": true,
     "kickoff": "2026-07-03T22:00:00",
     "model": "ensemble_live",
@@ -754,9 +754,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7631,
-    "xgb_draw": 0.1388,
-    "xgb_away": 0.0981,
+    "xgb_home": 0.7612,
+    "xgb_draw": 0.1403,
+    "xgb_away": 0.0985,
     "elo_home": 0.9095,
     "elo_draw": 0.08,
     "elo_away": 0.0105,
@@ -800,8 +800,8 @@
   {
     "home_team": "Colombia",
     "away_team": "Ghana",
-    "p_home": 0.5462,
-    "p_draw": 0.2767,
+    "p_home": 0.546,
+    "p_draw": 0.277,
     "p_away": 0.1771,
     "is_neutral": true,
     "kickoff": "2026-07-04T01:30:00",
@@ -811,8 +811,8 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6975,
-    "xgb_draw": 0.1885,
+    "xgb_home": 0.6961,
+    "xgb_draw": 0.1898,
     "xgb_away": 0.1141,
     "elo_home": 0.8419,
     "elo_draw": 0.0897,
@@ -857,9 +857,9 @@
   {
     "home_team": "Australia",
     "away_team": "Egypt",
-    "p_home": 0.2868,
-    "p_draw": 0.3112,
-    "p_away": 0.402,
+    "p_home": 0.2869,
+    "p_draw": 0.3115,
+    "p_away": 0.4016,
     "is_neutral": true,
     "kickoff": "2026-07-03T18:00:00",
     "model": "ensemble_live",
@@ -868,9 +868,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2819,
-    "xgb_draw": 0.2544,
-    "xgb_away": 0.4637,
+    "xgb_home": 0.2824,
+    "xgb_draw": 0.2555,
+    "xgb_away": 0.4621,
     "elo_home": 0.2572,
     "elo_draw": 0.2001,
     "elo_away": 0.5427,
@@ -914,9 +914,9 @@
   {
     "home_team": "Paraguay",
     "away_team": "France",
-    "p_home": 0.1542,
-    "p_draw": 0.2386,
-    "p_away": 0.6072,
+    "p_home": 0.1611,
+    "p_draw": 0.2405,
+    "p_away": 0.5983,
     "is_neutral": true,
     "kickoff": "2026-07-04T21:00:00",
     "model": "ensemble_live",
@@ -925,44 +925,44 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1299,
+    "xgb_home": 0.1427,
     "xgb_draw": 0.219,
-    "xgb_away": 0.6512,
-    "elo_home": 0.0626,
-    "elo_draw": 0.0867,
-    "elo_away": 0.8507,
-    "poisson_home": 0.1974,
-    "poisson_draw": 0.3029,
-    "poisson_away": 0.4997,
+    "xgb_away": 0.6383,
+    "elo_home": 0.0771,
+    "elo_draw": 0.0941,
+    "elo_away": 0.8288,
+    "poisson_home": 0.1994,
+    "poisson_draw": 0.3035,
+    "poisson_away": 0.4971,
     "top_scorelines": [
       {
         "home": 0,
         "away": 1,
-        "prob": 0.187
+        "prob": 0.1864
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.165
+        "prob": 0.1651
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1159
+        "prob": 0.1163
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.106
+        "prob": 0.1053
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1022
+        "prob": 0.103
       }
     ],
-    "lambda_home": 0.62,
-    "lambda_away": 1.133,
+    "lambda_home": 0.624,
+    "lambda_away": 1.129,
     "stage": "knockout",
     "group": "",
     "venue": "Philadelphia",
@@ -971,9 +971,9 @@
   {
     "home_team": "Canada",
     "away_team": "Morocco",
-    "p_home": 0.1602,
-    "p_draw": 0.2946,
-    "p_away": 0.5452,
+    "p_home": 0.1604,
+    "p_draw": 0.295,
+    "p_away": 0.5446,
     "is_neutral": true,
     "kickoff": "2026-07-04T17:00:00",
     "model": "ensemble_live",
@@ -982,9 +982,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1679,
-    "xgb_draw": 0.2559,
-    "xgb_away": 0.5762,
+    "xgb_home": 0.1692,
+    "xgb_draw": 0.2579,
+    "xgb_away": 0.5729,
     "elo_home": 0.1405,
     "elo_draw": 0.1282,
     "elo_away": 0.7313,
@@ -1028,9 +1028,9 @@
   {
     "home_team": "Brazil",
     "away_team": "Norway",
-    "p_home": 0.5377,
-    "p_draw": 0.2555,
-    "p_away": 0.2067,
+    "p_home": 0.537,
+    "p_draw": 0.2561,
+    "p_away": 0.2069,
     "is_neutral": true,
     "kickoff": "2026-07-05T20:00:00",
     "model": "ensemble_live",
@@ -1039,9 +1039,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.4617,
-    "xgb_draw": 0.2793,
-    "xgb_away": 0.259,
+    "xgb_home": 0.458,
+    "xgb_draw": 0.2823,
+    "xgb_away": 0.2597,
     "elo_home": 0.4094,
     "elo_draw": 0.2571,
     "elo_away": 0.3335,
@@ -1085,9 +1085,9 @@
   {
     "home_team": "Mexico",
     "away_team": "England",
-    "p_home": 0.2423,
-    "p_draw": 0.3101,
-    "p_away": 0.4476,
+    "p_home": 0.2422,
+    "p_draw": 0.3111,
+    "p_away": 0.4468,
     "is_neutral": false,
     "kickoff": "2026-07-06T00:00:00",
     "model": "ensemble_live",
@@ -1096,9 +1096,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2539,
-    "xgb_draw": 0.3468,
-    "xgb_away": 0.3993,
+    "xgb_home": 0.2535,
+    "xgb_draw": 0.3514,
+    "xgb_away": 0.3951,
     "elo_home": 0.2438,
     "elo_draw": 0.191,
     "elo_away": 0.5652,
@@ -1142,9 +1142,9 @@
   {
     "home_team": "Portugal",
     "away_team": "Spain",
-    "p_home": 0.19,
-    "p_draw": 0.286,
-    "p_away": 0.524,
+    "p_home": 0.1833,
+    "p_draw": 0.282,
+    "p_away": 0.5348,
     "is_neutral": true,
     "kickoff": "2026-07-06T19:00:00",
     "model": "ensemble_live",
@@ -1153,15 +1153,15 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.1577,
-    "xgb_draw": 0.2867,
-    "xgb_away": 0.5556,
-    "elo_home": 0.1308,
-    "elo_draw": 0.1228,
-    "elo_away": 0.7464,
-    "poisson_home": 0.2236,
-    "poisson_draw": 0.3476,
-    "poisson_away": 0.4288,
+    "xgb_home": 0.1538,
+    "xgb_draw": 0.2808,
+    "xgb_away": 0.5654,
+    "elo_home": 0.1092,
+    "elo_draw": 0.111,
+    "elo_away": 0.7798,
+    "poisson_home": 0.2215,
+    "poisson_draw": 0.3472,
+    "poisson_away": 0.4313,
     "top_scorelines": [
       {
         "home": 0,
@@ -1171,26 +1171,26 @@
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1972
+        "prob": 0.198
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1264
+        "prob": 0.1255
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1158
+        "prob": 0.1155
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0903
+        "prob": 0.091
       }
     ],
-    "lambda_home": 0.587,
-    "lambda_away": 0.916,
+    "lambda_home": 0.583,
+    "lambda_away": 0.92,
     "stage": "knockout",
     "group": "",
     "venue": "Dallas (Arlington)",
@@ -1201,7 +1201,7 @@
     "away_team": "Belgium",
     "p_home": 0.2325,
     "p_draw": 0.2713,
-    "p_away": 0.4963,
+    "p_away": 0.4962,
     "is_neutral": false,
     "kickoff": "2026-07-07T00:00:00",
     "model": "ensemble_live",
@@ -1210,9 +1210,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2031,
-    "xgb_draw": 0.2806,
-    "xgb_away": 0.5163,
+    "xgb_home": 0.2032,
+    "xgb_draw": 0.2808,
+    "xgb_away": 0.516,
     "elo_home": 0.1857,
     "elo_draw": 0.1544,
     "elo_away": 0.6599,
@@ -1256,8 +1256,8 @@
   {
     "home_team": "Argentina",
     "away_team": "Egypt",
-    "p_home": 0.6727,
-    "p_draw": 0.2114,
+    "p_home": 0.6724,
+    "p_draw": 0.2116,
     "p_away": 0.116,
     "is_neutral": true,
     "kickoff": "2026-07-07T16:00:00",
@@ -1267,9 +1267,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.7472,
-    "xgb_draw": 0.1409,
-    "xgb_away": 0.1119,
+    "xgb_home": 0.7456,
+    "xgb_draw": 0.1423,
+    "xgb_away": 0.1121,
     "elo_home": 0.8276,
     "elo_draw": 0.0945,
     "elo_away": 0.0779,
@@ -1313,9 +1313,9 @@
   {
     "home_team": "Switzerland",
     "away_team": "Colombia",
-    "p_home": 0.4075,
-    "p_draw": 0.3048,
-    "p_away": 0.2876,
+    "p_home": 0.4072,
+    "p_draw": 0.3049,
+    "p_away": 0.2879,
     "is_neutral": true,
     "kickoff": "2026-07-07T20:00:00",
     "model": "ensemble_live",
@@ -1324,9 +1324,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.5435,
-    "xgb_draw": 0.2469,
-    "xgb_away": 0.2097,
+    "xgb_home": 0.5418,
+    "xgb_draw": 0.2474,
+    "xgb_away": 0.2109,
     "elo_home": 0.4399,
     "elo_draw": 0.2435,
     "elo_away": 0.3166,
@@ -1370,9 +1370,9 @@
   {
     "home_team": "France",
     "away_team": "Morocco",
-    "p_home": 0.5389,
-    "p_draw": 0.2797,
-    "p_away": 0.1814,
+    "p_home": 0.5181,
+    "p_draw": 0.2908,
+    "p_away": 0.1911,
     "is_neutral": true,
     "kickoff": "2026-07-09T20:00:00",
     "model": "ensemble_live",
@@ -1381,44 +1381,44 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6396,
-    "xgb_draw": 0.2167,
-    "xgb_away": 0.1437,
-    "elo_home": 0.6967,
-    "elo_draw": 0.1408,
-    "elo_away": 0.1626,
-    "poisson_home": 0.4442,
-    "poisson_draw": 0.3541,
-    "poisson_away": 0.2016,
+    "xgb_home": 0.5981,
+    "xgb_draw": 0.2492,
+    "xgb_away": 0.1527,
+    "elo_home": 0.6487,
+    "elo_draw": 0.1586,
+    "elo_away": 0.1927,
+    "poisson_home": 0.441,
+    "poisson_draw": 0.3553,
+    "poisson_away": 0.2037,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.2298
+        "prob": 0.2308
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.2095
+        "prob": 0.2089
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.121
+        "prob": 0.1221
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1103
+        "prob": 0.1106
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0955
+        "prob": 0.0946
       }
     ],
-    "lambda_home": 0.912,
-    "lambda_away": 0.527,
+    "lambda_home": 0.905,
+    "lambda_away": 0.529,
     "stage": "knockout",
     "group": "",
     "venue": "Boston (Foxborough)",
@@ -1427,9 +1427,9 @@
   {
     "home_team": "Spain",
     "away_team": "Belgium",
-    "p_home": 0.5935,
-    "p_draw": 0.2401,
-    "p_away": 0.1664,
+    "p_home": 0.6036,
+    "p_draw": 0.2382,
+    "p_away": 0.1582,
     "is_neutral": true,
     "kickoff": "2026-07-10T19:00:00",
     "model": "ensemble_live",
@@ -1438,44 +1438,44 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6379,
-    "xgb_draw": 0.2201,
-    "xgb_away": 0.142,
-    "elo_home": 0.7389,
-    "elo_draw": 0.1255,
-    "elo_away": 0.1356,
-    "poisson_home": 0.5231,
-    "poisson_draw": 0.2904,
-    "poisson_away": 0.1865,
+    "xgb_home": 0.6392,
+    "xgb_draw": 0.2288,
+    "xgb_away": 0.132,
+    "elo_home": 0.7746,
+    "elo_draw": 0.1128,
+    "elo_away": 0.1126,
+    "poisson_home": 0.5264,
+    "poisson_draw": 0.2891,
+    "poisson_away": 0.1845,
     "top_scorelines": [
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1841
+        "prob": 0.1843
       },
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1532
+        "prob": 0.1524
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1141
+        "prob": 0.1137
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.1106
+        "prob": 0.1114
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.095
+        "prob": 0.094
       }
     ],
-    "lambda_home": 1.202,
-    "lambda_away": 0.62,
+    "lambda_home": 1.209,
+    "lambda_away": 0.617,
     "stage": "knockout",
     "group": "",
     "venue": "Los Angeles (Inglewood)",
@@ -1484,9 +1484,9 @@
   {
     "home_team": "Norway",
     "away_team": "England",
-    "p_home": 0.1579,
-    "p_draw": 0.235,
-    "p_away": 0.6071,
+    "p_home": 0.1578,
+    "p_draw": 0.2353,
+    "p_away": 0.6069,
     "is_neutral": true,
     "kickoff": "2026-07-11T21:00:00",
     "model": "ensemble_live",
@@ -1495,9 +1495,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.2055,
-    "xgb_draw": 0.289,
-    "xgb_away": 0.5056,
+    "xgb_home": 0.205,
+    "xgb_draw": 0.2904,
+    "xgb_away": 0.5046,
     "elo_home": 0.1845,
     "elo_draw": 0.1536,
     "elo_away": 0.6619,
@@ -1541,8 +1541,8 @@
   {
     "home_team": "Argentina",
     "away_team": "Switzerland",
-    "p_home": 0.6016,
-    "p_draw": 0.23,
+    "p_home": 0.6012,
+    "p_draw": 0.2304,
     "p_away": 0.1684,
     "is_neutral": true,
     "kickoff": "2026-07-12T01:00:00",
@@ -1552,9 +1552,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.6894,
-    "xgb_draw": 0.1767,
-    "xgb_away": 0.1339,
+    "xgb_home": 0.6876,
+    "xgb_draw": 0.1784,
+    "xgb_away": 0.134,
     "elo_home": 0.6965,
     "elo_draw": 0.1408,
     "elo_away": 0.1627,
@@ -1598,9 +1598,9 @@
   {
     "home_team": "France",
     "away_team": "Spain",
-    "p_home": 0.2814,
-    "p_draw": 0.311,
-    "p_away": 0.4076,
+    "p_home": 0.2362,
+    "p_draw": 0.2957,
+    "p_away": 0.4681,
     "is_neutral": true,
     "kickoff": "2026-07-14T19:00:00",
     "model": "ensemble_live",
@@ -1609,44 +1609,44 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.3219,
-    "xgb_draw": 0.3153,
-    "xgb_away": 0.3628,
-    "elo_home": 0.3213,
-    "elo_draw": 0.2472,
-    "elo_away": 0.4316,
-    "poisson_home": 0.2523,
-    "poisson_draw": 0.3337,
-    "poisson_away": 0.414,
+    "xgb_home": 0.25,
+    "xgb_draw": 0.331,
+    "xgb_away": 0.419,
+    "elo_home": 0.2064,
+    "elo_draw": 0.167,
+    "elo_away": 0.6266,
+    "poisson_home": 0.2427,
+    "poisson_draw": 0.3324,
+    "poisson_away": 0.425,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1907
+        "prob": 0.1908
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1798
+        "prob": 0.1831
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1294
+        "prob": 0.1261
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.122
+        "prob": 0.121
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0848
+        "prob": 0.0878
       }
     ],
-    "lambda_home": 0.679,
-    "lambda_away": 0.943,
+    "lambda_home": 0.661,
+    "lambda_away": 0.959,
     "stage": "knockout",
     "group": "",
     "venue": "Dallas (Arlington)",
@@ -1656,8 +1656,8 @@
     "home_team": "England",
     "away_team": "Argentina",
     "p_home": 0.3418,
-    "p_draw": 0.3069,
-    "p_away": 0.3513,
+    "p_draw": 0.3072,
+    "p_away": 0.351,
     "is_neutral": true,
     "kickoff": "2026-07-15T19:00:00",
     "model": "ensemble_live",
@@ -1666,9 +1666,9 @@
       "poisson": 0.58,
       "xgb": 0.2
     },
-    "xgb_home": 0.3068,
-    "xgb_draw": 0.2814,
-    "xgb_away": 0.4119,
+    "xgb_home": 0.3069,
+    "xgb_draw": 0.2828,
+    "xgb_away": 0.4103,
     "elo_home": 0.3056,
     "elo_draw": 0.2349,
     "elo_away": 0.4595,

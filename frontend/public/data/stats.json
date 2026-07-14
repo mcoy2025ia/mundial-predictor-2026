@@ -1,6 +1,6 @@
 {
-  "total_matches": 1064,
-  "total_goals": 3037,
+  "total_matches": 1065,
+  "total_goals": 3039,
   "avg_goals_all": 2.854,
   "n_editions": 23,
   "highest_scoring_match": {
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 317,
-      "matches": 100,
-      "avg": 3.17
+      "total": 319,
+      "matches": 101,
+      "avg": 3.158
     }
   ],
   "best_avg_edition": {
@@ -202,11 +202,11 @@
     {
       "team": "France",
       "flag": "🇫🇷",
-      "matches": 79,
+      "matches": 80,
       "goals_for": 152,
-      "goals_against": 87,
-      "goal_diff": 65,
-      "avg": 1.92
+      "goals_against": 89,
+      "goal_diff": 63,
+      "avg": 1.9
     },
     {
       "team": "Italy",
@@ -220,11 +220,11 @@
     {
       "team": "Spain",
       "flag": "🇪🇸",
-      "matches": 73,
-      "goals_for": 119,
+      "matches": 74,
+      "goals_for": 121,
       "goals_against": 76,
-      "goal_diff": 43,
-      "avg": 1.63
+      "goal_diff": 45,
+      "avg": 1.64
     },
     {
       "team": "England",
