@@ -1598,9 +1598,9 @@
   {
     "home_team": "France",
     "away_team": "Spain",
-    "p_home": 0.2804,
-    "p_draw": 0.3123,
-    "p_away": 0.4073,
+    "p_home": 0.2814,
+    "p_draw": 0.311,
+    "p_away": 0.4076,
     "is_neutral": true,
     "kickoff": "2026-07-14T19:00:00",
     "model": "ensemble_live",
@@ -1615,38 +1615,38 @@
     "elo_home": 0.3213,
     "elo_draw": 0.2472,
     "elo_away": 0.4316,
-    "poisson_home": 0.2506,
-    "poisson_draw": 0.3359,
-    "poisson_away": 0.4135,
+    "poisson_home": 0.2523,
+    "poisson_draw": 0.3337,
+    "poisson_away": 0.414,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1939
+        "prob": 0.1907
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1814
+        "prob": 0.1798
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1299
+        "prob": 0.1294
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1215
+        "prob": 0.122
       },
       {
         "home": 0,
         "away": 2,
-        "prob": 0.0849
+        "prob": 0.0848
       }
     ],
-    "lambda_home": 0.67,
-    "lambda_away": 0.935,
+    "lambda_home": 0.679,
+    "lambda_away": 0.943,
     "stage": "knockout",
     "group": "",
     "venue": "Dallas (Arlington)",
