@@ -1655,9 +1655,9 @@
   {
     "home_team": "England",
     "away_team": "Argentina",
-    "p_home": 0.3418,
-    "p_draw": 0.3072,
-    "p_away": 0.351,
+    "p_home": 0.3429,
+    "p_draw": 0.304,
+    "p_away": 0.3531,
     "is_neutral": true,
     "kickoff": "2026-07-15T19:00:00",
     "model": "ensemble_live",
@@ -1672,38 +1672,38 @@
     "elo_home": 0.3056,
     "elo_draw": 0.2349,
     "elo_away": 0.4595,
-    "poisson_home": 0.3676,
-    "poisson_draw": 0.343,
-    "poisson_away": 0.2894,
+    "poisson_home": 0.3695,
+    "poisson_draw": 0.3375,
+    "poisson_away": 0.293,
     "top_scorelines": [
       {
         "home": 0,
         "away": 0,
-        "prob": 0.1984
+        "prob": 0.1905
       },
       {
         "home": 1,
         "away": 0,
-        "prob": 0.1698
+        "prob": 0.1666
       },
       {
         "home": 0,
         "away": 1,
-        "prob": 0.1447
+        "prob": 0.1429
       },
       {
         "home": 1,
         "away": 1,
-        "prob": 0.1239
+        "prob": 0.125
       },
       {
         "home": 2,
         "away": 0,
-        "prob": 0.0727
+        "prob": 0.0729
       }
     ],
-    "lambda_home": 0.856,
-    "lambda_away": 0.73,
+    "lambda_home": 0.875,
+    "lambda_away": 0.75,
     "stage": "knockout",
     "group": "",
     "venue": "Atlanta",

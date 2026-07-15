@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T17:35:07.734466+00:00",
+  "generated_at": "2026-07-15T19:34:19.797597+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -1226,24 +1226,24 @@
         "away_label": "Argentina",
         "resolved": true,
         "pred": {
-          "p_home": 0.3418,
-          "p_draw": 0.3072,
-          "p_away": 0.351,
+          "p_home": 0.3429,
+          "p_draw": 0.304,
+          "p_away": 0.3531,
           "top_scorelines": [
             {
               "home": 0,
               "away": 0,
-              "prob": 0.1984
+              "prob": 0.1905
             },
             {
               "home": 1,
               "away": 0,
-              "prob": 0.1698
+              "prob": 0.1666
             },
             {
               "home": 0,
               "away": 1,
-              "prob": 0.1447
+              "prob": 0.1429
             }
           ]
         }

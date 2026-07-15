@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-07-15T17:25:36.758281+00:00",
+  "fetched_at": "2026-07-15T19:23:40.849827+00:00",
   "matches": [
     {
       "stage": "LAST_32",
@@ -209,7 +209,7 @@
       "home": "England",
       "away": "Argentina",
       "date": "2026-07-15",
-      "status": "TIMED"
+      "status": "IN_PLAY"
     }
   ]
 }
