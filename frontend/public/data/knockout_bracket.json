@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T10:19:07.497119+00:00",
+  "generated_at": "2026-07-15T14:09:17.938878+00:00",
   "round_order": [
     "Round of 32",
     "Round of 16",
@@ -648,7 +648,7 @@
         "pred": {
           "p_home": 0.2869,
           "p_draw": 0.3115,
-          "p_away": 0.4017,
+          "p_away": 0.4016,
           "top_scorelines": [
             {
               "home": 0,
