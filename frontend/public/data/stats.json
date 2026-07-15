@@ -1,6 +1,6 @@
 {
-  "total_matches": 1065,
-  "total_goals": 3039,
+  "total_matches": 1066,
+  "total_goals": 3042,
   "avg_goals_all": 2.854,
   "n_editions": 23,
   "highest_scoring_match": {
@@ -158,9 +158,9 @@
     },
     {
       "year": 2026,
-      "total": 319,
-      "matches": 101,
-      "avg": 3.158
+      "total": 322,
+      "matches": 102,
+      "avg": 3.157
     }
   ],
   "best_avg_edition": {
@@ -193,10 +193,10 @@
     {
       "team": "Argentina",
       "flag": "🇦🇷",
-      "matches": 94,
-      "goals_for": 169,
-      "goals_against": 107,
-      "goal_diff": 62,
+      "matches": 95,
+      "goals_for": 171,
+      "goals_against": 108,
+      "goal_diff": 63,
       "avg": 1.8
     },
     {
@@ -229,10 +229,10 @@
     {
       "team": "England",
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      "matches": 80,
-      "goals_for": 117,
-      "goals_against": 74,
-      "goal_diff": 43,
+      "matches": 81,
+      "goals_for": 118,
+      "goals_against": 76,
+      "goal_diff": 42,
       "avg": 1.46
     },
     {

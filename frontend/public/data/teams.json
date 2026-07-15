@@ -432,14 +432,14 @@
     "pen_total": 15
   },
   "Argentina": {
-    "elo": 2402.5,
+    "elo": 2425.5,
     "rank": 2,
     "flag": "🇦🇷",
     "group": "J",
     "confederation": "CONMEBOL",
     "goals_scored": 2.8,
-    "goals_conceded": 1.2,
-    "wc_matches": 94,
+    "goals_conceded": 1.4,
+    "wc_matches": 95,
     "pen_wins": 15,
     "pen_total": 23
   },
@@ -528,14 +528,14 @@
     "pen_total": 5
   },
   "England": {
-    "elo": 2319.7,
+    "elo": 2296.7,
     "rank": 4,
     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
     "group": "L",
     "confederation": "UEFA",
-    "goals_scored": 1.8,
-    "goals_conceded": 0.8,
-    "wc_matches": 80,
+    "goals_scored": 2.0,
+    "goals_conceded": 1.2,
+    "wc_matches": 81,
     "pen_wins": 4,
     "pen_total": 12
   },
