@@ -118,7 +118,7 @@
       "team2": "Qatar",
       "team1_flag": "🇨🇦",
       "team2_flag": "🇶🇦",
-      "t1_win": 0.5782,
+      "t1_win": 0.5781,
       "draw": 0.2517,
       "t2_win": 0.1702
     },
@@ -748,7 +748,7 @@
       "team2": "DR Congo",
       "team1_flag": "🇵🇹",
       "team2_flag": "🇨🇩",
-      "t1_win": 0.6714,
+      "t1_win": 0.6713,
       "draw": 0.2189,
       "t2_win": 0.1098
     },
